@@ -1,0 +1,359 @@
+{
+  "section": "Basics",
+  "slug": "operators",
+  "topic": "Operators and short-circuit logic",
+  "page": 31,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic Arithmetic and Modulus Operations",
+      "question": "Perform addition, subtraction, multiplication, division, and remainder operations on two integer variables (`a = 10`, `b = 3`) and display each computed result.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-01",
+      "id": "operators-001",
+      "explanation": "Java provides five fundamental binary arithmetic operators: addition (+), subtraction (-), multiplication (*), division (/), and remainder/modulus (%). When both operands are primitive integers, Java executes 32-bit integer arithmetic. Integral division truncates any fractional decimal remainder toward zero rather than rounding, meaning 10 / 3 evaluates strictly to 3. The modulus operator (%) calculates the remainder satisfying the identity (a / b) * b + (a % b) == a; thus, 10 % 3 yields 1. In the underlying JVM bytecode, these operations correspond directly to the iadd, isub, imul, idiv, and irem opcodes executing on the operand stack. Understanding integer truncation and remainder mechanics is critical for index calculations, pagination offsets, and circular data structures.",
+      "hints": [
+        "Declare two primitive integer variables 'int a = 10;' and 'int b = 3;'.",
+        "Perform each operation using +, -, *, /, and % directly within your print statements or assigned variables.",
+        "Remember that integer division truncates fractions toward zero rather than rounding."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 3;\n\n        System.out.println(\"a = \" + a + \", b = \" + b);\n        System.out.println(\"Addition: \" + (a + b));\n        System.out.println(\"Subtraction: \" + (a - b));\n        System.out.println(\"Multiplication: \" + (a * b));\n        System.out.println(\"Division: \" + (a / b));\n        System.out.println(\"Remainder: \" + (a % b));\n    }\n}",
+      "expectedOutput": "a = 10, b = 3\nAddition: 13\nSubtraction: 7\nMultiplication: 30\nDivision: 3\nRemainder: 1"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Even or Odd Parity Evaluation",
+      "question": "Determine whether a given integer is even or odd using the remainder operator (`%`) and conditional branching.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-02",
+      "id": "operators-002",
+      "explanation": "Evaluating numerical parity is a foundational algorithmic task. In Java, an integer is even if it is divisible by 2 with no remainder (number % 2 == 0). If the remainder is non-zero, the number is odd. However, developers must account for negative numbers: in Java, the remainder operator preserves the sign of the dividend (JLS §15.17.3). For example, -7 % 2 evaluates to -1 rather than 1. Consequently, testing 'number % 2 == 1' incorrectly classifies negative odd integers as not odd. Testing 'number % 2 != 0' or 'number % 2 == 0' guarantees correct parity classification across both positive and negative integer domains.",
+      "hints": [
+        "Test for evenness with (number % 2 == 0) rather than testing for oddness with (number % 2 == 1).",
+        "Use an if-else statement or ternary expression to print 'Even' or 'Odd'.",
+        "Keep in mind that in Java, negative dividends produce negative remainders with %."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = 7;\n        String result = (number % 2 != 0) ? \"Odd\" : \"Even\";\n\n        System.out.println(\"Number: \" + number);\n        System.out.println(\"Result: \" + result);\n    }\n}",
+      "expectedOutput": "Number: 7\nResult: Odd"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Pre-Increment and Post-Increment Mechanics",
+      "question": "Demonstrate the operational difference between prefix (`++x`) and postfix (`x++`) increment operators by printing the expression result and the modified variable in separate statements.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-03",
+      "id": "operators-003",
+      "explanation": "The difference between prefix and postfix increment operators lies in when the operand value is emitted relative to the variable modification. With post-increment (x++), the current value of x is evaluated and pushed onto the operand stack before x is incremented by 1 in the local variable table; thus, the enclosing expression sees the original value. With pre-increment (++x), the variable is incremented in place first, and the updated value is subsequently loaded onto the operand stack, making the incremented value immediately visible to the evaluating statement. Both operators modify the underlying variable, but their expression return timing differs, which directly affects loop index calculations and expression evaluations.",
+      "hints": [
+        "Initialize a variable 'int x = 5;'.",
+        "Print 'x++' to observe the post-increment return value, then print 'x' on the next line to see the modified state.",
+        "Print '++x' to observe the pre-increment return value, followed by inspecting 'x' again."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int x = 5;\n        System.out.println(\"Initial value: \" + x);\n        System.out.println(\"Post-increment result: \" + (x++));\n        System.out.println(\"Value after post-increment: \" + x);\n        System.out.println(\"Pre-increment result: \" + (++x));\n        System.out.println(\"Value after pre-increment: \" + x);\n    }\n}",
+      "expectedOutput": "Initial value: 5\nPost-increment result: 5\nValue after post-increment: 6\nPre-increment result: 7\nValue after pre-increment: 7"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Relational and Logical Comparison Operators",
+      "question": "Apply relational operators (`<`, `<=`, `>`, `>=`, `==`, `!=`) and logical operators (`&&`, `||`, `!`) on two integer values and display the boolean result of each expression.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-04",
+      "id": "operators-004",
+      "explanation": "Relational operators compare two operand values and yield a primitive boolean result (true or false). These operators evaluate numeric magnitudes and equality: < (less than), <= (less than or equal), > (greater than), >= (greater than or equal), == (equal to), and != (not equal to). Logical operators combine multiple boolean expressions: logical AND (&&) requires both conditions to be true, logical OR (||) requires at least one condition to be true, and logical NOT (!) inverts the boolean truth value. In JVM bytecode, relational comparisons compile down to conditional branching jump instructions (if_icmpeq, if_icmpgt, if_icmplt). Mastering these operators is essential for formulating complex decision pathways in program control flow.",
+      "hints": [
+        "Compare two integers 'int a = 10;' and 'int b = 20;' using relational operators like a < b and a == b.",
+        "Combine conditions using logical operators: (a < b && b > 15) and (a > b || b == 20).",
+        "Use parentheses around relational sub-expressions inside System.out.println statements to ensure proper precedence."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 20;\n\n        System.out.println(\"a < b: \" + (a < b));\n        System.out.println(\"a == b: \" + (a == b));\n        System.out.println(\"a != b: \" + (a != b));\n        System.out.println(\"(a < b) && (b > 15): \" + ((a < b) && (b > 15)));\n        System.out.println(\"(a > b) || (b == 20): \" + ((a > b) || (b == 20)));\n        System.out.println(\"!(a == b): \" + (!(a == b)));\n    }\n}",
+      "expectedOutput": "a < b: true\na == b: false\na != b: true\n(a < b) && (b > 15): true\n(a > b) || (b == 20): true\n!(a == b): true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Binary Maximum Selection with Ternary Operator",
+      "question": "Find and print the maximum of two integer variables using the conditional ternary operator (`? :`).",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-05",
+      "id": "operators-005",
+      "explanation": "The conditional operator (? :) is Java's sole ternary operator, requiring three operands: a boolean condition, a value returned if the condition evaluates to true, and a value returned if false (condition ? exprTrue : exprFalse). Unlike an if-else statement which controls execution flow without producing an inline value, the ternary operator is an expression that yields a concrete result. At runtime, the JVM evaluates the condition first; only the selected branch expression is evaluated, while the unselected expression is skipped. This makes ternary expressions compact for inline assignments, logging, and parameter passing without the verbosity of multi-line branching statements.",
+      "hints": [
+        "Formulate the ternary expression: 'int max = (a > b) ? a : b;'.",
+        "Notice that both result expressions must share compatible, assignable types.",
+        "Print both original numbers alongside the evaluated maximum."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 45;\n        int b = 72;\n        int max = (a > b) ? a : b;\n\n        System.out.println(\"a = \" + a + \", b = \" + b);\n        System.out.println(\"Maximum: \" + max);\n    }\n}",
+      "expectedOutput": "a = 45, b = 72\nMaximum: 72"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Arithmetic and Modulo Math",
+      "question": "Write a program that takes two integers and prints their sum, difference, product, quotient, and remainder. Ensure division by zero is handled gracefully.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-01",
+      "id": "operators-006",
+      "explanation": "Defensive arithmetic programming requires validating input operands before performing division or remainder operations. In Java integer arithmetic, attempting to divide by zero (x / 0) or compute remainder by zero (x % 0) causes the JVM to throw a java.lang.ArithmeticException: / by zero at runtime. Unlike floating-point division (which yields Infinity or NaN per IEEE 754), integer math cannot represent undefined fractional boundaries. A robust application verifies that the divisor is non-zero before invoking division and modulus, reporting an error message or skipping the calculation rather than crashing the thread frame.",
+      "hints": [
+        "Compute sum, difference, and product directly using +, -, and *.",
+        "Check if divisor == 0 before performing division (/) or remainder (%).",
+        "Print diagnostic warnings if division by zero is attempted."
+      ],
+      "sampleCode": "public class Solution {\n    public static void compute(int a, int b) {\n        System.out.println(\"Operands: a = \" + a + \", b = \" + b);\n        System.out.println(\"Sum: \" + (a + b));\n        System.out.println(\"Difference: \" + (a - b));\n        System.out.println(\"Product: \" + (a * b));\n        if (b != 0) {\n            System.out.println(\"Quotient: \" + (a / b));\n            System.out.println(\"Remainder: \" + (a % b));\n        } else {\n            System.out.println(\"Division by zero is undefined!\");\n        }\n    }\n\n    public static void main(String[] args) {\n        compute(20, 4);\n    }\n}",
+      "expectedOutput": "Operands: a = 20, b = 4\nSum: 24\nDifference: 16\nProduct: 80\nQuotient: 5\nRemainder: 0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Prefix vs Postfix Increment",
+      "question": "Write a program that evaluates complex arithmetic combinations of prefix (`++x`, `--y`) and postfix (`x++`, `y--`) increment/decrement operators, documenting the step-by-step variable transformations.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-02",
+      "id": "operators-007",
+      "explanation": "Evaluating compound expressions containing mixed prefix and postfix operators requires a precise understanding of Java's left-to-right operand evaluation rules (JLS §15.7). In an expression like ++x + y--, the compiler evaluates sub-expressions strictly from left to right: first, ++x increments x immediately and yields the incremented value. Next, y-- evaluates to the current value of y before decrementing y in memory. Finally, the addition operator sums the two evaluated operands. Tracing intermediate values through explicit print statements illustrates the precise order of operand loading, local variable mutation, and stack evaluation.",
+      "hints": [
+        "Track variable states manually step-by-step before and after each operator executes.",
+        "Remember that left-to-right evaluation applies: left operands are evaluated before right operands.",
+        "Print intermediate values after each composite expression to verify variable mutation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int x = 5;\n        int y = 10;\n\n        // Step 1: ++x increments x to 6 and yields 6\n        // Step 2: y-- yields 10, then decrements y to 9\n        // Result: 6 + 10 = 16\n        int result1 = ++x + y--;\n        System.out.println(\"result1 (++x + y--): \" + result1);\n        System.out.println(\"State after expr 1: x = \" + x + \", y = \" + y);\n\n        // Step 3: x++ yields 6, then increments x to 7\n        // Step 4: --y decrements y to 8 and yields 8\n        // Result: 6 + 8 = 14\n        int result2 = x++ + --y;\n        System.out.println(\"result2 (x++ + --y): \" + result2);\n        System.out.println(\"State after expr 2: x = \" + x + \", y = \" + y);\n    }\n}",
+      "expectedOutput": "result1 (++x + y--): 16\nState after expr 1: x = 6, y = 9\nresult2 (x++ + --y): 14\nState after expr 2: x = 7, y = 8"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Ternary Operator Max of Three",
+      "question": "Write a nested ternary operator expression to find the maximum of three numbers `a`, `b`, and `c` without using `if-else` or `Math.max()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-03",
+      "id": "operators-008",
+      "explanation": "The ternary operator can be nested to evaluate multi-condition decisions without procedural if-else branching blocks. To determine the maximum among three numbers (a, b, c), a nested expression first compares a against b: (a >= b) ? ((a >= c) ? a : c) : ((b >= c) ? b : c). If a is greater than or equal to b, the expression evaluates whether a is also greater than or equal to c; if so, a is the maximum, otherwise c is. If b is greater than a, b is compared against c similarly. Because ternary expressions are right-associative, structuring them with explicit parentheses avoids precedence ambiguities and maintains code readability.",
+      "hints": [
+        "Structure the condition as: (a >= b) ? ((a >= c) ? a : c) : ((b >= c) ? b : c).",
+        "Use explicit parentheses to make the nested sub-expressions clear and maintainable.",
+        "Verify with values where each variable in turn is the maximum."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 25;\n        int b = 78;\n        int c = 43;\n\n        int max = (a >= b) ? ((a >= c) ? a : c) : ((b >= c) ? b : c);\n\n        System.out.println(\"a = \" + a + \", b = \" + b + \", c = \" + c);\n        System.out.println(\"Maximum: \" + max);\n    }\n}",
+      "expectedOutput": "a = 25, b = 78, c = 43\nMaximum: 78"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Short-Circuit Guard Evaluation",
+      "question": "Write a logical expression `(str != null && str.length() > 0)` demonstrating how the short-circuit `&&` operator prevents a `NullPointerException` compared to the non-short-circuit bitwise/logical `&` operator.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-04",
+      "id": "operators-009",
+      "explanation": "Short-circuit boolean operators (&& and ||) evaluate their right-hand operand only when necessary. In the expression (str != null && str.length() > 0), if str is null, the left-hand condition evaluates to false. Because false && anything is always false, the JVM short-circuits and skips evaluating str.length(), safely avoiding a NullPointerException. In contrast, the non-short-circuit logical AND operator (&) always evaluates both operands unconditionally. If str is null, evaluating str.length() with & immediately throws a NullPointerException. Short-circuit evaluation is essential for writing safe guard conditions in production code.",
+      "hints": [
+        "Demonstrate short-circuit safety with 'str != null && str.length() > 0'.",
+        "Wrap the non-short-circuit version '(str != null & str.length() > 0)' in a try-catch block.",
+        "Catch java.lang.NullPointerException to prove that the right operand is unconditionally evaluated with &."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String str = null;\n\n        // Safe short-circuit evaluation\n        if (str != null && str.length() > 0) {\n            System.out.println(\"String is non-empty\");\n        } else {\n            System.out.println(\"Short-circuit && safely guarded against null reference!\");\n        }\n\n        // Unsafe non-short-circuit evaluation\n        try {\n            boolean unsafeCheck = (str != null & str.length() > 0);\n            System.out.println(\"Unsafe check result: \" + unsafeCheck);\n        } catch (NullPointerException e) {\n            System.out.println(\"Caught NullPointerException: non-short-circuit & evaluated right operand!\");\n        }\n    }\n}",
+      "expectedOutput": "Short-circuit && safely guarded against null reference!\nCaught NullPointerException: non-short-circuit & evaluated right operand!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Compound Assignment Type Cast",
+      "question": "Demonstrate the implicit type cast performed automatically by compound assignment operators (e.g., `byte b = 10; b += 500;`) versus explicit arithmetic expansion (`b = b + 500`), which causes a compilation error.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-05",
+      "id": "operators-010",
+      "explanation": "According to the Java Language Specification (JLS §15.26.2), compound assignment expressions of the form E1 op= E2 are equivalent to E1 = (T)((E1) op (E2)), where T is the type of E1, with E1 evaluated only once. In Java binary arithmetic, operands of type byte, short, or char are automatically promoted to 32-bit int. Therefore, writing b = b + 500 produces a 32-bit int result; assigning it back to byte b causes a compile-time error: 'incompatible types: possible lossy conversion from int to byte'. However, the compound assignment b += 500 compiles because the compiler automatically inserts an explicit cast: b = (byte)(b + 500). This implicit cast silently truncates the upper 24 bits, potentially causing unexpected numeric overflow.",
+      "hints": [
+        "Declare 'byte b = 10;' and apply compound assignment 'b += 500;'.",
+        "Explain in comments that 'b = b + 500;' fails to compile without an explicit cast due to binary numeric promotion.",
+        "Print the resulting truncated byte value to illustrate narrowing overflow."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        byte b = 10;\n\n        // b = b + 500; // Compile-time error: incompatible types (int cannot be converted to byte)\n        b += 500; // Compiles because javac desugars this to: b = (byte)(b + 500)\n        System.out.println(\"Byte value after compound assignment (b += 500): \" + b);\n\n        byte explicitCasted = 10;\n        explicitCasted = (byte) (explicitCasted + 500);\n        System.out.println(\"Byte value with explicit cast ((byte)(b + 500)): \" + explicitCasted);\n    }\n}",
+      "expectedOutput": "Byte value after compound assignment (b += 500): -2\nByte value with explicit cast ((byte)(b + 500)): -2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Short-Circuit AND Side-Effect Verification",
+      "question": "Write two boolean methods that print execution messages and return boolean values. Combine them using short-circuit `&&` and logical `&` to demonstrate which methods are invoked.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-06",
+      "id": "operators-011",
+      "explanation": "This exercise provides explicit visual proof of short-circuit evaluation semantics. When two methods returning boolean values are joined by the short-circuit AND operator (&&), the JVM evaluates the left method first. If the left method returns false, the entire logical conjunction is guaranteed to be false; the JVM skips invoking the right method entirely, preventing any side effects it might produce. In contrast, the standard logical AND operator (&) evaluates both method operands unconditionally, regardless of the left method's return value. Understanding this difference is critical when method calls perform I/O, database writes, or mutate state.",
+      "hints": [
+        "Create methodA() that prints a call message and returns false.",
+        "Create methodB() that prints a call message and returns true.",
+        "Evaluate 'methodA() && methodB()' and contrast with 'methodA() & methodB()'."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean checkFirst() {\n        System.out.println(\"-> checkFirst() invoked: returns false\");\n        return false;\n    }\n\n    public static boolean checkSecond() {\n        System.out.println(\"-> checkSecond() invoked: returns true\");\n        return true;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Testing short-circuit AND (&&):\");\n        boolean scResult = checkFirst() && checkSecond();\n        System.out.println(\"Short-circuit result: \" + scResult);\n\n        System.out.println(\"\\nTesting non-short-circuit AND (&):\");\n        boolean nonScResult = checkFirst() & checkSecond();\n        System.out.println(\"Non-short-circuit result: \" + nonScResult);\n    }\n}",
+      "expectedOutput": "Testing short-circuit AND (&&):\n-> checkFirst() invoked: returns false\nShort-circuit result: false\n\nTesting non-short-circuit AND (&):\n-> checkFirst() invoked: returns false\n-> checkSecond() invoked: returns true\nNon-short-circuit result: false"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Short-Circuit OR Side-Effect Verification",
+      "question": "Demonstrate the operational difference between the short-circuit logical OR (`||`) and non-short-circuit logical OR (`|`) using methods with observable side-effect logging.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-07",
+      "id": "operators-012",
+      "explanation": "The short-circuit OR operator (||) optimizes boolean evaluation by inspecting operands from left to right. If the left-hand operand evaluates to true, the overall disjunction is guaranteed to be true regardless of the right-hand operand; the JVM short-circuits and skips evaluating the right-hand operand. Conversely, the non-short-circuit logical OR operator (|) forces full evaluation of both operands. If the right-hand operand is a method call that alters state, logs metrics, or performs network I/O, using || skips that execution, while | executes it unconditionally. Writing clean code requires choosing operators intentionally based on whether side effects are intended.",
+      "hints": [
+        "Create methodA() that prints and returns true.",
+        "Create methodB() that prints and returns false.",
+        "Evaluate 'methodA() || methodB()' and compare against 'methodA() | methodB()'."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean primaryCheck() {\n        System.out.println(\"-> primaryCheck() invoked: returns true\");\n        return true;\n    }\n\n    public static boolean secondaryCheck() {\n        System.out.println(\"-> secondaryCheck() invoked: returns false\");\n        return false;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Testing short-circuit OR (||):\");\n        boolean scResult = primaryCheck() || secondaryCheck();\n        System.out.println(\"Short-circuit result: \" + scResult);\n\n        System.out.println(\"\\nTesting non-short-circuit OR (|):\");\n        boolean nonScResult = primaryCheck() | secondaryCheck();\n        System.out.println(\"Non-short-circuit result: \" + nonScResult);\n    }\n}",
+      "expectedOutput": "Testing short-circuit OR (||):\n-> primaryCheck() invoked: returns true\nShort-circuit result: true\n\nTesting non-short-circuit OR (|):\n-> primaryCheck() invoked: returns true\n-> secondaryCheck() invoked: returns false\nNon-short-circuit result: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Binary Numeric Promotion and Explicit Narrowing",
+      "question": "Explain why `byte b += 5;` compiles successfully while `b = b + 5;` causes a compilation error, and fix the statement using an explicit narrowing cast.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-08",
+      "id": "operators-013",
+      "explanation": "Java enforces strict binary numeric promotion rules (JLS §5.6). When an arithmetic operator (+, -, *, /) is applied to primitive operands smaller than int (such as byte, short, or char), both operands are automatically promoted to 32-bit int before the arithmetic operation executes. In the statement b = b + 5, the expression b + 5 evaluates to a 32-bit int. Assigning this 32-bit result back to an 8-bit byte variable fails at compile time because downcasting requires an explicit narrowing conversion: b = (byte)(b + 5). In contrast, the compound assignment operator b += 5 includes an implicit cast defined by the language specification: b = (byte)(b + 5), allowing it to compile without explicit casting.",
+      "hints": [
+        "Explain in comments that binary operators promote byte operands to 32-bit int.",
+        "Demonstrate the required fix: 'b = (byte) (b + 5);'.",
+        "Compare the output of both statements to confirm identical numerical results."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        byte b1 = 20;\n        b1 += 5; // Compiler desugars to: b1 = (byte)(b1 + 5)\n        System.out.println(\"Compound assignment result (b1 += 5): \" + b1);\n\n        byte b2 = 20;\n        // b2 = b2 + 5; // Compilation failure: incompatible types: possible lossy conversion from int to byte\n        b2 = (byte) (b2 + 5); // Fixed using explicit cast\n        System.out.println(\"Explicit cast result ((byte)(b2 + 5)): \" + b2);\n    }\n}",
+      "expectedOutput": "Compound assignment result (b1 += 5): 25\nExplicit cast result ((byte)(b2 + 5)): 25"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Bitwise Manipulation: Get, Set, Clear, and Toggle",
+      "question": "Write methods to inspect (get), set, clear, and toggle the i-th bit of an integer using bitwise operators (`&`, `|`, `~`, `^`, `<<`), and demonstrate their effects.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-09",
+      "id": "operators-014",
+      "explanation": "Bit manipulation allows compact, high-performance state representation at the binary level. To manipulate the i-th bit of an integer, a mask is created by shifting 1 left by i positions (1 << i): 1) Getting the bit uses bitwise AND ((num & mask) != 0). 2) Setting the bit to 1 uses bitwise OR (num | mask), forcing the target bit high while leaving other bits unchanged. 3) Clearing the bit to 0 uses bitwise AND with the bitwise NOT of the mask (num & ~mask), turning the target bit off while preserving all others. 4) Toggling (inverting) the bit uses bitwise XOR (num ^ mask). These operations form the foundation of bitmap indices, hardware drivers, and network protocol headers.",
+      "hints": [
+        "Construct the bitmask using '(1 << i)'.",
+        "Clear a bit using 'num & ~(1 << i)'.",
+        "Toggle a bit using 'num ^ (1 << i)'."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean getBit(int num, int i) {\n        return (num & (1 << i)) != 0;\n    }\n\n    public static int setBit(int num, int i) {\n        return num | (1 << i);\n    }\n\n    public static int clearBit(int num, int i) {\n        return num & ~(1 << i);\n    }\n\n    public static int toggleBit(int num, int i) {\n        return num ^ (1 << i);\n    }\n\n    public static void main(String[] args) {\n        int num = 8; // Binary: 0000 1000 (bit 3 is set)\n        System.out.println(\"Original: \" + num + \" (\" + Integer.toBinaryString(num) + \")\");\n        System.out.println(\"Bit 3 is set: \" + getBit(num, 3));\n        System.out.println(\"Bit 1 is set: \" + getBit(num, 1));\n\n        num = setBit(num, 1); // Set bit 1 -> 1010 (10)\n        System.out.println(\"After setBit(1): \" + num + \" (\" + Integer.toBinaryString(num) + \")\");\n\n        num = clearBit(num, 3); // Clear bit 3 -> 0010 (2)\n        System.out.println(\"After clearBit(3): \" + num + \" (\" + Integer.toBinaryString(num) + \")\");\n\n        num = toggleBit(num, 0); // Toggle bit 0 -> 0011 (3)\n        System.out.println(\"After toggleBit(0): \" + num + \" (\" + Integer.toBinaryString(num) + \")\");\n    }\n}",
+      "expectedOutput": "Original: 8 (1000)\nBit 3 is set: true\nBit 1 is set: false\nAfter setBit(1): 10 (1010)\nAfter clearBit(3): 2 (10)\nAfter toggleBit(0): 3 (11)"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Power of Two Bitwise Verification",
+      "question": "Check whether a given positive integer is an exact power of two using the bitwise expression `(n > 0) && ((n & (n - 1)) == 0)`.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-10",
+      "id": "operators-015",
+      "explanation": "In binary representation, an integer that is an exact power of two contains exactly one set bit (1) followed by zeros (e.g., 2 = 0010, 4 = 0100, 8 = 1000). Subtracting 1 from a power of two flips that single set bit to 0 and turns all lower trailing zero bits to 1 (e.g., 8 - 1 = 7, or 0111). Performing a bitwise AND between n and n - 1 results in zero ((n & (n - 1)) == 0) because the two numbers share no common set bits. For numbers that are not powers of two, additional higher set bits remain unchanged by the subtraction, causing the bitwise AND to evaluate to a non-zero value. Guarding with n > 0 ensures 0 and negative integers are handled correctly.",
+      "hints": [
+        "Check that n > 0 to exclude zero and negative integers.",
+        "Apply the expression: '(n & (n - 1)) == 0'.",
+        "Test with powers of two (e.g., 16) and non-powers of two (e.g., 18)."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPowerOfTwo(int n) {\n        return (n > 0) && ((n & (n - 1)) == 0);\n    }\n\n    public static void main(String[] args) {\n        int[] testValues = {0, 1, 2, 16, 18, 64, 100};\n        for (int v : testValues) {\n            System.out.println(v + \" is power of 2: \" + isPowerOfTwo(v));\n        }\n    }\n}",
+      "expectedOutput": "0 is power of 2: false\n1 is power of 2: true\n2 is power of 2: true\n16 is power of 2: true\n18 is power of 2: false\n64 is power of 2: true\n100 is power of 2: false"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Bitwise Flag Manager",
+      "question": "Implement an authorization permission system using bitwise operators (`|`, `&`, `^`, `~`) to set, check, clear, and toggle permissions (READ, WRITE, EXECUTE, ADMIN) within a single byte.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-06",
+      "id": "operators-016",
+      "explanation": "Bitwise flags allow multiple boolean attributes to be packed into a single primitive byte or int. Each permission is assigned a unique power-of-two bit position: READ (1 << 0 = 1), WRITE (1 << 1 = 2), EXECUTE (1 << 2 = 4), and ADMIN (1 << 3 = 8). Bitwise OR (|) combines multiple permissions into a single permission set. Bitwise AND (&) checks whether a specific permission bit is set ((flags & READ) == READ). Bitwise AND with NOT (~WRITE) removes a permission, while bitwise XOR (^) toggles a permission. This pattern is widely used in POSIX file systems, network packet headers, and high-performance game engines to minimize memory usage.",
+      "hints": [
+        "Define constants: READ = 1, WRITE = 2, EXECUTE = 4, ADMIN = 8.",
+        "Add a permission using 'permissions |= FLAG;'.",
+        "Check a permission using '(permissions & FLAG) != 0;'."
+      ],
+      "sampleCode": "public class Solution {\n    public static final byte READ = 1 << 0;    // 0001 (1)\n    public static final byte WRITE = 1 << 1;   // 0010 (2)\n    public static final byte EXECUTE = 1 << 2; // 0100 (4)\n    public static final byte ADMIN = 1 << 3;   // 1000 (8)\n\n    public static void main(String[] args) {\n        byte userPermissions = 0;\n\n        // Grant READ and WRITE\n        userPermissions |= (READ | WRITE);\n        System.out.println(\"Has READ: \" + ((userPermissions & READ) != 0));\n        System.out.println(\"Has WRITE: \" + ((userPermissions & WRITE) != 0));\n        System.out.println(\"Has ADMIN: \" + ((userPermissions & ADMIN) != 0));\n\n        // Revoke WRITE\n        userPermissions &= ~WRITE;\n        System.out.println(\"After revoking WRITE, has WRITE: \" + ((userPermissions & WRITE) != 0));\n\n        // Toggle EXECUTE\n        userPermissions ^= EXECUTE;\n        System.out.println(\"After toggling EXECUTE, has EXECUTE: \" + ((userPermissions & EXECUTE) != 0));\n    }\n}",
+      "expectedOutput": "Has READ: true\nHas WRITE: true\nHas ADMIN: false\nAfter revoking WRITE, has WRITE: false\nAfter toggling EXECUTE, has EXECUTE: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Fast Bitwise Arithmetic",
+      "question": "Implement fast multiplication by 2, fast division by 2, and power-of-two detection using only bitwise shift (`<<`, `>>`) and bitwise logical operations.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-07",
+      "id": "operators-017",
+      "explanation": "Bitwise shift operators perform arithmetic multiplication and division by powers of two directly at the hardware register level. Shifting an integer left by 1 (n << 1) shifts all bits one position toward the most significant bit, which is equivalent to multiplying by 2 (n * 2^k). Arithmetic right shift by 1 (n >> 1) shifts bits one position to the right while preserving the sign bit, which is equivalent to integer division by 2 (n / 2^k). Because bit shifts avoid the overhead of complex CPU division circuitry, optimizing compilers and low-level graphics engines frequently use bit shifts to accelerate arithmetic calculations.",
+      "hints": [
+        "Multiply by 2 using left shift: 'n << 1'.",
+        "Divide by 2 using arithmetic right shift: 'n >> 1'.",
+        "Combine shifts with '(n > 0) && ((n & (n - 1)) == 0)' for power-of-two verification."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int val = 24;\n\n        int multiplied = val << 1; // 24 * 2\n        int divided = val >> 1;    // 24 / 2\n        boolean isPow2 = (val > 0) && ((val & (val - 1)) == 0);\n\n        System.out.println(\"Original value: \" + val);\n        System.out.println(\"Multiplied by 2 (val << 1): \" + multiplied);\n        System.out.println(\"Divided by 2 (val >> 1): \" + divided);\n        System.out.println(\"Is power of 2: \" + isPow2);\n    }\n}",
+      "expectedOutput": "Original value: 24\nMultiplied by 2 (val << 1): 48\nDivided by 2 (val >> 1): 12\nIs power of 2: false"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "In-Place Variable Swap via Bitwise XOR",
+      "question": "Swap two integer variables in place using bitwise XOR (`^`) without allocating a temporary variable, and explain the edge case when swapping an array element with itself.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-11",
+      "id": "operators-018",
+      "explanation": "The XOR swap algorithm leverages two mathematical properties of exclusive OR: self-inverse (x ^ x == 0) and identity (x ^ 0 == x). The swap proceeds in three steps: 1) a = a ^ b; 2) b = a ^ b (which expands to (a ^ b) ^ b = a); 3) a = a ^ b (which expands to (a ^ b) ^ a = b). While this swaps two distinct variables without extra memory, it fails if both references point to the exact same memory location (such as swapping arr[i] and arr[j] when i == j). In that case, the first step computes a[i] = a[i] ^ a[i], zeroing out the value permanently. Defensive implementations must ensure operand addresses are distinct before executing an XOR swap.",
+      "hints": [
+        "Execute the three-step sequence: a = a ^ b; b = a ^ b; a = a ^ b;.",
+        "Check that the variables or array indices do not refer to the exact same memory location.",
+        "Compare with arithmetic swapping (a = a + b), which carries an integer overflow risk."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 15;\n        int b = 42;\n\n        System.out.println(\"Before XOR swap: a = \" + a + \", b = \" + b);\n        a = a ^ b;\n        b = a ^ b;\n        a = a ^ b;\n        System.out.println(\"After XOR swap:  a = \" + a + \", b = \" + b);\n\n        // Edge case demonstration: swapping an element with itself\n        int[] arr = {99};\n        // arr[0] = arr[0] ^ arr[0] would zero the value out!\n        System.out.println(\"Caution: Same-reference XOR swap zeroes value: (99 ^ 99) = \" + (arr[0] ^ arr[0]));\n    }\n}",
+      "expectedOutput": "Before XOR swap: a = 15, b = 42\nAfter XOR swap:  a = 42, b = 15\nCaution: Same-reference XOR swap zeroes value: (99 ^ 99) = 0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Short-Circuit Side-Effect Validator",
+      "question": "Create two boolean methods that increment execution counters as side effects. Combine them using short-circuit operators (`||`, `&&`) and standard operators (`|`, `&`) to prove when methods are skipped.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-09",
+      "id": "operators-019",
+      "explanation": "When methods produce side effects (such as incrementing state counters or performing I/O), using short-circuit operators can alter application behavior based on which methods actually execute. In an expression like testA() && testB(), if testA() increments a counter and returns false, testB() is never invoked, leaving testB's counter unchanged. With the non-short-circuit operator testA() & testB(), both methods execute unconditionally, incrementing both counters. Tracking these counters provides concrete evidence of how operator choice impacts program state and helps identify unintended side-effect dependencies.",
+      "hints": [
+        "Maintain static counter variables: counterA and counterB.",
+        "Increment counterA inside methodA() and counterB inside methodB().",
+        "Compare the counter values after short-circuit evaluation versus non-short-circuit evaluation."
+      ],
+      "sampleCode": "public class Solution {\n    static int callCountA = 0;\n    static int callCountB = 0;\n\n    public static boolean stepA() {\n        callCountA++;\n        return false;\n    }\n\n    public static boolean stepB() {\n        callCountB++;\n        return true;\n    }\n\n    public static void main(String[] args) {\n        // Short-circuit && skips stepB\n        boolean r1 = stepA() && stepB();\n        System.out.println(\"After short-circuit &&:\");\n        System.out.println(\"callCountA = \" + callCountA + \", callCountB = \" + callCountB);\n\n        // Non-short-circuit & executes both\n        boolean r2 = stepA() & stepB();\n        System.out.println(\"\\nAfter non-short-circuit &:\");\n        System.out.println(\"callCountA = \" + callCountA + \", callCountB = \" + callCountB);\n    }\n}",
+      "expectedOutput": "After short-circuit &&:\ncallCountA = 1, callCountB = 0\n\nAfter non-short-circuit &:\ncallCountA = 2, callCountB = 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Brian Kernighan’s Set-Bit Counting Algorithm",
+      "question": "Write a function that counts the number of set bits (1s) in an integer using Brian Kernighan’s bitwise algorithm without calling `Integer.bitCount()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-10",
+      "id": "operators-020",
+      "explanation": "Counting set bits using a naive loop requires shifting through all 32 bits of an integer. Brian Kernighan’s algorithm optimizes this to run in O(k) time, where k is the number of set bits (1s). The algorithm uses the identity n = n & (n - 1) in a while loop. Subtracting 1 flips all bits after the rightmost set bit, including that bit itself. Performing a bitwise AND between n and n - 1 clears the rightmost set bit while leaving all other set bits unchanged. The loop repeats until all set bits are cleared and n becomes 0. The number of loop iterations equals the exact number of set bits in the integer.",
+      "hints": [
+        "Initialize 'int count = 0;'.",
+        "Loop while 'n != 0', updating 'n = n & (n - 1);' on each iteration.",
+        "Increment the count on each iteration and return the result."
+      ],
+      "sampleCode": "public class Solution {\n    public static int countSetBits(int n) {\n        int count = 0;\n        while (n != 0) {\n            n = n & (n - 1); // Clears the lowest set bit\n            count++;\n        }\n        return count;\n    }\n\n    public static void main(String[] args) {\n        int num = 29; // Binary: 0001 1101 (4 set bits)\n        System.out.println(\"Number: \" + num + \" (\" + Integer.toBinaryString(num) + \")\");\n        System.out.println(\"Set bits (Kernighan's): \" + countSetBits(num));\n        System.out.println(\"Set bits (Library match): \" + Integer.bitCount(num));\n    }\n}",
+      "expectedOutput": "Number: 29 (11101)\nSet bits (Kernighan's): 4\nSet bits (Library match): 4"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "In-Place Variable Swap: Arithmetic vs XOR Analysis",
+      "question": "Implement variable swapping without temporary storage using both arithmetic operations (`+`, `-`) and bitwise XOR (`^`). Explain why arithmetic swapping risks integer overflow while XOR swapping does not.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "OPR-08",
+      "id": "operators-021",
+      "explanation": "Swapping two variables without auxiliary storage can be implemented using arithmetic or bitwise operations. Arithmetic swapping uses: a = a + b; b = a - b; a = a - b;. While this works mathematically, if a + b exceeds Integer.MAX_VALUE (2,147,483,647), it causes integer overflow. Although two's complement wrap-around preserves the correct result in standard Java, checked environments or Math.addExact() will throw an ArithmeticException. Bitwise XOR swapping (a = a ^ b; b = a ^ b; a = a ^ b;) operates directly on individual bits without carry propagation, completely eliminating overflow risks. However, neither method is faster than standard temporary-variable swapping on modern pipelined CPUs.",
+      "hints": [
+        "Implement arithmetic swap: a = a + b; b = a - b; a = a - b;.",
+        "Implement XOR swap: a = a ^ b; b = a ^ b; a = a ^ b;.",
+        "Explain that arithmetic addition risks integer overflow, whereas bitwise XOR operations do not carry across bit positions."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Arithmetic swap demonstration\n        int a = 100, b = 200;\n        System.out.println(\"Initial: a = \" + a + \", b = \" + b);\n        a = a + b; // Risk of overflow if values are near Integer.MAX_VALUE\n        b = a - b;\n        a = a - b;\n        System.out.println(\"After arithmetic swap: a = \" + a + \", b = \" + b);\n\n        // XOR swap demonstration\n        int x = 100, y = 200;\n        x = x ^ y; // Safe from arithmetic overflow\n        y = x ^ y;\n        x = x ^ y;\n        System.out.println(\"After XOR swap: x = \" + x + \", y = \" + y);\n    }\n}",
+      "expectedOutput": "Initial: a = 100, b = 200\nAfter arithmetic swap: a = 200, b = 100\nAfter XOR swap: x = 200, y = 100"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Arithmetic vs Logical Bit Shift Disparity",
+      "question": "Demonstrate the operational difference between the arithmetic right shift (`>>`) and logical right shift (`>>>`) on negative numbers, displaying the resulting 32-bit binary representations.",
+      "source": "java_coding_practice.json",
+      "source_id": "operators-12",
+      "id": "operators-022",
+      "explanation": "Java provides two distinct right-shift operators: arithmetic right shift (>>) and logical right shift (>>>). For positive integers, both operators shift bits right and fill the vacated upper positions with 0. However, their behavior diverges on negative numbers, where the sign bit (bit 31) is 1. Arithmetic right shift (>>) performs sign extension: it preserves the sign bit by shifting in 1s from the left, keeping negative numbers negative. Logical right shift (>>>) performs zero extension: it shifts in 0s from the left regardless of the sign bit, converting a negative integer into a large positive integer. Understanding this distinction is essential when parsing unsigned binary data, deserializing network protocols, or implementing cryptography routines.",
+      "hints": [
+        "Use a negative integer such as 'int val = -8;'.",
+        "Perform 'val >> 2' and 'val >>> 2'.",
+        "Format both results using Integer.toBinaryString() to inspect the shifted bit patterns."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int negativeNum = -16;\n        int arithmeticShift = negativeNum >> 2;\n        int logicalShift = negativeNum >>> 2;\n\n        System.out.println(\"Original value: \" + negativeNum);\n        System.out.println(\"Binary original:   \" + Integer.toBinaryString(negativeNum));\n        System.out.println(\"Arithmetic (>> 2): \" + arithmeticShift + \" -> Binary: \" + Integer.toBinaryString(arithmeticShift));\n        System.out.println(\"Logical   (>>> 2): \" + logicalShift + \" -> Binary: \" + Integer.toBinaryString(logicalShift));\n    }\n}",
+      "expectedOutput": "Original value: -16\nBinary original:   11111111111111111111111111110000\nArithmetic (>> 2): -4 -> Binary: 11111111111111111111111111111100\nLogical   (>>> 2): 1073741820 -> Binary: 111111111111111111111111111100"
+    },
+    {

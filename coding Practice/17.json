@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "break-continue",
+  "topic": "Break and continue",
+  "page": 69,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Array Search with Immediate Break",
+      "question": "Search an array of integers for a target value and terminate loop execution immediately using `break` as soon as the value is located.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-01",
+      "id": "break-continue-001",
+      "explanation": "In sequential array searches, continuing to iterate after locating the desired item wastes CPU cycles. The `break` statement provides an immediate, unconditional exit from the innermost enclosing loop (`for`, `while`, or `do-while`). At the bytecode level, executing a `break` causes an unconditional jump (via the `goto` opcode) to the instruction directly following the loop's closing brace. This short-circuiting pattern is crucial for linear search operations, reducing average-case runtime complexity from inspecting the entire collection down to terminating at the first matching element.",
+      "hints": [
+        "Traverse the array using a standard indexed loop: `for (int i = 0; i < arr.length; i++)`.",
+        "Check if `arr[i] == target` inside the loop body.",
+        "Execute `break;` immediately once the condition is met and record the found index."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {10, 25, 42, 88, 99};\n        int target = 42;\n        int foundIndex = -1;\n\n        for (int i = 0; i < numbers.length; i++) {\n            if (numbers[i] == target) {\n                foundIndex = i;\n                break;\n            }\n        }\n\n        System.out.println(\"Target: \" + target);\n        System.out.println(\"Found at index: \" + foundIndex);\n    }\n}",
+      "expectedOutput": "Target: 42\nFound at index: 2"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Iteration Bypass with Continue",
+      "question": "Print numbers from 1 to 10 on a single line separated by spaces, but skip the number 5 using the `continue` statement.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-02",
+      "id": "break-continue-002",
+      "explanation": "The `continue` statement halts only the current iteration of the innermost enclosing loop and immediately transfers control to the loop's update step. In a standard `for` loop, executing `continue` skips all remaining statements in the loop body and directly evaluates the iteration expression (e.g., `i++`), followed by the termination test (`i <= 10`). When `i == 5`, the print statement is bypassed entirely. This demonstrates how `continue` functions as a selective filter for specific values without terminating the overall iteration cycle.",
+      "hints": [
+        "Iterate from `1` through `10` inclusive using a `for` loop.",
+        "Evaluate `if (i == 5) continue;` before calling the output statement.",
+        "Ensure spacing is formatted cleanly across remaining printed values."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 10; i++) {\n            if (i == 5) {\n                continue;\n            }\n            System.out.print(i + (i == 10 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "1 2 3 4 6 7 8 9 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Selective Odd Number Summation",
+      "question": "Calculate and print the sum of only odd numbers between 1 and 20 by using `continue` to skip even numbers.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-03",
+      "id": "break-continue-003",
+      "explanation": "Combining conditional branching with `continue` creates concise filtering pipelines inside loop bodies. In this problem, `sum` aggregates values across the range 1 to 20. On each step, `i % 2 == 0` tests for even parity. If true, `continue` executes, bypassing the addition `sum += i`. Unlike stepping by two (`i += 2`), using `continue` demonstrates programmatic filtering of heterogeneous data streams, simulating scenarios where unwanted elements must be rejected before entering critical processing pipelines.",
+      "hints": [
+        "Initialize an accumulator `int sum = 0;` outside the loop.",
+        "Check even parity with `if (i % 2 == 0) continue;`.",
+        "Accumulate remaining odd numbers using `sum += i;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int sum = 0;\n        for (int i = 1; i <= 20; i++) {\n            if (i % 2 == 0) {\n                continue;\n            }\n            sum += i;\n        }\n        System.out.println(\"Sum of odd numbers (1-20): \" + sum);\n    }\n}",
+      "expectedOutput": "Sum of odd numbers (1-20): 100"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Stream Abort on Negative Value",
+      "question": "Process an array of numbers sequentially and terminate processing immediately at the first negative number using `break`, reporting the sum of prior positive numbers.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-04",
+      "id": "break-continue-004",
+      "explanation": "Processing sequential transactions often requires aborting upon encountering an invalid or sentinel record. In this scenario, elements are inspected in order. When `num < 0` is detected, `break` immediately terminates the loop, leaving subsequent elements unvisited. This ensures that any corrupted or invalid records halt the aggregation process, maintaining data consistency. The accumulated total represents strictly the valid prefix sequence up to the first failing element.",
+      "hints": [
+        "Iterate using an enhanced `for-each` loop over the integer array.",
+        "Check `if (n < 0) break;` prior to accumulating.",
+        "Display the count or sum of elements successfully processed before the abort."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] values = {15, 30, 45, -5, 60, 75};\n        int sum = 0;\n\n        for (int n : values) {\n            if (n < 0) {\n                System.out.println(\"Negative value encountered: \" + n + \" (Aborting)\");\n                break;\n            }\n            sum += n;\n        }\n\n        System.out.println(\"Processed sum: \" + sum);\n    }\n}",
+      "expectedOutput": "Negative value encountered: -5 (Aborting)\nProcessed sum: 90"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "First Threshold Multiple Finder",
+      "question": "Find and print the smallest multiple of 7 that is strictly greater than 100 using a `while(true)` loop with a `break` statement.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-05",
+      "id": "break-continue-005",
+      "explanation": "When an upper iteration bound cannot be determined cleanly in advance, an infinite loop (`while (true)`) paired with a conditional `break` provides an effective search mechanism. Starting at `candidate = 101`, the loop increments on each iteration and tests divisibility with `candidate % 7 == 0`. When the condition evaluates to true, the program prints the multiple and invokes `break`, breaking the infinite loop. This design separates stepping logic from the termination predicate.",
+      "hints": [
+        "Initialize `int candidate = 101;`.",
+        "Use `while (true)` and test `if (candidate % 7 == 0)`.",
+        "Break immediately after logging or assigning the matching candidate."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int candidate = 101;\n        while (true) {\n            if (candidate % 7 == 0) {\n                System.out.println(\"First multiple of 7 > 100: \" + candidate);\n                break;\n            }\n            candidate++;\n        }\n    }\n}",
+      "expectedOutput": "First multiple of 7 > 100: 105"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Linear Search Early Exit",
+      "question": "Iterate through an array looking for a target integer. Print its index and terminate the loop immediately using `break`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-01",
+      "id": "break-continue-006",
+      "explanation": "Linear search scans elements from left to right until a target key is found. Without a `break` statement, the loop would redundantly examine all remaining elements even after locating the target. Introducing `break` halts execution as soon as `arr[i] == target` evaluates to true. If the loop completes without triggering `break`, the search reports that the element was not found. This illustrates boundary handling and search optimization using control flow interruption.",
+      "hints": [
+        "Track the match status using a boolean flag or sentinel index `found = -1;`.",
+        "Exit the loop immediately upon finding the target using `break;`.",
+        "Print whether the item was found and its specific index."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] items = {4, 9, 15, 23, 42, 77};\n        int target = 23;\n        int index = -1;\n\n        for (int i = 0; i < items.length; i++) {\n            if (items[i] == target) {\n                index = i;\n                break;\n            }\n        }\n\n        System.out.println(\"Searching for: \" + target);\n        System.out.println(\"Found at index: \" + index);\n    }\n}",
+      "expectedOutput": "Searching for: 23\nFound at index: 3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Skip Multiples with Continue",
+      "question": "Print numbers from 1 to 20, but skip all multiples of both 3 and 5 using the `continue` statement.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-02",
+      "id": "break-continue-007",
+      "explanation": "Multiple criteria filtering is common in data validation. Here, `i % 3 == 0 || i % 5 == 0` tests whether the current integer is divisible by 3, 5, or both. If the condition holds true, `continue` executes, bypassing the print statement and jumping straight to `i++`. This skips numbers like 3, 5, 6, 9, 10, 12, 15, 18, and 20, demonstrating how compound boolean predicates can be paired with `continue` to clean data streams in-flight.",
+      "hints": [
+        "Combine divisibility tests with logical OR: `if (i % 3 == 0 || i % 5 == 0) continue;`.",
+        "Print qualifying numbers separated by single spaces.",
+        "Verify that numbers like 15 (divisible by both) are skipped properly."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 20; i++) {\n            if (i % 3 == 0 || i % 5 == 0) {\n                continue;\n            }\n            System.out.print(i + \" \");\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "1 2 4 7 8 11 13 14 16 17 19 "
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Infinite Loop Breaker",
+      "question": "Create an intentional `while(true)` infinite loop that simulates polling sensor values and terminates with `break` when a target threshold (>= 100) is reached.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-03",
+      "id": "break-continue-008",
+      "explanation": "Event-driven daemon tasks often execute indefinitely inside `while (true)` loops until an external shutdown trigger or threshold breach occurs. In this simulation, an accumulator models increasing sensor readings. On each iteration, the value increases until `sensorValue >= 100` evaluates to true. The program logs a shutdown message and executes `break`, transferring control past the loop. This pattern is standard for event loops, socket listeners, and message queue consumers.",
+      "hints": [
+        "Declare `while (true)` to create the open loop structure.",
+        "Increment the simulated sensor reading inside the loop body.",
+        "Trigger `break;` once `sensorValue >= 100` is reached."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int sensorReading = 40;\n        int tick = 0;\n\n        while (true) {\n            tick++;\n            sensorReading += 25;\n            System.out.println(\"Tick \" + tick + \": Reading = \" + sensorReading);\n            if (sensorReading >= 100) {\n                System.out.println(\"Critical threshold reached! Breaking loop.\");\n                break;\n            }\n        }\n    }\n}",
+      "expectedOutput": "Tick 1: Reading = 65\nTick 2: Reading = 90\nTick 3: Reading = 115\nCritical threshold reached! Breaking loop."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Continue in While vs For",
+      "question": "Demonstrate the infinite loop hazard when using `continue` inside a `while` loop if the counter increment is placed after `continue`, and show the correct placement.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-04",
+      "id": "break-continue-009",
+      "explanation": "A key architectural difference between `for` and `while` loops lies in how `continue` interacts with the iteration step. In a `for` loop, `continue` jumps directly to the update clause (`i++`). In a `while` loop, however, there is no automatic update clause; the programmer must increment the counter manually. If the increment `i++` is placed below a conditional `continue`, executing `continue` skips the increment entirely. The counter never changes, causing the condition to remain true and trapping the program in an infinite loop. The fix is to place the increment before `continue` or use a `for` loop.",
+      "hints": [
+        "In a `while` loop, ensure the counter increments before `continue` is reached.",
+        "Illustrate the safe pattern by printing numbers up to 5 while skipping 3.",
+        "Explain in comments why placing `i++` after `continue` creates an infinite loop."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int i = 0;\n        System.out.print(\"Safe while-loop output: \");\n        while (i < 5) {\n            i++; // Increment BEFORE continue check prevents infinite loop\n            if (i == 3) {\n                continue;\n            }\n            System.out.print(i + \" \");\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Safe while-loop output: 1 2 4 5 "
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Skip Blank and Comment Lines",
+      "question": "Iterate through an array of strings representing configuration lines, using `continue` to bypass lines that are empty or start with `#`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-05",
+      "id": "break-continue-010",
+      "explanation": "Configuration parsers regularly encounter comment lines and blank whitespace that must be ignored before processing key-value pairs. Using `continue` allows these non-actionable lines to be filtered out at the top of the loop. If `line.trim().isEmpty() || line.trim().startsWith(\"#\")` evaluates to true, `continue` skips the parsing logic and advances immediately to the next configuration line. This pattern reduces nested `if` blocks, keeping the parsing logic clean and focused.",
+      "hints": [
+        "Trim the string before inspection using `line.trim()`.",
+        "Check both `isEmpty()` and `startsWith(\"#\")` in a single guard condition.",
+        "Execute `continue;` when either condition matches, processing valid entries below."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String[] config = {\n            \"# Server Configuration\",\n            \"port=8080\",\n            \"\",\n            \"# Security Settings\",\n            \"ssl=true\",\n            \"timeout=30\"\n        };\n\n        System.out.println(\"Parsing valid settings:\");\n        for (String line : config) {\n            String trimmed = line.trim();\n            if (trimmed.isEmpty() || trimmed.startsWith(\"#\")) {\n                continue;\n            }\n            System.out.println(\"Config -> \" + trimmed);\n        }\n    }\n}",
+      "expectedOutput": "Parsing valid settings:\nConfig -> port=8080\nConfig -> ssl=true\nConfig -> timeout=30"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Labeled Break for Matrix Search",
+      "question": "Search a 2D matrix for a target value and break out of both nested loops immediately using a labeled `break` upon finding the first match.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-06",
+      "id": "break-continue-011",
+      "explanation": "Standard unlabeled `break` statements exit only the innermost enclosing loop. When searching multidimensional structures like 2D arrays, breaking out of an inner loop leaves the outer loop running, requiring extra boolean flags to stop search iteration. Java resolves this with labeled statements. By prefixing the outer loop with an identifier label (`searchLoop:`), executing `break searchLoop;` immediately terminates both the inner and outer loops in a single step, jumping directly to the statement following the outer loop.",
+      "hints": [
+        "Label the outer loop: `searchLoop: for (int r = 0; ...)`.",
+        "Check for target match inside the inner loop: `if (matrix[r][c] == target)`.",
+        "Invoke `break searchLoop;` to terminate both loops at once."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][] matrix = {\n            {1, 5, 9},\n            {14, 25, 33},\n            {42, 50, 61}\n        };\n        int target = 25;\n        int foundRow = -1, foundCol = -1;\n\n        searchLoop:\n        for (int r = 0; r < matrix.length; r++) {\n            for (int c = 0; c < matrix[r].length; c++) {\n                if (matrix[r][c] == target) {\n                    foundRow = r;\n                    foundCol = c;\n                    break searchLoop;\n                }\n            }\n        }\n\n        System.out.println(\"Target: \" + target);\n        System.out.println(\"Found at position: [\" + foundRow + \"][\" + foundCol + \"]\");\n    }\n}",
+      "expectedOutput": "Target: 25\nFound at position: [1][1]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Prime Discovery via Labeled Continue",
+      "question": "Find and print all prime numbers up to 30 using nested loops and a labeled `continue` to skip composite numbers immediately.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-07",
+      "id": "break-continue-012",
+      "explanation": "While finding prime numbers, discovering any factor proves that the candidate is composite. Using a labeled `continue` simplifies this logic: by labeling the outer candidate loop (`outer:`), discovering a divisor in the inner loop (`num % d == 0`) allows calling `continue outer;`. This immediately skips the remainder of the inner loop and advances to the next candidate without needing a temporary `isPrime` boolean flag. If the inner loop finishes without triggering `continue outer;`, the candidate is prime and execution falls through to print it.",
+      "hints": [
+        "Label the outer loop: `outer: for (int num = 2; num <= 30; num++)`.",
+        "In the inner loop, check `if (num % d == 0) continue outer;`.",
+        "Place the print statement after the inner loop to display candidates that had no divisors."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.print(\"Primes up to 30: \");\n        outer:\n        for (int num = 2; num <= 30; num++) {\n            for (int d = 2; d * d <= num; d++) {\n                if (num % d == 0) {\n                    continue outer; // Candidate is composite; advance outer loop immediately\n                }\n            }\n            System.out.print(num + \" \");\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Primes up to 30: 2 3 5 7 11 13 17 19 23 29 "
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Vowel Stripping with Continue",
+      "question": "Iterate through a string character by character, using `continue` to bypass vowels and print only the consonants.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-08",
+      "id": "break-continue-013",
+      "explanation": "Text filtering algorithms inspect characters sequentially and skip unwanted symbols. In this problem, `input.toCharArray()` converts the string into a sequence of characters. As each character is processed, `\"aeiouAEIOU\".indexOf(ch) != -1` checks whether the character is a vowel. If so, `continue` executes, skipping the append step. All consonants and non-vowel characters pass through and are appended to a `StringBuilder`, demonstrating character filtering using `continue`.",
+      "hints": [
+        "Traverse characters using `for (char ch : text.toCharArray())`.",
+        "Check for vowels using `if (\"aeiouAEIOU\".indexOf(ch) != -1) continue;`.",
+        "Append qualifying characters to a `StringBuilder` and print the final result."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"Java Programming\";\n        StringBuilder consonantsOnly = new StringBuilder();\n\n        for (char ch : text.toCharArray()) {\n            if (\"aeiouAEIOU\".indexOf(ch) != -1) {\n                continue;\n            }\n            consonantsOnly.append(ch);\n        }\n\n        System.out.println(\"Original: \" + text);\n        System.out.println(\"Consonants: \" + consonantsOnly);\n    }\n}",
+      "expectedOutput": "Original: Java Programming\nConsonants: Jv Prgrmmng"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "First Repeating Character Finder",
+      "question": "Find and print the first repeating character in a string using a frequency tracking array and `break` on the first recurrence.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-09",
+      "id": "break-continue-014",
+      "explanation": "Detecting duplicate characters in a single pass requires tracking character occurrences. A boolean lookup array `seen` sized to 256 entries tracks ASCII characters. As each character is examined, `if (seen[ch])` checks whether it was previously encountered. If true, the first repeating character has been found; the character is recorded, and `break` terminates the loop immediately in $O(N)$ time. If the character has not been seen before, `seen[ch] = true` records its presence and the loop continues.",
+      "hints": [
+        "Use a `boolean[] seen = new boolean[256];` array to track ASCII character visits.",
+        "Check `if (seen[ch]) { repeatChar = ch; break; }`.",
+        "Mark characters as visited using `seen[ch] = true;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String input = \"developer\";\n        boolean[] seen = new boolean[256];\n        char firstRepeat = '\\0';\n\n        for (char ch : input.toCharArray()) {\n            if (seen[ch]) {\n                firstRepeat = ch;\n                break;\n            }\n            seen[ch] = true;\n        }\n\n        System.out.println(\"Input string: \" + input);\n        System.out.println(\"First repeating character: '\" + firstRepeat + \"'\");\n    }\n}",
+      "expectedOutput": "Input string: developer\nFirst repeating character: 'e'"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Method Linear Search with Break Flag",
+      "question": "Implement a linear search method that traverses an array, uses `break` upon finding the target, and returns the found index or `-1`.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-10",
+      "id": "break-continue-015",
+      "explanation": "Encapsulating linear search within a method separates search iteration from result handling. An index variable `foundIdx` is initialized to `-1`. A `for` loop inspects each element: if `arr[i] == target`, `foundIdx` is assigned `i` and `break` terminates the loop immediately. The method then returns `foundIdx`. This mirrors standard collection search methods like `indexOf()`, providing $O(N)$ worst-case and $O(1)$ best-case runtime.",
+      "hints": [
+        "Initialize `int result = -1;` to serve as the default 'not found' return value.",
+        "Assign `result = i;` and execute `break;` when `arr[i] == target` matches.",
+        "Return `result` after the loop concludes."
+      ],
+      "sampleCode": "public class Solution {\n    public static int findIndex(int[] arr, int target) {\n        int foundIndex = -1;\n        for (int i = 0; i < arr.length; i++) {\n            if (arr[i] == target) {\n                foundIndex = i;\n                break;\n            }\n        }\n        return foundIndex;\n    }\n\n    public static void main(String[] args) {\n        int[] data = {10, 45, 82, 99, 120};\n        int target = 82;\n        int idx = findIndex(data, target);\n        System.out.println(\"Target: \" + target);\n        System.out.println(\"Search result index: \" + idx);\n    }\n}",
+      "expectedOutput": "Target: 82\nSearch result index: 2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Labeled Break for 2D Search",
+      "question": "Search for a specific value in an $M \\times N$ 2D matrix. Upon finding the target, break entirely out of both nested loops using a labeled break (`break searchLoop;`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-06",
+      "id": "break-continue-016",
+      "explanation": "Nested loops complicate early exits because an unlabeled `break` exits only the innermost loop. In a matrix search, this would leave the outer row loop running, redundantly checking subsequent rows. Labeling the outer loop (`matrixSearch:`) allows an inner matching condition to execute `break matrixSearch;`. This terminates both loop levels immediately, transferring control directly to the statement following the outer loop and avoiding redundant iterations.",
+      "hints": [
+        "Place the label before the outer loop: `matrixSearch: for (int r = 0; ...)`.",
+        "When `matrix[r][c] == target`, save the coordinates and execute `break matrixSearch;`.",
+        "Print the resolved row and column coordinates."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][] grid = {\n            {10, 20, 30},\n            {40, 50, 60},\n            {70, 80, 90}\n        };\n        int target = 50;\n        int rPos = -1, cPos = -1;\n\n        matrixSearch:\n        for (int r = 0; r < grid.length; r++) {\n            for (int c = 0; c < grid[r].length; c++) {\n                if (grid[r][c] == target) {\n                    rPos = r;\n                    cPos = c;\n                    break matrixSearch;\n                }\n            }\n        }\n\n        System.out.println(\"Matrix search target: \" + target);\n        System.out.println(\"Coordinates: [\" + rPos + \"][\" + cPos + \"]\");\n    }\n}",
+      "expectedOutput": "Matrix search target: 50\nCoordinates: [1][1]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Labeled Continue for Matrix Row Validation",
+      "question": "Iterate over a 2D matrix. If any cell in a row contains a negative value, skip the rest of that row immediately using a labeled `continue` and evaluate the next row.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-07",
+      "id": "break-continue-017",
+      "explanation": "Validating multi-row records often requires aborting work on an invalid row without halting validation of subsequent rows. Labeling the outer row loop (`rowLoop:`) allows an inner column check to execute `continue rowLoop;` upon encountering a negative value. This skips all remaining columns in the current row, avoids summing corrupted data, and immediately advances the outer loop to the next row.",
+      "hints": [
+        "Label the outer loop: `rowLoop: for (int r = 0; ...)`.",
+        "Inside the column loop, check `if (row[c] < 0) continue rowLoop;`.",
+        "Only valid rows where all columns pass will reach the end of the inner loop to be counted."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][] table = {\n            {5, 10, 15},\n            {20, -1, 30},\n            {40, 50, 60}\n        };\n\n        System.out.println(\"Processing matrix rows:\");\n        rowLoop:\n        for (int r = 0; r < table.length; r++) {\n            int rowSum = 0;\n            for (int c = 0; c < table[r].length; c++) {\n                if (table[r][c] < 0) {\n                    System.out.println(\"Row \" + r + \" rejected (contains negative: \" + table[r][c] + \")\");\n                    continue rowLoop;\n                }\n                rowSum += table[r][c];\n            }\n            System.out.println(\"Row \" + r + \" valid. Sum: \" + rowSum);\n        }\n    }\n}",
+      "expectedOutput": "Processing matrix rows:\nRow 0 valid. Sum: 30\nRow 1 rejected (contains negative: -1)\nRow 2 valid. Sum: 150"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "First Non-Repeating Character",
+      "question": "Find the first non-repeating character in a string in $O(N)$ time and $O(1)$ space using a character frequency array and `break`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-08",
+      "id": "break-continue-018",
+      "explanation": "Finding the first unique character in a string efficiently uses a two-pass algorithm. The first pass iterates through the string to populate a fixed-size frequency array `int[] count = new int[256]` in $O(N)$ time. The second pass iterates through the string in original character order: the first character with `count[ch] == 1` is the first non-repeating character. A `break` statement terminates the second pass immediately, ensuring the earliest unique character is selected without scanning the rest of the string.",
+      "hints": [
+        "Pass 1: increment counts with `count[ch]++` for each character.",
+        "Pass 2: scan the string again; when `count[ch] == 1`, capture the character and `break;`.",
+        "Return or print the unique character, or indicate if all characters repeat."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String word = \"swiss\";\n        int[] counts = new int[256];\n\n        for (char ch : word.toCharArray()) {\n            counts[ch]++;\n        }\n\n        char firstUnique = '\\0';\n        for (char ch : word.toCharArray()) {\n            if (counts[ch] == 1) {\n                firstUnique = ch;\n                break;\n            }\n        }\n\n        System.out.println(\"Input word: \" + word);\n        System.out.println(\"First unique character: '\" + firstUnique + \"'\");\n    }\n}",
+      "expectedOutput": "Input word: swiss\nFirst unique character: 'w'"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Duplicate Pair Detection",
+      "question": "Given an integer array, detect whether any duplicate value exists. Terminate execution with `break` immediately upon discovering the first duplicate pair.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-09",
+      "id": "break-continue-019",
+      "explanation": "Detecting duplicates in a stream can be optimized using a lookup set and early loop termination. In this implementation, a `java.util.HashSet<Integer>` tracks seen elements. Because `set.add(x)` returns `false` if the item is already present, checking `if (!seen.add(x))` detects duplicates in $O(1)$ time. When a duplicate is found, the program records the value and calls `break` immediately. This short-circuiting pattern avoids scanning the rest of the array once duplicate status is confirmed.",
+      "hints": [
+        "Use a `HashSet<Integer> seen = new HashSet<>();`.",
+        "Test `if (!seen.add(val))` inside the loop.",
+        "Trigger `break;` on the first collision to exit early."
+      ],
+      "sampleCode": "import java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] items = {7, 12, 19, 24, 12, 33, 45};\n        Set<Integer> seen = new HashSet<>();\n        int duplicate = -1;\n        boolean hasDuplicate = false;\n\n        for (int x : items) {\n            if (!seen.add(x)) {\n                duplicate = x;\n                hasDuplicate = true;\n                break;\n            }\n        }\n\n        System.out.println(\"Duplicate found: \" + hasDuplicate);\n        if (hasDuplicate) {\n            System.out.println(\"First duplicated element: \" + duplicate);\n        }\n    }\n}",
+      "expectedOutput": "Duplicate found: true\nFirst duplicated element: 12"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Selective Summation with Threshold",
+      "question": "Sum elements of an integer array, using `continue` to ignore negative values and `break` if the running sum reaches or exceeds a predefined threshold of 50.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-10",
+      "id": "break-continue-020",
+      "explanation": "This exercise combines both `continue` and `break` inside a single loop to implement selective filtering alongside early termination. As the array is traversed, negative values are filtered out using `continue`, ensuring only non-negative numbers contribute to the total. After adding each valid number, the updated sum is checked against a threshold (`sum >= 50`). If exceeded, `break` halts the loop immediately. Combining filtering with bounded thresholds is common in budget capping and resource-monitoring loops.",
+      "hints": [
+        "Filter negative values first: `if (val < 0) continue;`.",
+        "Add positive values to the accumulator: `sum += val;`.",
+        "Check threshold: `if (sum >= 50) break;` immediately after accumulating."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] values = {10, -5, 20, -8, 25, 30};\n        int sum = 0;\n        int threshold = 50;\n\n        for (int v : values) {\n            if (v < 0) {\n                continue; // Ignore negative amounts\n            }\n            sum += v;\n            if (sum >= threshold) {\n                System.out.println(\"Threshold reached (\" + sum + \" >= \" + threshold + \"). Halting.\");\n                break;\n            }\n        }\n\n        System.out.println(\"Final running sum: \" + sum);\n    }\n}",
+      "expectedOutput": "Threshold reached (55 >= 50). Halting.\nFinal running sum: 55"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Two-Sum Target Search via Labeled Break",
+      "question": "Find the first pair of array elements that sum to a target value ($S = 50$) using nested loops, and terminate both loops immediately upon the first match using a labeled `break`.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-11",
+      "id": "break-continue-021",
+      "explanation": "Finding target sums across index pairs $(i, j)$ requires exploring a 2D triangular search space ($0 \\le i < j < N$). When searching for the first matching pair, finding a valid sum means all remaining iterations across both loops should stop immediately. An unlabeled `break` would exit only the inner loop, leaving the outer loop to continue testing subsequent pairs. Labeling the outer loop (`pairSearch:`) allows the inner matching block to execute `break pairSearch;`, terminating both loop levels instantly and preserving the exact first matching pair.",
+      "hints": [
+        "Prefix the outer loop with a label: `pairSearch: for (int i = 0; ...)`.",
+        "Inner loop scans ahead: `for (int j = i + 1; j < arr.length; j++)`.",
+        "When `arr[i] + arr[j] == target`, save the pair and call `break pairSearch;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {10, 22, 28, 35, 40};\n        int target = 50;\n        int val1 = -1, val2 = -1;\n        boolean found = false;\n\n        pairSearch:\n        for (int i = 0; i < numbers.length; i++) {\n            for (int j = i + 1; j < numbers.length; j++) {\n                if (numbers[i] + numbers[j] == target) {\n                    val1 = numbers[i];\n                    val2 = numbers[j];\n                    found = true;\n                    break pairSearch;\n                }\n            }\n        }\n\n        System.out.println(\"Target sum: \" + target);\n        if (found) {\n            System.out.println(\"Matching pair: \" + val1 + \" + \" + val2 + \" = \" + target);\n        }\n    }\n}",
+      "expectedOutput": "Target sum: 50\nMatching pair: 22 + 28 = 50"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "All-Zero Matrix Row Detection",
+      "question": "Find the index of the first row in a 2D matrix where all elements are zero, using labeled loops to skip non-zero rows immediately.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-12",
+      "id": "break-continue-022",
+      "explanation": "Verifying that a row consists entirely of zeros requires confirming that no cell contains a non-zero value. By labeling the outer row loop (`scanRows:`), an inner column check can execute `continue scanRows;` as soon as any cell contains `matrix[r][c] != 0`. This short-circuits evaluation for that row and immediately advances to the next row. If the inner column loop completes without encountering a non-zero value, all elements in that row are zero, and the program records the row index and breaks.",
+      "hints": [
+        "Label the outer loop: `scanRows: for (int r = 0; ...)`.",
+        "In the inner loop, check `if (matrix[r][c] != 0) continue scanRows;`.",
+        "If the inner loop finishes without skipping, the row contains all zeros: record `r` and `break;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][] matrix = {\n            {1, 0, 3},\n            {0, 0, 0},\n            {0, 4, 0}\n        };\n        int zeroRow = -1;\n\n        scanRows:\n        for (int r = 0; r < matrix.length; r++) {\n            for (int c = 0; c < matrix[r].length; c++) {\n                if (matrix[r][c] != 0) {\n                    continue scanRows; // Non-zero found; skip to next row\n                }\n            }\n            zeroRow = r; // All elements in row r were 0\n            break;\n        }\n\n        System.out.println(\"First all-zero row index: \" + zeroRow);\n    }\n}",
+      "expectedOutput": "First all-zero row index: 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Sequential Command Token Pipeline",
+      "question": "Process an array of command strings: skip processing on 'skip' using `continue`, terminate processing on 'stop' using `break`, and execute all other commands.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-13",
+      "id": "break-continue-023",
+      "explanation": "Command interpreters commonly use control flow statements to handle pipeline directives. In this command loop, incoming tokens are inspected sequentially. If the token equals 'skip' (case-insensitive), `continue` skips the execution block and advances to the next instruction. If the token equals 'stop', `break` terminates the command pipeline immediately. All other commands fall through to standard execution. This pattern cleanly separates pipeline control directives from payload processing.",
+      "hints": [
+        "Normalize tokens with `.trim().toLowerCase()`.",
+        "Check for exit condition first: `if (\"stop\".equals(cmd)) break;`.",
+        "Check for bypass condition: `if (\"skip\".equals(cmd)) continue;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String[] commands = {\"init\", \"process\", \"skip\", \"update\", \"stop\", \"finalize\"};\n\n        System.out.println(\"Executing command pipeline:\");\n        for (String cmd : commands) {\n            if (\"stop\".equalsIgnoreCase(cmd)) {\n                System.out.println(\"-> Encountered 'stop'. Halting execution.\");\n                break;\n            }\n            if (\"skip\".equalsIgnoreCase(cmd)) {\n                System.out.println(\"-> Encountered 'skip'. Bypassing step.\");\n                continue;\n            }\n            System.out.println(\"Executing: \" + cmd);\n        }\n    }\n}",
+      "expectedOutput": "Executing command pipeline:\nExecuting: init\nExecuting: process\n-> Encountered 'skip'. Bypassing step.\nExecuting: update\n-> Encountered 'stop'. Halting execution."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Smallest Common Multiple via Infinite Loop Break",
+      "question": "Find the smallest positive integer divisible by all numbers from 1 to 10 using a `while(true)` search loop with inner divisibility checks and `break`.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-14",
+      "id": "break-continue-024",
+      "explanation": "Finding the least common multiple of a contiguous range of numbers tests bounded search logic. The candidate search space starts at 10 and increments by 10 (since the result must be divisible by 10). For each candidate, an inner loop tests divisors from 2 through 9. If `candidate % d != 0` for any divisor, the candidate fails and the inner loop breaks early. If the inner loop finishes without breaking, the candidate is divisible by all numbers from 1 to 10, and the outer loop breaks to output the result (2520).",
+      "hints": [
+        "Increment candidates by 10 to satisfy divisibility by 10 by default.",
+        "In the inner loop, check `if (candidate % d != 0)` and `break` early on mismatch.",
+        "If all divisors 2–9 divide the candidate evenly, break the outer loop and print the result."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int candidate = 10;\n        while (true) {\n            boolean divisibleAll = true;\n            for (int d = 2; d <= 9; d++) {\n                if (candidate % d != 0) {\n                    divisibleAll = false;\n                    break;\n                }\n            }\n            if (divisibleAll) {\n                System.out.println(\"Smallest number divisible by 1 to 10: \" + candidate);\n                break;\n            }\n            candidate += 10;\n        }\n    }\n}",
+      "expectedOutput": "Smallest number divisible by 1 to 10: 2520"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Prime Sieve with Labeled Continue and Break",
+      "question": "List all prime numbers up to 50 using an outer labeled loop with `continue` combined with an inner divisor check optimized with `break`.",
+      "source": "java_coding_practice.json",
+      "source_id": "break-continue-15",
+      "id": "break-continue-025",
+      "explanation": "This problem combines labeled loop control with divisor bound optimization. The outer candidate loop is labeled `primeCheck:`. For each candidate `n`, odd numbers are checked against divisors `d` up to $\\sqrt{n}$ (`d * d <= n`). If `n % d == 0`, `continue primeCheck;` immediately aborts checking for that candidate and advances the outer loop. If the divisor loop finishes without finding any factor, execution reaches the print statement. This demonstrates how labeled `continue` can replace boolean status flags in nested loops.",
+      "hints": [
+        "Label the outer candidate loop: `primeCheck: for (int n = 2; n <= 50; n++)`.",
+        "Test divisors up to $\\sqrt{n}$: `for (int d = 2; d * d <= n; d++)`.",
+        "Execute `continue primeCheck;` as soon as `n % d == 0` is detected."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.print(\"Primes up to 50: \");\n        primeCheck:\n        for (int n = 2; n <= 50; n++) {\n            for (int d = 2; d * d <= n; d++) {\n                if (n % d == 0) {\n                    continue primeCheck;\n                }\n            }\n            System.out.print(n + \" \");\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Primes up to 50: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 "
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Triply Nested Labeled Control",
+      "question": "Implement a 3D coordinate search across dimensions $(X, Y, Z)$ using a labeled `break` to exit all three loops immediately upon locating a target voxel.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-11",
+      "id": "break-continue-026",
+      "explanation": "Searching a three-dimensional coordinate grid involves three nested loops ($O(X \\times Y \\times Z)$). Without labeled control flow, exiting upon finding a match requires multiple boolean flags and repeated conditional checks at each loop level. By labeling the outermost loop (`cubeSearch:`), finding the target inside the innermost $Z$ loop allows executing `break cubeSearch;`. This single instruction exits all three loop levels immediately, popping their control frames and jumping directly to post-search processing.",
+      "hints": [
+        "Label the outermost loop: `cubeSearch: for (int x = 0; ...)`.",
+        "Nest loops for dimensions $Y$ and $Z$.",
+        "Upon locating the target voxel, save coordinates and call `break cubeSearch;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][][] space = new int[3][3][3];\n        space[1][2][1] = 99; // Target voxel\n        int target = 99;\n        int fX = -1, fY = -1, fZ = -1;\n\n        cubeSearch:\n        for (int x = 0; x < space.length; x++) {\n            for (int y = 0; y < space[x].length; y++) {\n                for (int z = 0; z < space[x][y].length; z++) {\n                    if (space[x][y][z] == target) {\n                        fX = x; fY = y; fZ = z;\n                        break cubeSearch; // Exit all three loops at once\n                    }\n                }\n            }\n        }\n\n        System.out.println(\"Target voxel: \" + target);\n        System.out.println(\"Found at coordinates: (\" + fX + \", \" + fY + \", \" + fZ + \")\");\n    }\n}",
+      "expectedOutput": "Target voxel: 99\nFound at coordinates: (1, 2, 1)"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Subarray Sum Target (Short-Circuit Sliding)",
+      "question": "Find the first contiguous subarray that sums to target $S = 33$ using nested loops, using `break` to prune inner loops whose running sum exceeds the target.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-12",
+      "id": "break-continue-027",
+      "explanation": "Searching for a contiguous subarray with a given sum in an array of non-negative integers can be pruned using `break`. The outer loop fixes the starting index `i`, and the inner loop extends the window by adding elements at `j`. If `currentSum == target`, the matching subarray bounds are recorded and the search breaks. If `currentSum > target`, adding further non-negative numbers cannot reduce the sum back down, so `break` terminates the inner loop early. This prunes unpromising search paths, improving performance over an exhaustive search.",
+      "hints": [
+        "Outer loop sets the window start index `i`.",
+        "Inner loop accumulates: `currentSum += arr[j];`.",
+        "Prune immediately with `if (currentSum > target) break;`, and record bounds when `currentSum == target`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {1, 4, 20, 3, 10, 5};\n        int target = 33;\n        int start = -1, end = -1;\n        boolean found = false;\n\n        outer:\n        for (int i = 0; i < numbers.length; i++) {\n            int currentSum = 0;\n            for (int j = i; j < numbers.length; j++) {\n                currentSum += numbers[j];\n                if (currentSum == target) {\n                    start = i;\n                    end = j;\n                    found = true;\n                    break outer;\n                }\n                if (currentSum > target) {\n                    break; // Prune: sum already exceeds target\n                }\n            }\n        }\n\n        System.out.println(\"Target sum: \" + target);\n        System.out.println(\"Subarray found: \" + found);\n        if (found) {\n            System.out.println(\"Window indices: [\" + start + \" to \" + end + \"]\");\n        }\n    }\n}",
+      "expectedOutput": "Target sum: 33\nSubarray found: true\nWindow indices: [2 to 4]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Naive Substring Pattern Matcher with Break",
+      "question": "Implement a manual substring pattern matching algorithm without using `String.indexOf()`, using inner loop `break` statements on character mismatches.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-13",
+      "id": "break-continue-028",
+      "explanation": "Naive pattern matching aligns a pattern of length $M$ against every valid starting offset $i$ in a text of length $N$ ($0 \\le i \\le N - M$). The inner loop compares characters: if `text.charAt(i + j) != pattern.charAt(j)` at any position, a mismatch has occurred, and `break` terminates the inner loop immediately. If the inner loop completes all $M$ iterations without breaking, the entire pattern matched, and the starting index $i$ is returned. This early mismatch exit avoids unnecessary character comparisons at that offset.",
+      "hints": [
+        "Outer loop slides from `0` to `text.length() - pattern.length()`.",
+        "Inner loop checks characters: `if (text.charAt(i + j) != pattern.charAt(j)) break;`.",
+        "If `j == pattern.length()`, the complete pattern matched at index `i`."
+      ],
+      "sampleCode": "public class Solution {\n    public static int findSubstring(String text, String pattern) {\n        int n = text.length();\n        int m = pattern.length();\n\n        for (int i = 0; i <= n - m; i++) {\n            int j = 0;\n            for (; j < m; j++) {\n                if (text.charAt(i + j) != pattern.charAt(j)) {\n                    break; // Mismatch detected; abort check at offset i\n                }\n            }\n            if (j == m) {\n                return i; // Full match found\n            }\n        }\n        return -1;\n    }\n\n    public static void main(String[] args) {\n        String text = \"JavaProgrammingLanguage\";\n        String pattern = \"Program\";\n        int pos = findSubstring(text, pattern);\n        System.out.println(\"Text: \" + text);\n        System.out.println(\"Pattern: \" + pattern);\n        System.out.println(\"Pattern found at offset: \" + pos);\n    }\n}",
+      "expectedOutput": "Text: JavaProgrammingLanguage\nPattern: Program\nPattern found at offset: 4"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Transaction Rollback Simulation via Labeled Break",
+      "question": "Simulate ledger transactions: process balance adjustments sequentially, and if any transaction causes the balance to drop below zero, use a labeled `break` to abort and roll back all changes.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-14",
+      "id": "break-continue-029",
+      "explanation": "Transactional processing requires atomicity: either all operations in a batch succeed, or the entire transaction is rolled back if any operation fails. In this ledger simulation, an initial balance is updated across a series of debit and credit transactions. If an adjustment would cause the balance to become negative (`balance + tx < 0`), the transaction is invalid. A labeled `break` aborts the processing loop immediately, and rollback logic restores the initial balance snapshot, ensuring data consistency.",
+      "hints": [
+        "Save a backup of the starting balance before the transaction loop begins.",
+        "If a transaction causes `balance + tx < 0`, flag the error and execute `break;`.",
+        "If aborted, restore the balance from the initial snapshot."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int initialBalance = 100;\n        int balance = initialBalance;\n        int[] ledgerDeltas = {50, -30, -150, 40};\n        boolean aborted = false;\n        int failedIndex = -1;\n\n        txBlock:\n        for (int i = 0; i < ledgerDeltas.length; i++) {\n            int delta = ledgerDeltas[i];\n            if (balance + delta < 0) {\n                aborted = true;\n                failedIndex = i;\n                break txBlock; // Abort transaction batch\n            }\n            balance += delta;\n        }\n\n        if (aborted) {\n            System.out.println(\"Transaction \" + failedIndex + \" failed (insufficient balance). Rolling back.\");\n            balance = initialBalance; // Rollback to snapshot\n        }\n        System.out.println(\"Final Account Balance: $\" + balance);\n    }\n}",
+      "expectedOutput": "Transaction 2 failed (insufficient balance). Rolling back.\nFinal Account Balance: $100"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Custom Lexer Tokenizer with Lookahead",
+      "question": "Parse a mathematical expression string into tokens (numbers and operators) using a loop, using `continue` to bypass whitespace and `break` on invalid characters.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "BRK-15",
+      "id": "break-continue-030",
+      "explanation": "Lexical tokenization converts raw character streams into structured tokens for parsing. In this lexer, a `while (idx < len)` loop scans characters sequentially. If a character is whitespace, `continue` skips it. If an operator (`+`, `-`, `*`, `/`) is encountered, it is emitted as an operator token. When a digit is encountered, an inner `while` loop consumes all contiguous digits to assemble a complete multi-digit integer token. If an unrecognized symbol is encountered, `break` terminates the tokenizer and reports a syntax error, illustrating how `continue` and `break` coordinate lexical scanning.",
+      "hints": [
+        "Use `Character.isWhitespace(ch)` and `continue` to bypass spaces.",
+        "When `Character.isDigit(ch)` is found, use an inner loop to consume contiguous digits.",
+        "Break immediately upon encountering an invalid symbol to report a lexing error."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String expr = \"142 + 58 * 3\";\n        List<String> tokens = new ArrayList<>();\n        int i = 0;\n        boolean valid = true;\n\n        while (i < expr.length()) {\n            char ch = expr.charAt(i);\n            if (Character.isWhitespace(ch)) {\n                i++;\n                continue;\n            }\n            if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {\n                tokens.add(String.valueOf(ch));\n                i++;\n                continue;\n            }\n            if (Character.isDigit(ch)) {\n                StringBuilder num = new StringBuilder();\n                while (i < expr.length() && Character.isDigit(expr.charAt(i))) {\n                    num.append(expr.charAt(i));\n                    i++;\n                }\n                tokens.add(num.toString());\n                continue;\n            }\n            valid = false;\n            break;\n        }\n\n        System.out.println(\"Expression: \" + expr);\n        if (valid) {\n            System.out.println(\"Tokens: \" + tokens);\n        } else {\n            System.out.println(\"Lexing Error: Invalid character encountered.\");\n        }\n    }\n}",
+      "expectedOutput": "Expression: 142 + 58 * 3\nTokens: [142, +, 58, *, 3]"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

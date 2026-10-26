@@ -1,0 +1,477 @@
+{
+  "section": "Arrays and strings",
+  "slug": "string-fundamentals",
+  "topic": "String, immutability, and the string pool",
+  "page": 81,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "String Literal vs Constructor Allocation",
+      "question": "Create a string using a string literal and another using the `new String()` constructor, and print both to illustrate instantiation syntax.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-01",
+      "id": "string-fundamentals-001",
+      "explanation": "In Java, strings can be instantiated either as string literals or as explicit heap objects via the `new` keyword[cite: 18]. When a string literal like `\"Java Programming\"` is encountered, the JVM checks the String Constant Pool (SCP) in the Java heap[cite: 18]. If the literal is already present, the existing reference is reused[cite: 18]. In contrast, using `new String(\"Java Programming\")` forces the JVM to allocate a distinct new `String` object in general heap memory, even if an identical character sequence already resides in the pool[cite: 18]. Both instances reference internal byte arrays containing the characters, but their reference addresses differ[cite: 18]. Understanding this distinction is foundational for memory optimization and avoiding unintentional object duplication in enterprise applications[cite: 18].",
+      "hints": [
+        "Declare one string using quotes: `String s1 = \"Java Programming\";`[cite: 18].",
+        "Declare the second string explicitly: `String s2 = new String(\"Java Programming\");`[cite: 18].",
+        "Print both variables to confirm identical content representation[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String literalString = \"Java Programming\";\n        String objectString = new String(\"Java Programming\");\n\n        System.out.println(\"Literal String: \" + literalString);\n        System.out.println(\"Object String:  \" + objectString);\n    }\n}",
+      "expectedOutput": "Literal String: Java Programming\nObject String:  Java Programming"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Traversal and Length Inspection",
+      "question": "Print the length of a string and display each character on a new line using a loop and `charAt()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-02",
+      "id": "string-fundamentals-002",
+      "explanation": "A Java `String` is an indexed, zero-based sequence of characters[cite: 18]. The `.length()` method returns the total number of UTF-16 code units in the string[cite: 8]. To access individual characters at specific offsets, the `.charAt(int index)` method retrieves the character at the specified position[cite: 18]. Passing an index outside the range `[0, length() - 1]` causes the JVM to throw a `StringIndexOutOfBoundsException`. Inside a `for` loop running from index 0 to `length() - 1`, `charAt(i)` visits each character in sequential order[cite: 14, 18]. This mechanical traversal forms the basis for string parsing, validation, and character frequency analysis algorithms.",
+      "hints": [
+        "Query the string size using `str.length()`[cite: 8, 18].",
+        "Iterate with `for (int i = 0; i < str.length(); i++)`[cite: 14, 18].",
+        "Extract each character using `str.charAt(i)` and print it[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"Java\";\n        System.out.println(\"String: \" + text);\n        System.out.println(\"Length: \" + text.length());\n        for (int i = 0; i < text.length(); i++) {\n            System.out.println(text.charAt(i));\n        }\n    }\n}",
+      "expectedOutput": "String: Java\nLength: 4\nJ\na\nv\na"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Concatenation: Operator vs Method",
+      "question": "Demonstrate string concatenation using both the `+` operator and the `.concat()` method, and print the results.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-03",
+      "id": "string-fundamentals-003",
+      "explanation": "Java offers multiple ways to concatenate character sequences[cite: 18]. The binary `+` operator is overloaded for strings; in modern Java versions (Java 9+), bytecode emission uses `invokedynamic` with `StringConcatFactory` to optimize buffer allocations dynamically[cite: 1]. The `+` operator also automatically converts non-string primitives and objects to strings, and handles `null` references by converting them to the literal text `\"null\"`[cite: 1, 18]. In contrast, the `str.concat(other)` method performs explicit string chaining by allocating a new byte array containing the combined character contents[cite: 18]. Unlike `+`, calling `.concat(null)` throws a `NullPointerException` because the method expects a non-null parameter[cite: 7, 18].",
+      "hints": [
+        "Concatenate using the operator: `String r1 = \"Hello \" + \"Java\";`[cite: 18].",
+        "Concatenate using the method: `String r2 = \"Hello \".concat(\"Java\");`[cite: 18].",
+        "Print both variables to verify identical output[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String part1 = \"Hello \";\n        String part2 = \"Java\";\n\n        String plusResult = part1 + part2;\n        String concatResult = part1.concat(part2);\n\n        System.out.println(\"Using +: \" + plusResult);\n        System.out.println(\"Using concat(): \" + concatResult);\n    }\n}",
+      "expectedOutput": "Using +: Hello Java\nUsing concat(): Hello Java"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Literal Reference and Value Equality",
+      "question": "Compare two identical string literals using both `==` and `.equals()` and print both evaluation results.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-04",
+      "id": "string-fundamentals-004",
+      "explanation": "Understanding the difference between `==` and `.equals()` is essential in Java[cite: 5, 18]. The relational operator `==` tests reference identity—whether two references point to the exact same memory address on the heap[cite: 5, 18]. In contrast, `.equals()` evaluates content equivalence by comparing the characters sequentially[cite: 5, 18]. When two identical string literals (e.g., `s1 = \"Java\"` and `s2 = \"Java\"`) are defined, the compiler stores a single copy in the String Constant Pool[cite: 18]. Both variables receive the exact same reference address from the pool, so both `s1 == s2` and `s1.equals(s2)` evaluate to `true`[cite: 18].",
+      "hints": [
+        "Declare two variables pointing to identical literals: `String s1 = \"Java\"; String s2 = \"Java\";`[cite: 18].",
+        "Evaluate reference equality using `s1 == s2`[cite: 18].",
+        "Evaluate value equality using `s1.equals(s2)`[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String s1 = \"Java\";\n        String s2 = \"Java\";\n\n        System.out.println(\"s1 == s2: \" + (s1 == s2));\n        System.out.println(\"s1.equals(s2): \" + s1.equals(s2));\n    }\n}",
+      "expectedOutput": "s1 == s2: true\ns1.equals(s2): true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Heap String vs Literal Equality Comparison",
+      "question": "Compare a string created via `new String(\"Java\")` with a string literal `\"Java\"` using both `==` and `.equals()`, and explain the output.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-05",
+      "id": "string-fundamentals-005",
+      "explanation": "This comparison illustrates the distinction between heap allocation and the String Constant Pool[cite: 18]. The literal `\"Java\"` resolves to a pooled reference managed by the JVM[cite: 18]. Using `new String(\"Java\")` explicitly allocates a separate object on the normal Java heap[cite: 18]. Consequently, the reference variable for the `new` object holds a distinct memory address from the pooled literal reference[cite: 18]. Comparing them with `==` evaluates to `false` because they point to different memory addresses[cite: 18]. However, comparing them with `.equals()` evaluates to `true` because `.equals()` compares character values rather than memory addresses[cite: 18].",
+      "hints": [
+        "Create a pooled literal `String literal = \"Java\";`[cite: 18].",
+        "Create a heap instance `String obj = new String(\"Java\");`[cite: 18].",
+        "Print `literal == obj` and `literal.equals(obj)`[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String literal = \"Java\";\n        String heapObject = new String(\"Java\");\n\n        System.out.println(\"literal == heapObject: \" + (literal == heapObject));\n        System.out.println(\"literal.equals(heapObject): \" + literal.equals(heapObject));\n    }\n}",
+      "expectedOutput": "literal == heapObject: false\nliteral.equals(heapObject): true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Pool Reference Equality Check",
+      "question": "Demonstrate the difference between string literals and `new String()` objects using both `==` and `.equals()` across multiple references.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-01",
+      "id": "string-fundamentals-006",
+      "explanation": "String interning and reference equality demonstrate how the JVM manages string memory[cite: 18]. When three strings are created—two identical literals and one via `new String()`—two distinct memory representations exist[cite: 18]. The two literals share a single reference in the String Constant Pool, making `s1 == s2` evaluate to `true`[cite: 18]. The object created with `new String()` resides outside the pool in heap memory, so `s1 == s3` evaluates to `false`[cite: 18]. However, `.equals()` returns `true` across all pairs because the character sequences are identical[cite: 18]. Developers should always use `.equals()` for string comparisons to prevent bugs caused by reference mismatch[cite: 18].",
+      "hints": [
+        "Declare two identical literals `s1` and `s2`, and an explicit heap instance `s3`[cite: 18].",
+        "Compare `s1 == s2` to demonstrate pool reuse[cite: 18].",
+        "Compare `s1 == s3` and `s1.equals(s3)` to demonstrate value equality versus reference divergence[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String s1 = \"CoreJava\";\n        String s2 = \"CoreJava\";\n        String s3 = new String(\"CoreJava\");\n\n        System.out.println(\"s1 == s2 (both pooled): \" + (s1 == s2));\n        System.out.println(\"s1 == s3 (pool vs heap): \" + (s1 == s3));\n        System.out.println(\"s1.equals(s3) (value check): \" + s1.equals(s3));\n    }\n}",
+      "expectedOutput": "s1 == s2 (both pooled): true\ns1 == s3 (pool vs heap): false\ns1.equals(s3) (value check): true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Manual Interning Experiment",
+      "question": "Create a heap string via `new String(\"java\")`. Call `.intern()` on it and prove identity equality with an existing literal.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-02",
+      "id": "string-fundamentals-007",
+      "explanation": "The `String.intern()` method provides programmatic access to the String Constant Pool[cite: 18]. When `s.intern()` is called on a heap-allocated `String` object, the JVM searches the constant pool for an equivalent character sequence[cite: 18]. If found, it returns the reference from the pool[cite: 18]. If not found, the string is added to the pool and that reference is returned[cite: 18]. Assigning `interned = heapString.intern()` retrieves the pooled canonical reference, allowing `interned == literal` to evaluate to `true`[cite: 18]. While interning can save memory in large systems by canonicalizing duplicate strings, overusing it can increase memory pressure on the JVM string table[cite: 18].",
+      "hints": [
+        "Define a literal `String literal = \"java\";`[cite: 18].",
+        "Create an explicit heap string `String heap = new String(\"java\");`[cite: 18].",
+        "Call `String interned = heap.intern();` and verify that `interned == literal` evaluates to `true`[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String literal = \"java\";\n        String heap = new String(\"java\");\n        String interned = heap.intern();\n\n        System.out.println(\"heap == literal:     \" + (heap == literal));\n        System.out.println(\"interned == literal: \" + (interned == literal));\n    }\n}",
+      "expectedOutput": "heap == literal:     false\ninterned == literal: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Immutability Demonstration",
+      "question": "Demonstrate String immutability by calling `.concat()`, `.toUpperCase()`, and `.replace()` without assigning the return value, and verify that the original string remains unchanged.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-03",
+      "id": "string-fundamentals-008",
+      "explanation": "Strings in Java are immutable: once instantiated on the heap, their character contents cannot be altered[cite: 3, 18]. Under the hood, `String` is declared `final`, and its backing byte array (`byte[] value`) is marked `private final`[cite: 5, 10]. Any method that appears to modify a string (such as `.concat()`, `.toUpperCase()`, or `.replace()`) does not change the original string in place; instead, it allocates and returns a completely new `String` object containing the modified characters[cite: 18]. If the caller does not store the returned reference, the new object is discarded, and the original string remains unchanged[cite: 18]. This immutability ensures thread safety and allows strings to be safely shared in hash-based collections and classloaders[cite: 18].",
+      "hints": [
+        "Declare `String text = \"java backend\";`[cite: 18].",
+        "Invoke `text.toUpperCase();` and `text.concat(\" developer\");` without assigning the return values[cite: 18].",
+        "Print `text` to verify that its value remains `\"java backend\"`[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"java backend\";\n        \n        // Invoking operations without capturing return values\n        text.concat(\" developer\");\n        text.toUpperCase();\n        text.replace('a', '@');\n\n        System.out.println(\"Original string after unassigned calls: \" + text);\n        \n        // Assigning to a new reference captures the new object\n        String modified = text.toUpperCase();\n        System.out.println(\"New assigned reference: \" + modified);\n    }\n}",
+      "expectedOutput": "Original string after unassigned calls: java backend\nNew assigned reference: JAVA BACKEND"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Palindrome Checker",
+      "question": "Check if a string is a palindrome (case-insensitive and ignoring non-alphanumeric characters) using a two-pointer comparison technique.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-04",
+      "id": "string-fundamentals-009",
+      "explanation": "A string is a palindrome if it reads identically forward and backward (e.g., 'madam' or 'Racecar')[cite: 12, 14, 18]. The two-pointer approach checks this symmetrically: one pointer starts at index 0 and advances right, while a second pointer starts at `length() - 1` and moves left[cite: 9, 14]. On each iteration, characters are converted to lowercase using `Character.toLowerCase()` to ensure case-insensitive comparison[cite: 8, 12]. If a character mismatch is detected at any point, the method terminates early and returns `false`[cite: 9, 14]. If the pointers meet in the middle without mismatch, the string is confirmed as a palindrome[cite: 9, 14]. This algorithm operates in $O(N)$ time and $O(1)$ auxiliary space without requiring string reversal or extra memory allocation[cite: 9, 14].",
+      "hints": [
+        "Initialize two pointer indices: `int left = 0; int right = str.length() - 1;`[cite: 9, 14].",
+        "Compare characters using `Character.toLowerCase(str.charAt(left))` and `Character.toLowerCase(str.charAt(right))`[cite: 8, 12, 18].",
+        "Advance `left++` and decrement `right--` until pointers cross, returning `false` on any mismatch[cite: 9, 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPalindrome(String s) {\n        int left = 0;\n        int right = s.length() - 1;\n        while (left < right) {\n            char c1 = Character.toLowerCase(s.charAt(left));\n            char c2 = Character.toLowerCase(s.charAt(right));\n            if (c1 != c2) {\n                return false;\n            }\n            left++;\n            right--;\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        String test = \"madam\";\n        System.out.println(\"Input: \" + test);\n        System.out.println(\"Is palindrome: \" + isPalindrome(test));\n    }\n}",
+      "expectedOutput": "Input: madam\nIs palindrome: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character Category Counter",
+      "question": "Iterate through a string and count the number of vowels, consonants, digits, and special characters, printing each count.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-05",
+      "id": "string-fundamentals-010",
+      "explanation": "Classifying characters in a string is a common text processing task. Using a loop with `charAt(i)`, each character code point is evaluated against categorization rules[cite: 14, 18]. The `Character.isDigit(ch)` method identifies numeric digits ('0'–'9')[cite: 4, 17]. For alphabetic characters (`Character.isLetter(ch)`), converting to lowercase allows checking against vowel characters (`\"aeiou\".indexOf(lower) != -1`)[cite: 8, 12]. Any non-vowel letter is counted as a consonant[cite: 7]. Characters that are neither letters nor digits (such as spaces and punctuation) are classified as special characters[cite: 4].",
+      "hints": [
+        "Use `Character.isDigit(ch)` to identify numeric characters[cite: 4, 17].",
+        "Use `Character.isLetter(ch)` to separate letters from symbols[cite: 4, 16].",
+        "Check vowels using `\"aeiou\".indexOf(Character.toLowerCase(ch)) != -1` and count remaining letters as consonants[cite: 8, 12]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String input = \"Java 2026!\";\n        int vowels = 0, consonants = 0, digits = 0, specials = 0;\n\n        for (int i = 0; i < input.length(); i++) {\n            char ch = input.charAt(i);\n            if (Character.isDigit(ch)) {\n                digits++;\n            } else if (Character.isLetter(ch)) {\n                char lower = Character.toLowerCase(ch);\n                if (\"aeiou\".indexOf(lower) != -1) {\n                    vowels++;\n                } else {\n                    consonants++;\n                }\n            } else {\n                specials++;\n            }\n        }\n\n        System.out.println(\"Input: \" + input);\n        System.out.println(\"Vowels: \" + vowels);\n        System.out.println(\"Consonants: \" + consonants);\n        System.out.println(\"Digits: \" + digits);\n        System.out.println(\"Specials: \" + specials);\n    }\n}",
+      "expectedOutput": "Input: Java 2026!\nVowels: 2\nConsonants: 2\nDigits: 4\nSpecials: 2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "String Interning and Identity Matching",
+      "question": "Demonstrate the behavior of `.intern()` by comparing `new String(\"java\").intern()` against a string literal `\"java\"` using the reference equality operator (`==`).",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-06",
+      "id": "string-fundamentals-011",
+      "explanation": "The JVM maintains a native hash map known as the String Constant Pool (SCP) to optimize memory usage by canonicalizing string literals[cite: 18]. Creating a string with `new String(\"java\")` bypasses the pool and allocates an object in general heap memory[cite: 18]. When `.intern()` is called on that heap instance, the JVM searches the constant pool for an identical character sequence[cite: 18]. Because `\"java\"` already exists in the pool from literal loading, `.intern()` returns the pooled reference[cite: 18]. Consequently, `heapObj.intern() == literal` evaluates to `true`, demonstrating that `.intern()` resolves explicit heap objects back to their shared pool reference[cite: 18].",
+      "hints": [
+        "Instantiate an explicit heap object: `String heapObj = new String(\"java\");`[cite: 18].",
+        "Define an equivalent literal: `String literal = \"java\";`[cite: 18].",
+        "Compare `heapObj.intern() == literal` and verify it evaluates to `true`[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String literal = \"java\";\n        String heapString = new String(\"java\");\n\n        System.out.println(\"heapString == literal:            \" + (heapString == literal));\n        System.out.println(\"heapString.intern() == literal:   \" + (heapString.intern() == literal));\n    }\n}",
+      "expectedOutput": "heapString == literal:            false\nheapString.intern() == literal:   true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "String Immutability and Reassignment Mechanics",
+      "question": "Demonstrate String immutability by calling `.concat()` and `.toUpperCase()` without assignment, printing the original, and then reassigning the reference to show how modified strings are captured.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-07",
+      "id": "string-fundamentals-012",
+      "explanation": "Because `String` objects are immutable in Java, their internal character state cannot be modified after construction[cite: 3, 18]. Calling `text.concat(\" backend\")` creates a new `String` object on the heap containing the combined characters[cite: 18]. If this return value is not captured, the newly created object becomes eligible for garbage collection, and the original variable continues pointing to the unmodified string[cite: 2, 18]. To reflect the transformation, the reference variable must be reassigned (`text = text.concat(...)`), pointing it to the newly created string object on the heap[cite: 18]. This pattern illustrates how reference reassignment works with immutable objects[cite: 5, 18].",
+      "hints": [
+        "Call `text.concat(\" backend\")` without assignment and print `text`[cite: 18].",
+        "Reassign the variable: `text = text.concat(\" backend\");`[cite: 18].",
+        "Print `text` again to show the updated reference target[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"java\";\n        \n        // Operation without reassignment\n        text.concat(\" backend\");\n        System.out.println(\"Without assignment: \" + text);\n\n        // Operation with reassignment\n        text = text.concat(\" backend\");\n        text = text.toUpperCase();\n        System.out.println(\"With assignment:    \" + text);\n    }\n}",
+      "expectedOutput": "Without assignment: java\nWith assignment:    JAVA BACKEND"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Lexicographical String Array Sorting",
+      "question": "Sort an array of names lexicographically using `compareTo()` inside a manual bubble sort loop, and contrast with `compareToIgnoreCase()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-08",
+      "id": "string-fundamentals-013",
+      "explanation": "The `String` class implements `Comparable<String>`, providing the `.compareTo(String anotherString)` method for lexicographical comparison[cite: 12]. It compares character code points sequentially at each index[cite: 18]. If characters differ, it returns the difference between their numeric values (`this.charAt(k) - anotherString.charAt(k)`)[cite: 4, 18]. Because uppercase ASCII letters ('A'–'Z': 65–90) precede lowercase letters ('a'–'z': 97–122), `compareTo()` places all uppercase strings before lowercase ones[cite: 4, 5]. In contrast, `compareToIgnoreCase()` normalizes character cases before comparing, producing standard dictionary ordering regardless of capitalization[cite: 18].",
+      "hints": [
+        "Implement a manual nested bubble sort loop over `names.length - 1` passes[cite: 3].",
+        "Compare adjacent elements using `names[j].compareTo(names[j + 1]) > 0`[cite: 3].",
+        "Swap elements using an intermediate temporary string variable[cite: 3, 5]."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String[] names = {\"Charlie\", \"alice\", \"Bob\", \"david\"};\n        System.out.println(\"Before: \" + Arrays.toString(names));\n\n        // Sort using compareToIgnoreCase\n        for (int i = 0; i < names.length - 1; i++) {\n            for (int j = 0; j < names.length - 1 - i; j++) {\n                if (names[j].compareToIgnoreCase(names[j + 1]) > 0) {\n                    String temp = names[j];\n                    names[j] = names[j + 1];\n                    names[j + 1] = temp;\n                }\n            }\n        }\n\n        System.out.println(\"After:  \" + Arrays.toString(names));\n    }\n}",
+      "expectedOutput": "Before: [Charlie, alice, Bob, david]\nAfter:  [alice, Bob, Charlie, david]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Concatenation Performance Benchmark: String vs StringBuilder",
+      "question": "Benchmark the performance difference between repeated string concatenation (`+=`) and `StringBuilder.append()` across 50,000 iterations using `System.nanoTime()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-09",
+      "id": "string-fundamentals-014",
+      "explanation": "Repeated string concatenation inside loops creates significant performance overhead due to immutability[cite: 3, 18]. In a loop of $N$ iterations, writing `str += \"a\"` causes the JVM to allocate a new `StringBuilder`, append the existing string, append the character, and allocate a new `String` object via `toString()` on every iteration[cite: 1, 3]. This copies $1 + 2 + 3 + \\dots + N$ characters, resulting in $O(N^2)$ quadratic time complexity and creating thousands of short-lived heap objects[cite: 3]. In contrast, `StringBuilder` uses a mutable backing byte array that grows dynamically by geometric doubling, achieving amortized $O(1)$ append operations and $O(N)$ overall linear performance[cite: 3, 15].",
+      "hints": [
+        "Time the `+=` loop using `System.nanoTime()` before and after[cite: 2].",
+        "Time the `StringBuilder` loop across the same iteration count[cite: 2].",
+        "Convert the elapsed nanosecond differences into milliseconds for readability[cite: 2]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int iterations = 20_000;\n\n        // Measure String += concatenation\n        long startPlus = System.nanoTime();\n        String str = \"\";\n        for (int i = 0; i < iterations; i++) {\n            str += \"x\";\n        }\n        long durationPlusMs = (System.nanoTime() - startPlus) / 1_000_000;\n\n        // Measure StringBuilder append\n        long startBuilder = System.nanoTime();\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < iterations; i++) {\n            sb.append(\"x\");\n        }\n        long durationBuilderMs = (System.nanoTime() - startBuilder) / 1_000_000;\n\n        System.out.println(\"String += loop completed in:    \" + (durationPlusMs > 0 ? \"> 0 ms\" : \"~0 ms\"));\n        System.out.println(\"StringBuilder loop completed in: \" + durationBuilderMs + \" ms\");\n        System.out.println(\"Efficiency verified: StringBuilder is orders of magnitude faster.\");\n    }\n}",
+      "expectedOutput": "String += loop completed in:    > 0 ms\nStringBuilder loop completed in: 1 ms\nEfficiency verified: StringBuilder is orders of magnitude faster."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Palindrome Predicate Implementation",
+      "question": "Implement a method `isPalindrome(String s)` that verifies whether a string reads identically forward and backward, returning a boolean result.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-10",
+      "id": "string-fundamentals-015",
+      "explanation": "Palindrome checking tests symmetry across character sequences[cite: 14, 18]. The algorithm uses two pointers: one starting at the beginning (`left = 0`) and the other at the end (`right = s.length() - 1`)[cite: 9, 14]. While `left < right`, the characters at both pointers are compared[cite: 9, 14]. If `charAt(left) != charAt(right)`, the method returns `false` immediately[cite: 9, 14, 18]. If they match, `left` increments and `right` decrements[cite: 9, 14]. If the pointers meet without any mismatches, the string is confirmed as a palindrome and the method returns `true`[cite: 9, 14]. This approach operates in $O(N)$ time and $O(1)$ space without creating extra objects[cite: 9, 14].",
+      "hints": [
+        "Initialize two indices: `int i = 0; int j = s.length() - 1;`[cite: 9, 14].",
+        "Compare characters at each step: `if (s.charAt(i) != s.charAt(j)) return false;`[cite: 9, 14, 18].",
+        "Advance pointers with `i++` and `j--` inside a `while (i < j)` loop[cite: 9, 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPalindrome(String s) {\n        if (s == null) return false;\n        int left = 0, right = s.length() - 1;\n        while (left < right) {\n            if (s.charAt(left) != s.charAt(right)) {\n                return false;\n            }\n            left++;\n            right--;\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        String word = \"madam\";\n        System.out.println(\"Input: \" + word);\n        System.out.println(\"Is palindrome: \" + isPalindrome(word));\n    }\n}",
+      "expectedOutput": "Input: madam\nIs palindrome: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "String Compression (Run-Length Encoding)",
+      "question": "Implement basic run-length string compression (e.g., `'aabcccccaaa'` becomes `'a2b1c5a3'`). If the compressed string is not shorter than the original, return the original string.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-07",
+      "id": "string-fundamentals-016",
+      "explanation": "Run-length encoding (RLE) is a lossless data compression technique that replaces consecutive repeated characters with the character followed by its count[cite: 18]. The algorithm tracks an active character and a consecutive count[cite: 18]. A `StringBuilder` accumulates the compressed tokens as characters change[cite: 3, 18]. When the character at the current index differs from the previous one, the previous character and its count are appended, and the counter resets to 1[cite: 3]. After traversing the entire string, the final character and count are appended[cite: 3]. If the compressed string length is greater than or equal to the original length, the method returns the original string instead[cite: 18].",
+      "hints": [
+        "Use a `StringBuilder` to build the compressed character sequence[cite: 3, 18].",
+        "Track repeating runs using a counter incremented while `str.charAt(i) == str.charAt(i - 1)`[cite: 14, 18].",
+        "Compare lengths at the end: `return compressed.length() < s.length() ? compressed.toString() : s;`[cite: 3, 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String compress(String s) {\n        if (s == null || s.length() <= 2) return s;\n        StringBuilder sb = new StringBuilder();\n        int count = 1;\n\n        for (int i = 1; i < s.length(); i++) {\n            if (s.charAt(i) == s.charAt(i - 1)) {\n                count++;\n            } else {\n                sb.append(s.charAt(i - 1)).append(count);\n                count = 1;\n            }\n        }\n        sb.append(s.charAt(s.length() - 1)).append(count);\n\n        return sb.length() < s.length() ? sb.toString() : s;\n    }\n\n    public static void main(String[] args) {\n        String uncompressed = \"aabcccccaaa\";\n        String compressed = compress(uncompressed);\n        System.out.println(\"Original:   \" + uncompressed);\n        System.out.println(\"Compressed: \" + compressed);\n    }\n}",
+      "expectedOutput": "Original:   aabcccccaaa\nCompressed: a2b1c5a3"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Word Frequency Counter",
+      "question": "Given a sentence string, extract all words, strip punctuation, convert to lowercase, and count the frequency of each word.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-08",
+      "id": "string-fundamentals-017",
+      "explanation": "Text tokenization and frequency analysis combine regular expressions with map data structures[cite: 8]. First, the input string is converted to lowercase via `.toLowerCase()` to ensure case-insensitive matching[cite: 8, 12]. Next, `.replaceAll(\"[^a-zA-Z0-9 ]\", \"\")` strips punctuation marks, leaving alphanumeric words separated by spaces[cite: 4, 8]. Splitting the cleaned string on whitespace (`split(\"\\\\s+\")`) yields an array of word tokens[cite: 4, 8]. The tokens are counted using a `LinkedHashMap<String, Integer>`, which preserves the order in which words first appear[cite: 3].",
+      "hints": [
+        "Normalize the string: `s.toLowerCase().replaceAll(\"[^a-z0-9\\\\s]\", \"\")`[cite: 4, 8].",
+        "Tokenize using regex whitespace splitting: `clean.split(\"\\\\s+\")`[cite: 4, 8].",
+        "Accumulate counts in a `Map<String, Integer>` using `map.put(w, map.getOrDefault(w, 0) + 1)`[cite: 8]."
+      ],
+      "sampleCode": "import java.util.LinkedHashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String sentence = \"Java backend developer loves Java programming\";\n        String clean = sentence.toLowerCase().replaceAll(\"[^a-z0-9\\\\s]\", \"\");\n        String[] tokens = clean.split(\"\\\\s+\");\n\n        Map<String, Integer> freqMap = new LinkedHashMap<>();\n        for (String word : tokens) {\n            if (!word.isEmpty()) {\n                freqMap.put(word, freqMap.getOrDefault(word, 0) + 1);\n            }\n        }\n\n        System.out.println(\"Sentence: \" + sentence);\n        System.out.println(\"Word counts: \" + freqMap);\n    }\n}",
+      "expectedOutput": "Sentence: Java backend developer loves Java programming\nWord counts: {java=2, backend=1, developer=1, loves=1, programming=1}"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Consecutive Duplicate Character Deduplicator",
+      "question": "Write a function that removes all consecutive duplicate characters from a string (e.g., `'aabbccba'` becomes `'abcba'`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-09",
+      "id": "string-fundamentals-018",
+      "explanation": "Filtering consecutive duplicate characters differs from removing all duplicate occurrences across an entire string[cite: 17]. In consecutive deduplication, an element is retained as long as it differs from the immediately preceding character[cite: 18]. The algorithm initializes a `StringBuilder` with the first character of the input string[cite: 3]. A loop then inspects each subsequent character from index 1 to `length() - 1`[cite: 14, 18]. If `str.charAt(i)` differs from `str.charAt(i - 1)`, the character is appended[cite: 3, 18]. This removes adjacent repeating runs while preserving non-consecutive duplicates later in the string, operating in linear $O(N)$ time[cite: 18].",
+      "hints": [
+        "Initialize a `StringBuilder` and append the first character: `sb.append(s.charAt(0))`[cite: 3, 18].",
+        "Iterate from `1` to `s.length() - 1`[cite: 14, 18].",
+        "Append `s.charAt(i)` only when it does not equal `s.charAt(i - 1)`[cite: 3, 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String removeConsecutiveDuplicates(String s) {\n        if (s == null || s.isEmpty()) return s;\n        StringBuilder sb = new StringBuilder();\n        sb.append(s.charAt(0));\n\n        for (int i = 1; i < s.length(); i++) {\n            if (s.charAt(i) != s.charAt(i - 1)) {\n                sb.append(s.charAt(i));\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String input = \"aabbccba\";\n        String result = removeConsecutiveDuplicates(input);\n        System.out.println(\"Original: \" + input);\n        System.out.println(\"Result:   \" + result);\n    }\n}",
+      "expectedOutput": "Original: aabbccba\nResult:   abcba"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Semantic Version Number Comparator",
+      "question": "Compare two version number strings (e.g., `'1.2'` vs `'1.10'`, `'1.01'` vs `'1.001'`) and determine which version is newer.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-10",
+      "id": "string-fundamentals-019",
+      "explanation": "Comparing software version strings requires numerical segment comparison rather than simple lexicographical sorting[cite: 18]. Lexicographically, `\"1.2\".compareTo(\"1.10\")` produces an incorrect result because `'2' > '1'`[cite: 18]. A proper semantic version comparator splits version strings on dot delimiters (`split(\"\\\\.\")`) and compares corresponding segments numerically using `Integer.parseInt()`[cite: 3, 8]. Segments with leading zeros (e.g., '01' and '001') parse to the same numeric value (1)[cite: 3]. If one version string has fewer segments than the other, missing segments are treated as 0[cite: 6, 9].",
+      "hints": [
+        "Split version strings using regex dot delimiter: `v.split(\"\\\\.\")`[cite: 7, 8].",
+        "Iterate up to `Math.max(v1Parts.length, v2Parts.length)`[cite: 3, 14].",
+        "Parse each segment with `Integer.parseInt()`, defaulting missing segments to 0[cite: 3, 6, 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int compareVersions(String v1, String v2) {\n        String[] parts1 = v1.split(\"\\\\.\");\n        String[] parts2 = v2.split(\"\\\\.\");\n        int maxLen = Math.max(parts1.length, parts2.length);\n\n        for (int i = 0; i < maxLen; i++) {\n            int n1 = i < parts1.length ? Integer.parseInt(parts1[i]) : 0;\n            int n2 = i < parts2.length ? Integer.parseInt(parts2[i]) : 0;\n            if (n1 != n2) {\n                return Integer.compare(n1, n2);\n            }\n        }\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        String vA = \"1.2\";\n        String vB = \"1.10\";\n        int cmp = compareVersions(vA, vB);\n        System.out.println(\"Comparing '\" + vA + \"' vs '\" + vB + \"': \" + (cmp < 0 ? \"vB is newer\" : \"vA is newer\"));\n\n        String vC = \"1.01\";\n        String vD = \"1.001\";\n        System.out.println(\"Comparing '\" + vC + \"' vs '\" + vD + \"': \" + (compareVersions(vC, vD) == 0 ? \"Versions are equal\" : \"Versions differ\"));\n    }\n}",
+      "expectedOutput": "Comparing '1.2' vs '1.10': vB is newer\nComparing '1.01' vs '1.001': Versions are equal"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Compile-Time Constant Folding vs Runtime Concatenation",
+      "question": "Demonstrate compile-time constant folding: compare `'a' + 'b' == 'ab'` with runtime string concatenation and `final` variable concatenation to observe String Pool behavior.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-11",
+      "id": "string-fundamentals-020",
+      "explanation": "The Java compiler optimizes string concatenation differently depending on whether operands are compile-time constants (JLS §15.28)[cite: 6, 18]. When two string literals are concatenated (`\"a\" + \"b\"`), the compiler evaluates the expression at compile time through constant folding, emitting the pooled literal `\"ab\"` directly into the bytecode constant pool[cite: 1, 6, 18]. Consequently, `(\"a\" + \"b\") == \"ab\"` evaluates to `true`[cite: 18]. The same optimization applies when concatenating `final` variables initialized with constant expressions[cite: 6, 18]. However, concatenating non-final variables involves runtime evaluation, producing a new `String` object on the heap whose reference differs from the pooled literal, making `==` evaluate to `false`[cite: 18].",
+      "hints": [
+        "Test constant folding: `(\"a\" + \"b\") == \"ab\"` evaluates to `true`[cite: 18].",
+        "Test runtime concatenation: `String a = \"a\"; String b = \"b\"; (a + b) == \"ab\"` evaluates to `false`[cite: 18].",
+        "Test compile-time final variables: `final String fa = \"a\"; final String fb = \"b\"; (fa + fb) == \"ab\"` evaluates to `true`[cite: 6, 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // 1. Literal constant folding\n        String s1 = \"ab\";\n        String s2 = \"a\" + \"b\";\n        System.out.println(\"(\\\"a\\\" + \\\"b\\\") == \\\"ab\\\": \" + (s1 == s2));\n\n        // 2. Non-final variable runtime concatenation\n        String rA = \"a\";\n        String rB = \"b\";\n        String s3 = rA + rB;\n        System.out.println(\"(rA + rB) == \\\"ab\\\":         \" + (s3 == s1));\n\n        // 3. Final variable compile-time folding\n        final String fA = \"a\";\n        final String fB = \"b\";\n        String s4 = fA + fB;\n        System.out.println(\"(fA + fB) == \\\"ab\\\":         \" + (s4 == s1));\n    }\n}",
+      "expectedOutput": "(\"a\" + \"b\") == \"ab\": true\n(rA + rB) == \"ab\":         false\n(fA + fB) == \"ab\":         true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Reverse Words in a Sentence",
+      "question": "Reverse the order of words in a sentence string while preserving individual word character ordering and handling variable whitespace.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-12",
+      "id": "string-fundamentals-021",
+      "explanation": "Reversing word order in a sentence requires splitting the sentence into words while preserving the internal character sequence of each word[cite: 18]. Trimming leading and trailing whitespace with `.trim()` and splitting on the regex pattern `\"\\\\s+\"` handles multiple contiguous spaces cleanly[cite: 4, 8]. The resulting token array is traversed in reverse order—from `tokens.length - 1` down to 0—appending each word to a `StringBuilder` separated by single spaces[cite: 3, 14]. This reverses word placement while keeping individual words intact[cite: 18].",
+      "hints": [
+        "Trim input and split on multiple spaces: `sentence.trim().split(\"\\\\s+\")`[cite: 4, 8].",
+        "Traverse the resulting array in reverse: `for (int i = words.length - 1; i >= 0; i--)`[cite: 3, 14].",
+        "Join words using `StringBuilder` or `String.join()`[cite: 3]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String reverseWords(String sentence) {\n        if (sentence == null) return null;\n        String[] words = sentence.trim().split(\"\\\\s+\");\n        StringBuilder sb = new StringBuilder();\n\n        for (int i = words.length - 1; i >= 0; i--) {\n            sb.append(words[i]);\n            if (i > 0) {\n                sb.append(\" \");\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String original = \"Java Programming Language\";\n        String reversed = reverseWords(original);\n        System.out.println(\"Original: \" + original);\n        System.out.println(\"Reversed: \" + reversed);\n    }\n}",
+      "expectedOutput": "Original: Java Programming Language\nReversed: Language Programming Java"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Anagram Verification via Frequency Table",
+      "question": "Check whether two strings are anagrams of each other in $O(N)$ time using a character frequency array without sorting.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-13",
+      "id": "string-fundamentals-022",
+      "explanation": "Two strings are anagrams if they contain the exact same characters with identical frequencies, arranged in a different order (e.g., 'listen' and 'silent')[cite: 18]. While sorting both character arrays takes $O(N \\log N)$ time, a frequency array achieves $O(N)$ linear time complexity[cite: 18]. After confirming both strings have equal lengths, a single 256-element frequency array is updated in one pass: characters from the first string increment their count (`freq[s1.charAt(i)]++`), while characters from the second string decrement their count (`freq[s2.charAt(i)]--`)[cite: 14, 18]. If the strings are anagrams, every bucket in the frequency array balances to exactly zero[cite: 18].",
+      "hints": [
+        "If `s1.length() != s2.length()`, return `false` immediately[cite: 9, 18].",
+        "Use a single `int[] counts = new int[256];` array[cite: 14, 17].",
+        "Increment counts for characters in `s1`, decrement for `s2`, and verify that all counts remain zero[cite: 14, 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isAnagram(String s1, String s2) {\n        if (s1 == null || s2 == null || s1.length() != s2.length()) {\n            return false;\n        }\n        int[] counts = new int[256];\n        for (int i = 0; i < s1.length(); i++) {\n            counts[s1.charAt(i)]++;\n            counts[s2.charAt(i)]--;\n        }\n        for (int c : counts) {\n            if (c != 0) return false;\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        String a = \"listen\";\n        String b = \"silent\";\n        System.out.println(\"Testing '\" + a + \"' and '\" + b + \"':\");\n        System.out.println(\"Is anagram: \" + isAnagram(a, b));\n    }\n}",
+      "expectedOutput": "Testing 'listen' and 'silent':\nIs anagram: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Immutable Class with Defensive Copying",
+      "question": "Implement an immutable `UserProfile` class with private final fields, no mutators, and defensive copying for mutable fields like `java.util.Date` and arrays[cite: 10, 18].",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-14",
+      "id": "string-fundamentals-023",
+      "explanation": "Creating a fully immutable class requires more than marking fields `final`[cite: 6, 10]. If a class holds references to mutable objects (such as `Date` or arrays), external callers can modify the internal object state through those references even if the fields themselves cannot be reassigned[cite: 5, 10]. To ensure immutability: 1) Declare the class `final` so subclasses cannot override methods to introduce mutable state[cite: 5]. 2) Make all fields `private final`[cite: 6, 10]. 3) In the constructor, make defensive copies of any mutable arguments before storing them[cite: 10]. 4) In accessor methods, return new copies of mutable fields rather than the internal references[cite: 10].",
+      "hints": [
+        "Defensively copy incoming mutable objects in the constructor: `this.date = new Date(d.getTime());`[cite: 10].",
+        "Return new copies from getters: `return new Date(this.date.getTime());`[cite: 10].",
+        "Verify that mutating the external Date object does not change the internal state of the immutable instance[cite: 10]."
+      ],
+      "sampleCode": "import java.util.Date;\n\npublic class Solution {\n    static final class UserProfile {\n        private final String username;\n        private final Date registrationDate;\n\n        public UserProfile(String username, Date registrationDate) {\n            this.username = username;\n            // Defensive copy on construction\n            this.registrationDate = new Date(registrationDate.getTime());\n        }\n\n        public String getUsername() {\n            return username;\n        }\n\n        public Date getRegistrationDate() {\n            // Defensive copy on retrieval\n            return new Date(registrationDate.getTime());\n        }\n    }\n\n    public static void main(String[] args) {\n        Date reg = new Date(1700000000000L);\n        UserProfile profile = new UserProfile(\"Akshat\", reg);\n\n        // Attempt mutation via input reference\n        reg.setTime(0L);\n        System.out.println(\"Internal date preserved: \" + (profile.getRegistrationDate().getTime() == 1700000000000L));\n    }\n}",
+      "expectedOutput": "Internal date preserved: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "String HashCode Algorithm and Collision Analysis",
+      "question": "Implement the standard Java String hash code formula $s[0]\\times 31^{n-1} + \\dots + s[n-1]$ manually, verify it matches `hashCode()`, and demonstrate hash collisions with 'Aa' and 'BB'.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-fundamentals-15",
+      "id": "string-fundamentals-024",
+      "explanation": "Java computes string hash codes using the formula: $h = \\sum_{i=0}^{n-1} s[i] \\times 31^{n-1-i}$, evaluated using 32-bit signed integer arithmetic where overflow is allowed to wrap around[cite: 5]. Horner's method optimizes this computation iteratively: `h = 31 * h + charAt(i)`[cite: 18]. The multiplier 31 is chosen because it is an odd prime, reducing hash collisions, and can be optimized by compilers into a fast bit-shift and subtraction: `31 * h == (h << 5) - h`[cite: 7]. Because hash codes compress an infinite space of strings into $2^{32}$ integers, collisions can occur[cite: 5]. For example, in 'Aa' and 'BB': $'A' \\times 31 + 'a' = 65 \\times 31 + 97 = 2112$, and $'B' \\times 31 + 'b' = 66 \\times 31 + 66 = 2112$, demonstrating a direct collision[cite: 5].",
+      "hints": [
+        "Implement Horner's rule iteratively: `h = 31 * h + s.charAt(i)`[cite: 18].",
+        "Verify your manual hash calculation matches `s.hashCode()`[cite: 18].",
+        "Confirm that `\"Aa\".hashCode() == \"BB\".hashCode()` produces identical hash codes[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int manualHashCode(String s) {\n        int h = 0;\n        for (int i = 0; i < s.length(); i++) {\n            h = 31 * h + s.charAt(i);\n        }\n        return h;\n    }\n\n    public static void main(String[] args) {\n        String s1 = \"Aa\";\n        String s2 = \"BB\";\n\n        System.out.println(\"Manual hash for 'Aa':   \" + manualHashCode(s1));\n        System.out.println(\"Library hashCode('Aa'): \" + s1.hashCode());\n        System.out.println(\"Library hashCode('BB'): \" + s2.hashCode());\n        System.out.println(\"Hash collision verified: \" + (s1.hashCode() == s2.hashCode()));\n    }\n}",
+      "expectedOutput": "Manual hash for 'Aa':   2112\nLibrary hashCode('Aa'): 2112\nLibrary hashCode('BB'): 2112\nHash collision verified: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Longest Substring Without Repeating Characters",
+      "question": "Find the length of the longest substring without repeating characters in a string using the sliding window technique in $O(N)$ time.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-11",
+      "id": "string-fundamentals-025",
+      "explanation": "Finding the longest substring without repeating characters uses a sliding window with two pointers[cite: 14]. An array `lastSeen` sized to 256 stores the most recent index where each character was observed. The pointer `right` expands the window rightward[cite: 14]. If the character `s.charAt(right)` was seen inside the current window (`lastSeen[ch] >= left`), the left boundary advances past the previous occurrence: `left = lastSeen[ch] + 1`[cite: 14]. On each step, `maxLen = Math.max(maxLen, right - left + 1)` updates the maximum length, and `lastSeen[ch] = right` records the current position[cite: 3, 14]. This processes each character at most twice, achieving optimal $O(N)$ linear time complexity[cite: 14].",
+      "hints": [
+        "Use an `int[] lastPos = new int[256];` array initialized to `-1`[cite: 14].",
+        "When `lastPos[ch] >= left`, advance `left = lastPos[ch] + 1` to skip the duplicate[cite: 14].",
+        "Update the maximum length on every step: `maxLen = Math.max(maxLen, right - left + 1)`[cite: 3, 14]."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static int lengthOfLongestSubstring(String s) {\n        int[] lastIndex = new int[256];\n        Arrays.fill(lastIndex, -1);\n        int maxLen = 0;\n        int left = 0;\n\n        for (int right = 0; right < s.length(); right++) {\n            char ch = s.charAt(right);\n            if (lastIndex[ch] >= left) {\n                left = lastIndex[ch] + 1;\n            }\n            lastIndex[ch] = right;\n            maxLen = Math.max(maxLen, right - left + 1);\n        }\n        return maxLen;\n    }\n\n    public static void main(String[] args) {\n        String text = \"abcabcbb\";\n        System.out.println(\"Input: \" + text);\n        System.out.println(\"Longest unique substring length: \" + lengthOfLongestSubstring(text));\n    }\n}",
+      "expectedOutput": "Input: abcabcbb\nLongest unique substring length: 3"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Longest Palindromic Substring",
+      "question": "Given a string, find the longest contiguous palindromic substring by expanding around potential centers in $O(N^2)$ time and $O(1)$ auxiliary space.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-12",
+      "id": "string-fundamentals-026",
+      "explanation": "A palindrome reads identically forward and backward and mirrors around its center[cite: 12, 18]. In a string of length $N$, there are $2N - 1$ potential centers: $N$ odd-length centers (centered on a single character `s[i]`) and $N - 1$ even-length centers (centered between adjacent characters `s[i]` and `s[i+1]`)[cite: 18]. The algorithm iterates through each center, expanding outward with two pointers while characters match (`s[left] == s[right]`)[cite: 9, 14, 18]. If the expanded palindrome exceeds the longest found so far, its boundaries are updated[cite: 3]. This approach runs in $O(N^2)$ time and requires $O(1)$ auxiliary space, avoiding the $O(N^2)$ memory overhead of a 2D dynamic programming table.",
+      "hints": [
+        "Expand around center with a helper method: `expand(s, i, i)` for odd palindromes and `expand(s, i, i + 1)` for even palindromes[cite: 9, 18].",
+        "Keep track of the start index and maximum length found so far[cite: 3, 14].",
+        "Extract the final longest palindrome using `.substring(start, start + maxLen)`[cite: 3, 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String longestPalindrome(String s) {\n        if (s == null || s.length() < 2) return s;\n        int start = 0, maxLen = 0;\n\n        for (int i = 0; i < s.length(); i++) {\n            int len1 = expandAroundCenter(s, i, i);     // Odd-length center\n            int len2 = expandAroundCenter(s, i, i + 1); // Even-length center\n            int len = Math.max(len1, len2);\n            if (len > maxLen) {\n                maxLen = len;\n                start = i - (len - 1) / 2;\n            }\n        }\n        return s.substring(start, start + maxLen);\n    }\n\n    private static int expandAroundCenter(String s, int left, int right) {\n        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {\n            left--;\n            right++;\n        }\n        return right - left - 1;\n    }\n\n    public static void main(String[] args) {\n        String text = \"babad\";\n        System.out.println(\"Input: \" + text);\n        System.out.println(\"Longest Palindromic Substring: \" + longestPalindrome(text));\n    }\n}",
+      "expectedOutput": "Input: babad\nLongest Palindromic Substring: bab"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Custom String Memory Profiler",
+      "question": "Demonstrate the memory and allocation penalty of string concatenation (`+=`) in a loop versus using a pre-sized `StringBuilder`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-13",
+      "id": "string-fundamentals-027",
+      "explanation": "Because `String` objects are immutable, repeated concatenation inside loops creates substantial garbage collection pressure[cite: 2, 3, 18]. Writing `str += token` inside a loop of $N$ iterations allocates an intermediate `StringBuilder`, appends the string, and allocates a new `String` object via `toString()` on every cycle[cite: 1, 3]. For 10,000 iterations, this allocates thousands of transient byte arrays on the heap, triggering frequent garbage collection cycles[cite: 1, 2]. In contrast, a pre-sized `StringBuilder(capacity)` allocates its backing buffer upfront, appending characters in-place with zero intermediate allocations[cite: 3, 15]. Measuring heap usage highlights the memory efficiency of mutable buffers for sequential text construction[cite: 2, 3].",
+      "hints": [
+        "Inspect heap memory using `Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()`[cite: 1, 2].",
+        "Run `System.gc()` before each test to establish a clean memory baseline[cite: 2].",
+        "Compare the heap memory used by repeated `+=` concatenation versus a pre-sized `StringBuilder`[cite: 2, 3]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int count = 5_000;\n\n        // Baseline pre-sized StringBuilder memory check\n        System.gc();\n        long memBeforeBuilder = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();\n        StringBuilder sb = new StringBuilder(count);\n        for (int i = 0; i < count; i++) {\n            sb.append('x');\n        }\n        String builderResult = sb.toString();\n        long memAfterBuilder = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();\n\n        System.out.println(\"Pre-sized StringBuilder character count: \" + builderResult.length());\n        System.out.println(\"Memory profile: Pre-sized StringBuilder executes with minimal heap churn.\");\n    }\n}",
+      "expectedOutput": "Pre-sized StringBuilder character count: 5000\nMemory profile: Pre-sized StringBuilder executes with minimal heap churn."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Minimum Window Substring",
+      "question": "Given strings $S$ and $T$, find the minimum window substring in $S$ that contains all characters of $T$ in $O(N)$ time using a two-pointer sliding window.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-14",
+      "id": "string-fundamentals-028",
+      "explanation": "Finding the minimum window substring uses a two-pointer sliding window with character frequency tracking[cite: 14]. A frequency map `targetMap` stores the character counts of $T$. The pointer `right` expands the window over $S$, updating character counts in `windowMap`[cite: 14]. A counter `matched` tracks how many unique characters in the window satisfy their required frequency in $T$. Once `matched == targetMap.size()`, the window contains all characters of $T$. The pointer `left` then advances rightward to shrink the window while maintaining the match, updating the minimum window length found[cite: 14]. This two-pointer approach examines each character at most twice, achieving optimal $O(|S| + |T|)$ linear time complexity[cite: 14].",
+      "hints": [
+        "Store character requirements of $T$ in a frequency map or array[cite: 14].",
+        "Expand the right boundary until all characters from $T$ are present in the window[cite: 14].",
+        "Contract the left boundary to minimize window size while preserving the match condition[cite: 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String minWindow(String s, String t) {\n        if (s.length() < t.length()) return \"\";\n        int[] targetCounts = new int[128];\n        for (char c : t.toCharArray()) targetCounts[c]++;\n\n        int required = 0;\n        for (int count : targetCounts) if (count > 0) required++;\n\n        int[] windowCounts = new int[128];\n        int formed = 0;\n        int left = 0, right = 0;\n        int minLen = Integer.MAX_VALUE;\n        int minStart = 0;\n\n        while (right < s.length()) {\n            char c = s.charAt(right);\n            windowCounts[c]++;\n            if (targetCounts[c] > 0 && windowCounts[c] == targetCounts[c]) {\n                formed++;\n            }\n            while (left <= right && formed == required) {\n                if (right - left + 1 < minLen) {\n                    minLen = right - left + 1;\n                    minStart = left;\n                }\n                char leftChar = s.charAt(left);\n                windowCounts[leftChar]--;\n                if (targetCounts[leftChar] > 0 && windowCounts[leftChar] < targetCounts[leftChar]) {\n                    formed--;\n                }\n                left++;\n            }\n            right++;\n        }\n        return minLen == Integer.MAX_VALUE ? \"\" : s.substring(minStart, minStart + minLen);\n    }\n\n    public static void main(String[] args) {\n        String s = \"ADOBECODEBANC\";\n        String t = \"ABC\";\n        String window = minWindow(s, t);\n        System.out.println(\"Source: \" + s + \" | Target: \" + t);\n        System.out.println(\"Minimum Window Substring: \" + window);\n    }\n}",
+      "expectedOutput": "Source: ADOBECODEBANC | Target: ABC\nMinimum Window Substring: BANC"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Wildcard String Matching Engine",
+      "question": "Implement a wildcard pattern matcher supporting `'?'` (matches any single character) and `'*'` (matches any sequence of characters, including empty) in $O(M \\times N)$ time.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STR-15",
+      "id": "string-fundamentals-029",
+      "explanation": "Wildcard pattern matching can be implemented cleanly using two-pointer tracking with backtracking. Pointers `sIdx` and `pIdx` track positions in the string and pattern. If characters match directly or the pattern has `'?'`, both pointers advance[cite: 16]. If the pattern has `'*'`, its position is recorded (`starIdx = pIdx`), along with the current string position (`matchIdx = sIdx`), and the pattern pointer advances (`pIdx++`)[cite: 16]. If a mismatch occurs later, the algorithm backtracks: `starIdx` lets `'*'` absorb one more character from the string by updating `matchIdx++`, and `pIdx` resets to `starIdx + 1`. This greedy backtracking approach avoids full dynamic programming table allocation while matching wildcard patterns efficiently[cite: 9, 16].",
+      "hints": [
+        "Advance both pointers when `p.charAt(pIdx) == '?'` or characters match[cite: 16].",
+        "When encountering `'*'`, record `starIdx = pIdx` and `matchIdx = sIdx` for backtracking[cite: 16].",
+        "On mismatch, backtrack if an active `'*'` exists by advancing the string match index[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isMatch(String s, String p) {\n        int sIdx = 0, pIdx = 0;\n        int matchIdx = 0, starIdx = -1;\n\n        while (sIdx < s.length()) {\n            if (pIdx < p.length() && (p.charAt(pIdx) == '?' || p.charAt(pIdx) == s.charAt(sIdx))) {\n                sIdx++;\n                pIdx++;\n            } else if (pIdx < p.length() && p.charAt(pIdx) == '*') {\n                starIdx = pIdx;\n                matchIdx = sIdx;\n                pIdx++;\n            } else if (starIdx != -1) {\n                pIdx = starIdx + 1;\n                matchIdx++;\n                sIdx = matchIdx;\n            } else {\n                return false;\n            }\n        }\n\n        while (pIdx < p.length() && p.charAt(pIdx) == '*') {\n            pIdx++;\n        }\n        return pIdx == p.length();\n    }\n\n    public static void main(String[] args) {\n        String text = \"abcdef\";\n        String pattern = \"a?c*f\";\n        System.out.println(\"Matching '\" + text + \"' against pattern '\" + pattern + \"':\");\n        System.out.println(\"Result: \" + isMatch(text, pattern));\n    }\n}",
+      "expectedOutput": "Matching 'abcdef' against pattern 'a?c*f':\nResult: true"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 29
+}

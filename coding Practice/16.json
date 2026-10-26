@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "switch-statements",
+  "topic": "Switch statements",
+  "page": 66,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Day of the Week Decoder with Default Case",
+      "question": "Write a Java program that takes an integer from 1 to 7 and uses a traditional switch statement with a default case to map the number to its corresponding day name[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-01",
+      "id": "switch-statements-001",
+      "explanation": "A traditional switch statement in Java evaluates an expression against multiple constant case labels[cite: 16]. Compatible selector expressions include byte, short, char, int, their respective wrapper types, enums, and String[cite: 5, 16]. In this implementation, the integer selector is evaluated sequentially against integer case literals 1 through 7[cite: 16]. Each case block must conclude with a break statement; omitting break triggers fall-through, causing execution to spill into subsequent case blocks regardless of whether their condition matches[cite: 16]. The default label acts as a catch-all branch that executes when none of the defined case values match the selector, ensuring reliable boundary handling for out-of-range inputs[cite: 16].",
+      "hints": [
+        "Include an explicit `break;` statement at the conclusion of every case block to prevent unwanted fall-through[cite: 16].",
+        "Place a `default:` label at the end of the switch block to handle invalid numbers outside the 1–7 range[cite: 16].",
+        "Print both the input selector number and the mapped day string[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int dayNumber = 2;\n        String dayName;\n        switch (dayNumber) {\n            case 1: dayName = \"Sunday\"; break;\n            case 2: dayName = \"Monday\"; break;\n            case 3: dayName = \"Tuesday\"; break;\n            case 4: dayName = \"Wednesday\"; break;\n            case 5: dayName = \"Thursday\"; break;\n            case 6: dayName = \"Friday\"; break;\n            case 7: dayName = \"Saturday\"; break;\n            default: dayName = \"Invalid Day\"; break;\n        }\n        System.out.println(\"Day number: \" + dayNumber);\n        System.out.println(\"Day: \" + dayName);\n    }\n}",
+      "expectedOutput": "Day number: 2\nDay: Monday"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Simple Calculator via Operator Character Switch",
+      "question": "Build an arithmetic calculator that switches over a primitive `char` operator ('+', '-', '*', '/') to compute and display the result of two integer operands[cite: 7, 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-02",
+      "id": "switch-statements-002",
+      "explanation": "Because Java's primitive char type is an unsigned 16-bit numeric integer under the hood, it can be passed directly as the selector expression in a switch construct[cite: 5, 16]. Case labels accept character literals enclosed in single quotes, such as '+', '-', '*', and '/'[cite: 16]. Inside the matching branch, the corresponding arithmetic operation executes[cite: 7]. For division ('/'), an if check guards against division by zero before evaluation[cite: 3, 7]. A default case catches unsupported operator characters, returning an informative error message[cite: 3, 16].",
+      "hints": [
+        "Switch directly on the `char` operator variable: `switch (op)`[cite: 16].",
+        "Wrap case character literals in single quotes (e.g., `case '+':`)[cite: 16].",
+        "Add defensive validation for division by zero inside `case '/':`[cite: 3, 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 10, b = 5;\n        char op = '+';\n        int result = 0;\n        boolean valid = true;\n\n        switch (op) {\n            case '+': result = a + b; break;\n            case '-': result = a - b; break;\n            case '*': result = a * b; break;\n            case '/':\n                if (b != 0) result = a / b;\n                else valid = false;\n                break;\n            default:\n                valid = false;\n        }\n\n        System.out.println(\"Input: \" + a + \" \" + op + \" \" + b);\n        if (valid) System.out.println(\"Result: \" + result);\n        else System.out.println(\"Error: Invalid operation\");\n    }\n}",
+      "expectedOutput": "Input: 10 + 5\nResult: 15"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Vowel Classifier via Stacked Fall-Through Cases",
+      "question": "Determine whether a given character is an English vowel by stacking switch case labels together without `break` statements to take advantage of fall-through[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-03",
+      "id": "switch-statements-003",
+      "explanation": "In traditional Java switch statements, omitting a break statement between cases causes control to fall through sequentially to the next statement[cite: 16]. While unintended fall-through is a frequent source of bugs, intentional fall-through allows multiple distinct case values to share an identical execution path[cite: 16]. By stacking `case 'a': case 'e': case 'i': case 'o': case 'u':` contiguously without intermediate statements or breaks, any vowel character flows down to the single assignment statement before terminating at the break[cite: 16]. A default label catches all remaining characters, categorizing them as consonants or non-vowels[cite: 16].",
+      "hints": [
+        "Stack case labels directly on top of each other: `case 'a': case 'e': ...`[cite: 16].",
+        "Normalize case with `Character.toLowerCase(ch)` to handle uppercase and lowercase identically[cite: 8].",
+        "Place a single `break;` at the end of the combined vowel block[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        char ch = 'a';\n        char normalized = Character.toLowerCase(ch);\n        String result;\n\n        switch (normalized) {\n            case 'a':\n            case 'e':\n            case 'i':\n            case 'o':\n            case 'u':\n                result = \"Vowel\";\n                break;\n            default:\n                result = \"Consonant or Non-Alphabet\";\n                break;\n        }\n\n        System.out.println(\"Character: \" + ch);\n        System.out.println(\"Result: \" + result);\n    }\n}",
+      "expectedOutput": "Character: a\nResult: Vowel"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Calendar Days per Month Calculator with Leap Year Logic",
+      "question": "Write a method that takes a month number (1-12) and year, and uses a switch statement with grouped cases to return the number of days in that month, incorporating leap year checks for February[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-04",
+      "id": "switch-statements-004",
+      "explanation": "Calculating month lengths demonstrates case grouping alongside nested conditional logic[cite: 16]. Months with 31 days (1, 3, 5, 7, 8, 10, 12) share a stacked case group returning 31[cite: 13, 16]. Months with 30 days (4, 6, 9, 11) share another group returning 30[cite: 13, 16]. February (month 2) forms its own isolated branch where leap year rules must be evaluated: if `(year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)`, February has 29 days; otherwise, it has 28[cite: 7, 13, 16]. Any month outside 1-12 falls to default and returns -1[cite: 16].",
+      "hints": [
+        "Group 31-day months (1, 3, 5, 7, 8, 10, 12) into a single fall-through block[cite: 13, 16].",
+        "Group 30-day months (4, 6, 9, 11) into a separate block[cite: 13, 16].",
+        "For month 2, evaluate `(year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)` to choose 29 or 28[cite: 7, 13]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int getDaysInMonth(int month, int year) {\n        switch (month) {\n            case 1: case 3: case 5: case 7: case 8: case 10: case 12:\n                return 31;\n            case 4: case 6: case 9: case 11:\n                return 30;\n            case 2:\n                boolean isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);\n                return isLeap ? 29 : 28;\n            default:\n                return -1;\n        }\n    }\n\n    public static void main(String[] args) {\n        int month = 2, year = 2024;\n        int days = getDaysInMonth(month, year);\n        System.out.println(\"Month: \" + month + \", Year: \" + year);\n        System.out.println(\"Days in Month: \" + days);\n    }\n}",
+      "expectedOutput": "Month: 2, Year: 2024\nDays in Month: 29"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Letter Grade Performance Feedback Dispatcher",
+      "question": "Use a switch statement over a letter grade char ('A', 'B', 'C', 'D', 'F') to display corresponding performance feedback messages[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-05",
+      "id": "switch-statements-005",
+      "explanation": "Switch statements provide clean multi-way branching when mapping discrete categorical codes to textual feedback[cite: 16]. A char grade selector matches against individual grade characters[cite: 16]. When matching 'A', 'B', 'C', 'D', or 'F', the corresponding feedback string is assigned and break halts execution[cite: 16]. If an unrecognized character is provided (such as 'Z' or a number), default catches the discrepancy and reports an invalid grade message[cite: 16]. This replaces deeply nested if-else structures with a readable lookup structure[cite: 9, 16].",
+      "hints": [
+        "Normalize the grade character to uppercase before the switch[cite: 4, 8].",
+        "Map 'A' to \"Excellent\", 'B' to \"Good\", 'C' to \"Satisfactory\", 'D' to \"Pass\", 'F' to \"Fail\"[cite: 16].",
+        "Add a `default` case to handle invalid letter codes[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        char grade = 'B';\n        String feedback;\n        switch (Character.toUpperCase(grade)) {\n            case 'A': feedback = \"Excellent Performance\"; break;\n            case 'B': feedback = \"Good Performance\"; break;\n            case 'C': feedback = \"Satisfactory Performance\"; break;\n            case 'D': feedback = \"Pass\"; break;\n            case 'F': feedback = \"Fail - Needs Improvement\"; break;\n            default: feedback = \"Invalid Grade\"; break;\n        }\n        System.out.println(\"Grade: \" + grade);\n        System.out.println(\"Feedback: \" + feedback);\n    }\n}",
+      "expectedOutput": "Grade: B\nFeedback: Good Performance"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Day of the Week Decoder",
+      "question": "Write a `switch` statement that takes an integer 1-7 and prints the corresponding day name, with a `default` case for invalid inputs[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-01",
+      "id": "switch-statements-006",
+      "explanation": "This exercise reinforces basic switch mechanics and constant table matching[cite: 16]. When compiled to JVM bytecode, switch statements on contiguous integer keys are compiled using the `tableswitch` bytecode instruction, which provides O(1) indexed jump table dispatch rather than sequential linear comparisons[cite: 16]. Case labels must evaluate to compile-time constant expressions[cite: 6, 16]. Adding a default branch ensures that out-of-range values (such as negative numbers or integers greater than 7) are caught and handled safely[cite: 16].",
+      "hints": [
+        "Structure each integer case from 1 to 7[cite: 16].",
+        "Terminate every branch with `break;` to prevent execution from continuing into subsequent days[cite: 16].",
+        "Assign the name to a variable and print it after the switch block concludes[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int day = 3;\n        String name;\n        switch (day) {\n            case 1: name = \"Monday\"; break;\n            case 2: name = \"Tuesday\"; break;\n            case 3: name = \"Wednesday\"; break;\n            case 4: name = \"Thursday\"; break;\n            case 5: name = \"Friday\"; break;\n            case 6: name = \"Saturday\"; break;\n            case 7: name = \"Sunday\"; break;\n            default: name = \"Unknown\"; break;\n        }\n        System.out.println(\"Input: \" + day);\n        System.out.println(\"Result: \" + name);\n    }\n}",
+      "expectedOutput": "Input: 3\nResult: Wednesday"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Vowel or Consonant Detector",
+      "question": "Write a switch statement demonstrating fall-through across multiple cases ('a', 'e', 'i', 'o', 'u') to identify vowels versus consonants[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-02",
+      "id": "switch-statements-007",
+      "explanation": "This task demonstrates multi-label matching using intentional fall-through in a traditional switch block[cite: 16]. When the character matches any of the stacked vowel case labels, execution falls through until it encounters the shared assignment and a `break` statement[cite: 16]. Before reaching the default consonant branch, an input check verifies whether the character is an alphabetic letter using `Character.isLetter()`, preventing symbols and punctuation from being misclassified as consonants[cite: 4, 16].",
+      "hints": [
+        "Stack the lowercase vowel cases sequentially: `case 'a': case 'e': case 'i': case 'o': case 'u':`[cite: 16].",
+        "In the default block, verify if the character is an alphabet letter using `Character.isLetter()`[cite: 4, 16].",
+        "Normalize the input with `Character.toLowerCase()` to handle uppercase inputs[cite: 8]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        char letter = 'E';\n        char ch = Character.toLowerCase(letter);\n        String type;\n        switch (ch) {\n            case 'a':\n            case 'e':\n            case 'i':\n            case 'o':\n            case 'u':\n                type = \"Vowel\";\n                break;\n            default:\n                if (Character.isLetter(ch)) {\n                    type = \"Consonant\";\n                } else {\n                    type = \"Invalid Character\";\n                }\n                break;\n        }\n        System.out.println(\"Input Character: \" + letter);\n        System.out.println(\"Type: \" + type);\n    }\n}",
+      "expectedOutput": "Input Character: E\nType: Vowel"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Simple Arithmetic Switch Evaluator",
+      "question": "Take a char operator ('+', '-', '*', '/') and evaluate the arithmetic expression over two numbers using a traditional switch, reporting division by zero safely[cite: 3, 7, 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-03",
+      "id": "switch-statements-008",
+      "explanation": "Evaluating math operations via traditional switch statements highlights how control flow branches to target calculations based on character tokens[cite: 7, 16]. The switch inspects the operator char[cite: 16]. When evaluating division ('/'), integer division by zero must be guarded against to prevent a runtime `ArithmeticException`[cite: 3, 7]. The default case handles invalid operators by printing an error message[cite: 3, 16]. Each valid case completes its calculation and exits via break[cite: 16].",
+      "hints": [
+        "Include distinct cases for `'+'`, `'-'`, `'*'`, and `'/'`[cite: 16].",
+        "Guard against division by zero using `if (b == 0)`[cite: 3, 7].",
+        "Ensure every branch calls `break;`[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int x = 20, y = 4;\n        char op = '*';\n        int result = 0;\n        switch (op) {\n            case '+': result = x + y; break;\n            case '-': result = x - y; break;\n            case '*': result = x * y; break;\n            case '/':\n                if (y != 0) result = x / y;\n                else System.out.println(\"Error: Division by zero\");\n                break;\n            default:\n                System.out.println(\"Error: Unknown operator\");\n                return;\n        }\n        System.out.println(\"Calculation: \" + x + \" \" + op + \" \" + y + \" = \" + result);\n    }\n}",
+      "expectedOutput": "Calculation: 20 * 4 = 80"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Month Days Lookup via Enhanced Arrow Syntax",
+      "question": "Take a month number (1-12) and return the number of days using modern arrow `->` switch syntax introduced in Java 14[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-04",
+      "id": "switch-statements-009",
+      "explanation": "Standardized in Java 14 (JEP 361), enhanced switch expressions use arrow syntax (`case X ->`)[cite: 16]. Unlike traditional switch statements, arrow case labels eliminate fall-through entirely: only the expression or block to the right of the arrow executes, removing the need for error-prone `break` statements[cite: 16]. Multiple matching labels can be grouped on a single line separated by commas (`case 4, 6, 9, 11 -> 30;`)[cite: 16]. Furthermore, enhanced switch can be used as an expression that produces an inline return value directly assigned to a variable[cite: 16].",
+      "hints": [
+        "Use arrow syntax: `case 1, 3, 5, 7, 8, 10, 12 -> 31;`[cite: 16].",
+        "Assign the result of the switch expression directly: `int days = switch (month) { ... };`[cite: 16].",
+        "Do not include `break;` statements; arrow syntax prevents fall-through automatically[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int month = 4;\n        int days = switch (month) {\n            case 1, 3, 5, 7, 8, 10, 12 -> 31;\n            case 4, 6, 9, 11 -> 30;\n            case 2 -> 28;\n            default -> -1;\n        };\n        System.out.println(\"Month: \" + month);\n        System.out.println(\"Days: \" + days);\n    }\n}",
+      "expectedOutput": "Month: 4\nDays: 30"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Traffic Light State Switching with Enums",
+      "question": "Define an enum `TrafficLight` with values RED, YELLOW, GREEN, and write a switch block providing action instructions for each signal[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-05",
+      "id": "switch-statements-010",
+      "explanation": "Switching over Java `enum` types provides compile-time safety and self-documenting code[cite: 16]. In switch case labels matching enum selectors, case labels must use the unqualified enum constant name (e.g., `case RED:`, not `case TrafficLight.RED:`) because the compiler infers the enum type directly from the selector expression[cite: 16]. Under the hood, the compiler translates enum switches into integer lookups using the enum constant's `ordinal()` value via an internal synthetic lookup table, ensuring both fast execution and type safety[cite: 16].",
+      "hints": [
+        "Declare `enum TrafficLight { RED, YELLOW, GREEN }`[cite: 16].",
+        "In the switch case labels, use unqualified names: `case RED:`[cite: 16].",
+        "Print instructions such as \"Stop\", \"Prepare to stop\", and \"Proceed\"[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    enum TrafficLight { RED, YELLOW, GREEN }\n\n    public static void main(String[] args) {\n        TrafficLight signal = TrafficLight.RED;\n        String action = switch (signal) {\n            case RED -> \"Stop immediately\";\n            case YELLOW -> \"Prepare to stop\";\n            case GREEN -> \"Proceed with caution\";\n        };\n        System.out.println(\"Signal: \" + signal);\n        System.out.println(\"Action: \" + action);\n    }\n}",
+      "expectedOutput": "Signal: RED\nAction: Stop immediately"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Intentional Fall-Through State Accumulator",
+      "question": "Demonstrate intentional switch fall-through by modeling a pizza order builder where toppings accumulate sequentially when lower crust tiers fall through without `break` statements[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-06",
+      "id": "switch-statements-011",
+      "explanation": "While accidental fall-through is a common bug, intentional fall-through can model tiered feature accumulation cleanly[cite: 16]. In this pizza tier model, ordering a 'Deluxe' pizza falls through to also accumulate toppings from 'Special' and 'Basic' tiers without re-specifying them[cite: 16]. When `tier` is 3 (Deluxe), execution begins at case 3, adds Bacon, and falls through to case 2 to add Mushrooms, then falls through to case 1 to add Cheese and Tomato base before reaching a final break[cite: 16]. This produces an accumulated list of ingredients without code duplication[cite: 16].",
+      "hints": [
+        "Order tiers in descending order: `case 3:` (Deluxe), `case 2:` (Special), `case 1:` (Basic)[cite: 16].",
+        "Omit `break;` statements between the tiered cases so higher tiers inherit lower-tier toppings[cite: 16].",
+        "Place a final `break;` after `case 1:` to terminate accumulation before `default:`[cite: 16]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int tier = 3; // 1: Basic, 2: Special, 3: Deluxe\n        List<String> toppings = new ArrayList<>();\n\n        switch (tier) {\n            case 3:\n                toppings.add(\"Bacon\");\n            case 2:\n                toppings.add(\"Mushrooms\");\n            case 1:\n                toppings.add(\"Cheese\");\n                toppings.add(\"Tomato Sauce\");\n                break;\n            default:\n                System.out.println(\"Invalid Tier\");\n        }\n\n        System.out.println(\"Selected Tier: \" + tier);\n        System.out.println(\"Accumulated Toppings: \" + toppings);\n    }\n}",
+      "expectedOutput": "Selected Tier: 3\nAccumulated Toppings: [Bacon, Mushrooms, Cheese, Tomato Sauce]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "String Command Action Dispatcher",
+      "question": "Write a string-based switch statement that processes application commands ('start', 'stop', 'pause') and triggers corresponding system actions[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-07",
+      "id": "switch-statements-012",
+      "explanation": "Since Java 7, `String` expressions can be used as switch selectors[cite: 16]. At compile time, the Java compiler implements string switching through a two-step process: it first computes the string's `hashCode()` and generates an initial switch table over that hash code[cite: 16]. To protect against hash collisions, the matching branch then performs a full `equals()` comparison to confirm the string matches exactly[cite: 16]. Passing `null` to a string switch throws a `NullPointerException` immediately upon evaluation, so inputs should be checked or guaranteed non-null before entering the switch[cite: 5, 7, 16].",
+      "hints": [
+        "Normalize the string command with `.toLowerCase()` or `.trim()` before switching[cite: 3, 8].",
+        "Check that the input string is not `null` prior to switching to prevent a `NullPointerException`[cite: 5, 7, 16].",
+        "Include a `default:` branch to handle unrecognized commands gracefully[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String command = \"PAUSE\";\n        String action;\n\n        switch (command.toLowerCase()) {\n            case \"start\":\n                action = \"Starting worker threads\";\n                break;\n            case \"pause\":\n                action = \"Pausing active tasks\";\n                break;\n            case \"stop\":\n                action = \"Shutting down system\";\n                break;\n            default:\n                action = \"Unknown command\";\n                break;\n        }\n\n        System.out.println(\"Command: \" + command);\n        System.out.println(\"Action: \" + action);\n    }\n}",
+      "expectedOutput": "Command: PAUSE\nAction: Pausing active tasks"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Calendar Season Mapping via Enhanced Switch Expression",
+      "question": "Use an enhanced switch expression with arrow syntax (`->`) to return the corresponding season name for a given month number (1-12)[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-08",
+      "id": "switch-statements-013",
+      "explanation": "Switch expressions returning a value must be exhaustive: every possible value of the selector type must be handled by either explicit case labels or a `default` branch[cite: 16]. Enhanced switch expressions allow matching multiple comma-delimited labels on a single line (`case 12, 1, 2 -> \"Winter\";`)[cite: 16]. If the month matches 12, 1, or 2, the expression yields \"Winter\" directly[cite: 16]. Arrow syntax ensures each case is cleanly isolated, making it impossible to accidentally fall through to an unintended season[cite: 16].",
+      "hints": [
+        "Group months into seasonal cases: `case 12, 1, 2 -> \"Winter\";`, etc.[cite: 16].",
+        "Assign the switch expression directly to a String variable[cite: 16].",
+        "Provide a `default -> \"Invalid Month\";` to ensure the expression is exhaustive[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int month = 7;\n        String season = switch (month) {\n            case 12, 1, 2 -> \"Winter\";\n            case 3, 4, 5 -> \"Spring\";\n            case 6, 7, 8 -> \"Summer\";\n            case 9, 10, 11 -> \"Autumn\";\n            default -> \"Invalid Month\";\n        };\n        System.out.println(\"Month: \" + month);\n        System.out.println(\"Season: \" + season);\n    }\n}",
+      "expectedOutput": "Month: 7\nSeason: Summer"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Grid Navigation State Machine using Enum Switch",
+      "question": "Define an enum `Direction` (NORTH, SOUTH, EAST, WEST) and implement a switch statement to update and return grid coordinates $(x, y)$ after a step[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-09",
+      "id": "switch-statements-014",
+      "explanation": "State transitions on a 2D Cartesian grid map directions to coordinate offsets[cite: 14, 16]. By switching over a `Direction` enum, the application updates coordinate values: NORTH increments $y$, SOUTH decrements $y$, EAST increments $x$, and WEST decrements $x$[cite: 16]. Because the switch covers all declared enum constants, modern compilers can verify exhaustiveness without requiring a redundant `default` case[cite: 16]. This ensures that adding a new enum value (like NORTH_EAST) without updating the switch produces a compile-time warning or error[cite: 16].",
+      "hints": [
+        "Declare `enum Direction { NORTH, SOUTH, EAST, WEST }`[cite: 16].",
+        "Switch on the direction instance and update `x` or `y` accordingly[cite: 16].",
+        "Print the updated coordinate pair after the step executes[cite: 11]."
+      ],
+      "sampleCode": "public class Solution {\n    enum Direction { NORTH, SOUTH, EAST, WEST }\n\n    public static void main(String[] args) {\n        int x = 0, y = 0;\n        Direction dir = Direction.NORTH;\n\n        switch (dir) {\n            case NORTH -> y++;\n            case SOUTH -> y--;\n            case EAST  -> x++;\n            case WEST  -> x--;\n        }\n\n        System.out.println(\"Moved: \" + dir);\n        System.out.println(\"New Position: (\" + x + \", \" + y + \")\");\n    }\n}",
+      "expectedOutput": "Moved: NORTH\nNew Position: (0, 1)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Multi-Label Categorization via Enhanced Switch",
+      "question": "Use a modern switch statement with multiple comma-separated labels (`case 1, 2, 3 ->`) to categorize system urgency codes into 'Low', 'Medium', 'High', and 'Critical' priority tiers[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-10",
+      "id": "switch-statements-015",
+      "explanation": "Prior to Java 14, grouping multiple values to execute shared logic required stacked fall-through cases, which risked accidental fall-through bugs if break statements were missed[cite: 16]. Enhanced switch expressions support comma-separated labels on a single line (`case 1, 2, 3 ->`)[cite: 16]. This allows grouping multiple related inputs into discrete categories cleanly, combining readability with the safety of arrow syntax[cite: 16].",
+      "hints": [
+        "Combine urgency tiers using comma separation: `case 1, 2 -> \"Low\";`, `case 3, 4 -> \"Medium\";`, etc.[cite: 16].",
+        "Assign the resulting tier directly from the switch expression[cite: 16].",
+        "Add a `default ->` branch for unexpected numeric codes[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int code = 5;\n        String priority = switch (code) {\n            case 1, 2    -> \"Low Priority\";\n            case 3, 4    -> \"Medium Priority\";\n            case 5, 6    -> \"High Priority\";\n            case 7, 8, 9 -> \"Critical Emergency\";\n            default      -> \"Unknown Priority\";\n        };\n        System.out.println(\"Alert Code: \" + code);\n        System.out.println(\"Classification: \" + priority);\n    }\n}",
+      "expectedOutput": "Alert Code: 5\nClassification: High Priority"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Switch Expression Value Assignment with Yield",
+      "question": "Use a Java modern switch expression that performs intermediate calculations across multi-line blocks and yields a value using the `yield` keyword[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-06",
+      "id": "switch-statements-016",
+      "explanation": "When an arrow switch branch requires multi-statement blocks rather than a single expression, the statements are enclosed in curly braces (`{ ... }`)[cite: 16]. To return a value from within a block back to the enclosing switch expression, Java provides the contextual keyword `yield`[cite: 4, 16]. Unlike `return` (which returns control from the enclosing method), `yield` only exits the switch expression and yields the value to the assignment target[cite: 16]. This allows logging, temporary variables, and validation to run within a case branch before yielding the final value[cite: 16].",
+      "hints": [
+        "Open a code block on the right of the arrow: `case \"PROMO\" -> { ... }`[cite: 16].",
+        "Perform intermediate calculations inside the block[cite: 16].",
+        "Use `yield computedValue;` to return the calculated value from the block[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String orderType = \"BULK\";\n        int quantity = 20;\n        double basePrice = 10.0;\n\n        double finalTotal = switch (orderType) {\n            case \"RETAIL\" -> basePrice * quantity;\n            case \"BULK\" -> {\n                double discount = 0.15; // 15% bulk discount\n                double total = (basePrice * quantity) * (1.0 - discount);\n                System.out.println(\"Applied Bulk Discount: 15%\");\n                yield total;\n            }\n            default -> {\n                System.out.println(\"Applying standard pricing\");\n                yield basePrice * quantity;\n            }\n        };\n\n        System.out.printf(\"Final Calculated Total: $%.2f%n\", finalTotal);\n    }\n}",
+      "expectedOutput": "Applied Bulk Discount: 15%\nFinal Calculated Total: $170.00"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Case-Insensitive String Command Dispatcher",
+      "question": "Implement a string-based switch handling application commands ('START', 'PAUSE', 'RESUME', 'STOP'), sanitizing input to ensure case-insensitive matching[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-07",
+      "id": "switch-statements-017",
+      "explanation": "String switching evaluates values by exact character match[cite: 16]. To support case-insensitive command processing without duplicating uppercase and lowercase cases, input strings are sanitized before entering the switch[cite: 16]. Guarding against `null` with a null check or default fallback prevents a `NullPointerException`[cite: 5, 7, 16]. Applying `.trim().toUpperCase()` normalizes inputs so that commands like 'start', 'Start', and 'START ' match the defined case labels consistently[cite: 8, 16].",
+      "hints": [
+        "Sanitize inputs before the switch: `input != null ? input.trim().toUpperCase() : \"UNKNOWN\"`[cite: 7, 8].",
+        "Define all case labels in uppercase: `case \"START\":`, `case \"STOP\":`[cite: 16].",
+        "Handle unexpected or missing commands in the `default:` branch[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void executeCommand(String input) {\n        String cmd = (input == null) ? \"\" : input.trim().toUpperCase();\n        String status;\n        switch (cmd) {\n            case \"START\":  status = \"Engine Initialized\"; break;\n            case \"PAUSE\":  status = \"Engine Paused\"; break;\n            case \"RESUME\": status = \"Engine Resumed\"; break;\n            case \"STOP\":   status = \"Engine Halted\"; break;\n            default:       status = \"Invalid Command\"; break;\n        }\n        System.out.println(\"Command: '\" + input + \"' -> \" + status);\n    }\n\n    public static void main(String[] args) {\n        executeCommand(\"  start  \");\n        executeCommand(\"STOP\");\n        executeCommand(null);\n    }\n}",
+      "expectedOutput": "Command: '  start  ' -> Engine Initialized\nCommand: 'STOP' -> Engine Halted\nCommand: 'null' -> Invalid Command"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Quarter and Season Classifier",
+      "question": "Write a switch expression that maps month names directly to fiscal quarters and calendar seasons using comma-separated matching labels[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-08",
+      "id": "switch-statements-018",
+      "explanation": "Switch expressions can map string identifiers to structured data records or formatted descriptions[cite: 4, 16]. By matching comma-separated uppercase month names, a single branch can categorize an entire quarter (e.g., `case \"JANUARY\", \"FEBRUARY\", \"MARCH\" -> \"Q1 (Winter)\";`)[cite: 16]. The compiler verifies that the expression is exhaustive when backed by a default branch, ensuring any invalid month name is caught and handled[cite: 16].",
+      "hints": [
+        "Normalize the month string using `.toUpperCase()`[cite: 8].",
+        "Group months into quarters: `case \"JANUARY\", \"FEBRUARY\", \"MARCH\" -> ...`[cite: 16].",
+        "Assign the resulting description directly from the switch expression[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String month = \"October\";\n        String quarter = switch (month.toUpperCase()) {\n            case \"JANUARY\", \"FEBRUARY\", \"MARCH\"    -> \"Q1 (Winter/Spring)\";\n            case \"APRIL\", \"MAY\", \"JUNE\"            -> \"Q2 (Spring/Summer)\";\n            case \"JULY\", \"AUGUST\", \"SEPTEMBER\"      -> \"Q3 (Summer/Autumn)\";\n            case \"OCTOBER\", \"NOVEMBER\", \"DECEMBER\" -> \"Q4 (Autumn/Winter)\";\n            default -> \"Unknown Quarter\";\n        };\n        System.out.println(\"Month: \" + month);\n        System.out.println(\"Fiscal Period: \" + quarter);\n    }\n}",
+      "expectedOutput": "Month: October\nFiscal Period: Q4 (Autumn/Winter)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "HTTP Status Code Categorizer",
+      "question": "Map HTTP status code integers (200, 400, 401, 403, 404, 500) to corresponding category classifications ('Success', 'Client Error', 'Server Error') using a switch expression[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-09",
+      "id": "switch-statements-019",
+      "explanation": "Mapping HTTP protocol response codes to status categories shows how switch expressions simplify network protocol classification[cite: 16]. Specific status codes are grouped by category: 200 maps to Success; 400, 401, 403, and 404 map to Client Error; and 500, 502, 503 map to Server Error[cite: 16]. Using modern arrow syntax avoids break statements, keeping the mapping concise and readable[cite: 16].",
+      "hints": [
+        "Group client error codes using comma separation: `case 400, 401, 403, 404 -> ...`[cite: 16].",
+        "Map 200 to 'Success' and 500 to 'Server Error'[cite: 16].",
+        "Use `default -> \"Unrecognized Status Code\";` for unknown codes[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int statusCode = 404;\n        String category = switch (statusCode) {\n            case 200, 201, 204           -> \"Success (2xx)\";\n            case 400, 401, 403, 404, 429 -> \"Client Error (4xx)\";\n            case 500, 502, 503, 504      -> \"Server Error (5xx)\";\n            default                      -> \"Unrecognized Status\";\n        };\n        System.out.println(\"HTTP Status: \" + statusCode);\n        System.out.println(\"Category: \" + category);\n    }\n}",
+      "expectedOutput": "HTTP Status: 404\nCategory: Client Error (4xx)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Switch Variable Scope Isolation via Blocks",
+      "question": "Demonstrate how variable scoping works across traditional switch case labels and resolve variable name collisions using explicit code blocks `{}`[cite: 6, 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-10",
+      "id": "switch-statements-020",
+      "explanation": "In a traditional switch statement, the entire switch block forms a single lexical scope[cite: 6, 16]. A variable declared in one case label (e.g., `case 1: int temp = 10;`) remains in scope for all subsequent case labels until the closing brace of the switch[cite: 6, 16]. Trying to declare another variable with the same name `temp` in `case 2:` causes a compile-time error: 'variable temp is already defined'[cite: 4, 6]. To isolate local variables to a single case, the statements must be enclosed in curly braces (`case 2: { int temp = 20; ... }`)[cite: 6, 16]. This creates an independent nested scope, preventing identifier collisions between cases[cite: 4, 6, 16].",
+      "hints": [
+        "Enclose case bodies inside curly braces `{ ... }` to create an isolated block scope[cite: 6, 16].",
+        "Declare a variable with the same name (e.g., `int count`) inside different isolated case blocks[cite: 6, 16].",
+        "Observe how explicit scoping blocks resolve variable collision errors[cite: 6, 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int option = 2;\n        switch (option) {\n            case 1: {\n                int result = 10 * 2;\n                System.out.println(\"Option 1 calculated: \" + result);\n                break;\n            }\n            case 2: {\n                // Fully isolated block scope: reusing identifier 'result' is legal\n                int result = 20 * 5;\n                System.out.println(\"Option 2 calculated: \" + result);\n                break;\n            }\n            default: {\n                System.out.println(\"Default case executed\");\n                break;\n            }\n        }\n    }\n}",
+      "expectedOutput": "Option 2 calculated: 100"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Enhanced Switch with Multi-Statement Yield Block",
+      "question": "Implement a switch expression with arrow syntax where one branch uses a multi-statement block with the `yield` keyword to perform a multi-step tax calculation[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-11",
+      "id": "switch-statements-021",
+      "explanation": "Switch expressions allow mixing single-expression arrows with multi-statement block arrows[cite: 16]. Single-line branches return their value directly (`case \"EXEMPT\" -> 0.0;`), while complex branches use curly braces (`case \"STANDARD\" -> { ... }`) to perform multi-step work[cite: 16]. Inside a block arrow, `yield` returns the calculated value back to the variable assignment[cite: 16]. This combines the readability of expression-based assignment with the flexibility to log, validate, or perform intermediate calculations when needed[cite: 16].",
+      "hints": [
+        "Mix simple branches (`case \"NONE\" -> 0.0;`) with block branches (`case \"STANDARD\" -> { ... }`)[cite: 16].",
+        "Inside block branches, declare local variables and conclude with `yield totalTax;`[cite: 16].",
+        "Ensure every path through a block branch yields a compatible type value[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String category = \"LUXURY\";\n        double amount = 500.0;\n\n        double tax = switch (category) {\n            case \"EXEMPT\" -> 0.0;\n            case \"ESSENTIAL\" -> amount * 0.05;\n            case \"LUXURY\" -> {\n                double baseSurcharge = 25.0;\n                double luxuryRate = 0.20;\n                double computed = (amount * luxuryRate) + baseSurcharge;\n                System.out.println(\"Log: Applied luxury tax rate and base surcharge\");\n                yield computed;\n            }\n            default -> amount * 0.10;\n        };\n\n        System.out.printf(\"Item Category: %s | Total Tax: $%.2f%n\", category, tax);\n    }\n}",
+      "expectedOutput": "Log: Applied luxury tax rate and base surcharge\nItem Category: LUXURY | Total Tax: $125.00"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Pattern Matching Switch Type Inspection",
+      "question": "Use Java 21 pattern matching for switch to inspect an `Object` reference, handling `Integer`, `String`, `Double`, and `null` with type patterns[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-12",
+      "id": "switch-statements-022",
+      "explanation": "Standardized in Java 21 (JEP 441), pattern matching for switch allows switching directly over object types and binding them to typed variables in a single step[cite: 16]. Instead of chains of `if (obj instanceof String s)` checks with manual casts, pattern matching supports cases like `case Integer i -> ...` and `case String s -> ...`[cite: 16]. The compiler performs smart casting automatically, making `s` immediately accessible as a `String` within that branch[cite: 16]. Java 21 also allows handling `null` explicitly as a case label (`case null -> ...`), avoiding the automatic `NullPointerException` thrown by traditional switch statements[cite: 7, 16].",
+      "hints": [
+        "Match types directly with type patterns: `case Integer i -> ...`[cite: 16].",
+        "Include an explicit `case null -> ...` to handle null references cleanly[cite: 16].",
+        "Provide a `default ->` case to handle any other unhandled object types[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String formatObject(Object obj) {\n        return switch (obj) {\n            case null      -> \"Received null reference\";\n            case Integer i -> \"Integer value: \" + (i * 10);\n            case String s  -> \"String of length \" + s.length() + \": \" + s.toUpperCase();\n            case Double d  -> String.format(\"Double formatted: %.2f\", d);\n            default        -> \"Unknown object type: \" + obj.getClass().getSimpleName();\n        };\n    }\n\n    public static void main(String[] args) {\n        System.out.println(formatObject(42));\n        System.out.println(formatObject(\"hello pattern matching\"));\n        System.out.println(formatObject(3.14159));\n        System.out.println(formatObject(null));\n    }\n}",
+      "expectedOutput": "Integer value: 420\nString of length 22: HELLO PATTERN MATCHING\nDouble formatted: 3.14\nReceived null reference"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Finite State Machine Vending State Transitions",
+      "question": "Model a vending machine state machine using an enum `State` (IDLE, COIN_INSERTED, DISPENSING) and an event switch that validates state transitions[cite: 13, 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-13",
+      "id": "switch-statements-023",
+      "explanation": "Finite State Machines (FSMs) manage complex state transitions using structured conditional logic[cite: 13]. By pairing a current `State` enum with an event or action in a switch statement, the system validates whether requested state transitions are allowed[cite: 13, 16]. For example, inserting a coin is valid only when in `IDLE`, transitioning the machine to `COIN_INSERTED`[cite: 13]. Selecting an item is allowed only from `COIN_INSERTED`, transitioning to `DISPENSING`[cite: 13]. Attempting to dispense an item from `IDLE` is rejected as an illegal transition[cite: 13]. This keeps transition logic centralized and predictable[cite: 13].",
+      "hints": [
+        "Define `enum State { IDLE, COIN_INSERTED, DISPENSING }` and `enum Action { INSERT_COIN, SELECT_ITEM, DISPENSE_COMPLETE }`[cite: 16].",
+        "Switch over the current state and evaluate incoming actions[cite: 16].",
+        "Return the updated target state or report an error if the transition is invalid[cite: 13]."
+      ],
+      "sampleCode": "public class Solution {\n    enum State { IDLE, COIN_INSERTED, DISPENSING }\n    enum Action { INSERT_COIN, SELECT_ITEM, DISPENSE_COMPLETE }\n\n    public static State transition(State current, Action action) {\n        return switch (current) {\n            case IDLE -> {\n                if (action == Action.INSERT_COIN) yield State.COIN_INSERTED;\n                System.out.println(\"Invalid action for IDLE state\");\n                yield current;\n            }\n            case COIN_INSERTED -> {\n                if (action == Action.SELECT_ITEM) yield State.DISPENSING;\n                System.out.println(\"Invalid action for COIN_INSERTED state\");\n                yield current;\n            }\n            case DISPENSING -> {\n                if (action == Action.DISPENSE_COMPLETE) yield State.IDLE;\n                System.out.println(\"Dispense in progress\");\n                yield current;\n            }\n        };\n    }\n\n    public static void main(String[] args) {\n        State state = State.IDLE;\n        System.out.println(\"Initial State: \" + state);\n        state = transition(state, Action.INSERT_COIN);\n        System.out.println(\"After Coin: \" + state);\n        state = transition(state, Action.SELECT_ITEM);\n        System.out.println(\"After Selection: \" + state);\n    }\n}",
+      "expectedOutput": "Initial State: IDLE\nAfter Coin: COIN_INSERTED\nAfter Selection: DISPENSING"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Roman Numeral Character Decoder",
+      "question": "Implement an algorithm using a switch statement to map Roman numeral characters ('I', 'V', 'X', 'L', 'C', 'D', 'M') to their integer values and decode a Roman numeral string[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-14",
+      "id": "switch-statements-024",
+      "explanation": "Decoding Roman numerals requires translating characters to their numeric values and evaluating subtractive combinations[cite: 16]. A helper method uses a switch expression to map characters to values: 'I' -> 1, 'V' -> 5, 'X' -> 10, 'L' -> 50, 'C' -> 100, 'D' -> 500, 'M' -> 1000[cite: 16]. The main loop processes characters from left to right: if the current numeral's value is less than the next numeral's value (e.g., 'IV' where $1 < 5$), the current value is subtracted from the total; otherwise, it is added[cite: 16]. The switch provides fast, constant-time character-to-value lookups[cite: 16].",
+      "hints": [
+        "Implement a helper method `charToValue(char c)` using an arrow switch expression[cite: 16].",
+        "Traverse the string from left to right: if `current < next`, subtract `current`; else add it[cite: 16].",
+        "Add the value of the final character directly to the total[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int charValue(char ch) {\n        return switch (ch) {\n            case 'I' -> 1;\n            case 'V' -> 5;\n            case 'X' -> 10;\n            case 'L' -> 50;\n            case 'C' -> 100;\n            case 'D' -> 500;\n            case 'M' -> 1000;\n            default  -> 0;\n        };\n    }\n\n    public static int romanToInt(String s) {\n        int total = 0;\n        for (int i = 0; i < s.length(); i++) {\n            int current = charValue(s.charAt(i));\n            if (i + 1 < s.length() && current < charValue(s.charAt(i + 1))) {\n                total -= current;\n            } else {\n                total += current;\n            }\n        }\n        return total;\n    }\n\n    public static void main(String[] args) {\n        String roman = \"MCMXCIV\"; // 1994\n        System.out.println(\"Roman Numeral: \" + roman);\n        System.out.println(\"Parsed Integer: \" + romanToInt(roman));\n    }\n}",
+      "expectedOutput": "Roman Numeral: MCMXCIV\nParsed Integer: 1994"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Stack Machine Bytecode Instruction Evaluator",
+      "question": "Build an execution engine using a switch statement to interpret string instructions ('PUSH', 'POP', 'ADD', 'PRINT') and manipulate an integer stack[cite: 16].",
+      "source": "java_coding_practice.json",
+      "source_id": "switch-statements-15",
+      "id": "switch-statements-025",
+      "explanation": "A virtual machine or bytecode interpreter typically runs a dispatch loop that switches over instruction opcodes[cite: 16]. In this stack machine simulator, instructions are parsed from strings: 'PUSH <val>' pushes an integer onto a `Deque<Integer>` stack; 'ADD' pops the top two values, sums them, and pushes the result; 'POP' discards the top value; and 'PRINT' outputs the top of the stack[cite: 6, 7, 16]. The switch statement handles opcode dispatch, executing stack operations based on instruction tokens[cite: 16].",
+      "hints": [
+        "Split instruction lines into opcode and argument tokens using `split(\" \")`[cite: 3, 8].",
+        "Switch on `tokens[0].toUpperCase()` to dispatch commands[cite: 8, 16].",
+        "Use a `java.util.ArrayDeque<Integer>` to manage the operand stack[cite: 6]."
+      ],
+      "sampleCode": "import java.util.ArrayDeque;\nimport java.util.Deque;\n\npublic class Solution {\n    public static void executeInstructions(String[] instructions) {\n        Deque<Integer> stack = new ArrayDeque<>();\n        for (String line : instructions) {\n            String[] parts = line.split(\" \");\n            String op = parts[0].toUpperCase();\n            switch (op) {\n                case \"PUSH\" -> stack.push(Integer.parseInt(parts[1]));\n                case \"ADD\" -> {\n                    int b = stack.pop();\n                    int a = stack.pop();\n                    stack.push(a + b);\n                }\n                case \"PRINT\" -> System.out.println(\"Top of Stack: \" + stack.peek());\n                case \"POP\" -> stack.pop();\n                default -> System.out.println(\"Unknown Opcode: \" + op);\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        String[] program = {\"PUSH 15\", \"PUSH 35\", \"ADD\", \"PRINT\"};\n        executeInstructions(program);\n    }\n}",
+      "expectedOutput": "Top of Stack: 50"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Pattern Matching Switch (Type Inspection)",
+      "question": "Write a pattern-matching switch that accepts an `Object` reference and performs operations based on whether it is an `Integer`, `String`, `Double[]`, or `null`[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-11",
+      "id": "switch-statements-026",
+      "explanation": "Java 21 pattern matching for switch enables type-based dispatch without manual `instanceof` checks and casts[cite: 16]. When switching over an `Object`, type patterns like `case Integer i` match if the runtime object is an instance of `Integer` and automatically bind the cast value to `i`[cite: 16]. Array types like `case Double[] arr` match arrays of doubles, allowing direct array access[cite: 5, 16]. Handling `null` explicitly via `case null` makes null checks first-class branches in the switch rather than throwing exceptions[cite: 7, 16].",
+      "hints": [
+        "Include an explicit `case null ->` branch[cite: 16].",
+        "Match reference array types directly: `case Double[] arr -> ...`[cite: 5, 16].",
+        "Use the auto-bound pattern variables directly within the branch expressions[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void inspectType(Object o) {\n        String result = switch (o) {\n            case null -> \"Matched Null\";\n            case Integer i -> \"Integer multiplied: \" + (i * 2);\n            case String s -> \"String length: \" + s.length();\n            case Double[] arr -> \"Double array of length: \" + arr.length;\n            default -> \"Unsupported type: \" + o.getClass().getSimpleName();\n        };\n        System.out.println(result);\n    }\n\n    public static void main(String[] args) {\n        inspectType(null);\n        inspectType(25);\n        inspectType(\"Modern Java Switch\");\n        inspectType(new Double[]{1.1, 2.2, 3.3});\n    }\n}",
+      "expectedOutput": "Matched Null\nInteger multiplied: 50\nString length: 18\nDouble array of length: 3"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Guarded Pattern Switch with When Clauses",
+      "question": "Implement a pattern-matching switch using `when` guard clauses (e.g., `case String s when s.length() > 5`) to classify string tokens by format and length[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-12",
+      "id": "switch-statements-027",
+      "explanation": "Introduced in Java 21, guarded pattern cases allow adding boolean conditions to pattern matches using the `when` keyword[cite: 16]. A guarded case matches only if both the type pattern matches and the boolean condition evaluates to true: `case String s when s.length() > 5` matches strings longer than 5 characters, while shorter strings pass through to subsequent cases[cite: 16]. The compiler evaluates patterns in top-down order, requiring guarded cases to precede unguarded catch-all cases to prevent unreachable case errors[cite: 16].",
+      "hints": [
+        "Use the syntax `case Type identifier when (booleanCondition) ->`[cite: 16].",
+        "Place more specific guarded cases before general unguarded type cases to avoid compiler errors[cite: 16].",
+        "Combine type binding with conditions like `s.startsWith(\"SYS_\")`[cite: 3, 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String classifyToken(Object obj) {\n        return switch (obj) {\n            case String s when s.startsWith(\"ADMIN_\") -> \"Admin Identifier: \" + s.substring(6);\n            case String s when s.length() > 5         -> \"Long String: \" + s;\n            case String s                             -> \"Standard String: \" + s;\n            case Integer i when i < 0                 -> \"Negative Integer: \" + i;\n            case Integer i                            -> \"Positive Integer: \" + i;\n            case null                                 -> \"Null token\";\n            default                                   -> \"Other object\";\n        };\n    }\n\n    public static void main(String[] args) {\n        System.out.println(classifyToken(\"ADMIN_ROOT\"));\n        System.out.println(classifyToken(\"Hello\"));\n        System.out.println(classifyToken(-42));\n    }\n}",
+      "expectedOutput": "Admin Identifier: ROOT\nStandard String: Hello\nNegative Integer: -42"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Lexical Parser State Transitions via Switch",
+      "question": "Implement an algebraic expression tokenizer state machine using nested switch expressions that transitions through START, NUMBER, and OPERATOR states[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-13",
+      "id": "switch-statements-028",
+      "explanation": "Lexical tokenizers scan character streams using finite state machines[cite: 13, 16]. By pairing the current parser state with character classifications in nested switch expressions, the parser transitions between states cleanly[cite: 13, 16]. For example, when in the `START` state, encountering a digit transitions to the `NUMBER` state, while encountering an operator transitions to `OPERATOR`[cite: 16]. Using enhanced switch expressions keeps character classification and state transition logic structured and easy to follow[cite: 16].",
+      "hints": [
+        "Define an enum for parser states: `enum State { START, NUMBER, OPERATOR, ERROR }`[cite: 16].",
+        "Classify characters: digits, operators ('+', '-', '*', '/'), whitespace, or invalid[cite: 7, 16].",
+        "Use nested switch expressions to determine the next state based on current state and character type[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    enum State { START, IN_NUMBER, IN_OPERATOR, ERROR }\n\n    public static State step(State current, char ch) {\n        return switch (current) {\n            case START -> switch (ch) {\n                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> State.IN_NUMBER;\n                case '+', '-', '*', '/' -> State.IN_OPERATOR;\n                default -> State.ERROR;\n            };\n            case IN_NUMBER -> switch (ch) {\n                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> State.IN_NUMBER;\n                case '+', '-', '*', '/' -> State.IN_OPERATOR;\n                default -> State.ERROR;\n            };\n            case IN_OPERATOR -> switch (ch) {\n                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> State.IN_NUMBER;\n                default -> State.ERROR;\n            };\n            case ERROR -> State.ERROR;\n        };\n    }\n\n    public static void main(String[] args) {\n        String expr = \"42+\";\n        State s = State.START;\n        for (char c : expr.toCharArray()) {\n            s = step(s, c);\n            System.out.println(\"Char '\" + c + \"' -> State: \" + s);\n        }\n    }\n}",
+      "expectedOutput": "Char '4' -> State: IN_NUMBER\nChar '2' -> State: IN_NUMBER\nChar '+' -> State: IN_OPERATOR"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "AST Expression Evaluator via Pattern Matching",
+      "question": "Define a sealed interface `Node` representing an Abstract Syntax Tree (AST) with record types `Constant`, `Add`, and `Multiply`, and evaluate it recursively using a pattern-matching switch[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-14",
+      "id": "switch-statements-029",
+      "explanation": "Combining sealed hierarchies with pattern-matching switch expressions provides an algebraic data type pattern in modern Java[cite: 16]. A sealed interface restricts which classes can implement it (`sealed interface Node permits Constant, Add, Multiply`)[cite: 4, 16]. When evaluating a `Node` in a pattern-matching switch, the compiler checks the permits clause to ensure every possible subtype is handled[cite: 4, 16]. Because the hierarchy is sealed, the switch expression is provably exhaustive, eliminating the need for a fallback default case[cite: 16]. The evaluator recursively evaluates sub-nodes, computing tree expressions cleanly[cite: 9, 16].",
+      "hints": [
+        "Declare `sealed interface Node permits Constant, Add, Multiply {}`[cite: 4, 16].",
+        "Implement records: `record Constant(int val) implements Node`, `record Add(Node l, Node r) implements Node`, etc.[cite: 4, 16].",
+        "Evaluate recursively with pattern matching: `case Add(Node l, Node r) -> eval(l) + eval(r);`[cite: 9, 16]."
+      ],
+      "sampleCode": "public class Solution {\n    sealed interface Node permits Constant, Add, Multiply {}\n    record Constant(int value) implements Node {}\n    record Add(Node left, Node right) implements Node {}\n    record Multiply(Node left, Node right) implements Node {}\n\n    public static int eval(Node node) {\n        return switch (node) {\n            case Constant(int val)       -> val;\n            case Add(Node l, Node r)      -> eval(l) + eval(r);\n            case Multiply(Node l, Node r) -> eval(l) * eval(r);\n        };\n    }\n\n    public static void main(String[] args) {\n        // Represents (5 + 3) * 2\n        Node ast = new Multiply(new Add(new Constant(5), new Constant(3)), new Constant(2));\n        System.out.println(\"AST Evaluation: (5 + 3) * 2\");\n        System.out.println(\"Calculated Result: \" + eval(ast));\n    }\n}",
+      "expectedOutput": "AST Evaluation: (5 + 3) * 2\nCalculated Result: 16"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Exhaustive Sealed Hierarchy Switch Without Default",
+      "question": "Implement a sealed interface `Result` with permitted records `Success`, `Failure`, `Timeout`, and `Cancelled`, and write an exhaustive switch expression that compiler-verifies full coverage without a `default` branch[cite: 16].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SWT-15",
+      "id": "switch-statements-030",
+      "explanation": "In Java 21, sealed hierarchies enable compiler-enforced exhaustiveness in switch expressions[cite: 16]. When an interface is declared `sealed` with an explicit list of permitted records (`Success`, `Failure`, `Timeout`, `Cancelled`), the Java compiler knows all possible subclasses at compile time[cite: 4, 16]. If a switch expression defines a case pattern for every permitted subtype, the compiler recognizes the switch as exhaustive without requiring a `default` branch[cite: 16]. If a new subtype is added to the sealed interface in the future, the compiler will flag any switch expression that does not handle the new subtype, preventing unhandled cases at compile time[cite: 16].",
+      "hints": [
+        "Declare `sealed interface ServiceResult permits Success, Failure, Timeout, Cancelled`[cite: 4, 16].",
+        "Create record implementations for each permitted subtype[cite: 4, 16].",
+        "Write a switch with branches for all four subtypes, verifying that omitting `default` compiles cleanly[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    sealed interface ServiceResult permits Success, Failure, Timeout, Cancelled {}\n    record Success(String payload) implements ServiceResult {}\n    record Failure(String error) implements ServiceResult {}\n    record Timeout(long durationMs) implements ServiceResult {}\n    record Cancelled() implements ServiceResult {}\n\n    public static String handleResult(ServiceResult res) {\n        // Exhaustive switch: covers all permitted subtypes without needing a default branch\n        return switch (res) {\n            case Success s   -> \"Status 200: \" + s.payload();\n            case Failure f   -> \"Status 500: \" + f.error();\n            case Timeout t   -> \"Status 408: Timed out after \" + t.durationMs() + \"ms\";\n            case Cancelled c -> \"Status 499: Request Cancelled\";\n        };\n    }\n\n    public static void main(String[] args) {\n        ServiceResult r1 = new Success(\"Data loaded\");\n        ServiceResult r2 = new Timeout(3000);\n        System.out.println(handleResult(r1));\n        System.out.println(handleResult(r2));\n    }\n}",
+      "expectedOutput": "Status 200: Data loaded\nStatus 408: Timed out after 3000ms"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

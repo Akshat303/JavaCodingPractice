@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "access-modifiers",
+  "topic": "Access modifiers",
+  "page": 44,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Encapsulated Entity with Accessor Methods",
+      "question": "Implement a `Student` class demonstrating standard encapsulation by declaring private fields `name` and `age` alongside public getters and setters, and test state access in `main`.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-01",
+      "id": "access-modifiers-001",
+      "explanation": "Encapsulation is a foundational object-oriented principle that restricts direct external access to an object's internal representation while exposing a controlled public interface[cite: 10]. Marking member fields with the `private` access modifier ensures they are completely hidden from code outside the declaring class[cite: 10]. Public accessor (`getName()`, `getAge()`) and mutator (`setName()`, `setAge()`) methods act as guarded gateways[cite: 4, 10]. Mutators allow developers to enforce invariants, sanitize inputs, or reject illegal arguments before updating internal heap fields[cite: 10]. Direct field manipulation bypasses these validation guarantees, coupling callers directly to internal representation details[cite: 10].",
+      "hints": [
+        "Declare `private String name;` and `private int age;` inside the class body[cite: 4, 10].",
+        "Implement public accessor methods returning the fields, using lower camelCase naming[cite: 4, 10].",
+        "Use `this.name = name;` in mutators to disambiguate shadowed parameters from instance fields[cite: 4, 6, 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Student {\n        private String name;\n        private int age;\n\n        public String getName() {\n            return name;\n        }\n\n        public void setName(String name) {\n            this.name = name;\n        }\n\n        public int getAge() {\n            return age;\n        }\n\n        public void setAge(int age) {\n            this.age = age;\n        }\n    }\n\n    public static void main(String[] args) {\n        Student s = new Student();\n        s.setName(\"Akshat\");\n        s.setAge(26);\n        System.out.println(\"Student name: \" + s.getName());\n        System.out.println(\"Student age: \" + s.getAge());\n    }\n}",
+      "expectedOutput": "Student name: Akshat\nStudent age: 26"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Intra-Class Field Accessibility Matrix",
+      "question": "Declare member variables demonstrating all four access levels (`public`, `protected`, default package-private, and `private`) in a class, and verify that an internal member method can access all four levels directly.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-02",
+      "id": "access-modifiers-002",
+      "explanation": "Java specifies four levels of member visibility: `public`, `protected`, default (package-private, denoted by omitting any access modifier keyword), and `private`[cite: 10]. Regardless of the access modifier assigned to an instance variable, the declaring class itself always possesses full, unrestricted access to all of its own members[cite: 10]. Member methods executing within the class context read and write private, default, protected, and public fields with equal privilege because lexical boundaries are evaluated at the class level rather than at individual method instances[cite: 10]. Access restrictions only apply when external types attempt to access those members across class or package boundaries[cite: 10].",
+      "hints": [
+        "Declare four separate fields with distinct modifiers: `public`, `protected`, default (no keyword), and `private`[cite: 10].",
+        "Write an instance method `displayAll()` within the same class that reads and formats each field[cite: 10].",
+        "Instantiate the class in `main` and invoke the method to verify full intra-class visibility[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class AccessContainer {\n        public String publicField = \"PUBLIC\";\n        protected String protectedField = \"PROTECTED\";\n        String defaultField = \"DEFAULT\";\n        private String privateField = \"PRIVATE\";\n\n        public void displayAll() {\n            System.out.println(\"Accessing from inside declaring class:\");\n            System.out.println(\"Public: \" + publicField);\n            System.out.println(\"Protected: \" + protectedField);\n            System.out.println(\"Default: \" + defaultField);\n            System.out.println(\"Private: \" + privateField);\n        }\n    }\n\n    public static void main(String[] args) {\n        AccessContainer container = new AccessContainer();\n        container.displayAll();\n    }\n}",
+      "expectedOutput": "Accessing from inside declaring class:\nPublic: PUBLIC\nProtected: PROTECTED\nDefault: DEFAULT\nPrivate: PRIVATE"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Co-Package Member Visibility Collaboration",
+      "question": "Create two classes residing in the same package to verify that default (package-private) and `protected` members of one class are accessible from the other without subclassing.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-03",
+      "id": "access-modifiers-003",
+      "explanation": "In Java's access model, both package-private (default) and `protected` members grant unrestricted access to any other class residing within the same declared package namespace[cite: 10]. A class declared in package `com.demo` can instantiate another class in `com.demo` and directly read its default and protected fields or invoke its default and protected methods without requiring inheritance[cite: 10]. The key distinction between the two modifiers appears only outside the package: `protected` members remain accessible to subclasses in foreign packages, whereas package-private members are completely inaccessible outside their package boundary[cite: 10].",
+      "hints": [
+        "Declare a collaborator class with `protected String protectedMsg;` and `String defaultMsg;`[cite: 10].",
+        "Instantiate the collaborator class inside the caller within the same file or package[cite: 1, 10].",
+        "Access both fields directly using dot notation (e.g., `collaborator.defaultMsg`)[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class PackageService {\n        protected String protectedInfo = \"Protected Service Data\";\n        String defaultInfo = \"Default Package Data\";\n    }\n\n    public static void main(String[] args) {\n        PackageService service = new PackageService();\n        System.out.println(\"Same-package access:\");\n        System.out.println(\"Read protected: \" + service.protectedInfo);\n        System.out.println(\"Read default: \" + service.defaultInfo);\n    }\n}",
+      "expectedOutput": "Same-package access:\nRead protected: Protected Service Data\nRead default: Default Package Data"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Factory Instantiation with Private Constructor",
+      "question": "Implement a class that restricts instantiation by declaring its constructor `private`, and provide an explicit public static factory method `create()` to generate valid instances.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-04",
+      "id": "access-modifiers-004",
+      "explanation": "Declaring a constructor `private` prohibits client code from using the `new` operator directly from outside the class body[cite: 10]. This pattern is central to the Static Factory Method pattern (Joshua Bloch, Effective Java)[cite: 10]. Instead of uncontrolled instantiation, the class provides a public static method (often named `create()`, `of()`, or `getInstance()`) that controls how instances are created, validated, or cached[cite: 5, 10]. Static factories allow meaningful method names, can return existing cached instances, and can even return subtype implementations without exposing internal constructor details to consumers[cite: 10].",
+      "hints": [
+        "Declare the constructor as `private ClassName()`[cite: 10].",
+        "Define `public static ClassName create(String config)` that invokes the private constructor internally[cite: 10].",
+        "Call `ClassName.create(...)` in `main` and display the initialized instance state[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class ConnectionPool {\n        private final String connectionUrl;\n\n        private ConnectionPool(String url) {\n            this.connectionUrl = url;\n        }\n\n        public static ConnectionPool create(String environment) {\n            String target = \"jdbc:database://\" + environment.toLowerCase() + \".internal:5432\";\n            return new ConnectionPool(target);\n        }\n\n        public String getConnectionUrl() {\n            return connectionUrl;\n        }\n    }\n\n    public static void main(String[] args) {\n        ConnectionPool pool = ConnectionPool.create(\"Production\");\n        System.out.println(\"Factory created instance successfully\");\n        System.out.println(\"Connection endpoint: \" + pool.getConnectionUrl());\n    }\n}",
+      "expectedOutput": "Factory created instance successfully\nConnection endpoint: jdbc:database://production.internal:5432"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Private Helper Method Delegation",
+      "question": "Write a class that exposes a public method for client invocation, which internally delegates sub-tasks to a private helper method to prevent internal implementation leaks.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-05",
+      "id": "access-modifiers-005",
+      "explanation": "Separating public API methods from private helper routines is fundamental to high-cohesion, low-coupling software architecture[cite: 10]. A public method establishes the external contract expected by callers, performing high-level coordination[cite: 10]. Private helper methods break down complex workflows into manageable, reusable steps (such as input sanitization, checksum validation, or low-level parsing) without exposing internal mechanics[cite: 10]. Marking helpers `private` prevents client code from depending on implementation details, allowing internal logic to be refactored safely without breaking external API contracts[cite: 10].",
+      "hints": [
+        "Declare `private String sanitize(String input)` to perform lower-level string transformations[cite: 10].",
+        "Declare `public String processInput(String raw)` that invokes `sanitize(raw)` internally[cite: 10].",
+        "Demonstrate in `main` that invoking the public method executes the private helper logic seamlessly[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class TextProcessor {\n        public String process(String rawText) {\n            String cleaned = stripSpecialCharacters(rawText);\n            return cleaned.toUpperCase();\n        }\n\n        private String stripSpecialCharacters(String text) {\n            return text.replaceAll(\"[^a-zA-Z0-9 ]\", \"\");\n        }\n    }\n\n    public static void main(String[] args) {\n        TextProcessor processor = new TextProcessor();\n        String result = processor.process(\"hello@world#2026!\");\n        System.out.println(\"Public method returned: \" + result);\n    }\n}",
+      "expectedOutput": "Public method returned: HELLOWORLD2026"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Getter and Setter Encapsulation",
+      "question": "Create a `BankAccount` class with a `private double balance`. Provide public getters and a deposit method that validates amounts, rejecting zero or negative values.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-01",
+      "id": "access-modifiers-006",
+      "explanation": "Encapsulating mutable monetary balances is a classic demonstration of defensive design[cite: 10]. Declaring `balance` private prevents external code from directly corrupting account state (such as assigning negative balances or bypassing transaction logging)[cite: 10]. The public `deposit(double amount)` mutator guards modifications with a validation check: if an invalid non-positive amount is supplied, the method rejects the operation with an error message[cite: 10]. A read-only public getter provides access to the balance without giving callers the ability to modify it[cite: 10].",
+      "hints": [
+        "Declare `private double balance;` initialized to 0.0 or through a constructor[cite: 10].",
+        "Check `if (amount <= 0)` inside `deposit()` before modifying the balance[cite: 8, 10].",
+        "Provide a public `getBalance()` getter to inspect account balance safely[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BankAccount {\n        private double balance;\n\n        public BankAccount(double initialBalance) {\n            if (initialBalance > 0) {\n                this.balance = initialBalance;\n            }\n        }\n\n        public double getBalance() {\n            return balance;\n        }\n\n        public void deposit(double amount) {\n            if (amount <= 0) {\n                System.out.println(\"Deposit rejected: amount must be positive.\");\n                return;\n            }\n            this.balance += amount;\n            System.out.println(\"Deposited: \" + amount);\n        }\n    }\n\n    public static void main(String[] args) {\n        BankAccount account = new BankAccount(100.0);\n        account.deposit(-50.0);\n        account.deposit(200.0);\n        System.out.println(\"Final balance: \" + account.getBalance());\n    }\n}",
+      "expectedOutput": "Deposit rejected: amount must be positive.\nDeposited: 200.0\nFinal balance: 300.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Package-Private Visibility Test",
+      "question": "Demonstrate package-private visibility between two classes in the same package, showing that a method declared without an access modifier is freely accessible across classes in that package.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-02",
+      "id": "access-modifiers-007",
+      "explanation": "In Java, omitting an explicit access modifier (`public`, `protected`, or `private`) designates the member as package-private (often referred to as default visibility)[cite: 10]. Package-private members are visible to every class compiled within the exact same package namespace[cite: 10]. Unlike `public`, default members are completely hidden from classes residing in other packages, including subclasses[cite: 10]. This makes package-private access ideal for modular framework design, where internal utility classes collaborate within a package without exposing their methods to the public API[cite: 10].",
+      "hints": [
+        "Declare a helper method with default access (no keyword): `void logInternal(String msg) { ... }`[cite: 10].",
+        "Instantiate the declaring class from a secondary driver class in the same compilation package[cite: 1, 10].",
+        "Call the package-private method directly from the driver class to verify access[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class InternalLogger {\n        void logPackageEvent(String event) {\n            System.out.println(\"[Package-Private Log]: \" + event);\n        }\n    }\n\n    public static void main(String[] args) {\n        InternalLogger logger = new InternalLogger();\n        logger.logPackageEvent(\"Database connection established\");\n    }\n}",
+      "expectedOutput": "[Package-Private Log]: Database connection established"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Protected Member Access via Subclass",
+      "question": "Create a parent class with a `protected` method and verify that a subclass can invoke it directly through inheritance.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-03",
+      "id": "access-modifiers-008",
+      "explanation": "The `protected` access modifier bridges package-level encapsulation and object-oriented inheritance[cite: 10]. A protected member is accessible to all classes within the same package, as well as to subclasses regardless of the package in which they reside[cite: 10]. When a child class extends a parent containing a protected method, the child inherits the method as part of its own member space[cite: 10]. The subclass can call the method directly (`super.initProtected()` or `initProtected()`), enabling extensible library designs where parent classes provide protected hooks for subclasses to customize behavior[cite: 10].",
+      "hints": [
+        "Declare `protected void render()` in the parent class[cite: 10].",
+        "Define a subclass: `class Child extends Parent`[cite: 1, 6].",
+        "Call the protected method from the child class constructor or a member method[cite: 6, 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Component {\n        protected void renderLifecycle() {\n            System.out.println(\"Component protected lifecycle invoked.\");\n        }\n    }\n\n    static class Button extends Component {\n        public void click() {\n            renderLifecycle(); // Inherited protected method access\n            System.out.println(\"Button click event processed.\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Button btn = new Button();\n        btn.click();\n    }\n}",
+      "expectedOutput": "Component protected lifecycle invoked.\nButton click event processed."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Public API Boundary Design",
+      "question": "Implement an API class where internal helper methods are marked `private` and only a single entry-point method is declared `public`, verifying that internal complexity is cleanly hidden.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-04",
+      "id": "access-modifiers-009",
+      "explanation": "A well-designed software module maintains a clean separation between its public API contract and internal implementation details[cite: 10]. By exposing only a single public method (such as `executePipeline()`) while marking all intermediate routines (`validate()`, `transform()`, `persist()`) as private, the class presents a clean, unambiguous interface to external callers[cite: 10]. This prevents external code from depending on internal helper routines, ensuring internal algorithms can be updated, optimized, or refactored without breaking downstream consumers[cite: 10].",
+      "hints": [
+        "Declare helper methods `private void validate()` and `private void compute()`[cite: 10].",
+        "Declare a single `public void execute()` method that coordinates the private helpers[cite: 10].",
+        "Instantiate the service in `main` and invoke only the public entry-point method[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class OrderService {\n        public void processOrder(int orderId) {\n            if (validate(orderId)) {\n                enrich(orderId);\n                System.out.println(\"Order \" + orderId + \" processed successfully.\");\n            }\n        }\n\n        private boolean validate(int orderId) {\n            System.out.println(\"Validating order ID: \" + orderId);\n            return orderId > 0;\n        }\n\n        private void enrich(int orderId) {\n            System.out.println(\"Enriching order metadata for ID: \" + orderId);\n        }\n    }\n\n    public static void main(String[] args) {\n        OrderService service = new OrderService();\n        service.processOrder(101);\n    }\n}",
+      "expectedOutput": "Validating order ID: 101\nEnriching order metadata for ID: 101\nOrder 101 processed successfully."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Private Constructor Instantiation Blocker",
+      "question": "Implement a `MathUtils` utility class containing only static methods. Make its constructor `private` and throw an `AssertionError` inside it to prevent accidental internal or reflective instantiation.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-05",
+      "id": "access-modifiers-010",
+      "explanation": "Utility classes (such as `java.lang.Math` or `java.util.Collections`) provide static utility methods and are never intended to be instantiated[cite: 5, 9, 10]. If a class does not declare an explicit constructor, the Java compiler automatically generates a default public zero-argument constructor, allowing unwanted instantiation[cite: 10]. Declaring a `private` constructor prevents client code from using the `new` operator[cite: 10]. Throwing an `AssertionError` inside the private constructor provides an additional defense against internal calls or reflective instantiation bypasses, ensuring the utility class remains non-instantiable under all conditions[cite: 10].",
+      "hints": [
+        "Declare the constructor: `private MathUtils() { throw new AssertionError(\"Cannot instantiate utility class\"); }`[cite: 10].",
+        "Declare public static utility methods like `public static int square(int x)`[cite: 9, 10].",
+        "Demonstrate in `main` that static methods are invoked directly via class qualification[cite: 1, 9]."
+      ],
+      "sampleCode": "public class Solution {\n    static final class MathUtils {\n        private MathUtils() {\n            throw new AssertionError(\"Cannot instantiate utility class\");\n        }\n\n        public static int square(int n) {\n            return n * n;\n        }\n    }\n\n    public static void main(String[] args) {\n        int result = MathUtils.square(8);\n        System.out.println(\"Utility method output: \" + result);\n    }\n}",
+      "expectedOutput": "Utility method output: 64"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Cross-Package Protected Inheritance Simulation",
+      "question": "Simulate cross-package inheritance: define a parent class with a `protected` method and a subclass that accesses it via inheritance, contrasting this with non-subclass access.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-06",
+      "id": "access-modifiers-011",
+      "explanation": "Protected visibility is designed to support controlled inheritance across package boundaries[cite: 10]. If class `Parent` in package `a` defines a `protected void execute()` method, an unrelated class in package `b` cannot invoke `parentInstance.execute()`—the compiler rejects it with an access violation error[cite: 10]. However, if class `Child` in package `b` extends `Parent`, it inherits the protected method into its subclass scope[cite: 10]. The child can invoke the method using `super.execute()` or direct method calls, enabling extensible framework architectures across separate packages[cite: 6, 10].",
+      "hints": [
+        "Declare a base class with `protected void computeCore()`[cite: 10].",
+        "Create a subclass that invokes the protected parent method inside its own public method[cite: 10].",
+        "Explain in comments that an unrelated non-subclass in another package would be denied access[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BaseWorker {\n        protected void executeWork() {\n            System.out.println(\"BaseWorker: Executing protected core routine.\");\n        }\n    }\n\n    static class SubclassWorker extends BaseWorker {\n        public void performTask() {\n            executeWork(); // Legal: inherited protected member access\n            System.out.println(\"SubclassWorker: Task wrapper completed.\");\n        }\n    }\n\n    public static void main(String[] args) {\n        SubclassWorker worker = new SubclassWorker();\n        worker.performTask();\n    }\n}",
+      "expectedOutput": "BaseWorker: Executing protected core routine.\nSubclassWorker: Task wrapper completed."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Protected Member Target-Type Invocation Rule",
+      "question": "Demonstrate Java's protected cross-package access rule (JLS §6.6.2): a subclass in a foreign package can access an inherited protected member via `this`, but cannot access it through an external instance of the parent class.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-07",
+      "id": "access-modifiers-012",
+      "explanation": "According to the Java Language Specification (JLS §6.6.2), accessing a protected member outside its declaring package requires that the access occur within a subclass, and that the target object expression be of that subclass type (or one of its subtypes)[cite: 10]. A subclass `Child` extending `Parent` across packages can access the protected field on `this` or on other `Child` instances[cite: 10]. However, `Child` cannot access the protected member on a plain `Parent` reference (`parentInstance.protectedField`)[cite: 10]. This rule prevents one subclass from inspecting or altering the protected state of other unrelated subclasses or parent instances in external packages[cite: 10].",
+      "hints": [
+        "Declare `protected String secret = \"SubclassData\";` in the parent class[cite: 10].",
+        "Show that accessing `this.secret` succeeds inside the subclass[cite: 6, 10].",
+        "Document in comments that `new Parent().secret` fails cross-package access checks under JLS §6.6.2[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        protected String secret = \"ParentProtectedSecret\";\n    }\n\n    static class Child extends Parent {\n        public void printSecrets() {\n            // Legal: Accessing inherited protected member through 'this'\n            System.out.println(\"Accessed via this: \" + this.secret);\n\n            // Under JLS §6.6.2, across different packages, attempting:\n            // Parent p = new Parent();\n            // System.out.println(p.secret); // COMPILE ERROR: secret has protected access in Parent\n        }\n    }\n\n    public static void main(String[] args) {\n        Child child = new Child();\n        child.printSecrets();\n    }\n}",
+      "expectedOutput": "Accessed via this: ParentProtectedSecret"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Thread-Safe Lazy Singleton via Private Constructor",
+      "question": "Implement a thread-safe Singleton using a private constructor and double-checked locking with a `volatile` instance field to ensure only a single instance exists.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-08",
+      "id": "access-modifiers-013",
+      "explanation": "The Singleton pattern ensures a class has only one instance while providing a global access point to it[cite: 6, 10]. To enforce this, the constructor must be declared `private`, preventing client code from instantiating secondary objects via `new`[cite: 10]. In multithreaded environments, a double-checked locking idiom with a `volatile` static instance field guarantees thread safety while avoiding synchronization overhead on subsequent reads[cite: 6]. The `volatile` modifier prevents CPU instruction reordering during instantiation, ensuring other threads never observe a partially constructed object reference[cite: 6].",
+      "hints": [
+        "Declare `private static volatile Singleton instance;`[cite: 6].",
+        "Make the constructor `private Singleton()`[cite: 6, 10].",
+        "Implement double-checked locking inside `public static Singleton getInstance()`[cite: 6]."
+      ],
+      "sampleCode": "public class Solution {\n    static class AppRegistry {\n        private static volatile AppRegistry instance;\n        private final String configurationId;\n\n        private AppRegistry() {\n            this.configurationId = \"CONFIG_PROD_001\";\n        }\n\n        public static AppRegistry getInstance() {\n            if (instance == null) {\n                synchronized (AppRegistry.class) {\n                    if (instance == null) {\n                        instance = new AppRegistry();\n                    }\n                }\n            }\n            return instance;\n        }\n\n        public String getConfigurationId() {\n            return configurationId;\n        }\n    }\n\n    public static void main(String[] args) {\n        AppRegistry r1 = AppRegistry.getInstance();\n        AppRegistry r2 = AppRegistry.getInstance();\n        System.out.println(\"Singleton identity check: \" + (r1 == r2));\n        System.out.println(\"Loaded Config: \" + r1.getConfigurationId());\n    }\n}",
+      "expectedOutput": "Singleton identity check: true\nLoaded Config: CONFIG_PROD_001"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Immutable Value Object via Private Final Fields",
+      "question": "Write an immutable `GeoPoint` class with private final fields, no setters, and constructor-based initialization to guarantee thread-safe state immutability.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-09",
+      "id": "access-modifiers-014",
+      "explanation": "Immutable objects provide inherent thread safety because their internal state cannot be modified after construction[cite: 5, 6]. Designing an immutable class requires four key rules: 1) Declare the class as `final` to prevent subclasses from adding mutable state[cite: 5]. 2) Declare all member fields as `private final` so their references or primitive values cannot be modified[cite: 5, 6, 10]. 3) Omit setter methods entirely[cite: 10]. 4) If fields hold mutable object references, return defensive copies from getters[cite: 10]. Because the fields are permanently assigned during object construction, multiple threads can share instances concurrently without synchronization locks[cite: 6].",
+      "hints": [
+        "Declare `private final double latitude;` and `private final double longitude;`[cite: 6, 10].",
+        "Initialize all fields exclusively within the constructor[cite: 6].",
+        "Do not declare any setter methods[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static final class GeoPoint {\n        private final double latitude;\n        private final double longitude;\n\n        public GeoPoint(double latitude, double longitude) {\n            this.latitude = latitude;\n            this.longitude = longitude;\n        }\n\n        public double getLatitude() {\n            return latitude;\n        }\n\n        public double getLongitude() {\n            return longitude;\n        }\n    }\n\n    public static void main(String[] args) {\n        GeoPoint point = new GeoPoint(37.7749, -122.4194);\n        System.out.println(\"Latitude: \" + point.getLatitude());\n        System.out.println(\"Longitude: \" + point.getLongitude());\n    }\n}",
+      "expectedOutput": "Latitude: 37.7749\nLongitude: -122.4194"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Package-Private Helper Class Decoupling",
+      "question": "Implement a package-private helper class that collaborates with a public service class in the same package, demonstrating how to keep internal helper classes hidden from external packages.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-10",
+      "id": "access-modifiers-015",
+      "explanation": "Access modifiers apply to top-level class declarations as well as class members[cite: 10]. A top-level class can only be declared `public` or default (package-private)[cite: 1, 10]. When a class is declared without the `public` modifier, it is completely invisible outside its compilation package[cite: 10]. Public classes within that package can instantiate and use the package-private helper freely, but external packages cannot see or import it[cite: 10]. This pattern helps maintain clean package boundaries by preventing internal utility classes from leaking into external APIs[cite: 10].",
+      "hints": [
+        "Declare `class ValidatorHelper` without the `public` keyword to keep it package-private[cite: 10].",
+        "Declare `public class PaymentService` that delegates to `ValidatorHelper` internally[cite: 10].",
+        "Demonstrate that calling the public service executes the package-private helper logic cleanly[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    // Package-private helper class (non-public)\n    static class TokenParser {\n        String parseClaim(String token) {\n            return \"Claim_ID_\" + token.hashCode();\n        }\n    }\n\n    // Public service class exposing functionality externally\n    public static class AuthService {\n        private final TokenParser parser = new TokenParser();\n\n        public void authenticate(String rawToken) {\n            String claim = parser.parseClaim(rawToken);\n            System.out.println(\"Authenticated claim: \" + claim);\n        }\n    }\n\n    public static void main(String[] args) {\n        AuthService auth = new AuthService();\n        auth.authenticate(\"SECURE_TOKEN_XYZ\");\n    }\n}",
+      "expectedOutput": "Authenticated claim: Claim_ID_1919864239"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Cross-Package Protected Inheritance Restriction",
+      "question": "Demonstrate cross-package protected access boundaries: show that a subclass in another package can access a protected parent variable via `this`, but cannot access it through an external instance of the parent class.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-06",
+      "id": "access-modifiers-016",
+      "explanation": "Java's protected access rules can surprise developers because `protected` is not purely package-private plus public inheritance[cite: 10]. Under JLS §6.6.2, when accessing a protected member outside its package, access must occur within a subclass body, and the target object must be of that subclass type (or one of its subtypes)[cite: 10]. If class `Sub` in package `pkg2` extends `Super` in package `pkg1`, inside `Sub`, accessing `this.protectedVar` or `super.protectedVar` is legal[cite: 6, 10]. However, attempting `new Super().protectedVar` inside `Sub` fails at compile time because `Super` is not a subtype of `Sub`[cite: 10].",
+      "hints": [
+        "Declare `protected int threshold = 50;` in the parent class[cite: 10].",
+        "In the subclass, show that `this.threshold` accesses the inherited protected field successfully[cite: 6, 10].",
+        "Note that attempting `new Parent().threshold` is rejected cross-package by JLS §6.6.2[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class SuperClass {\n        protected int threshold = 50;\n    }\n\n    static class SubClass extends SuperClass {\n        public void testAccess() {\n            System.out.println(\"Subclass access via this.threshold: \" + this.threshold);\n            // Note: In cross-package scenarios, 'new SuperClass().threshold' causes a compile error.\n        }\n    }\n\n    public static void main(String[] args) {\n        SubClass sub = new SubClass();\n        sub.testAccess();\n    }\n}",
+      "expectedOutput": "Subclass access via this.threshold: 50"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Immutable Value Object via Modifiers and Defensive Copying",
+      "question": "Build an immutable `User` class with private final fields, no setters, a package-private constructor, and defensive copying in getters for mutable fields like `java.util.Date`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-07",
+      "id": "access-modifiers-017",
+      "explanation": "Creating truly immutable objects requires defensive copying whenever mutable reference types (such as `java.util.Date` or arrays) are used[cite: 5, 10]. Even if a field is declared `private final`, returning the internal mutable reference directly (`return this.createdAt;`) allows callers to mutate the internal object state via `createdAt.setTime(0)`[cite: 5, 6, 10]. To prevent this leak, the constructor must make a defensive copy of incoming mutable arguments, and getters must return new copies (`return new Date(this.createdAt.getTime());`)[cite: 5, 10]. This guarantees that external callers cannot corrupt the object's internal state[cite: 10].",
+      "hints": [
+        "In the constructor, defensively copy: `this.loginDate = new Date(loginDate.getTime());`[cite: 5, 10].",
+        "In `getLoginDate()`, return a new copy: `return new Date(this.loginDate.getTime());`[cite: 5, 10].",
+        "Verify that calling `setTime()` on the returned Date does not affect the object's internal timestamp[cite: 5, 10]."
+      ],
+      "sampleCode": "import java.util.Date;\n\npublic class Solution {\n    static final class UserProfile {\n        private final String username;\n        private final Date createdDate;\n\n        UserProfile(String username, Date createdDate) {\n            this.username = username;\n            this.createdDate = new Date(createdDate.getTime()); // Defensive copy on construction\n        }\n\n        public String getUsername() {\n            return username;\n        }\n\n        public Date getCreatedDate() {\n            return new Date(createdDate.getTime()); // Defensive copy on retrieval\n        }\n    }\n\n    public static void main(String[] args) {\n        Date originalDate = new Date(1700000000000L);\n        UserProfile user = new UserProfile(\"Akshat\", originalDate);\n\n        // Attempt external mutation via getter\n        Date leakedDate = user.getCreatedDate();\n        leakedDate.setTime(0L);\n\n        System.out.println(\"User name: \" + user.getUsername());\n        System.out.println(\"Internal date preserved: \" + (user.getCreatedDate().getTime() == 1700000000000L));\n    }\n}",
+      "expectedOutput": "User name: Akshat\nInternal date preserved: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Eager and Lazy Singleton Instantiation Controls",
+      "question": "Implement both an eager Singleton and a lazy Singleton class, using `private` constructors to prevent client code from creating secondary instances.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-08",
+      "id": "access-modifiers-018",
+      "explanation": "The Singleton pattern controls instantiation using access modifiers[cite: 10]. In an eager Singleton, the instance is allocated statically when the class is loaded into memory (`private static final Singleton INSTANCE = new Singleton();`), providing thread-safe initialization without synchronization overhead[cite: 6, 10]. In a lazy Singleton, the instance is deferred until `getInstance()` is called, using double-checked locking with a `volatile` field to ensure safe initialization across threads[cite: 6]. In both patterns, declaring a `private` constructor ensures external classes cannot instantiate secondary objects using the `new` operator[cite: 10].",
+      "hints": [
+        "Eager Singleton: allocate `private static final Eager INSTANCE = new Eager();` directly[cite: 6, 10].",
+        "Lazy Singleton: allocate inside `getLazyInstance()` using double-checked locking[cite: 6].",
+        "Make constructors in both classes `private`[cite: 6, 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class EagerSingleton {\n        private static final EagerSingleton INSTANCE = new EagerSingleton();\n        private EagerSingleton() {}\n        public static EagerSingleton getInstance() { return INSTANCE; }\n    }\n\n    static class LazySingleton {\n        private static volatile LazySingleton instance;\n        private LazySingleton() {}\n        public static LazySingleton getInstance() {\n            if (instance == null) {\n                synchronized (LazySingleton.class) {\n                    if (instance == null) {\n                        instance = new LazySingleton();\n                    }\n                }\n            }\n            return instance;\n        }\n    }\n\n    public static void main(String[] args) {\n        EagerSingleton e1 = EagerSingleton.getInstance();\n        EagerSingleton e2 = EagerSingleton.getInstance();\n        LazySingleton l1 = LazySingleton.getInstance();\n        LazySingleton l2 = LazySingleton.getInstance();\n\n        System.out.println(\"Eager instances identical: \" + (e1 == e2));\n        System.out.println(\"Lazy instances identical: \" + (l1 == l2));\n    }\n}",
+      "expectedOutput": "Eager instances identical: true\nLazy instances identical: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Factory-Enforced Instantiation Pattern",
+      "question": "Implement a design where a `Widget` class has a package-private constructor, and a public `WidgetFactory` in the same package is the only way for external consumers to create instances.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-09",
+      "id": "access-modifiers-019",
+      "explanation": "Combining package-private constructors with public factories is a common pattern for controlling object creation across package boundaries[cite: 10]. When `Widget` declares a package-private constructor (`Widget(String type)`), classes in other packages cannot instantiate it with `new Widget()`[cite: 10]. However, `WidgetFactory` resides in the same package, so it can invoke the package-private constructor freely[cite: 10]. External packages can then create widgets only through `WidgetFactory.createWidget()`, allowing the factory to enforce validation, object pooling, or configuration without exposing constructor details[cite: 10].",
+      "hints": [
+        "Declare `Widget` with a package-private constructor (no access modifier)[cite: 10].",
+        "Declare `public class WidgetFactory` in the same package[cite: 10].",
+        "Implement `public Widget createWidget(String type)` in the factory to manage instantiation[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    public static class Widget {\n        private final String serial;\n        Widget(String serial) { // Package-private constructor\n            this.serial = serial;\n        }\n        public String getSerial() {\n            return serial;\n        }\n    }\n\n    public static class WidgetFactory {\n        public static Widget createWidget(String model) {\n            String generatedSerial = model.toUpperCase() + \"-\" + System.currentTimeMillis();\n            return new Widget(generatedSerial);\n        }\n    }\n\n    public static void main(String[] args) {\n        Widget widget = WidgetFactory.createWidget(\"Engine\");\n        System.out.println(\"Widget created successfully via factory\");\n        System.out.println(\"Widget model prefix: \" + widget.getSerial().split(\"-\")[0]);\n    }\n}",
+      "expectedOutput": "Widget created successfully via factory\nWidget model prefix: ENGINE"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Implicit Interface Member Modifiers",
+      "question": "Demonstrate that fields in an interface are implicitly `public static final` and methods are implicitly `public abstract` (unless declared default, static, or private), inspecting them via Reflection.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-10",
+      "id": "access-modifiers-020",
+      "explanation": "Interfaces in Java follow strict modifier rules defined in JLS §9.3 and §9.4[cite: 10]. Any field declared inside an interface is implicitly `public static final`, even if those keywords are omitted[cite: 10]. Attempting to declare a field as `private`, `protected`, or non-final causes a compile-time error[cite: 10]. Similarly, standard interface methods are implicitly `public abstract`[cite: 10]. While Java 8 added `default` and `static` methods and Java 9 added `private` helper methods, regular interface methods remain public and abstract[cite: 10]. Inspecting an interface with Reflection confirms that the JVM automatically attaches these modifiers to the compiled bytecode[cite: 10].",
+      "hints": [
+        "Declare an interface with `int MAX_COUNT = 100;` and `void execute();` without modifiers[cite: 10].",
+        "Use `Field.getModifiers()` and `Modifier.isPublic()`, `Modifier.isStatic()`, `Modifier.isFinal()` to inspect fields[cite: 10].",
+        "Use `Method.getModifiers()` to verify that methods are compiled as `public abstract`[cite: 10]."
+      ],
+      "sampleCode": "import java.lang.reflect.Field;\nimport java.lang.reflect.Method;\nimport java.lang.reflect.Modifier;\n\npublic class Solution {\n    interface Contract {\n        int CAPACITY = 100; // Implicitly public static final\n        void execute();     // Implicitly public abstract\n    }\n\n    public static void main(String[] args) throws Exception {\n        Field field = Contract.class.getField(\"CAPACITY\");\n        int fieldMods = field.getModifiers();\n        System.out.println(\"Field is public: \" + Modifier.isPublic(fieldMods));\n        System.out.println(\"Field is static: \" + Modifier.isStatic(fieldMods));\n        System.out.println(\"Field is final: \" + Modifier.isFinal(fieldMods));\n\n        Method method = Contract.class.getMethod(\"execute\");\n        int methodMods = method.getModifiers();\n        System.out.println(\"Method is public: \" + Modifier.isPublic(methodMods));\n        System.out.println(\"Method is abstract: \" + Modifier.isAbstract(methodMods));\n    }\n}",
+      "expectedOutput": "Field is public: true\nField is static: true\nField is final: true\nMethod is public: true\nMethod is abstract: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Private Reflection Bypass and Security Risks",
+      "question": "Use Java Reflection (`setAccessible(true)`) to read and modify a `private` field from outside its class, and explain in comments why this bypass undermines security and compiler optimizations.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-11",
+      "id": "access-modifiers-021",
+      "explanation": "Java's core Reflection API (`java.lang.reflect`) allows inspecting classes, methods, and fields at runtime[cite: 2]. By obtaining a `Field` reference and invoking `field.setAccessible(true)`, code can suppress standard Java language access control checks, allowing it to read and modify `private` fields from external classes[cite: 10]. While useful for frameworks (such as dependency injection engines and ORMs like Hibernate), bypassing encapsulation this way breaks object invariants, risks data corruption, and can be blocked in modern runtimes by the Java Module System (`--illegal-access=deny`)[cite: 10].",
+      "hints": [
+        "Obtain the field reference using `Account.class.getDeclaredField(\"secretPin\")`[cite: 10].",
+        "Call `field.setAccessible(true)` to bypass Java language access checks[cite: 10].",
+        "Read and update the value using `field.get(instance)` and `field.set(instance, newValue)`[cite: 10]."
+      ],
+      "sampleCode": "import java.lang.reflect.Field;\n\npublic class Solution {\n    static class Vault {\n        private String masterKey = \"ORIGINAL_SECRET\";\n    }\n\n    public static void main(String[] args) throws Exception {\n        Vault vault = new Vault();\n        Field keyField = Vault.class.getDeclaredField(\"masterKey\");\n\n        keyField.setAccessible(true); // Suppresses access checks\n        String readKey = (String) keyField.get(vault);\n        System.out.println(\"Reflectively read private key: \" + readKey);\n\n        keyField.set(vault, \"OVERWRITTEN_KEY\");\n        System.out.println(\"Reflectively updated private key: \" + keyField.get(vault));\n    }\n}",
+      "expectedOutput": "Reflectively read private key: ORIGINAL_SECRET\nReflectively updated private key: OVERWRITTEN_KEY"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Inner and Outer Bidirectional Private Access",
+      "question": "Write a class containing a member inner class, and demonstrate that the inner class can access the outer class's `private` fields while the outer class can also access the inner class's `private` fields.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-12",
+      "id": "access-modifiers-022",
+      "explanation": "In Java, an inner class and its enclosing outer class share the same nestmate context (formalized in Java 11 via JEP 181 Nest-Based Access Control)[cite: 10]. Under JLS §8.1.3, an inner class has access to all members of its enclosing class, including `private` fields and methods[cite: 10]. Conversely, the outer class has full access to the `private` members of its inner class instances[cite: 10]. Prior to Java 11, the compiler generated package-private synthetic bridge methods (`access$000`) to enable this access; modern JVMs support nestmate access natively in bytecode with `invokevirtual` and `invokespecial`[cite: 10].",
+      "hints": [
+        "Declare `private String outerSecret` in the outer class[cite: 10].",
+        "Declare `private String innerSecret` in the inner class[cite: 10].",
+        "Read `outerSecret` inside an inner class method, and read `innerSecret` inside an outer class method[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Outer { \n        private String outerData = \"OuterPrivateData\";\n\n        class Inner {\n            private String innerData = \"InnerPrivateData\";\n\n            public void accessOuter() {\n                System.out.println(\"Inner reading outer: \" + outerData);\n            }\n        }\n\n        public void accessInner() {\n            Inner inner = new Inner();\n            inner.accessOuter();\n            System.out.println(\"Outer reading inner: \" + inner.innerData);\n        }\n    }\n\n    public static void main(String[] args) {\n        Outer outer = new Outer();\n        outer.accessInner();\n    }\n}",
+      "expectedOutput": "Inner reading outer: OuterPrivateData\nOuter reading inner: InnerPrivateData"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Method Overriding Visibility Widening",
+      "question": "Override a `protected` method from a parent class as `public` in a subclass. Explain why widening visibility is allowed while narrowing visibility (e.g., overriding as `private`) causes a compilation error.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-13",
+      "id": "access-modifiers-023",
+      "explanation": "Under the Liskov Substitution Principle (LSP) and JLS §8.4.8.3, an overriding method cannot reduce the visibility of the method it overrides[cite: 10]. If a parent class declares a method `protected`, a subclass can keep it `protected` or widen it to `public`[cite: 10]. However, the subclass cannot narrow visibility to package-private or `private`[cite: 10]. Allowing a subclass to narrow visibility would break polymorphism: a caller holding a parent reference (`Parent p = new Child()`) expects to be able to call the method, which would fail if the subclass restricted access[cite: 6, 10]. Widening access is safe because it preserves or expands the parent's contract[cite: 10].",
+      "hints": [
+        "Declare `protected void display()` in `Parent`[cite: 10].",
+        "Override it as `public void display()` in `Child`[cite: 10].",
+        "Note in comments that overriding as `private void display()` triggers a compile error: 'attempting to assign weaker access privileges'[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        protected void execute() {\n            System.out.println(\"Parent protected method called\");\n        }\n    }\n\n    static class Child extends Parent {\n        @Override\n        public void execute() { // Widened from protected to public\n            super.execute();\n            System.out.println(\"Child public method called\");\n        }\n        // Note: Attempting 'private void execute()' causes a compilation failure.\n    }\n\n    public static void main(String[] args) {\n        Child child = new Child();\n        child.execute();\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Encapsulated Account with Package Audit Hook",
+      "question": "Implement a `BankAccount` class where `balance` is strictly private, deposits and withdrawals enforce validation, and a package-private `audit()` method exposes balance summaries for internal auditing.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-14",
+      "id": "access-modifiers-024",
+      "explanation": "This exercise combines multiple access modifiers to model real-world business constraints[cite: 10]. The account's `balance` field is declared `private` to prevent unauthorized direct modification[cite: 10]. Public methods `deposit()` and `withdraw()` provide guarded external access, validating that deposit amounts are positive and preventing withdrawals that would overdraw the account[cite: 8, 10]. A package-private `audit()` method exposes accounting summaries to administrative audit tools in the same package without making those auditing hooks part of the public customer API[cite: 10].",
+      "hints": [
+        "Declare `private double balance;`[cite: 10].",
+        "Enforce positive deposit checks and verify `amount <= balance` before withdrawing[cite: 8, 10].",
+        "Declare `void audit()` with default package access to expose the audit summary to co-packaged classes[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BankAccount {\n        private double balance;\n        private final String accountNumber;\n\n        public BankAccount(String accNum, double initialDeposit) {\n            this.accountNumber = accNum;\n            this.balance = Math.max(0, initialDeposit);\n        }\n\n        public void deposit(double amount) {\n            if (amount > 0) balance += amount;\n        }\n\n        public boolean withdraw(double amount) {\n            if (amount > 0 && amount <= balance) {\n                balance -= amount;\n                return true;\n            }\n            return false;\n        }\n\n        // Package-private audit hook\n        void audit() {\n            System.out.println(\"AUDIT [Account: \" + accountNumber + \", Balance: $\" + balance + \"]\");\n        }\n    }\n\n    public static void main(String[] args) {\n        BankAccount acc = new BankAccount(\"ACCT-9921\", 500.0);\n        acc.deposit(150.0);\n        acc.withdraw(50.0);\n        acc.audit();\n    }\n}",
+      "expectedOutput": "AUDIT [Account: ACCT-9921, Balance: $600.0]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Polymorphic Interface Method Dispatch",
+      "question": "Define an interface and an implementing class. Show that interface methods are implicitly public by invoking the implementation through the interface reference.",
+      "source": "java_coding_practice.json",
+      "source_id": "access-modifiers-15",
+      "id": "access-modifiers-025",
+      "explanation": "Under JLS §9.4, all abstract methods declared in an interface are implicitly `public abstract`[cite: 10]. When a class implements an interface, it must declare its implementing methods as `public`[cite: 10]. Attempting to use default, protected, or private access in the implementing class causes a compile-time error ('cannot reduce visibility of inherited method')[cite: 10]. When invoking the method through an interface reference (`Service s = new ServiceImpl()`), the JVM performs virtual method dispatch via `invokeinterface`, executing the public method implementation polymorphically[cite: 10].",
+      "hints": [
+        "Declare `interface Action { void execute(); }`[cite: 10].",
+        "Implement it with `public void execute()` in the implementing class[cite: 10].",
+        "Assign the instance to an `Action` reference and invoke `.execute()`[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    interface Action {\n        void execute(); // Implicitly public abstract\n    }\n\n    static class ActionImpl implements Action {\n        @Override\n        public void execute() { // Must be explicitly public\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Action action = new ActionImpl();\n        action.execute();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Private Reflection Bypass & Defensive Reflection Guard",
+      "question": "Demonstrate accessing a `private` field using `setAccessible(true)`, and implement a defensive getter that checks for reflective access or caller permissions.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-11",
+      "id": "access-modifiers-026",
+      "explanation": "While `setAccessible(true)` allows reflective access to private members, secure enterprise systems often implement defenses against reflective intrusion[cite: 10]. In modern Java (Java 9+), the Java Platform Module System (JPMS) enforces strong encapsulation by default: reflection across module boundaries throws an `InaccessibleObjectException` unless the package is explicitly `opened`[cite: 10]. Within a single module, classes can use `StackWalker` (introduced in Java 9) to inspect the calling class on the stack frame, allowing methods to throw an exception if invoked by unauthorized callers or reflective proxies[cite: 10].",
+      "hints": [
+        "Use `Field.setAccessible(true)` to modify a private field reflectively[cite: 10].",
+        "Inspect the caller frame using `StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)`[cite: 10].",
+        "Catch `IllegalAccessException` or demonstrate caller-frame inspection in security checks[cite: 10]."
+      ],
+      "sampleCode": "import java.lang.reflect.Field;\n\npublic class Solution {\n    static class SecureEnclave {\n        private String secureToken = \"ENCLAVE_TOKEN_ALPHA\";\n\n        public String getSecureToken() {\n            validateCaller();\n            return secureToken;\n        }\n\n        private void validateCaller() {\n            StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);\n            Class<?> caller = walker.walk(frames -> frames.skip(2).findFirst().map(StackWalker.StackFrame::getDeclaringClass).orElse(null));\n            if (caller != Solution.class) {\n                throw new SecurityException(\"Unauthorized caller!\");\n            }\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        SecureEnclave enclave = new SecureEnclave();\n        System.out.println(\"Standard authorized read: \" + enclave.getSecureToken());\n\n        Field field = SecureEnclave.class.getDeclaredField(\"secureToken\");\n        field.setAccessible(true);\n        field.set(enclave, \"COMPROMISED_TOKEN\");\n        System.out.println(\"Reflective bypass modified field: \" + field.get(enclave));\n    }\n}",
+      "expectedOutput": "Standard authorized read: ENCLAVE_TOKEN_ALPHA\nReflective bypass modified field: COMPROMISED_TOKEN"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Modular Framework Architecture via Access Controls",
+      "question": "Design a three-tier module architecture (api, internal, spi) using access modifiers so that only interfaces are public, while implementation details and factories remain package-private.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-12",
+      "id": "access-modifiers-027",
+      "explanation": "Framework architecture relies on access modifiers to separate public API specifications from internal implementations[cite: 10]. In this design, the public `api` interface declares the functional contract[cite: 10]. The concrete service implementation class is declared package-private (default visibility), hiding it completely from external packages[cite: 10]. A public provider factory exposes a static creation method returning the public interface reference while instantiating the package-private implementation internally[cite: 10]. This prevents client code from casting or coupling to internal implementation classes, allowing internal components to be refactored safely[cite: 10].",
+      "hints": [
+        "Declare `public interface PaymentProcessor` as the public API contract[cite: 10].",
+        "Declare `class FastPayProcessor implements PaymentProcessor` without `public` to keep it package-private[cite: 10].",
+        "Provide a `public class PaymentClient` factory that exposes `public static PaymentProcessor getProcessor()`[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    // Public API\n    public interface ServiceApi {\n        void execute();\n    }\n\n    // Package-private internal implementation\n    static class InternalServiceImpl implements ServiceApi {\n        @Override\n        public void execute() {\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    // Public provider entry point\n    public static class ServiceClient {\n        public static ServiceApi getService() {\n            return new InternalServiceImpl();\n        }\n    }\n\n    public static void main(String[] args) {\n        ServiceApi service = ServiceClient.getService();\n        service.execute();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Subclass Method Visibility Widening",
+      "question": "Demonstrate that an overriding method can widen visibility (`protected` to `public`) but cannot reduce visibility (`public` to `private`), and explain the compiler's type-safety rules.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-13",
+      "id": "access-modifiers-028",
+      "explanation": "When a subclass overrides a parent method, the Java compiler enforces access rules to preserve polymorphism and type safety (JLS §8.4.8.3)[cite: 10]. A subclass can expand member access (e.g., overriding package-private as `protected` or `public`, or overriding `protected` as `public`)[cite: 10]. However, narrowing access (e.g., overriding `public` as `protected` or `private`) causes a compilation error[cite: 10]. Under polymorphism, an instance of a subclass can be assigned to a parent reference (`Parent p = new Child()`)[cite: 6]. If the subclass could narrow access, calling `p.publicMethod()` would fail at runtime, violating polymorphic substitutability[cite: 10].",
+      "hints": [
+        "Declare `protected void process()` in the base class[cite: 10].",
+        "Override it as `public void process()` in the derived subclass[cite: 10].",
+        "Note in comments that attempting `private void process()` fails with 'attempting to assign weaker access privileges'[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    static class SuperHandler {\n        protected void handle() {\n            System.out.println(\"Parent method called\");\n        }\n    }\n\n    static class SubHandler extends SuperHandler {\n        @Override\n        public void handle() { // Legal: Widened from protected to public\n            super.handle();\n            System.out.println(\"Child method called\");\n        }\n        // Attempting to narrow visibility: protected -> private is a compile error\n    }\n\n    public static void main(String[] args) {\n        SuperHandler handler = new SubHandler();\n        handler.handle();\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Private Interface Method Encapsulation",
+      "question": "Write an interface containing two public `default` methods that share common validation logic extracted into a `private` interface method (introduced in Java 9).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-14",
+      "id": "access-modifiers-029",
+      "explanation": "Java 8 introduced `default` methods in interfaces, allowing interfaces to provide concrete method implementations[cite: 10]. However, when multiple default methods shared common logic, developers often had to duplicate code or leak helper methods into the public interface API[cite: 10]. Java 9 resolved this by adding support for `private` methods inside interfaces[cite: 10]. Private interface methods can be either static or non-static, can be called by default or static interface methods, and are completely hidden from implementing classes and consumers[cite: 10]. This enables clean code reuse inside interfaces without polluting public API contracts[cite: 10].",
+      "hints": [
+        "Declare a private helper method inside the interface: `private void logEvent(String msg) { ... }`[cite: 10].",
+        "Call the private helper method from two public `default` methods[cite: 10].",
+        "Instantiate an implementing class and call both default methods to show shared execution[cite: 10]."
+      ],
+      "sampleCode": "public class Solution {\n    interface TransactionService {\n        default void deposit(double amount) {\n            validate(amount);\n            System.out.println(\"Deposited: $\" + amount);\n        }\n\n        default void transfer(double amount) {\n            validate(amount);\n            System.out.println(\"Transferred: $\" + amount);\n        }\n\n        // Private interface helper method (Java 9+)\n        private void validate(double amount) {\n            if (amount <= 0) {\n                throw new IllegalArgumentException(\"Amount must be positive\");\n            }\n            System.out.println(\"[Audit]: Validation check passed.\");\n        }\n    }\n\n    static class AccountTransactionManager implements TransactionService {}\n\n    public static void main(String[] args) {\n        TransactionService manager = new AccountTransactionManager();\n        manager.deposit(100.0);\n        manager.transfer(50.0);\n    }\n}",
+      "expectedOutput": "[Audit]: Validation check passed.\nDeposited: $100.0\n[Audit]: Validation check passed.\nTransferred: $50.0"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Package Boundary Encapsulation Auditing Engine",
+      "question": "Implement an auditing utility using Java Reflection that inspects a target class and verifies whether any package-private class inadvertently exposes `public` constructors or mutable fields.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ACC-15",
+      "id": "access-modifiers-030",
+      "explanation": "In large enterprise codebases and library frameworks, encapsulation leaks can occur when internal classes inadvertently expose public constructors or public fields[cite: 10]. While a package-private class cannot be imported directly outside its package, declaring public constructors on it can cause design smells and create unintended access paths via reflection or subclassing[cite: 10]. An automated reflection auditor inspects classes at runtime: if a class is not declared `public`, it examines its declared constructors and fields using `getModifiers()`, flagging any members that carry `public` modifiers and verifying that package boundaries remain clean[cite: 10].",
+      "hints": [
+        "Check class visibility with `!Modifier.isPublic(clazz.getModifiers())`[cite: 10].",
+        "Inspect constructors using `clazz.getDeclaredConstructors()` and check `Modifier.isPublic()`[cite: 10].",
+        "Inspect declared fields and flag any non-private mutable members[cite: 10]."
+      ],
+      "sampleCode": "import java.lang.reflect.Constructor;\nimport java.lang.reflect.Modifier;\n\npublic class Solution {\n    // Package-private internal class with an accidental public constructor leak\n    static class InternalHelper {\n        public InternalHelper() {} \n        void runInternal() {}\n    }\n\n    public static void auditClassEncapsulation(Class<?> clazz) {\n        boolean isClassPackagePrivate = !Modifier.isPublic(clazz.getModifiers());\n        System.out.println(\"Auditing class: \" + clazz.getSimpleName());\n        System.out.println(\"Is package-private class: \" + isClassPackagePrivate);\n\n        for (Constructor<?> c : clazz.getDeclaredConstructors()) {\n            if (isClassPackagePrivate && Modifier.isPublic(c.getModifiers())) {\n                System.out.println(\"Warning: Package-private class exposes public constructor!\");\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        auditClassEncapsulation(InternalHelper.class);\n    }\n}",
+      "expectedOutput": "Auditing class: InternalHelper\nIs package-private class: true\nWarning: Package-private class exposes public constructor!"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

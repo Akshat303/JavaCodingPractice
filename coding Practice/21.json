@@ -1,0 +1,493 @@
+{
+  "section": "Arrays and strings",
+  "slug": "stringbuffer",
+  "topic": "StringBuffer",
+  "page": 97,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "StringBuffer Polymorphic Append Operations",
+      "question": "Create a `StringBuffer` instance and append multiple primitive and reference types (`String`, `int`, `char`, and `double`), then print the final buffer state and length.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-01",
+      "id": "stringbuffer-001",
+      "explanation": "Unlike immutable `String` objects, `java.lang.StringBuffer` represents a mutable, thread-safe sequence of characters[cite: 18, 21]. Under the hood, `StringBuffer` manages an internal resizable character/byte array and provides overloaded `.append()` methods for all Java primitives, character arrays, and `Object` instances[cite: 21]. Calling `.append(10)` or `.append(3.14)` converts the argument into characters and copies them directly into the existing buffer, adjusting the internal `count` field without reallocating the container object[cite: 21]. This prevents temporary object creation on the heap during sequential text assembly[cite: 2, 18, 21].",
+      "hints": [
+        "Instantiate a buffer using `StringBuffer sb = new StringBuffer(\"Java\");`[cite: 21].",
+        "Chain or sequentially call `.append(\" \")`, `.append(2026)`, `.append(':')`, and `.append(9.5)`[cite: 21].",
+        "Inspect the contents using `.toString()` and query character count via `.length()`[cite: 8, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"Java\");\n        sb.append(\" \").append(21).append(':').append(' ').append(9.5);\n\n        System.out.println(\"Result: \" + sb.toString());\n        System.out.println(\"Length: \" + sb.length());\n    }\n}",
+      "expectedOutput": "Result: Java 21: 9.5\nLength: 14"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Positional Insertion with StringBuffer",
+      "question": "Demonstrate positional character insertion by using `StringBuffer.insert()` to insert text at the beginning (index 0) and in the middle of an existing buffer.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-02",
+      "id": "stringbuffer-002",
+      "explanation": "The `StringBuffer.insert(int offset, ...)` method inserts text at a designated index within an existing character buffer[cite: 21]. When `.insert(0, text)` is invoked, the buffer shifts existing elements to the right starting from index 0 using native memory copy operations (`System.arraycopy`)[cite: 9, 15, 21]. If the insertion causes the character count to exceed the current capacity, the buffer grows automatically[cite: 21]. Inserting at a middle index shifts subsequent characters rightward by the length of the inserted token[cite: 21]. This allows in-place text modification without generating intermediate `String` objects[cite: 18, 21].",
+      "hints": [
+        "Use `sb.insert(0, \"Prefix \")` to prepend characters at the start of the buffer[cite: 21].",
+        "Locate an internal index and insert text into the middle: `sb.insert(offset, \"Insert \")`[cite: 21].",
+        "Handle `StringIndexOutOfBoundsException` by verifying `offset <= sb.length()`[cite: 18, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"World\");\n        sb.insert(0, \"Hello \");\n        int middleIndex = sb.indexOf(\"World\");\n        sb.insert(middleIndex, \"Beautiful \");\n\n        System.out.println(\"Updated: \" + sb.toString());\n        System.out.println(\"Length:  \" + sb.length());\n    }\n}",
+      "expectedOutput": "Updated: Hello Beautiful World\nLength:  21"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "In-Place Reversal via StringBuffer",
+      "question": "Reverse an existing `StringBuffer` in place using `.reverse()` and print the buffer state before and after the operation.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-03",
+      "id": "stringbuffer-003",
+      "explanation": "Reversing character sequences in place is supported natively by `StringBuffer.reverse()`[cite: 21]. Unlike immutable `String` instances where reversing requires manual loops or helper buffers, `StringBuffer.reverse()` mutates the underlying character array directly[cite: 12, 14, 18, 21]. It uses a two-pointer approach, swapping characters from outer boundaries inward until the pointers meet in the middle[cite: 5, 9, 19]. The operation handles surrogate pairs correctly and returns the same buffer reference (`this`), allowing further method chaining[cite: 9, 21].",
+      "hints": [
+        "Create a buffer: `StringBuffer sb = new StringBuffer(\"Java\");`[cite: 21].",
+        "Invoke `sb.reverse();` to swap characters directly in the internal array[cite: 21].",
+        "Observe that the original buffer instance is mutated without needing reassignment[cite: 18, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"Java\");\n        System.out.println(\"Original: \" + sb.toString());\n        sb.reverse();\n        System.out.println(\"Reversed: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Original: Java\nReversed: avaJ"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Range Deletion and Single Character Removal",
+      "question": "Demonstrate character deletion in a `StringBuffer` by removing a range of characters with `.delete(start, end)` and removing an individual character with `.deleteCharAt(index)`.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-04",
+      "id": "stringbuffer-004",
+      "explanation": "The `StringBuffer` class provides two deletion methods: `.delete(int start, int end)` and `.deleteCharAt(int index)`[cite: 21]. The range deletion method removes characters within the half-open interval `[start, end)` (inclusive of `start`, exclusive of `end`)[cite: 20, 21]. When characters are deleted, remaining elements are shifted left via `System.arraycopy`, and the internal length tracker decreases accordingly[cite: 9, 15, 21]. Similarly, `deleteCharAt(index)` shifts characters left by one position past the target index[cite: 21]. Both operations modify the existing buffer in place without allocating new container objects[cite: 18, 21].",
+      "hints": [
+        "Call `.delete(start, end)` where the character at `end` is excluded[cite: 20, 21].",
+        "Call `.deleteCharAt(index)` to remove a character at an exact zero-based position[cite: 21].",
+        "Print the buffer after each operation to observe how remaining text shifts left[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"Java Developer Guide\");\n        System.out.println(\"Initial: \" + sb.toString());\n\n        // Delete \"Developer \" (indices 5 to 15)\n        sb.delete(5, 15);\n        System.out.println(\"After range delete: \" + sb.toString());\n\n        // Delete trailing character\n        sb.deleteCharAt(sb.length() - 1);\n        System.out.println(\"After deleteCharAt: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Initial: Java Developer Guide\nAfter range delete: Java Guide\nAfter deleteCharAt: Java Guid"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "StringBuffer Capacity and Length Inspection",
+      "question": "Inspect and display the default initial capacity and length of a newly allocated `StringBuffer`, append text exceeding that capacity, and observe the updated values.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-05",
+      "id": "stringbuffer-005",
+      "explanation": "In Java buffer classes, `length()` and `capacity()` represent two distinct concepts[cite: 21]. `length()` returns the number of active characters currently stored in the buffer[cite: 21]. `capacity()` returns the total number of characters the underlying allocated array can hold before needing reallocation[cite: 21]. When initialized via `new StringBuffer()`, the default capacity is 16 characters[cite: 21]. Appending text beyond 16 characters triggers growth logic (`newCapacity = (oldCapacity * 2) + 2`)[cite: 21]. The buffer allocates a larger array, copies existing characters over, and updates its capacity automatically[cite: 15, 21].",
+      "hints": [
+        "Check initial metrics: `new StringBuffer().capacity()` defaults to 16[cite: 21].",
+        "Query current character count via `sb.length()`[cite: 21].",
+        "Append text longer than 16 characters to trigger capacity expansion[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer();\n        System.out.println(\"Initial Capacity: \" + sb.capacity() + \" | Initial Length: \" + sb.length());\n\n        sb.append(\"Java Programming Language\");\n        System.out.println(\"After Append Content: \" + sb.toString());\n        System.out.println(\"Updated Capacity: \" + sb.capacity() + \" | Updated Length: \" + sb.length());\n    }\n}",
+      "expectedOutput": "Initial Capacity: 16 | Initial Length: 0\nAfter Append Content: Java Programming Language\nUpdated Capacity: 34 | Updated Length: 25"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "StringBuilder Basic Operations",
+      "question": "Construct a string using `StringBuilder` by sequentially chaining `.append()`, `.insert()`, `.delete()`, and `.reverse()` operations.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-01",
+      "id": "stringbuffer-006",
+      "explanation": "Introduced in Java 5, `java.lang.StringBuilder` provides an unsynchronized, higher-performance alternative to `StringBuffer` for single-threaded string manipulation[cite: 21]. Both classes share an identical API inherited from `AbstractStringBuilder`[cite: 21]. Because `StringBuilder` mutator methods return `this`, operations can be chained fluently: `.append()`, `.insert()`, `.delete()`, and `.reverse()` execute sequentially on the same heap instance without method synchronization overhead[cite: 6, 9, 21].",
+      "hints": [
+        "Instantiate `StringBuilder sb = new StringBuilder(\"Java\");`[cite: 21].",
+        "Chain mutations fluently: `sb.append(...).insert(...).delete(...).reverse();`[cite: 21].",
+        "Print the final string using `sb.toString()`[cite: 1, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"Java\");\n        sb.append(\" Core\")\n          .insert(4, \" 21\")\n          .delete(8, 13)\n          .reverse();\n\n        System.out.println(\"Final StringBuilder result: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Final StringBuilder result: 12 avaJ"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Initial Capacity and Growth Inspection",
+      "question": "Initialize a `StringBuilder` with an explicit initial capacity of 10, append text that exceeds this threshold, and observe the capacity expansion formula.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-02",
+      "id": "stringbuffer-007",
+      "explanation": "When instantiating `StringBuilder(int capacity)`, the backing array is pre-allocated to the specified size[cite: 18, 21]. Pre-allocating capacity avoids reallocation overhead when the approximate final string length is known in advance[cite: 18, 21]. When an append causes the character count to exceed the current capacity, `AbstractStringBuilder` expands the buffer using the growth formula `(oldCapacity * 2) + 2`[cite: 21]. If the required length exceeds that doubled threshold, the capacity expands directly to the required length[cite: 21].",
+      "hints": [
+        "Initialize with a custom capacity: `new StringBuilder(10);`[cite: 21].",
+        "Log `capacity()` before appending text[cite: 21].",
+        "Append 12 characters to observe the expansion to `(10 * 2) + 2 = 22`[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(10);\n        System.out.println(\"Pre-allocated Capacity: \" + sb.capacity());\n\n        sb.append(\"Hello World!\"); // 12 characters, exceeds initial capacity of 10\n        System.out.println(\"Content: \" + sb.toString());\n        System.out.println(\"Expanded Capacity: \" + sb.capacity() + \" | Length: \" + sb.length());\n    }\n}",
+      "expectedOutput": "Pre-allocated Capacity: 10\nContent: Hello World!\nExpanded Capacity: 22 | Length: 12"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "In-Place Word Reversal",
+      "question": "Given a sentence string, reverse each individual word in place while preserving original word ordering and space positions using `StringBuilder`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-03",
+      "id": "stringbuffer-008",
+      "explanation": "Word-level reversal reverses the character sequence of each word while preserving the order of words in the sentence[cite: 21]. Splitting the input string on whitespace yields an array of word tokens[cite: 4, 8]. For each word, a `StringBuilder` is instantiated with the token, reversed using `.reverse()`, and appended to an accumulator buffer followed by a space delimiter[cite: 3, 21]. This processes each word in $O(K)$ time without complex manual character swaps[cite: 18, 21].",
+      "hints": [
+        "Split the sentence using `sentence.split(\" \")`[cite: 8, 20].",
+        "Reverse each token using `new StringBuilder(word).reverse().toString()`[cite: 1, 21].",
+        "Join the reversed words with spaces and trim any trailing whitespace[cite: 3, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String sentence = \"Java Programming Language\";\n        String[] words = sentence.split(\" \");\n        StringBuilder result = new StringBuilder();\n\n        for (int i = 0; i < words.length; i++) {\n            StringBuilder wordReverser = new StringBuilder(words[i]);\n            result.append(wordReverser.reverse());\n            if (i < words.length - 1) {\n                result.append(\" \");\n            }\n        }\n\n        System.out.println(\"Original: \" + sentence);\n        System.out.println(\"Reversed words: \" + result.toString());\n    }\n}",
+      "expectedOutput": "Original: Java Programming Language\nReversed words: avaJ gnimmargorP egaugnaL"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "StringBuffer Thread-Safety Baseline",
+      "question": "Demonstrate that `StringBuffer` methods are synchronized for thread-safe access, explaining why it differs from unsynchronized `StringBuilder`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-04",
+      "id": "stringbuffer-009",
+      "explanation": "`StringBuffer` and `StringBuilder` share an identical API through their common superclass `AbstractStringBuilder`, but differ in synchronization[cite: 21]. Every public mutator method in `StringBuffer` (`append`, `insert`, `delete`, `reverse`) is declared with the `synchronized` keyword[cite: 21]. This acquires an intrinsic monitor lock on `this` during every operation, ensuring atomic mutations when multiple threads share a single buffer[cite: 6, 21]. `StringBuilder` omits synchronization entirely, eliminating locking overhead in single-threaded contexts[cite: 21].",
+      "hints": [
+        "Inspect the class declarations: `StringBuffer` methods use the `synchronized` modifier[cite: 21].",
+        "Explain that intrinsic monitor locks prevent race conditions across concurrent appends[cite: 6, 21].",
+        "Recommend `StringBuilder` for single-threaded code where synchronization overhead is unnecessary[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer buffer = new StringBuffer(\"Shared Thread-Safe Buffer\");\n        System.out.println(\"Buffer content: \" + buffer.toString());\n        System.out.println(\"Thread-safety: StringBuffer methods use synchronized locks for concurrent safety.\");\n        System.out.println(\"Performance note: Use StringBuilder in single-threaded code to avoid lock overhead.\");\n    }\n}",
+      "expectedOutput": "Buffer content: Shared Thread-Safe Buffer\nThread-safety: StringBuffer methods use synchronized locks for concurrent safety.\nPerformance note: Use StringBuilder in single-threaded code to avoid lock overhead."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character Replacement in Buffer",
+      "question": "Iterate through a `StringBuilder` and replace all vowels with numerical digit substitutes (A->1, E->2, I->3, O->4, U->5) using `.setCharAt()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-05",
+      "id": "stringbuffer-010",
+      "explanation": "Modifying specific characters in an immutable `String` requires allocating new string slices[cite: 18]. `StringBuilder` provides `.setCharAt(int index, char ch)` to modify characters directly in the underlying buffer[cite: 21]. The method traverses the buffer from index 0 to `sb.length() - 1`[cite: 14, 21]. When a character matches a vowel, `.setCharAt(i, digit)` overwrites the character in place without modifying the length or reallocating the array[cite: 21]. This enables in-place character updates with $O(1)$ mutation cost per character[cite: 21].",
+      "hints": [
+        "Traverse the buffer with `for (int i = 0; i < sb.length(); i++)`[cite: 14, 21].",
+        "Inspect each character with `sb.charAt(i)`[cite: 21].",
+        "Substitute vowels using `sb.setCharAt(i, mappedDigit)`[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"JAVA EDUCATION\");\n\n        for (int i = 0; i < sb.length(); i++) {\n            char ch = sb.charAt(i);\n            switch (ch) {\n                case 'A' -> sb.setCharAt(i, '1');\n                case 'E' -> sb.setCharAt(i, '2');\n                case 'I' -> sb.setCharAt(i, '3');\n                case 'O' -> sb.setCharAt(i, '4');\n                case 'U' -> sb.setCharAt(i, '5');\n            }\n        }\n\n        System.out.println(\"Vowel-substituted result: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Vowel-substituted result: J1V1 2D5C1T34N"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Dynamic Growth Reallocation Monitoring",
+      "question": "Log and display buffer capacity changes after each append that exceeds current capacity to observe the JVM's growth reallocation formula.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-06",
+      "id": "stringbuffer-011",
+      "explanation": "Buffer growth reallocations balance memory footprint against array copy overhead[cite: 15, 21]. When appending text that exceeds the current array capacity, the JVM allocates a larger backing array using the growth formula: `newCapacity = (oldCapacity * 2) + 2`[cite: 21]. Existing characters are copied to the new array via `System.arraycopy`, and the old array is discarded[cite: 9, 15, 21]. If the appended string requires more space than doubled capacity, the capacity expands directly to match the required length[cite: 21]. Tracking `sb.capacity()` across appends reveals these reallocation points[cite: 21].",
+      "hints": [
+        "Initialize with default capacity: `StringBuffer sb = new StringBuffer();` (capacity 16)[cite: 21].",
+        "Append chunks of text that exceed the current capacity threshold[cite: 21].",
+        "Print `length()` and `capacity()` after each append to track expansions[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer();\n        System.out.println(\"Initial -> Length: \" + sb.length() + \", Capacity: \" + sb.capacity());\n\n        sb.append(\"0123456789ABCDEF\"); // 16 characters, fills initial capacity\n        System.out.println(\"Filled 16 chars -> Capacity: \" + sb.capacity());\n\n        sb.append(\"G\"); // Exceeds 16 -> (16 * 2) + 2 = 34\n        System.out.println(\"Appended 17th char -> Length: \" + sb.length() + \", Capacity: \" + sb.capacity());\n\n        sb.append(\"0123456789012345678\"); // Exceeds 34 -> (34 * 2) + 2 = 70\n        System.out.println(\"Appended past 34 -> Length: \" + sb.length() + \", Capacity: \" + sb.capacity());\n    }\n}",
+      "expectedOutput": "Initial -> Length: 0, Capacity: 16\nFilled 16 chars -> Capacity: 16\nAppended 17th char -> Length: 17, Capacity: 34\nAppended past 34 -> Length: 36, Capacity: 70"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Subsequence Replacement with StringBuffer",
+      "question": "Use `StringBuffer.replace(int start, int end, String str)` to locate and replace a targeted substring within a dynamic buffer.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-07",
+      "id": "stringbuffer-012",
+      "explanation": "`StringBuffer.replace(int start, int end, String str)` modifies a range of characters in place[cite: 21]. The range is defined by the half-open interval `[start, end)`[cite: 20, 21]. Unlike `String.replace()`, which scans for matching character sequences and returns a new `String` object, `StringBuffer.replace()` operates on exact index coordinates[cite: 20, 21]. If the replacement text has a different length than the targeted range, the buffer shifts subsequent characters and updates its length automatically[cite: 21]. Combining `indexOf()` with `replace()` enables fast in-place text substitutions[cite: 20, 21].",
+      "hints": [
+        "Locate target substring coordinates using `int start = sb.indexOf(\"target\");`[cite: 20].",
+        "Compute end index as `start + \"target\".length()`[cite: 8, 20].",
+        "Invoke `sb.replace(start, end, \"replacement\");`[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"The quick brown fox jumps over the lazy dog\");\n        System.out.println(\"Original: \" + sb.toString());\n\n        int start = sb.indexOf(\"brown\");\n        if (start != -1) {\n            sb.replace(start, start + \"brown\".length(), \"red\");\n        }\n\n        System.out.println(\"Replaced: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Original: The quick brown fox jumps over the lazy dog\nReplaced: The quick red fox jumps over the lazy dog"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Buffer Truncation and Padding via SetLength",
+      "question": "Demonstrate the behavior of `StringBuffer.setLength()` by truncating an existing buffer and padding it with null characters (`\\0`).",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-08",
+      "id": "stringbuffer-013",
+      "explanation": "The `setLength(int newLength)` method changes the active character count of a buffer directly[cite: 21]. If `newLength` is smaller than the current length, characters at and beyond `newLength` are truncated, discarding trailing content[cite: 21]. If `newLength` is greater than the current length, the buffer is padded with null characters (`\\u0000`)[cite: 21]. Setting `setLength(0)` clears the buffer contents instantly without releasing the allocated array, allowing the buffer to be reused with zero reallocation overhead[cite: 21].",
+      "hints": [
+        "Truncate content: `sb.setLength(10);` discards characters past index 9[cite: 21].",
+        "Clear all contents: `sb.setLength(0);` resets the character count while preserving capacity[cite: 21].",
+        "Pad content: setting length larger than current adds null characters (`\\u0000`)[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer(\"Enterprise Architecture\");\n        System.out.println(\"Initial: \" + sb.toString() + \" (Length: \" + sb.length() + \")\");\n\n        // Truncate to first 10 characters\n        sb.setLength(10);\n        System.out.println(\"Truncated: \" + sb.toString() + \" (Length: \" + sb.length() + \")\");\n\n        // Reset buffer for reuse\n        sb.setLength(0);\n        sb.append(\"Reused\");\n        System.out.println(\"Reused: \" + sb.toString() + \" (Length: \" + sb.length() + \")\");\n    }\n}",
+      "expectedOutput": "Initial: Enterprise Architecture (Length: 23)\nTruncated: Enterprise (Length: 10)\nReused: Reused (Length: 6)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Equality Evaluation: StringBuffer vs String",
+      "question": "Compare two distinct `StringBuffer` instances containing identical text using both `equals()` and `toString().equals()`, explaining why `StringBuffer` does not override `equals()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-09",
+      "id": "stringbuffer-014",
+      "explanation": "`StringBuffer` (and `StringBuilder`) does not override `equals()` from `java.lang.Object`[cite: 21]. Consequently, calling `sb1.equals(sb2)` performs identity comparison (`sb1 == sb2`), checking whether both references point to the exact same heap address rather than comparing characters[cite: 5, 18, 21]. This design exists because buffers are mutable: changing characters would alter an object's equality and hash code, which breaks hash-based collections like `HashSet` and `HashMap`[cite: 8, 21]. To compare character contents, both buffers must be converted to `String` via `.toString()` before calling `.equals()`[cite: 18, 21].",
+      "hints": [
+        "Notice that `sb1.equals(sb2)` returns `false` even if both buffers contain identical text[cite: 21].",
+        "Explain that `StringBuffer` inherits reference identity equality from `Object`[cite: 21].",
+        "Convert to strings first to compare character values: `sb1.toString().equals(sb2.toString())`[cite: 18, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb1 = new StringBuffer(\"Java\");\n        StringBuffer sb2 = new StringBuffer(\"Java\");\n\n        boolean objectEquals = sb1.equals(sb2); // Reference identity comparison\n        boolean contentEquals = sb1.toString().equals(sb2.toString()); // Value comparison\n\n        System.out.println(\"sb1.equals(sb2): \" + objectEquals);\n        System.out.println(\"sb1.toString().equals(sb2.toString()): \" + contentEquals);\n    }\n}",
+      "expectedOutput": "sb1.equals(sb2): false\nsb1.toString().equals(sb2.toString()): true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Delimited Sequence Assembly without Trailing Separators",
+      "question": "Build a formatted, comma-separated string from an array of tokens using `StringBuffer`, ensuring no trailing comma remains without calling `substring()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-10",
+      "id": "stringbuffer-015",
+      "explanation": "Formatting delimited text lists (such as CSV rows or SQL queries) requires omitting the separator after the final element[cite: 3, 20]. A common anti-pattern appends a delimiter after every item and calls `.substring()` or `.delete()` at the end[cite: 20, 21]. A cleaner approach checks index boundaries inside the loop: if `i > 0`, the delimiter is prepended before the token, or appended conditionally for `i < array.length - 1`[cite: 3, 14]. This builds the formatted string directly in the buffer without requiring cleanup passes[cite: 21].",
+      "hints": [
+        "Iterate with a standard indexed loop: `for (int i = 0; i < items.length; i++)`[cite: 14].",
+        "Append the delimiter conditionally: `if (i > 0) sb.append(\", \");`[cite: 3].",
+        "Append the token value on each pass[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String[] elements = {\"Alpha\", \"Beta\", \"Gamma\", \"Delta\"};\n        StringBuffer sb = new StringBuffer();\n\n        for (int i = 0; i < elements.length; i++) {\n            if (i > 0) {\n                sb.append(\", \");\n            }\n            sb.append(elements[i]);\n        }\n\n        System.out.println(\"CSV Output: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "CSV Output: Alpha, Beta, Gamma, Delta"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Concurrency Showdown: Buffer vs Builder",
+      "question": "Demonstrate data corruption under concurrent access by having multiple threads append to a shared `StringBuilder` versus a shared `StringBuffer`, observing the corrupted length in `StringBuilder`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-06",
+      "id": "stringbuffer-016",
+      "explanation": "Because `StringBuilder` mutator methods are unsynchronized, multiple threads appending concurrently cause race conditions on the internal `count` field and backing array[cite: 6, 21]. Multiple threads read the same `count`, write to the same array index, and overwrite each other's characters, resulting in a final length smaller than the expected total (or throwing `ArrayIndexOutOfBoundsException`)[cite: 6, 18, 21]. In contrast, `StringBuffer` synchronizes every mutator method on `this`, serializing concurrent access and guaranteeing that all characters are written safely without lost updates[cite: 6, 21].",
+      "hints": [
+        "Launch multiple concurrent worker threads using `Thread` instances[cite: 1, 6].",
+        "Have each thread execute 1,000 `.append(\"A\")` calls on shared buffers[cite: 6, 21].",
+        "Call `.join()` on all threads and compare the final lengths of both buffers[cite: 6, 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) throws InterruptedException {\n        StringBuffer buffer = new StringBuffer();\n        StringBuilder builder = new StringBuilder();\n\n        Thread[] threadsBuf = new Thread[2];\n        Thread[] threadsBld = new Thread[2];\n\n        for (int i = 0; i < 2; i++) {\n            threadsBuf[i] = new Thread(() -> {\n                for (int j = 0; j < 1000; j++) buffer.append(\"A\");\n            });\n            threadsBld[i] = new Thread(() -> {\n                for (int j = 0; j < 1000; j++) builder.append(\"A\");\n            });\n            threadsBuf[i].start();\n            threadsBld[i].start();\n        }\n\n        for (int i = 0; i < 2; i++) {\n            threadsBuf[i].join();\n            threadsBld[i].join();\n        }\n\n        System.out.println(\"Expected total characters: 2000\");\n        System.out.println(\"StringBuffer final length (thread-safe): \" + buffer.length());\n        System.out.println(\"StringBuilder race condition detected: \" + (builder.length() <= 2000));\n    }\n}",
+      "expectedOutput": "Expected total characters: 2000\nStringBuffer final length (thread-safe): 2000\nStringBuilder race condition detected: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Custom Fast Integer to String Formatter",
+      "question": "Implement an algorithm that writes an integer directly into a `StringBuilder` using character conversions without calling `Integer.toString()` or `String.valueOf()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-07",
+      "id": "stringbuffer-017",
+      "explanation": "Standard string conversions like `Integer.toString(n)` allocate a new `String` object on the heap on every call[cite: 18]. For high-throughput systems, integers can be formatted directly into a mutable buffer without extra object allocations[cite: 2, 21]. The algorithm handles negative numbers by appending a minus sign and working with absolute values[cite: 15]. Digits are extracted from right to left using modulo 10 (`digit = n % 10`), converted to characters via `(char)('0' + digit)`, and appended to a temporary buffer[cite: 8, 15]. Reversing the temporary buffer produces the final formatted integer directly in the destination buffer[cite: 21].",
+      "hints": [
+        "Extract digits using `rem = temp % 10` in a `while (temp > 0)` loop[cite: 15].",
+        "Convert each numeric digit to an ASCII character: `(char)('0' + rem)`[cite: 8, 15].",
+        "Append characters and reverse the buffer to restore correct digit order[cite: 14, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void appendInt(StringBuilder sb, int num) {\n        if (num == 0) {\n            sb.append('0');\n            return;\n        }\n        if (num < 0) {\n            sb.append('-');\n            num = -num;\n        }\n        StringBuilder temp = new StringBuilder();\n        while (num > 0) {\n            int digit = num % 10;\n            temp.append((char) ('0' + digit));\n            num /= 10;\n        }\n        sb.append(temp.reverse());\n    }\n\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"Processed Count: \");\n        appendInt(sb, 4289);\n        System.out.println(sb.toString());\n    }\n}",
+      "expectedOutput": "Processed Count: 4289"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Remove Duplicate Characters In-Place",
+      "question": "Remove duplicate characters from a `StringBuilder` in place without allocating auxiliary collections or secondary string objects.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-08",
+      "id": "stringbuffer-018",
+      "explanation": "Deduplicating characters in place using `StringBuilder` avoids allocating extra collection objects[cite: 18, 21]. The method uses two nested loops: an outer loop advances index `i` through the buffer, while an inner loop checks preceding characters from 0 to `i - 1`[cite: 14]. If the character at index `i` matches any earlier character, it is a duplicate and is removed via `sb.deleteCharAt(i)`[cite: 21]. Because deleting shifts subsequent characters left, index `i` is not incremented on that step[cite: 21]. This deduplicates characters in place with zero heap object allocations[cite: 18, 21].",
+      "hints": [
+        "Outer loop traverses indices `i` from 0 to `sb.length() - 1`[cite: 14, 21].",
+        "Inner loop checks if character `sb.charAt(i)` appeared at any index `j < i`[cite: 14, 21].",
+        "On match, call `sb.deleteCharAt(i)` and keep index `i` unchanged for the next check[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void removeDuplicates(StringBuilder sb) {\n        for (int i = 0; i < sb.length(); i++) {\n            char current = sb.charAt(i);\n            for (int j = 0; j < i; j++) {\n                if (sb.charAt(j) == current) {\n                    sb.deleteCharAt(i);\n                    i--; // Adjust index after shift\n                    break;\n                }\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        StringBuilder buffer = new StringBuilder(\"banana_apple\");\n        System.out.println(\"Before: \" + buffer.toString());\n        removeDuplicates(buffer);\n        System.out.println(\"After:  \" + buffer.toString());\n    }\n}",
+      "expectedOutput": "Before: banana_apple\nAfter:  ban_ple"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Encode and Decode Run-Length with Builder",
+      "question": "Implement run-length string encoding and decoding methods using `StringBuilder` configured with explicit pre-allocated initial capacities.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-09",
+      "id": "stringbuffer-019",
+      "explanation": "Run-length encoding (RLE) compresses contiguous repeating characters into character-count pairs (e.g., `\"WWWWWW\" -> \"W6\"`)[cite: 18, 20]. Pre-allocating capacity with `new StringBuilder(text.length())` ensures the buffer has sufficient space upfront, preventing array reallocations during encoding[cite: 18, 21]. The decoder reads character-count pairs, parses the count with `Character.getNumericValue()`, and appends the character in an inner loop[cite: 4, 14, 20]. Using `StringBuilder` makes both operations fast and memory-efficient[cite: 18, 21].",
+      "hints": [
+        "Pre-allocate capacity: `new StringBuilder(text.length())`[cite: 18, 21].",
+        "Encoder: track consecutive character counts and append `character + count` on change[cite: 18, 20].",
+        "Decoder: read character and count, appending via `for (int k = 0; k < count; k++) sb.append(ch)`[cite: 14, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String encodeRLE(String text) {\n        if (text == null || text.isEmpty()) return \"\";\n        StringBuilder sb = new StringBuilder(text.length());\n        int count = 1;\n        for (int i = 1; i < text.length(); i++) {\n            if (text.charAt(i) == text.charAt(i - 1)) {\n                count++;\n            } else {\n                sb.append(text.charAt(i - 1)).append(count);\n                count = 1;\n            }\n        }\n        sb.append(text.charAt(text.length() - 1)).append(count);\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String source = \"AAAAABBBCCDAA\";\n        String encoded = encodeRLE(source);\n        System.out.println(\"Source:  \" + source);\n        System.out.println(\"Encoded: \" + encoded);\n    }\n}",
+      "expectedOutput": "Source:  AAAAABBBCCDAA\nEncoded: A5B3C2D1A2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "HTML Escaping Engine",
+      "question": "Implement an HTML character escaping method that converts special characters (`<`, `>`, `&`, `\"`, `'`) to HTML entities using a single `StringBuilder`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-10",
+      "id": "stringbuffer-020",
+      "explanation": "Escaping text for HTML rendering prevents Cross-Site Scripting (XSS) and parsing errors by converting reserved HTML characters to entity references[cite: 21]. Instead of calling multiple chained `.replace()` calls on a `String` (which allocates a new string on each pass), a single pass over the string with a `StringBuilder` inspects characters one by one[cite: 3, 20, 21]. Normal characters are appended directly, while special characters map to entity codes: `<` becomes `&lt;`, `>` becomes `&gt;`, `&` becomes `&amp;`, `\"` becomes `&quot;`, and `'` becomes `&#39;`[cite: 21]. This escapes text in a single pass with minimal memory allocations[cite: 2, 21].",
+      "hints": [
+        "Pre-allocate the buffer with extra capacity: `new StringBuilder(raw.length() + 32)`[cite: 21].",
+        "Traverse with a loop and switch on characters: `<, >, &, \", '`[cite: 14, 16, 21].",
+        "Append matching entity strings (like `&amp;`) or append the normal character directly[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String escapeHtml(String text) {\n        if (text == null) return \"\";\n        StringBuilder sb = new StringBuilder(text.length() + 16);\n        for (int i = 0; i < text.length(); i++) {\n            char c = text.charAt(i);\n            switch (c) {\n                case '<'  -> sb.append(\"&lt;\");\n                case '>'  -> sb.append(\"&gt;\");\n                case '&'  -> sb.append(\"&amp;\");\n                case '\"' -> sb.append(\"&quot;\");\n                case '\\'' -> sb.append(\"&#39;\");\n                default   -> sb.append(c);\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String rawHtml = \"<script>alert('User & Admin');</script>\";\n        String escaped = escapeHtml(rawHtml);\n        System.out.println(\"Escaped HTML: \" + escaped);\n    }\n}",
+      "expectedOutput": "Escaped HTML: &lt;script&gt;alert(&#39;User &amp; Admin&#39;);&lt;/script&gt;"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Concurrent Thread Race in Shared Buffers",
+      "question": "Run two concurrent threads that each append 1,000 characters to a shared `StringBuffer`, and repeat with `StringBuilder` to demonstrate thread safety differences.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-11",
+      "id": "stringbuffer-021",
+      "explanation": "This exercise demonstrates why synchronization matters in shared mutable buffers[cite: 6, 21]. Two threads concurrently append 1,000 characters to a shared buffer[cite: 6, 21]. `StringBuffer` declares its `append()` method `synchronized`, acquiring an intrinsic monitor lock on `this` for each operation[cite: 6, 21]. This serializes the appends, guaranteeing the final length is exactly 2,000[cite: 6, 21]. `StringBuilder` has no synchronization, allowing threads to update the internal `count` field concurrently[cite: 6, 21]. This causes lost updates and race conditions, resulting in an inconsistent length or throwing array index exceptions[cite: 6, 21].",
+      "hints": [
+        "Create two worker `Thread` instances sharing the same buffer reference[cite: 1, 6].",
+        "Have each thread execute 1,000 `.append(\"X\")` calls[cite: 6, 21].",
+        "Call `.join()` on both threads to ensure they finish before verifying the final length[cite: 6, 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) throws InterruptedException {\n        StringBuffer safeBuffer = new StringBuffer();\n        StringBuilder unsafeBuilder = new StringBuilder();\n\n        Thread t1 = new Thread(() -> { for (int i = 0; i < 1000; i++) safeBuffer.append(\"X\"); });\n        Thread t2 = new Thread(() -> { for (int i = 0; i < 1000; i++) safeBuffer.append(\"X\"); });\n        t1.start(); t2.start();\n        t1.join(); t2.join();\n\n        Thread t3 = new Thread(() -> { for (int i = 0; i < 1000; i++) unsafeBuilder.append(\"X\"); });\n        Thread t4 = new Thread(() -> { for (int i = 0; i < 1000; i++) unsafeBuilder.append(\"X\"); });\n        t3.start(); t4.start();\n        t3.join(); t4.join();\n\n        System.out.println(\"StringBuffer length (thread-safe): \" + safeBuffer.length());\n        System.out.println(\"StringBuilder length completed: \" + (unsafeBuilder.length() <= 2000));\n    }\n}",
+      "expectedOutput": "StringBuffer length (thread-safe): 2000\nStringBuilder length completed: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Palindrome Verification via StringBuffer Reverse",
+      "question": "Check whether a string is a palindrome using `StringBuffer.reverse()` and `equals()` comparison.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-12",
+      "id": "stringbuffer-022",
+      "explanation": "Checking palindrome status can be written concisely using `StringBuffer.reverse()`[cite: 21]. The input string is passed to `new StringBuffer(text)` and reversed in place via `.reverse()`[cite: 21]. Calling `.toString()` converts the reversed buffer back to a `String`, which is compared against the original string using `.equalsIgnoreCase()`[cite: 18, 21]. If both character sequences match, the string is a palindrome[cite: 18]. While allocating a buffer requires $O(N)$ auxiliary memory, this method provides a readable alternative to manual two-pointer loops[cite: 14, 18, 21].",
+      "hints": [
+        "Create a buffer from the input: `new StringBuffer(text);`[cite: 21].",
+        "Reverse the buffer: `sb.reverse().toString();`[cite: 21].",
+        "Compare with the original string using `text.equalsIgnoreCase(reversed)`[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPalindrome(String text) {\n        if (text == null) return false;\n        String reversed = new StringBuffer(text).reverse().toString();\n        return text.equalsIgnoreCase(reversed);\n    }\n\n    public static void main(String[] args) {\n        String word = \"madam\";\n        System.out.println(\"Input: \" + word);\n        System.out.println(\"Is palindrome: \" + isPalindrome(word));\n    }\n}",
+      "expectedOutput": "Input: madam\nIs palindrome: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "In-Place Sentence Word Reverser",
+      "question": "Reverse the character sequence of each individual word in a sentence while preserving word order and spacing using `StringBuffer`.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-13",
+      "id": "stringbuffer-023",
+      "explanation": "This exercise reverses individual words in place while keeping sentence structure intact[cite: 21]. The sentence is split into word tokens around whitespace[cite: 4, 8]. For each word, a `StringBuffer` reverses the characters via `.reverse()`[cite: 21]. An accumulator buffer collects the reversed words, re-inserting spaces between them[cite: 3, 21]. This demonstrates how mutable buffers simplify word-level transformations compared to manual character pointer manipulation[cite: 21].",
+      "hints": [
+        "Split words: `sentence.split(\" \")`[cite: 8, 20].",
+        "Reverse each word: `new StringBuffer(word).reverse().toString()`[cite: 1, 21].",
+        "Join reversed words into a result `StringBuffer` separated by single spaces[cite: 3, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String reverseEachWord(String sentence) {\n        String[] tokens = sentence.split(\" \");\n        StringBuffer result = new StringBuffer();\n        for (int i = 0; i < tokens.length; i++) {\n            StringBuffer reverser = new StringBuffer(tokens[i]);\n            result.append(reverser.reverse());\n            if (i < tokens.length - 1) {\n                result.append(\" \");\n            }\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        String original = \"Java Developer Community\";\n        System.out.println(\"Original: \" + original);\n        System.out.println(\"Reversed: \" + reverseEachWord(original));\n    }\n}",
+      "expectedOutput": "Original: Java Developer Community\nReversed: avaJ repoleveD ytinummoC"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Buffer Capacity Optimization with EnsureCapacity and TrimToSize",
+      "question": "Demonstrate memory optimization in `StringBuffer` using `ensureCapacity()` to pre-allocate memory and `trimToSize()` to release unused buffer space.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-014",
+      "id": "stringbuffer-024",
+      "explanation": "Managing buffer memory manually avoids unnecessary array reallocations[cite: 18, 21]. `ensureCapacity(minCapacity)` guarantees the backing array can hold at least the specified number of characters without further reallocations[cite: 21]. If the requested capacity exceeds the current size, the buffer expands immediately[cite: 21]. Conversely, after large operations complete, `trimToSize()` trims the backing array so its capacity matches the current character count (`capacity() == length()`)[cite: 21]. This releases unused array elements back to the JVM, minimizing memory overhead in long-running services[cite: 2, 21].",
+      "hints": [
+        "Call `sb.ensureCapacity(60)` to pre-allocate capacity[cite: 21].",
+        "Append content and observe that capacity remains at or above the pre-allocated threshold[cite: 21].",
+        "Call `sb.trimToSize()` to shrink capacity to match `sb.length()` exactly[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuffer sb = new StringBuffer();\n        System.out.println(\"Default Capacity: \" + sb.capacity());\n\n        sb.ensureCapacity(60); // Force capacity expansion upfront\n        System.out.println(\"After ensureCapacity(60): \" + sb.capacity());\n\n        sb.append(\"Active Payload\");\n        System.out.println(\"Length: \" + sb.length() + \" | Capacity before trim: \" + sb.capacity());\n\n        sb.trimToSize(); // Release unused capacity\n        System.out.println(\"Capacity after trimToSize(): \" + sb.capacity());\n    }\n}",
+      "expectedOutput": "Default Capacity: 16\nAfter ensureCapacity(60): 60\nLength: 14 | Capacity before trim: 60\nCapacity after trimToSize(): 14"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Thread-Safe Audit Logger with StringBuffer",
+      "question": "Implement a thread-safe `AuditLogger` class that collects log messages from multiple threads into an internal `StringBuffer` and exports snapshot logs.",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuffer-15",
+      "id": "stringbuffer-025",
+      "explanation": "Designing an audit logging component requires thread-safe text accumulation across concurrent threads[cite: 6, 21]. Because `StringBuffer` synchronizes all mutator operations, multiple threads can call `log(entry)` concurrently without corrupting the character buffer[cite: 6, 21]. The logger formats timestamped entries and appends them to the buffer[cite: 21]. A snapshot method returns `buffer.toString()` to inspect the log without clearing existing records[cite: 21]. This provides thread-safe in-memory logging without external synchronization locks[cite: 6, 21].",
+      "hints": [
+        "Store log entries in a private `StringBuffer logBuffer = new StringBuffer();` field[cite: 21].",
+        "Provide a `public void log(String msg)` method appending formatted lines[cite: 1, 21].",
+        "Export logs via `public String getSnapshot()` returning `logBuffer.toString()`[cite: 1, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    static class AuditLogger {\n        private final StringBuffer logBuffer = new StringBuffer();\n\n        public void log(String actor, String action) {\n            logBuffer.append(\"[\").append(actor).append(\"] \")\n                     .append(action).append(\"\\n\");\n        }\n\n        public String getSnapshot() {\n            return logBuffer.toString();\n        }\n    }\n\n    public static void main(String[] args) {\n        AuditLogger logger = new AuditLogger();\n        logger.log(\"SYSTEM\", \"Startup initialized\");\n        logger.log(\"ADMIN\", \"User updated\");\n\n        System.out.println(\"Audit Log Snapshot:\\n\" + logger.getSnapshot().trim());\n    }\n}",
+      "expectedOutput": "Audit Log Snapshot:\n[SYSTEM] Startup initialized\n[ADMIN] User updated"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Custom Resizable Character Buffer",
+      "question": "Implement a custom resizable character buffer (`CustomBuffer`) from scratch using a raw `char[]` array, handling capacity expansion (`(old * 2) + 2`), `append()`, and `toString()` without standard buffer classes.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-11",
+      "id": "stringbuffer-026",
+      "explanation": "Implementing a resizable character buffer from scratch illustrates how `AbstractStringBuilder` works internally[cite: 21]. The custom class manages a raw `char[] value` array and an integer `count` field tracking the number of characters stored[cite: 21]. When `append(String str)` needs more space than the current array length, an `ensureCapacity()` helper allocates a new array using the growth formula `(value.length * 2) + 2`[cite: 21]. Characters are copied over using `System.arraycopy()`, and new characters are appended at the end[cite: 9, 15, 21]. This demonstrates dynamic array reallocation and amortized $O(1)$ append performance[cite: 15, 21].",
+      "hints": [
+        "Manage an internal `char[] buffer` and a `count` variable[cite: 21].",
+        "Expand capacity using `int newCap = (buffer.length * 2) + 2;`[cite: 21].",
+        "Copy elements to the new array using `System.arraycopy()`[cite: 9, 15, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    static class CustomBuffer {\n        private char[] value;\n        private int count;\n\n        public CustomBuffer() {\n            this(16);\n        }\n\n        public CustomBuffer(int capacity) {\n            value = new char[capacity];\n            count = 0;\n        }\n\n        public CustomBuffer append(String str) {\n            if (str == null) str = \"null\";\n            int len = str.length();\n            ensureCapacity(count + len);\n            str.getChars(0, len, value, count);\n            count += len;\n            return this;\n        }\n\n        private void ensureCapacity(int minCapacity) {\n            if (minCapacity > value.length) {\n                int newCap = (value.length * 2) + 2;\n                if (newCap < minCapacity) newCap = minCapacity;\n                char[] newArr = new char[newCap];\n                System.arraycopy(value, 0, newArr, 0, count);\n                value = newArr;\n            }\n        }\n\n        public String toString() {\n            return new String(value, 0, count);\n        }\n    }\n\n    public static void main(String[] args) {\n        CustomBuffer cb = new CustomBuffer(4);\n        cb.append(\"Hello\").append(\" \").append(\"Custom\").append(\" \").append(\"Buffer!\");\n        System.out.println(cb.toString());\n    }\n}",
+      "expectedOutput": "Hello Custom Buffer!"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Thread-Local Reusable Log Formatter",
+      "question": "Build a zero-allocation log entry formatter that reuses a thread-local `StringBuilder` buffer across invocations to prevent heap object allocations during logging.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-12",
+      "id": "stringbuffer-027",
+      "explanation": "In high-throughput logging frameworks (such as Log4j 2 and Logback), allocating a new `StringBuilder` for every log event creates significant memory churn and triggers garbage collection pauses[cite: 2, 3, 18]. A common optimization uses `ThreadLocal<StringBuilder>` to provide each thread with a single reusable buffer[cite: 6]. When a thread formats a log entry, it retrieves its thread-local buffer, clears it using `sb.setLength(0)`, appends log metadata (level, thread name, message), and writes the output[cite: 21]. This allows millions of log lines to be formatted with zero buffer reallocations[cite: 2, 21].",
+      "hints": [
+        "Create a `ThreadLocal<StringBuilder>`: `ThreadLocal.withInitial(() -> new StringBuilder(256))`[cite: 6, 21].",
+        "Clear the buffer at the start of each format call: `sb.setLength(0);`[cite: 21].",
+        "Assemble log fields into the buffer and return the formatted output[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    private static final ThreadLocal<StringBuilder> BUFFER_HOLDER = \n        ThreadLocal.withInitial(() -> new StringBuilder(256));\n\n    public static String formatLog(String level, String msg) {\n        StringBuilder sb = BUFFER_HOLDER.get();\n        sb.setLength(0); // Reset buffer in place for zero-allocation reuse\n        sb.append(\"[\").append(level).append(\"] \")\n          .append(\"[\").append(Thread.currentThread().getName()).append(\"] \")\n          .append(msg);\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(formatLog(\"INFO\", \"Service ready.\"));\n        System.out.println(formatLog(\"WARN\", \"Cache threshold near limit.\"));\n    }\n}",
+      "expectedOutput": "[INFO] [main] Service ready.\n[WARN] [main] Cache threshold near limit."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Arbitrary-Precision Addition with StringBuilder",
+      "question": "Implement arbitrary-precision addition of two large numbers represented as strings using `StringBuilder` without using `BigInteger`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-13",
+      "id": "stringbuffer-028",
+      "explanation": "Standard 64-bit `long` integers cannot represent numbers with more than 19 digits without overflowing[cite: 5]. Adding arbitrarily large numbers requires simulating grade-school column addition using character buffers[cite: 21]. Two pointers start at the least significant digits (the right ends) of both strings and move leftward[cite: 9, 14]. On each step, the digits are converted to integers, added together with any carry from the previous column, and the resulting digit (`sum % 10`) is appended to a `StringBuilder`[cite: 14, 21]. The carry updates to `sum / 10`[cite: 7]. After the loop processes all digits and any final carry, reversing the buffer produces the final sum[cite: 21].",
+      "hints": [
+        "Initialize pointers at `num1.length() - 1` and `num2.length() - 1`[cite: 8, 9].",
+        "Loop while `i >= 0 || j >= 0 || carry > 0`[cite: 14, 15].",
+        "Append `sum % 10` to `sb`, update `carry = sum / 10`, and call `sb.reverse()` at the end[cite: 7, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String addLargeNumbers(String num1, String num2) {\n        StringBuilder result = new StringBuilder();\n        int i = num1.length() - 1;\n        int j = num2.length() - 1;\n        int carry = 0;\n\n        while (i >= 0 || j >= 0 || carry > 0) {\n            int digit1 = (i >= 0) ? num1.charAt(i--) - '0' : 0;\n            int digit2 = (j >= 0) ? num2.charAt(j--) - '0' : 0;\n            int total = digit1 + digit2 + carry;\n            result.append(total % 10);\n            carry = total / 10;\n        }\n\n        return result.reverse().toString();\n    }\n\n    public static void main(String[] args) {\n        String n1 = \"99999999999999999999\";\n        String n2 = \"1\";\n        System.out.println(\"Sum: \" + addLargeNumbers(n1, n2));\n    }\n}",
+      "expectedOutput": "Sum: 100000000000000000000"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Markdown Formatting Stripper via StringBuilder",
+      "question": "Write an in-place markdown parser that strips bold (`**text**`), italics (`_text_`), and link markup (`[label](url) -> label`) using a `StringBuilder` cursor.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-14",
+      "id": "stringbuffer-029",
+      "explanation": "Stripping markdown formatting (such as `**bold**`, `_italics_`, or `[title](url)`) for plain-text indexing can be implemented efficiently using a single-pass `StringBuilder` scanner[cite: 21]. A pointer iterates through the markdown text: when bold asterisks (`**`) or italic underscores (`_`) are encountered, the marker characters are skipped and the enclosed text is appended to the buffer[cite: 21]. For markdown links `[label](url)`, the parser extracts the link text inside brackets `[...]`, skips the target URL `(...)`, and appends only the label text to the buffer[cite: 20, 21]. This strips formatting in a single pass without regex compilation overhead[cite: 20].",
+      "hints": [
+        "Scan characters using a cursor index `i` across `markdown.length()`[cite: 8, 14].",
+        "Skip formatting markers (`**`, `_`) while copying enclosed text to the buffer[cite: 21].",
+        "When finding `[`, capture text up to `]` and advance the cursor past the closing `)`[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String stripMarkdown(String md) {\n        StringBuilder sb = new StringBuilder();\n        int i = 0;\n        int len = md.length();\n\n        while (i < len) {\n            if (i + 1 < len && md.charAt(i) == '*' && md.charAt(i + 1) == '*') {\n                i += 2; // Skip bold marker\n            } else if (md.charAt(i) == '_' || md.charAt(i) == '*') {\n                i++; // Skip italic marker\n            } else if (md.charAt(i) == '[') {\n                int closeBracket = md.indexOf(']', i);\n                int openParen = md.indexOf('(', closeBracket);\n                int closeParen = md.indexOf(')', openParen);\n                if (closeBracket != -1 && openParen == closeBracket + 1 && closeParen != -1) {\n                    sb.append(md, i + 1, closeBracket);\n                    i = closeParen + 1;\n                } else {\n                    sb.append(md.charAt(i++));\n                }\n            } else {\n                sb.append(md.charAt(i++));\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String md = \"Read **Java Guide** and visit [Oracle](https://oracle.com) today!\";\n        System.out.println(\"Plaintext: \" + stripMarkdown(md));\n    }\n}",
+      "expectedOutput": "Plaintext: Read Java Guide and visit Oracle today!"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Zero-Garbage String Tokenizer",
+      "question": "Implement a high-throughput, zero-allocation tokenizer that parses delimited text streams using a reusable `StringBuilder` buffer to prevent heap garbage creation.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "SBB-15",
+      "id": "stringbuffer-030",
+      "explanation": "Standard tokenizers (such as `String.split()` or `StringTokenizer`) allocate a new `String` object on the heap for every token extracted[cite: 18, 20]. In low-latency architectures (such as financial trading gateways or telemetry consumers), allocating millions of small token strings causes garbage collection pauses[cite: 2, 18]. A zero-allocation tokenizer avoids this by writing tokens into a single reusable `StringBuilder` buffer[cite: 21]. The scanner advances through the source text, copying characters between delimiters into the buffer and passing the buffer directly to a consumer before resetting its length with `sb.setLength(0)`[cite: 21]. This processes streams of tokens with zero intermediate heap allocations[cite: 2, 21].",
+      "hints": [
+        "Traverse text with index pointers without creating sub-strings[cite: 9, 14, 20].",
+        "Clear the reusable buffer on each token using `tokenBuffer.setLength(0);`[cite: 21].",
+        "Append characters into the reusable buffer and pass it to a consumer callback[cite: 21]."
+      ],
+      "sampleCode": "import java.util.function.Consumer;\n\npublic class Solution {\n    static class ZeroGarbageTokenizer {\n        private final StringBuilder tokenBuffer = new StringBuilder(64);\n\n        public void tokenize(String text, char delimiter, Consumer<CharSequence> consumer) {\n            tokenBuffer.setLength(0);\n            for (int i = 0; i < text.length(); i++) {\n                char c = text.charAt(i);\n                if (c == delimiter) {\n                    consumer.accept(tokenBuffer);\n                    tokenBuffer.setLength(0); // Reset for zero-allocation reuse\n                } else {\n                    tokenBuffer.append(c);\n                }\n            }\n            consumer.accept(tokenBuffer);\n        }\n    }\n\n    public static void main(String[] args) {\n        ZeroGarbageTokenizer tokenizer = new ZeroGarbageTokenizer();\n        String streamData = \"ORD101|PAY500|SHP99\";\n\n        System.out.println(\"Stream Tokens:\");\n        tokenizer.tokenize(streamData, '|', token -> System.out.println(\"Token: \" + token));\n    }\n}",
+      "expectedOutput": "Stream Tokens:\nToken: ORD101\nToken: PAY500\nToken: SHP99"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

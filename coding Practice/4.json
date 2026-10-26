@@ -1,0 +1,493 @@
+{
+  "section": "Basics",
+  "slug": "identifiers-naming",
+  "topic": "Identifiers, reserved words, and naming",
+  "page": 13,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Lexical Rules for Legal Java Identifiers",
+      "question": "Declare variables demonstrating all permitted character classes in Java identifiers (letters, digits, underscores, and currency dollar signs), ensuring none begin with a digit, and display their values.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-01",
+      "id": "identifiers-naming-001",
+      "explanation": "According to the Java Language Specification (JLS §3.8), an identifier is an unlimited-length sequence of Java letters and Java digits, the first of which must be a Java letter. In the lexical grammar of Java, 'letters' include ASCII uppercase and lowercase alphabetic characters, the underscore character ('_'), and the dollar sign ('$'). Digits ('0' through '9') are legally permitted anywhere within an identifier except at the initial index. Commencing an identifier with a numeric character causes the compiler's lexer to tokenize the sequence as a numeric literal rather than an identifier token, resulting in a compile-time syntax error. While '$' is reserved by convention for compiler-generated artifacts (such as synthetic inner class identifiers) and '_' is constrained in modern Java specifications, both remain syntactically legal characters in user-defined variable identifiers.",
+      "hints": [
+        "Construct identifiers using valid leading characters like uppercase/lowercase letters, '$', or '_'.",
+        "Place numeric digits only after the initial character (e.g., 'item1' instead of '1item').",
+        "Print each declared variable with descriptive labels to confirm successful compilation and assignment."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int userAge = 25;\n        int user_score = 98;\n        int $walletBalance = 150;\n        int level2Bonus = 50;\n\n        System.out.println(\"userAge: \" + userAge);\n        System.out.println(\"user_score: \" + user_score);\n        System.out.println(\"$walletBalance: \" + $walletBalance);\n        System.out.println(\"level2Bonus: \" + level2Bonus);\n    }\n}",
+      "expectedOutput": "userAge: 25\nuser_score: 98\n$walletBalance: 150\nlevel2Bonus: 50"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Java Standard Naming Conventions Implementation",
+      "question": "Implement a `Student` class adhering strictly to standard Java naming conventions: PascalCase for class names, camelCase for instance fields and methods, and UPPER_SNAKE_CASE with `static final` modifiers for constants.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-02",
+      "id": "identifiers-naming-002",
+      "explanation": "Java naming conventions establish idiomatic readability across the ecosystem. Classes and interfaces use PascalCase (upper camel case), starting with a capital letter and capitalizing each subsequent concatenated word boundary. Method names and member variable names adhere to lower camelCase, beginning with a lowercase letter and capitalizing subsequent word fragments to immediately differentiate behavior and instance state from type identifiers. Compile-time constants declared with static final modifiers follow UPPER_SNAKE_CASE, where words are fully capitalized and separated by underscores. These naming conventions are enforced by linters and code analysis tools to maintain visual distinction between types, members, and constants during code inspection.",
+      "hints": [
+        "Declare the class as 'Student' using PascalCase.",
+        "Declare a compile-time constant using 'public static final int MAX_MARKS = 100;'.",
+        "Implement instance member 'studentName' and method 'calculateTotal' in camelCase."
+      ],
+      "sampleCode": "public class Solution {\n    static class Student {\n        public static final int MAX_MARKS = 100;\n        private String studentName;\n\n        public Student(String studentName) {\n            this.studentName = studentName;\n        }\n\n        public int calculateTotal(int score1, int score2) {\n            return score1 + score2;\n        }\n\n        public String getStudentName() {\n            return studentName;\n        }\n    }\n\n    public static void main(String[] args) {\n        Student student = new Student(\"Akshat\");\n        int total = student.calculateTotal(45, 48);\n        System.out.println(\"Student: \" + student.getStudentName());\n        System.out.println(\"Total Score: \" + total + \" / \" + (Student.MAX_MARKS * 2));\n    }\n}",
+      "expectedOutput": "Student: Akshat\nTotal Score: 93 / 200"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Special Symbol Identifiers Arithmetic",
+      "question": "Declare primitive integer variables named `_count`, `$price`, and `count1` to demonstrate valid underscore and dollar prefixing, and compute and print their sum.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-03",
+      "id": "identifiers-naming-003",
+      "explanation": "In Java's lexical structure, the underscore ('_') and dollar symbol ('$') are classified as connecting punctuation and currency symbols respectively, but both are treated as valid Java letter characters. Therefore, '_count' and '$price' are syntactically valid variable names that compile without error. In early Java versions, single underscores were common, but since Java 9, a lone underscore ('_') is a reserved keyword that cannot be used as an identifier name; prefixed identifiers like '_count', however, remain completely legal. The variable 'count1' demonstrates valid alphanumeric identifier ordering where digits follow an initial letter. Adding these variables verifies that the compiler resolves symbol-prefixed identifiers as standard primitive variables during bytecode generation.",
+      "hints": [
+        "Declare int _count = 10, $price = 25, and count1 = 15.",
+        "Compute their total using the standard arithmetic addition operator (+).",
+        "Display each individual variable alongside the calculated sum."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int _count = 10;\n        int $price = 25;\n        int count1 = 15;\n\n        int totalSum = _count +$price + count1;\n        System.out.println(\"_count: \" + _count);\n        System.out.println(\"$price: \" + $price);\n        System.out.println(\"count1: \" + count1);\n        System.out.println(\"Sum: \" + totalSum);\n    }\n}",
+      "expectedOutput": "_count: 10\n$price: 25\ncount1: 15\nSum: 50"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Unicode Mathematical Symbol Identifiers",
+      "question": "Declare a floating-point constant using the Greek letter pi (`π`) as a valid Unicode identifier, and calculate the area of a circle with radius 5.0.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-04",
+      "id": "identifiers-naming-004",
+      "explanation": "Java source code is defined in terms of Unicode character sequences (UTF-16 code units). The Java Language Specification delegates the definition of identifier characters to the Unicode Standard via Character.isJavaIdentifierStart(int) and Character.isJavaIdentifierPart(int). Because Greek letters such as 'π' (Unicode code point U+03C0, Greek Small Letter Pi) have the Unicode general category of 'Letter, lowercase' (Ll), they are fully valid identifier start characters in Java. The javac compiler processes Unicode characters natively in UTF-8 or UTF-16 encoded source files. While using non-ASCII mathematical glyphs is common in scientific domains, production enterprise standards generally avoid them to prevent font rendering inconsistencies and keyboard input barriers.",
+      "hints": [
+        "Declare 'double π = 3.141592653589793;' using the Unicode glyph directly.",
+        "Compute circle area using the formula: area = π * radius * radius.",
+        "Format the output using System.out.printf to display the calculated floating-point value to 4 decimal places."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double π = 3.141592653589793;\n        double radius = 5.0;\n        double area = π * radius * radius;\n\n        System.out.printf(\"Radius: %.1f%n\", radius);\n        System.out.printf(\"Calculated Area using Unicode π: %.4f%n\", area);\n    }\n}",
+      "expectedOutput": "Radius: 5.0\nCalculated Area using Unicode π: 78.5398"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Case Convention Architecture for Circle Geometry",
+      "question": "Implement a geometric circle area calculator that combines PascalCase for the class name, UPPER_SNAKE_CASE for a constant PI, and camelCase for instance variables and methods.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-05",
+      "id": "identifiers-naming-005",
+      "explanation": "This exercise reinforces the structural conventions of Java object-oriented design. The class CircleAreaCalculator uses PascalCase, signaling to developers that it represents a reference type. Within the class, DEFAULT_PI uses UPPER_SNAKE_CASE and static final modifiers to indicate that it is a constant value stored once in the class constant pool. The instance variable circleRadius and calculation method computeArea() use camelCase, distinguishing instance state and member behavior from static types and constants. Following these conventions ensures architectural clarity across development teams and prevents naming collisions in large codebases.",
+      "hints": [
+        "Name the class using PascalCase: 'CircleAreaCalculator'.",
+        "Define the mathematical constant using 'public static final double DEFAULT_PI = 3.14159;'.",
+        "Implement the computation method using lower camelCase: 'public double computeArea(double circleRadius)'."
+      ],
+      "sampleCode": "public class Solution {\n    static class CircleAreaCalculator {\n        public static final double DEFAULT_PI = 3.141592653589793;\n\n        public double computeArea(double circleRadius) {\n            return DEFAULT_PI * circleRadius * circleRadius;\n        }\n    }\n\n    public static void main(String[] args) {\n        CircleAreaCalculator calculator = new CircleAreaCalculator();\n        double radius = 4.0;\n        double calculatedArea = calculator.computeArea(radius);\n\n        System.out.println(\"Constant: DEFAULT_PI\");\n        System.out.println(\"Method: computeArea()\");\n        System.out.printf(\"Area for radius %.1f: %.4f%n\", radius, calculatedArea);\n    }\n}",
+      "expectedOutput": "Constant: DEFAULT_PI\nMethod: computeArea()\nArea for radius 4.0: 50.2655"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Character API Identifier Validation",
+      "question": "Write a method `isValidJavaIdentifier(String s)` that inspects every character using `Character.isJavaIdentifierStart()` and `Character.isJavaIdentifierPart()` while verifying the input is non-empty.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-01",
+      "id": "identifiers-naming-006",
+      "explanation": "Programmatic validation of Java identifiers requires evaluating character validity rules defined in JLS §3.8. The java.lang.Character class provides two dedicated inspection methods: Character.isJavaIdentifierStart(int codePoint) and Character.isJavaIdentifierPart(int codePoint). The first character of an identifier must satisfy isJavaIdentifierStart, which allows letters, currency signs ($), and connecting punctuation (_), but rejects all numeric digits. Every subsequent character must satisfy isJavaIdentifierPart, which adds digits, combining marks, and directional formatting characters. A complete validator must also check that the candidate string is non-null, non-empty, and does not conflict with Java reserved keywords or literals.",
+      "hints": [
+        "Guard against invalid inputs by checking if candidate == null || candidate.isEmpty().",
+        "Evaluate candidate.charAt(0) using Character.isJavaIdentifierStart().",
+        "Iterate across subsequent characters from index 1 to length - 1 using Character.isJavaIdentifierPart()."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isValidJavaIdentifier(String s) {\n        if (s == null || s.isEmpty()) {\n            return false;\n        }\n        if (!Character.isJavaIdentifierStart(s.charAt(0))) {\n            return false;\n        }\n        for (int i = 1; i < s.length(); i++) {\n            if (!Character.isJavaIdentifierPart(s.charAt(i))) {\n                return false;\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        String[] testCases = {\"validVar\", \"_count\", \"$amount\", \"2ndPlace\", \"invalid-token\"};\n        for (String test : testCases) {\n            System.out.println(test + \" -> isValid: \" + isValidJavaIdentifier(test));\n        }\n    }\n}",
+      "expectedOutput": "validVar -> isValid: true\n_count -> isValid: true\n$amount -> isValid: true\n2ndPlace -> isValid: false\ninvalid-token -> isValid: false"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "CamelCase to Snake_Case Converter",
+      "question": "Write a method that converts a Java lower camelCase identifier string into database-standard uppercase `SNAKE_CASE` by inserting underscores before uppercase word boundaries.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-02",
+      "id": "identifiers-naming-007",
+      "explanation": "Object-relational mapping (ORM) libraries such as Hibernate frequently map Java entity fields (which follow lower camelCase) to relational database table columns (which conventionally follow SNAKE_CASE). Converting between these conventions requires scanning the identifier string character by character. When an uppercase letter is encountered at an index greater than zero, an underscore ('_') is prepended before appending the uppercase character. StringBuilder provides an efficient mutable buffer for this transformation, avoiding the overhead of intermediate String allocations. The resulting string is then converted to uppercase using an invariant locale to maintain consistent casing across different runtime environments.",
+      "hints": [
+        "Iterate through the string characters using charAt(i) or toCharArray().",
+        "Detect uppercase word boundaries using Character.isUpperCase(ch).",
+        "Insert an underscore before uppercase letters (except at index 0) and append characters to a StringBuilder."
+      ],
+      "sampleCode": "import java.util.Locale;\n\npublic class Solution {\n    public static String camelToSnake(String camelCase) {\n        if (camelCase == null || camelCase.isEmpty()) {\n            return \"\";\n        }\n        StringBuilder result = new StringBuilder();\n        for (int i = 0; i < camelCase.length(); i++) {\n            char ch = camelCase.charAt(i);\n            if (Character.isUpperCase(ch) && i > 0) {\n                result.append('_');\n            }\n            result.append(Character.toUpperCase(ch));\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        String[] examples = {\"studentName\", \"maxAllowedConnections\", \"userId\"};\n        for (String example : examples) {\n            System.out.println(example + \" -> \" + camelToSnake(example));\n        }\n    }\n}",
+      "expectedOutput": "studentName -> STUDENT_NAME\nmaxAllowedConnections -> MAX_ALLOWED_CONNECTIONS\nuserId -> USER_ID"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Constant Naming Enforcement",
+      "question": "Write a validator method that checks whether a given string adheres to Java constant naming conventions (all uppercase letters, digits, and underscores, not starting with a digit).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-03",
+      "id": "identifiers-naming-008",
+      "explanation": "Java static final constants follow the UPPER_SNAKE_CASE naming convention by specification. A valid constant identifier must satisfy several lexical criteria: it cannot be null or empty; its initial character must be an uppercase ASCII letter ('A'–'Z') or an underscore ('_'); and all subsequent characters must be uppercase letters, digits ('0'–'9'), or underscores. Lowercase characters ('a'–'z') and special symbols violate this convention. Enforcing constant naming rules helps automated linters (such as Checkstyle and SonarQube) detect non-constant variables that have been marked static final, keeping shared constants visually distinct from mutable fields.",
+      "hints": [
+        "Reject any string that contains lowercase characters via Character.isLowerCase(ch).",
+        "Ensure the initial character is not a digit: !Character.isDigit(s.charAt(0)).",
+        "Confirm every character is an uppercase letter, digit, or underscore ('_')."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isValidConstantName(String s) {\n        if (s == null || s.isEmpty()) {\n            return false;\n        }\n        char first = s.charAt(0);\n        if (Character.isDigit(first) || (!Character.isUpperCase(first) && first != '_')) {\n            return false;\n        }\n        for (int i = 1; i < s.length(); i++) {\n            char ch = s.charAt(i);\n            if (!Character.isUpperCase(ch) && !Character.isDigit(ch) && ch != '_') {\n                return false;\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        String[] candidates = {\"MAX_RETRIES\", \"DEFAULT_PORT\", \"timeoutLimit\", \"1_INVALID\", \"_CONFIG_KEY\"};\n        for (String candidate : candidates) {\n            System.out.println(candidate + \" -> valid constant: \" + isValidConstantName(candidate));\n        }\n    }\n}",
+      "expectedOutput": "MAX_RETRIES -> valid constant: true\nDEFAULT_PORT -> valid constant: true\ntimeoutLimit -> valid constant: false\n1_INVALID -> valid constant: false\n_CONFIG_KEY -> valid constant: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Class Name Formatter",
+      "question": "Write a method that accepts a raw descriptive phrase (e.g., 'student grade calculator') and formats it into a syntactically valid PascalCase class name (`StudentGradeCalculator`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-04",
+      "id": "identifiers-naming-009",
+      "explanation": "Code generation tools and application scaffolds frequently convert raw descriptive strings into valid Java class identifiers. Generating a PascalCase class name requires splitting input text by whitespace or delimiter characters, capitalizing the first letter of each word, and converting all subsequent letters in that word to lowercase. Any non-alphanumeric characters (such as hyphens or punctuation) must be stripped to prevent syntax errors in the resulting class declaration. If the initial word begins with a digit, the generator must prepend an underscore or character prefix to maintain legal identifier syntax.",
+      "hints": [
+        "Split the phrase on whitespace delimiters using regex \"\\\\s+\".",
+        "Capitalize token.charAt(0) with Character.toUpperCase() and append token.substring(1).toLowerCase().",
+        "Filter out non-alphanumeric characters so the final output conforms to identifier rules."
+      ],
+      "sampleCode": "public class Solution {\n    public static String toPascalCaseClassName(String phrase) {\n        if (phrase == null || phrase.trim().isEmpty()) {\n            return \"DefaultClass\";\n        }\n        String[] tokens = phrase.trim().split(\"[\\\\s_-]+\");\n        StringBuilder builder = new StringBuilder();\n        for (String token : tokens) {\n            if (!token.isEmpty()) {\n                builder.append(Character.toUpperCase(token.charAt(0)));\n                if (token.length() > 1) {\n                    builder.append(token.substring(1).toLowerCase());\n                }\n            }\n        }\n        return builder.toString();\n    }\n\n    public static void main(String[] args) {\n        String phrase1 = \"student grade calculator\";\n        String phrase2 = \"order-processing_service\";\n        System.out.println(phrase1 + \" -> \" + toPascalCaseClassName(phrase1));\n        System.out.println(phrase2 + \" -> \" + toPascalCaseClassName(phrase2));\n    }\n}",
+      "expectedOutput": "student grade calculator -> StudentGradeCalculator\norder-processing_service -> OrderProcessingService"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Identifier Cleaning Tool",
+      "question": "Write a program that takes an invalid identifier input (containing spaces, hyphens, or illegal leading digits) and sanitizes it into a legal Java identifier.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-05",
+      "id": "identifiers-naming-010",
+      "explanation": "When importing data from external schemas (such as JSON attributes, CSV headers, or XML tags) into Java code generators, raw field names often violate Java identifier rules. Sanitizing these tokens into legal identifiers requires a two-step process: inspecting the initial character, and filtering all subsequent characters. If the first character is not a valid identifier start character (such as a digit, hyphen, or space), an underscore ('_') is prepended. For all remaining characters, any character that returns false from Character.isJavaIdentifierPart() is replaced with an underscore. This ensures the output string can be safely used as a variable or method identifier in generated source files.",
+      "hints": [
+        "Check the first character using Character.isJavaIdentifierStart(ch); prepend an underscore if it is invalid.",
+        "Iterate across subsequent characters; if Character.isJavaIdentifierPart(ch) is false, substitute an underscore.",
+        "Assemble the cleaned string using a StringBuilder."
+      ],
+      "sampleCode": "public class Solution {\n    public static String sanitizeIdentifier(String rawInput) {\n        if (rawInput == null || rawInput.isEmpty()) {\n            return \"_var\";\n        }\n        StringBuilder clean = new StringBuilder();\n        char first = rawInput.charAt(0);\n        if (Character.isJavaIdentifierStart(first)) {\n            clean.append(first);\n        } else {\n            clean.append('_');\n            if (Character.isJavaIdentifierPart(first)) {\n                clean.append(first);\n            }\n        }\n        for (int i = 1; i < rawInput.length(); i++) {\n            char ch = rawInput.charAt(i);\n            clean.append(Character.isJavaIdentifierPart(ch) ? ch : '_');\n        }\n        return clean.toString();\n    }\n\n    public static void main(String[] args) {\n        String[] rawInputs = {\"user-name\", \"99bottles\", \"first name\", \"total$\"};\n        for (String raw : rawInputs) {\n            System.out.println(\"Raw: '\" + raw + \"' -> Cleaned: '\" + sanitizeIdentifier(raw) + \"'\");\n        }\n    }\n}",
+      "expectedOutput": "Raw: 'user-name' -> Cleaned: 'user_name'\nRaw: '99bottles' -> Cleaned: '_99bottles'\nRaw: 'first name' -> Cleaned: 'first_name'\nRaw: 'total$' -> Cleaned: 'total$'"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Comprehensive Identifier Verification with Keyword Exclusion",
+      "question": "Implement an identifier validation method that verifies character legality using `Character.isJavaIdentifierStart` and `Character.isJavaIdentifierPart`, while rejecting Java reserved keywords.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-06",
+      "id": "identifiers-naming-011",
+      "explanation": "Validating an identifier requires more than checking whether its characters satisfy Character.isJavaIdentifierStart and Character.isJavaIdentifierPart. In Java, reserved keywords (such as class, int, public, and static) and reserved literals (true, false, null) are composed entirely of valid identifier letters, yet the lexer prohibits them from being used as identifier names (JLS §3.9). A complete identifier validator must perform character checks in conjunction with a reserved word lookup. Using a pre-populated HashSet<String> allows the validator to perform O(1) keyword exclusion checks after verifying character validity.",
+      "hints": [
+        "Validate character syntax using Character.isJavaIdentifierStart and Character.isJavaIdentifierPart.",
+        "Store reserved keywords in a Set<String> for constant-time lookup.",
+        "Reject the candidate if the set contains the input string."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(\n        \"abstract\", \"assert\", \"boolean\", \"break\", \"byte\", \"case\", \"catch\", \"char\", \"class\",\n        \"const\", \"continue\", \"default\", \"do\", \"double\", \"else\", \"enum\", \"extends\", \"final\",\n        \"finally\", \"float\", \"for\", \"goto\", \"if\", \"implements\", \"import\", \"instanceof\", \"int\",\n        \"interface\", \"long\", \"native\", \"new\", \"package\", \"private\", \"protected\", \"public\",\n        \"return\", \"short\", \"static\", \"strictfp\", \"super\", \"switch\", \"synchronized\", \"this\",\n        \"throw\", \"throws\", \"transient\", \"try\", \"void\", \"volatile\", \"while\", \"true\", \"false\", \"null\"\n    ));\n\n    public static boolean isValidIdentifier(String token) {\n        if (token == null || token.isEmpty() || KEYWORDS.contains(token)) {\n            return false;\n        }\n        if (!Character.isJavaIdentifierStart(token.charAt(0))) {\n            return false;\n        }\n        for (int i = 1; i < token.length(); i++) {\n            if (!Character.isJavaIdentifierPart(token.charAt(i))) {\n                return false;\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        String[] tokens = {\"myVariable\", \"class\", \"null\", \"_score1\", \"for\"};\n        for (String t : tokens) {\n            System.out.println(t + \" -> valid: \" + isValidIdentifier(t));\n        }\n    }\n}",
+      "expectedOutput": "myVariable -> valid: true\nclass -> valid: false\nnull -> valid: false\n_score1 -> valid: true\nfor -> valid: false"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Set-Based Reserved Keyword Query Engine",
+      "question": "Store Java reserved keywords in a `Set<String>` and implement a lookup method that checks whether candidate words are reserved keywords or legal identifiers.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-07",
+      "id": "identifiers-naming-012",
+      "explanation": "Java reserves 50+ words as keywords that cannot be used as identifiers for variables, methods, or classes. These keywords are reserved for compiler control structures (if, while, switch), type declarations (class, interface, enum, record), and primitive types (int, double, boolean). In addition to keywords, Java specifies three reserved literals: true, false, and null, which are syntactically boolean and null literals rather than keywords, but are equally prohibited as identifiers. Storing these tokens in a HashSet enables instant O(1) containment checks, allowing compilers and static analysis linters to differentiate identifiers from reserved words during lexical analysis.",
+      "hints": [
+        "Initialize a static Set<String> containing core keywords like 'class', 'public', 'static', 'void'.",
+        "Include the literal values 'true', 'false', and 'null' in the exclusion set.",
+        "Query the set using keywordsSet.contains(candidateWord) to determine reservation status."
+      ],
+      "sampleCode": "import java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> RESERVED_WORDS = new HashSet<>();\n\n    static {\n        String[] words = {\n            \"abstract\", \"assert\", \"boolean\", \"break\", \"byte\", \"case\", \"catch\", \"char\",\n            \"class\", \"const\", \"continue\", \"default\", \"do\", \"double\", \"else\", \"enum\",\n            \"extends\", \"final\", \"finally\", \"float\", \"for\", \"goto\", \"if\", \"implements\",\n            \"import\", \"instanceof\", \"int\", \"interface\", \"long\", \"native\", \"new\", \"package\",\n            \"private\", \"protected\", \"public\", \"return\", \"short\", \"static\", \"strictfp\",\n            \"super\", \"switch\", \"synchronized\", \"this\", \"throw\", \"throws\", \"transient\",\n            \"try\", \"void\", \"volatile\", \"while\", \"true\", \"false\", \"null\"\n        };\n        for (String w : words) {\n            RESERVED_WORDS.add(w);\n        }\n    }\n\n    public static boolean isReserved(String word) {\n        return RESERVED_WORDS.contains(word);\n    }\n\n    public static void main(String[] args) {\n        String[] candidates = {\"employeeId\", \"synchronized\", \"variable\", \"transient\", \"main\"};\n        for (String c : candidates) {\n            System.out.println(c + \" is reserved keyword: \" + isReserved(c));\n        }\n    }\n}",
+      "expectedOutput": "employeeId is reserved keyword: false\nsynchronized is reserved keyword: true\nvariable is reserved keyword: false\ntransient is reserved keyword: true\nmain is reserved keyword: false"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Snake_Case to CamelCase String Normalization",
+      "question": "Write a method that converts a database or configuration `snake_case` string into standard Java lower `camelCase`.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-08",
+      "id": "identifiers-naming-013",
+      "explanation": "Transforming database snake_case columns into Java camelCase properties is an essential step in data mapping layers and serialization frameworks. The algorithm iterates through the characters of the input string, tracking whether the previous character was an underscore ('_'). When an underscore is encountered, it is omitted, and an internal boolean flag is set. The character following the underscore is converted to uppercase via Character.toUpperCase(), while all other alphabetic characters are preserved in lowercase. StringBuilder accumulates the normalized characters, producing a formatted camelCase string with linear O(N) performance.",
+      "hints": [
+        "Iterate through the string using a char loop while tracking a boolean 'capitalizeNext' flag.",
+        "When an underscore ('_') is encountered, set capitalizeNext = true without appending the underscore.",
+        "Append the next character converted to uppercase, then reset the flag."
+      ],
+      "sampleCode": "public class Solution {\n    public static String snakeToCamel(String snake) {\n        if (snake == null || snake.isEmpty()) {\n            return \"\";\n        }\n        StringBuilder result = new StringBuilder();\n        boolean nextUpper = false;\n        for (int i = 0; i < snake.length(); i++) {\n            char ch = snake.charAt(i);\n            if (ch == '_') {\n                nextUpper = true;\n            } else {\n                if (nextUpper) {\n                    result.append(Character.toUpperCase(ch));\n                    nextUpper = false;\n                } else {\n                    result.append(Character.toLowerCase(ch));\n                }\n            }\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        String[] snakeCases = {\"first_name\", \"total_account_balance\", \"order_id\"};\n        for (String s : snakeCases) {\n            System.out.println(s + \" -> \" + snakeToCamel(s));\n        }\n    }\n}",
+      "expectedOutput": "first_name -> firstName\ntotal_account_balance -> totalAccountBalance\norder_id -> orderId"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "CamelCase to Snake_Case Formatting",
+      "question": "Write a method that converts a Java lower camelCase variable name into lower `snake_case` format by inserting underscores before uppercase word boundaries.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-09",
+      "id": "identifiers-naming-014",
+      "explanation": "Converting Java camelCase identifiers to lower snake_case is common when mapping Java entities to REST query parameters, Python microservice interfaces, or SQL column identifiers. The conversion inspects each character in the input string: if an uppercase character is encountered at an index greater than zero, an underscore ('_') is inserted prior to the character, and the character itself is converted to lowercase via Character.toLowerCase(). This preserves word boundaries while adhering to lower snake_case conventions. Using a StringBuilder guarantees efficient single-pass string construction.",
+      "hints": [
+        "Iterate across the string characters using charAt(i).",
+        "Detect uppercase word boundaries using Character.isUpperCase(ch).",
+        "Prepend an underscore if i > 0, then append Character.toLowerCase(ch)."
+      ],
+      "sampleCode": "public class Solution {\n    public static String camelToSnakeLower(String camel) {\n        if (camel == null || camel.isEmpty()) {\n            return \"\";\n        }\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < camel.length(); i++) {\n            char ch = camel.charAt(i);\n            if (Character.isUpperCase(ch) && i > 0) {\n                sb.append('_');\n            }\n            sb.append(Character.toLowerCase(ch));\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String[] camels = {\"customerAccountBalance\", \"itemPrice\", \"userAuthToken\"};\n        for (String c : camels) {\n            System.out.println(c + \" -> \" + camelToSnakeLower(c));\n        }\n    }\n}",
+      "expectedOutput": "customerAccountBalance -> customer_account_balance\nitemPrice -> item_price\nuserAuthToken -> user_auth_token"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Field and Method Identifier Namespace Independence",
+      "question": "Write a Java class declaring both a member field named `value` and a method named `value()` to demonstrate that variables and methods occupy separate lexical namespaces.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-10",
+      "id": "identifiers-naming-015",
+      "explanation": "In Java's formal grammar, variable identifiers and method identifiers occupy separate lexical namespaces (JLS §6.2). The compiler distinguishes between field references and method invocations by inspecting syntactic context: a method name is always immediately followed by an argument list enclosed in parentheses (e.g., value()), whereas a field reference evaluates to an expression or variable access without argument parentheses (e.g., this.value). Consequently, a class can declare an instance variable and a method with the exact same identifier without causing a compiler collision. Understanding namespace separation helps developers navigate idioms like accessor methods in records (where a record component x generates an accessor method x()).",
+      "hints": [
+        "Declare a private instance field: private int value = 42;.",
+        "Declare a public instance method: public int value() { return this.value; }.",
+        "Print both the field access and the method return value in the main entry point."
+      ],
+      "sampleCode": "public class Solution {\n    static class Container {\n        public int value = 100;\n\n        public int value() {\n            return this.value * 2;\n        }\n    }\n\n    public static void main(String[] args) {\n        Container container = new Container();\n        System.out.println(\"Field access container.value: \" + container.value);\n        System.out.println(\"Method invocation container.value(): \" + container.value());\n    }\n}",
+      "expectedOutput": "Field access container.value: 100\nMethod invocation container.value(): 200"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Java Reserved Word Detector",
+      "question": "Create a program containing a static lookup set of Java keywords. Given an input token, determine whether it cannot be used as an identifier because it is a reserved keyword or reserved literal (`true`, `false`, `null`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-06",
+      "id": "identifiers-naming-016",
+      "explanation": "A complete Java reserved word detector must identify all lexical tokens prohibited as identifier names by JLS §3.9. This includes the 50 standard keywords (such as boolean, byte, case, catch, class, const, default, do, double, else, enum, extends, final, finally, float, for, goto, if, implements, import, instanceof, int, interface, long, native, new, package, private, protected, public, return, short, static, strictfp, super, switch, synchronized, this, throw, throws, transient, try, void, volatile, while, and the lone underscore '_'), unused historical keywords (goto, const), and the three reserved literals (true, false, null). When building syntax analyzers or code generation engines, querying this set prevents generating invalid Java source code.",
+      "hints": [
+        "Populate a HashSet with standard keywords, reserved literals (true, false, null), and the lone underscore.",
+        "Normalize input by trimming whitespace before performing containment checks.",
+        "Provide a descriptive diagnostic reason explaining whether a token is a keyword or a reserved literal."
+      ],
+      "sampleCode": "import java.util.Collections;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> RESERVED_SET;\n\n    static {\n        Set<String> words = new HashSet<>();\n        Collections.addAll(words,\n            \"abstract\", \"assert\", \"boolean\", \"break\", \"byte\", \"case\", \"catch\", \"char\",\n            \"class\", \"const\", \"continue\", \"default\", \"do\", \"double\", \"else\", \"enum\",\n            \"extends\", \"final\", \"finally\", \"float\", \"for\", \"goto\", \"if\", \"implements\",\n            \"import\", \"instanceof\", \"int\", \"interface\", \"long\", \"native\", \"new\", \"package\",\n            \"private\", \"protected\", \"public\", \"return\", \"short\", \"static\", \"strictfp\",\n            \"super\", \"switch\", \"synchronized\", \"this\", \"throw\", \"throws\", \"transient\",\n            \"try\", \"void\", \"volatile\", \"while\", \"_\", \"true\", \"false\", \"null\"\n        );\n        RESERVED_SET = Collections.unmodifiableSet(words);\n    }\n\n    public static String classifyToken(String token) {\n        if (token.equals(\"true\") || token.equals(\"false\") || token.equals(\"null\")) {\n            return \"Reserved Literal (Illegal Identifier)\";\n        }\n        if (RESERVED_SET.contains(token)) {\n            return \"Reserved Keyword (Illegal Identifier)\";\n        }\n        return \"Valid Identifier\";\n    }\n\n    public static void main(String[] args) {\n        String[] tokens = {\"class\", \"null\", \"recordData\", \"goto\", \"validMethod\"};\n        for (String t : tokens) {\n            System.out.println(t + \": \" + classifyToken(t));\n        }\n    }\n}",
+      "expectedOutput": "class: Reserved Keyword (Illegal Identifier)\nnull: Reserved Literal (Illegal Identifier)\nrecordData: Valid Identifier\ngoto: Reserved Keyword (Illegal Identifier)\nvalidMethod: Valid Identifier"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Method vs Variable Convention Checker",
+      "question": "Write a program that takes code tokens and classifies them as valid method names, valid class names, valid constants, or invalid names based on Java standard naming rules.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-07",
+      "id": "identifiers-naming-017",
+      "explanation": "Static analysis linters rely on regular expressions and lexical rules to classify identifiers according to standard Java conventions. A valid class name follows PascalCase, beginning with an uppercase letter and containing alphanumeric characters without underscores. A method or local variable follows lower camelCase, starting with a lowercase letter. A constant follows UPPER_SNAKE_CASE, composed solely of uppercase letters, numbers, and underscores. Identifiers starting with digits, containing hyphens, or matching reserved keywords are invalid. Classifying code tokens against these patterns provides the foundation for style enforcement rules in continuous integration pipelines.",
+      "hints": [
+        "Check basic identifier legality first to reject invalid tokens.",
+        "Check for UPPER_SNAKE_CASE using the regex \"^[A-Z][A-Z0-9_]*$\" for constants.",
+        "Use Character.isUpperCase(ch) to classify PascalCase class names and Character.isLowerCase(ch) for camelCase methods."
+      ],
+      "sampleCode": "public class Solution {\n    public static String classifyConvention(String token) {\n        if (token == null || token.isEmpty() || Character.isDigit(token.charAt(0)) || token.contains(\"-\")) {\n            return \"INVALID_IDENTIFIER\";\n        }\n        if (token.matches(\"^[A-Z][A-Z0-9_]+$\")) {\n            return \"CONSTANT_CONVENTION (UPPER_SNAKE_CASE)\";\n        }\n        if (Character.isUpperCase(token.charAt(0)) && !token.contains(\"_\")) {\n            return \"CLASS_CONVENTION (PascalCase)\";\n        }\n        if (Character.isLowerCase(token.charAt(0)) && !token.contains(\"_\")) {\n            return \"METHOD_OR_VARIABLE_CONVENTION (camelCase)\";\n        }\n        return \"LEGAL_BUT_NON_CONVENTIONAL\";\n    }\n\n    public static void main(String[] args) {\n        String[] tokens = {\"OrderService\", \"calculateTax\", \"MAX_CAPACITY\", \"2ndPlace\", \"_internalRef\"};\n        for (String t : tokens) {\n            System.out.println(t + \" -> \" + classifyConvention(t));\n        }\n    }\n}",
+      "expectedOutput": "OrderService -> CLASS_CONVENTION (PascalCase)\ncalculateTax -> METHOD_OR_VARIABLE_CONVENTION (camelCase)\nMAX_CAPACITY -> CONSTANT_CONVENTION (UPPER_SNAKE_CASE)\n2ndPlace -> INVALID_IDENTIFIER\n_internalRef -> LEGAL_BUT_NON_CONVENTIONAL"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Contextual Keyword Filter",
+      "question": "Implement a logic check distinguishing contextual keywords in modern Java (e.g., `var`, `yield`, `record`, `sealed`, `permits`) from standard reserved keywords.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-08",
+      "id": "identifiers-naming-018",
+      "explanation": "To maintain backward compatibility with existing codebases, modern Java versions (Java 10+) introduced 'contextual keywords' (also known as restricted keywords or restricted identifiers) instead of adding new global reserved keywords. Tokens such as var, yield, record, sealed, permits, non-sealed, and module are not globally reserved. Their special semantic meaning applies only in specific syntactic contexts: for example, var is only interpreted as a type when declaring local variables, and record is only a keyword in type declarations. In other contexts, developers can legally declare a variable or method named var or record. Standard keywords (such as int, public, or class), by contrast, are prohibited everywhere.",
+      "hints": [
+        "Store standard reserved keywords and contextual keywords in separate sets.",
+        "Recognize contextual tokens like 'var', 'yield', 'record', 'sealed', and 'permits'.",
+        "Demonstrate that contextual keywords remain valid as variable identifiers in standard method bodies."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> CONTEXTUAL_KEYWORDS = new HashSet<>(Arrays.asList(\n        \"var\", \"yield\", \"record\", \"sealed\", \"permits\", \"non-sealed\", \"module\", \"open\", \"opens\", \"to\", \"with\"\n    ));\n\n    private static final Set<String> GLOBAL_KEYWORDS = new HashSet<>(Arrays.asList(\n        \"class\", \"interface\", \"public\", \"static\", \"void\", \"int\", \"for\", \"while\", \"return\"\n    ));\n\n    public static String inspectKeywordType(String token) {\n        if (GLOBAL_KEYWORDS.contains(token)) {\n            return \"Global Reserved Keyword (Prohibited everywhere)\";\n        }\n        if (CONTEXTUAL_KEYWORDS.contains(token)) {\n            return \"Contextual Keyword (Legal as variable name, restricted in declarations)\";\n        }\n        return \"Standard Identifier\";\n    }\n\n    public static void main(String[] args) {\n        // Demonstrating that contextual keywords are valid variable names\n        int var = 10;\n        String record = \"PatientRecord\";\n        System.out.println(\"Variable 'var' value: \" + var);\n        System.out.println(\"Variable 'record' value: \" + record);\n        System.out.println(\"var classification: \" + inspectKeywordType(\"var\"));\n        System.out.println(\"class classification: \" + inspectKeywordType(\"class\"));\n    }\n}",
+      "expectedOutput": "Variable 'var' value: 10\nVariable 'record' value: PatientRecord\nvar classification: Contextual Keyword (Legal as variable name, restricted in declarations)\nclass classification: Global Reserved Keyword (Prohibited everywhere)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Java Bean Getter/Setter Name Builder",
+      "question": "Write a program that takes field names and types (e.g., `boolean isEmployed`, `int age`) and generates the conventional JavaBeans getter and setter method names.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-09",
+      "id": "identifiers-naming-019",
+      "explanation": "The JavaBeans specification defines strict naming conventions for property accessor and mutator methods. For non-boolean properties (such as int age), the getter must be getAge() and the setter setAge(int age). For boolean properties, the convention varies based on the field prefix: primitive boolean properties typically use the is prefix for getters (e.g., isEmployed()) and setEmployed(boolean) for setters. If a boolean field already starts with the is prefix, the setter removes is before prepending set to prevent redundant names like setIsEmployed. Implementing this logic correctly is essential for serialization libraries and component frameworks (such as Jackson, Spring, and Hibernate).",
+      "hints": [
+        "For primitive boolean properties starting with 'is', generate the getter as the field name and strip 'is' before prefixing 'set'.",
+        "For standard properties, capitalize the first character and prefix with 'get' and 'set'.",
+        "Assemble the method signatures using clean string formatting."
+      ],
+      "sampleCode": "public class Solution {\n    public static void printBeanAccessors(String fieldName, String type) {\n        String getterName;\n        String setterName;\n        String capitalized;\n\n        if (\"boolean\".equals(type) && fieldName.startsWith(\"is\") && Character.isUpperCase(fieldName.charAt(2))) {\n            getterName = fieldName;\n            capitalized = fieldName.substring(2);\n            setterName = \"set\" + capitalized;\n        } else {\n            capitalized = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);\n            getterName = (\"boolean\".equals(type) ? \"is\" : \"get\") + capitalized;\n            setterName = \"set\" + capitalized;\n        }\n\n        System.out.println(\"Property: \" + fieldName + \" (\" + type + \")\");\n        System.out.println(\"  Getter: \" + getterName + \"()\");\n        System.out.println(\"  Setter: \" + setterName + \"(\" + type + \" \" + fieldName + \")\");\n    }\n\n    public static void main(String[] args) {\n        printBeanAccessors(\"age\", \"int\");\n        printBeanAccessors(\"isEmployed\", \"boolean\");\n    }\n}",
+      "expectedOutput": "Property: age (int)\n  Getter: getAge()\n  Setter: setAge(int age)\nProperty: isEmployed (boolean)\n  Getter: isEmployed()\n  Setter: setEmployed(boolean isEmployed)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Homoglyph/Confusable Identifier Detector",
+      "question": "Write a method to verify whether an identifier contains non-ASCII lookalike characters (such as Cyrillic 'а') that could introduce security vulnerabilities or visual spoofing into source code.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-10",
+      "id": "identifiers-naming-020",
+      "explanation": "Because Java permits arbitrary Unicode letters in identifiers, applications are vulnerable to homoglyph attacks (Trojan Source attacks). In these attacks, an attacker creates an identifier using characters from non-Latin scripts (such as Cyrillic Small Letter 'а', U+0430) that appear visually identical to standard ASCII Latin characters ('a', U+0061). To a human code reviewer, two variables appear identical, but the javac compiler treats them as two distinct symbols in the class constant pool, allowing malicious logic to bypass code reviews. Building a homoglyph detector involves inspecting character code points to flag identifiers that mix scripts or use non-ASCII code points in predominantly ASCII source trees.",
+      "hints": [
+        "Iterate across the identifier using codePointAt(i).",
+        "Check if any character exceeds the standard ASCII range (codePoint > 127).",
+        "Identify specific Unicode scripts using Character.UnicodeScript.of(codePoint)."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean containsConfusableGlyphs(String identifier) {\n        for (int i = 0; i < identifier.length(); i++) {\n            int cp = identifier.codePointAt(i);\n            // Flag non-ASCII characters acting as confusable Latin lookalikes\n            if (cp > 127) {\n                Character.UnicodeScript script = Character.UnicodeScript.of(cp);\n                if (script == Character.UnicodeScript.CYRILLIC || script == Character.UnicodeScript.GREEK) {\n                    return true;\n                }\n            }\n        }\n        return false;\n    }\n\n    public static void main(String[] args) {\n        String standardVar = \"account\";\n        // 'а' in Cyrillic (U+0430) instead of ASCII 'a' (U+0061)\n        String spoofedVar = \"\\u0430ccount\";\n\n        System.out.println(\"Testing '\" + standardVar + \"': homoglyph detected = \" + containsConfusableGlyphs(standardVar));\n        System.out.println(\"Testing '\" + spoofedVar + \"': homoglyph detected = \" + containsConfusableGlyphs(spoofedVar));\n    }\n}",
+      "expectedOutput": "Testing 'account': homoglyph detected = false\nTesting 'аccount': homoglyph detected = true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Lexical Identifier Diagnostics with Specific Failure Causes",
+      "question": "Validate candidate identifiers against Java lexical rules and print a descriptive failure diagnostic for each invalid case (e.g., starts with digit, contains hyphens or spaces, matches reserved keywords or literals).",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-11",
+      "id": "identifiers-naming-021",
+      "explanation": "Lexical analyzers in compilers do not merely return boolean pass/fail flags; they generate actionable diagnostic errors specifying why a token failed validation. Building a comprehensive diagnostic analyzer requires ordering validation checks systematically: first, check for null or zero length; second, check against reserved keywords and reserved literals; third, inspect the initial character with Character.isJavaIdentifierStart(); and finally, inspect each subsequent character with Character.isJavaIdentifierPart(). Categorizing the failure (such as distinguishing spaces, punctuation, or keyword collisions) enables developer tools and language servers (LSP) to provide targeted error reporting.",
+      "hints": [
+        "Check for reserved keyword collisions using a pre-populated Set.",
+        "Check the first character for digits or illegal symbols to report start-position violations.",
+        "Iterate through subsequent characters to identify spaces, hyphens, or illegal punctuation."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> RESERVED = new HashSet<>(Arrays.asList(\n        \"class\", \"public\", \"static\", \"void\", \"int\", \"while\", \"for\", \"true\", \"false\", \"null\", \"_\"\n    ));\n\n    public static String validateWithDiagnostics(String token) {\n        if (token == null || token.isEmpty()) {\n            return \"INVALID: Token is null or empty\";\n        }\n        if (RESERVED.contains(token)) {\n            return \"INVALID: Token matches reserved keyword or literal\";\n        }\n        char first = token.charAt(0);\n        if (Character.isDigit(first)) {\n            return \"INVALID: Cannot begin with numeric digit\";\n        }\n        if (!Character.isJavaIdentifierStart(first)) {\n            return \"INVALID: Illegal start character '\" + first + \"'\";\n        }\n        for (int i = 1; i < token.length(); i++) {\n            char ch = token.charAt(i);\n            if (Character.isWhitespace(ch)) {\n                return \"INVALID: Contains illegal whitespace at index \" + i;\n            }\n            if (ch == '-') {\n                return \"INVALID: Contains illegal hyphen at index \" + i;\n            }\n            if (!Character.isJavaIdentifierPart(ch)) {\n                return \"INVALID: Illegal character '\" + ch + \"' at index \" + i;\n            }\n        }\n        return \"VALID\";\n    }\n\n    public static void main(String[] args) {\n        String[] candidates = {\"3items\", \"user-name\", \"class\", \"total price\", \"validVar$\"};\n        for (String c : candidates) {\n            System.out.println(c + \" -> \" + validateWithDiagnostics(c));\n        }\n    }\n}",
+      "expectedOutput": "3items -> INVALID: Cannot begin with numeric digit\nuser-name -> INVALID: Contains illegal hyphen at index 4\nclass -> INVALID: Token matches reserved keyword or literal\ntotal price -> INVALID: Contains illegal whitespace at index 5\nvalidVar$ -> VALID"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Universal Multi-Convention Case Converter",
+      "question": "Implement an identifier case transformation engine that takes an arbitrary phrase and converts it into five major conventions: PascalCase, camelCase, snake_case, kebab-case, and UPPER_SNAKE_CASE.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-12",
+      "id": "identifiers-naming-022",
+      "explanation": "Software engineering toolchains require converting identifiers across different naming conventions when coordinating between Java classes, JSON schemas, SQL tables, and URL routes. Building a multi-case converter involves a two-phase process: lexical decomposition followed by contextual reassembly. First, the input string is tokenized into clean lowercase words by splitting on whitespace, underscores, hyphens, and camelCase boundaries. Second, the normalized word tokens are joined using convention-specific formatting rules: capitalizing each token for PascalCase, capitalizing all but the first token for camelCase, joining with underscores for snake_case, joining with hyphens for kebab-case, and uppercase joining for UPPER_SNAKE_CASE.",
+      "hints": [
+        "Normalize the input by splitting words along whitespace, hyphens, underscores, and camelCase transitions.",
+        "Store the extracted tokens as a clean array of lowercase strings.",
+        "Reassemble tokens using StringBuilder to construct each target case convention."
+      ],
+      "sampleCode": "public class Solution {\n    public static void convertAllCases(String phrase) {\n        String[] tokens = phrase.trim().split(\"[\\\\s_-]+\");\n        for (int i = 0; i < tokens.length; i++) {\n            tokens[i] = tokens[i].toLowerCase();\n        }\n\n        // PascalCase\n        StringBuilder pascal = new StringBuilder();\n        for (String t : tokens) {\n            if (!t.isEmpty()) pascal.append(Character.toUpperCase(t.charAt(0))).append(t.substring(1));\n        }\n\n        // camelCase\n        StringBuilder camel = new StringBuilder(tokens[0]);\n        for (int i = 1; i < tokens.length; i++) {\n            if (!tokens[i].isEmpty()) {\n                camel.append(Character.toUpperCase(tokens[i].charAt(0))).append(tokens[i].substring(1));\n            }\n        }\n\n        // snake_case, kebab-case, UPPER_SNAKE_CASE\n        String snake = String.join(\"_\", tokens);\n        String kebab = String.join(\"-\", tokens);\n        String upperSnake = snake.toUpperCase();\n\n        System.out.println(\"PascalCase: \" + pascal);\n        System.out.println(\"camelCase: \" + camel);\n        System.out.println(\"snake_case: \" + snake);\n        System.out.println(\"kebab-case: \" + kebab);\n        System.out.println(\"UPPER_SNAKE_CASE: \" + upperSnake);\n    }\n\n    public static void main(String[] args) {\n        convertAllCases(\"user profile settings\");\n    }\n}",
+      "expectedOutput": "PascalCase: UserProfileSettings\ncamelCase: userProfileSettings\nsnake_case: user_profile_settings\nkebab-case: user-profile-settings\nUPPER_SNAKE_CASE: USER_PROFILE_SETTINGS"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Arbitrary String to Valid Java Identifier Compiler",
+      "question": "Write a compiler utility method that transforms an arbitrary string into a legal Java identifier: replace illegal characters with underscores, prepend an underscore if it begins with a digit, and append an underscore suffix if it collides with a reserved keyword.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-13",
+      "id": "identifiers-naming-023",
+      "explanation": "Code generation systems (such as OpenAPI code generators or annotation processors) often consume external schemas with names that violate Java identifier specifications. Converting an arbitrary string into a legal identifier requires three sequential transformation phases. First, check the initial character: if it is a digit or invalid identifier start character, prepend an underscore. Second, iterate across all subsequent characters, replacing any character that returns false from Character.isJavaIdentifierPart() with an underscore. Third, evaluate the resulting string against the set of Java reserved keywords and literals; if a collision occurs, append an underscore suffix (e.g., class becomes class_). This approach guarantees a deterministically valid identifier.",
+      "hints": [
+        "Prepend '_' if the initial character is a digit or not a valid Java identifier start character.",
+        "Replace invalid middle characters with '_' using Character.isJavaIdentifierPart().",
+        "Check against a reserved keyword set and append an underscore suffix upon collision."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(\n        \"class\", \"public\", \"default\", \"void\", \"int\", \"switch\", \"true\", \"false\", \"null\", \"_\"\n    ));\n\n    public static String toValidIdentifier(String raw) {\n        if (raw == null || raw.isEmpty()) {\n            return \"_val\";\n        }\n        StringBuilder sb = new StringBuilder();\n        char first = raw.charAt(0);\n        if (Character.isDigit(first)) {\n            sb.append('_').append(first);\n        } else if (Character.isJavaIdentifierStart(first)) {\n            sb.append(first);\n        } else {\n            sb.append('_');\n        }\n        for (int i = 1; i < raw.length(); i++) {\n            char ch = raw.charAt(i);\n            sb.append(Character.isJavaIdentifierPart(ch) ? ch : '_');\n        }\n        String candidate = sb.toString();\n        if (KEYWORDS.contains(candidate)) {\n            candidate = candidate + \"_\";\n        }\n        return candidate;\n    }\n\n    public static void main(String[] args) {\n        String[] tests = {\"class\", \"2ndPlace\", \"order-total\", \"default\"};\n        for (String t : tests) {\n            System.out.println(\"'\" + t + \"' -> '\" + toValidIdentifier(t) + \"'\");\n        }\n    }\n}",
+      "expectedOutput": "'class' -> 'class_'\n'2ndPlace' -> '_2ndPlace'\n'order-total' -> 'order_total'\n'default' -> 'default_'"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Field Shadowing and Explicit This Resolution",
+      "question": "Demonstrate variable shadowing in Java by creating a class where a method parameter shares the exact identifier name with an instance field, resolving the collision using the `this` reference.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-14",
+      "id": "identifiers-naming-024",
+      "explanation": "In Java's scoping hierarchy (JLS §6.4.1), a local variable or method parameter declared within a method block shadows an instance field of the same name declared in the enclosing class. When an unqualified identifier is referenced, the compiler resolves it to the innermost scope, binding to the local parameter and making the instance field inaccessible via simple name resolution. To access the shadowed instance field, the code must qualify the identifier using the this keyword (e.g., this.value). This pattern is standard practice in constructors and setter methods, where parameter names match the instance fields they initialize.",
+      "hints": [
+        "Declare a private instance field: private int value = 10;.",
+        "Implement a method updateValue(int value) that accepts a parameter with the identical identifier name.",
+        "Differentiate assignment using this.value = value; and print both references to observe scoping."
+      ],
+      "sampleCode": "public class Solution {\n    static class ShadowDemo {\n        private int value = 10;\n\n        public void demonstrateShadowing(int value) {\n            System.out.println(\"Local parameter 'value': \" + value);\n            System.out.println(\"Instance field 'this.value': \" + this.value);\n            this.value = value;\n            System.out.println(\"Updated instance field 'this.value': \" + this.value);\n        }\n    }\n\n    public static void main(String[] args) {\n        ShadowDemo demo = new ShadowDemo();\n        demo.demonstrateShadowing(99);\n    }\n}",
+      "expectedOutput": "Local parameter 'value': 99\nInstance field 'this.value': 10\nUpdated instance field 'this.value': 99"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Contextual Identifiers and Restricted Keywords Demonstration",
+      "question": "Declare variables named `var`, `record`, and `sealed` in a standard Java method body to demonstrate that modern Java contextual keywords remain legal as local variable identifiers.",
+      "source": "java_coding_practice.json",
+      "source_id": "identifiers-naming-15",
+      "id": "identifiers-naming-025",
+      "explanation": "Modern Java releases introduce new language features without breaking backward compatibility by designating new syntax words as 'contextual keywords' (or restricted type names) rather than reserved keywords. While classical keywords like class, for, and return are reserved everywhere, contextual keywords such as var (Java 10), record (Java 14), and sealed (Java 17) retain their keyword semantics only in specific syntactic contexts. In local variable declarations, var, record, and sealed are legal identifier names. However, var cannot be used as a class or interface name because the compiler interprets it as a type inference directive in type positions.",
+      "hints": [
+        "Declare an int named 'var': int var = 100;.",
+        "Declare a String named 'record': String record = \"Medical Data\";.",
+        "Declare a boolean named 'sealed': boolean sealed = true; and print their values."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Demonstrating that contextual keywords remain legal variable identifiers\n        int var = 100;\n        String record = \"TransactionRecord\";\n        boolean sealed = true;\n\n        System.out.println(\"Contextual identifier 'var': \" + var);\n        System.out.println(\"Contextual identifier 'record': \" + record);\n        System.out.println(\"Contextual identifier 'sealed': \" + sealed);\n        System.out.println(\"Compiler status: Successfully resolved contextual identifiers without collision.\");\n    }\n}",
+      "expectedOutput": "Contextual identifier 'var': 100\nContextual identifier 'record': TransactionRecord\nContextual identifier 'sealed': true\nCompiler status: Successfully resolved contextual identifiers without collision."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Java Lexical Identifier Extractor",
+      "question": "Implement a lexical token scanner that processes a multiline Java code snippet string, strips line comments, block comments, and string literals, and returns all unique variable and method identifiers.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-11",
+      "id": "identifiers-naming-026",
+      "explanation": "Lexical extraction is the initial phase performed by compilers, linters, and indexers. Extracting identifiers from raw source code requires removing comments and literals to prevent false positives. First, a lexical preprocessor eliminates single-line comments (//...), multi-line comments (/*...*/), and quoted string/character literals (\"...\", '.'). Next, the remaining text is tokenized using non-identifier character delimiters. Finally, each token is validated: it must satisfy Character.isJavaIdentifierStart() and Character.isJavaIdentifierPart(), and must not match any Java reserved keyword. Storing matching tokens in a TreeSet produces a sorted set of unique identifiers.",
+      "hints": [
+        "Strip block comments with regex \"/\\\\*[^*]*\\\\*+(?:[^/*][^*]*\\\\*+)*/\" and line comments with \"//.*\".",
+        "Strip string literals with regex \"\\\"(?:\\\\\\\\.|[^\\\\\\\"])*\\\"\".",
+        "Filter extracted tokens using Character checks and a reserved keywords exclusion set."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.Set;\nimport java.util.TreeSet;\n\npublic class Solution {\n    private static final Set<String> KEYWORDS = new HashSet<>(Arrays.asList(\n        \"public\", \"class\", \"static\", \"void\", \"main\", \"int\", \"String\", \"return\", \"if\", \"new\"\n    ));\n\n    public static Set<String> extractIdentifiers(String code) {\n        // 1. Strip comments and string literals\n        String clean = code.replaceAll(\"//.*\", \"\")\n                           .replaceAll(\"/\\\\*.*?\\\\*/\", \"\")\n                           .replaceAll(\"\\\"([^\\\\\\\"\\\\]|\\\\\\\\.)*\\\"\", \"\");\n\n        // 2. Tokenize by non-identifier characters\n        String[] tokens = clean.split(\"[^a-zA-Z0-9_$]+\");\n        Set<String> identifiers = new TreeSet<>();\n        for (String t : tokens) {\n            if (!t.isEmpty() && !KEYWORDS.contains(t) && Character.isJavaIdentifierStart(t.charAt(0))) {\n                identifiers.add(t);\n            }\n        }\n        return identifiers;\n    }\n\n    public static void main(String[] args) {\n        String snippet = \"public class Demo {\\n\" +\n                         \"    // Comment with fakeVar\\n\" +\n                         \"    int score = 42;\\n\" +\n                         \"    String title = \\\"Sample text\\\";\\n\" +\n                         \"    void display() { int count = 10; }\\n\" +\n                         \"}\";\n        Set<String> result = extractIdentifiers(snippet);\n        System.out.println(\"Extracted Identifiers: \" + result);\n    }\n}",
+      "expectedOutput": "Extracted Identifiers: [Demo, count, display, score, title]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Automated Code Style Linter",
+      "question": "Write a static analysis linter that scans raw Java source lines and flags variable and method identifiers that violate camelCase or UPPER_SNAKE_CASE constant conventions, reporting the corresponding line numbers.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-12",
+      "id": "identifiers-naming-027",
+      "explanation": "Static analysis tools like Checkstyle, PMD, and SonarQube inspect abstract syntax trees (ASTs) or token streams to enforce architectural style conventions. A rule-based linter scans source lines, identifies variable declarations, and matches identifier names against naming patterns. Standard fields and local variables must match lower camelCase (^[a-z][a-zA-Z0-9]*$), while static final declarations must adhere to UPPER_SNAKE_CASE (^[A-Z][A-Z0-9_]*$). Flagging violations with their exact source line numbers provides actionable feedback in continuous integration (CI) workflows.",
+      "hints": [
+        "Iterate over lines maintaining a 1-based line counter.",
+        "Check whether lines containing 'static final' follow UPPER_SNAKE_CASE.",
+        "Check standard variable declarations for violations of lower camelCase (e.g., snake_case or PascalCase)."
+      ],
+      "sampleCode": "public class Solution {\n    public static void lintSource(String[] lines) {\n        for (int i = 0; i < lines.length; i++) {\n            String line = lines[i].trim();\n            int lineNum = i + 1;\n            if (line.contains(\"static final\")) {\n                // Check for non-UPPER_SNAKE_CASE\n                String[] parts = line.split(\"\\\\s+\");\n                for (int p = 0; p < parts.length; p++) {\n                    if (parts[p].equals(\"final\") && p + 2 < parts.length) {\n                        String ident = parts[p + 2].replace(\";\", \"\").split(\"=\")[0].trim();\n                        if (!ident.matches(\"^[A-Z][A-Z0-9_]*$\")) {\n                            System.out.println(\"Line \" + lineNum + \": Constant '\" + ident + \"' should be UPPER_SNAKE_CASE\");\n                        }\n                    }\n                }\n            } else if (line.matches(\".*\\\\b(int|String|double)\\\\s+([a-zA-Z0-9_]+).*\")) {\n                String ident = line.replaceAll(\".*\\\\b(int|String|double)\\\\s+([a-zA-Z0-9_]+).*\", \"$2\");\n                if (!ident.matches(\"^[a-z][a-zA-Z0-9]*$\")) {\n                    System.out.println(\"Line \" + lineNum + \": Variable '\" + ident + \"' should be lower camelCase\");\n                }\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        String[] sourceCode = {\n            \"int user_age = 25;\",\n            \"static final int maxItems = 100;\",\n            \"String ValidName = \\\"John\\\";\",\n            \"double balance = 50.0;\"\n        };\n        lintSource(sourceCode);\n    }\n}",
+      "expectedOutput": "Line 1: Variable 'user_age' should be lower camelCase\nLine 2: Constant 'maxItems' should be UPPER_SNAKE_CASE\nLine 3: Variable 'ValidName' should be lower camelCase"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Safe Variable Renaming Engine",
+      "question": "Implement a code-refactoring utility that replaces occurrences of a target variable identifier with a new name, ensuring the new name does not conflict with reserved keywords or introduce local identifier collisions.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-13",
+      "id": "identifiers-naming-028",
+      "explanation": "Automated code refactoring (such as renaming a symbol in an IDE) requires semantic validation before applying text replacements. Replacing a variable name using naive string substitution can introduce severe compiler errors or semantic bugs. The renaming engine must enforce three preconditions: first, the candidate identifier must be syntactically valid and cannot match any Java reserved keyword (e.g., class, int); second, the candidate name must not already exist in the target scope, which would shadow or collide with an existing declaration; and third, substitution must respect token word boundaries (\\b) so that occurrences inside longer identifiers are preserved.",
+      "hints": [
+        "Verify candidate legality using Character checks and reserved keyword exclusion.",
+        "Verify that the candidate name does not already exist within the code block.",
+        "Perform replacement using regex word boundaries: \"\\\\b\" + oldName + \"\\\\b\"."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    private static final Set<String> RESERVED = new HashSet<>(Arrays.asList(\n        \"class\", \"int\", \"void\", \"return\", \"if\", \"for\", \"static\", \"public\"\n    ));\n\n    public static String safeRename(String code, String oldVar, String newVar) {\n        if (RESERVED.contains(newVar) || !Character.isJavaIdentifierStart(newVar.charAt(0))) {\n            throw new IllegalArgumentException(\"Rename rejected: '\" + newVar + \"' is a reserved word or illegal identifier.\");\n        }\n        // Check collision\n        if (code.matches(\".*\\\\b\" + newVar + \"\\\\b.*\")) {\n            throw new IllegalStateException(\"Rename rejected: Variable '\" + newVar + \"' already exists in scope.\");\n        }\n        return code.replaceAll(\"\\\\b\" + oldVar + \"\\\\b\", newVar);\n    }\n\n    public static void main(String[] args) {\n        String snippet = \"int score = 10; score += 5; System.out.println(score);\";\n        System.out.println(\"Original: \" + snippet);\n        String refactored = safeRename(snippet, \"score\", \"points\");\n        System.out.println(\"Refactored: \" + refactored);\n    }\n}",
+      "expectedOutput": "Original: int score = 10; score += 5; System.out.println(score);\nRefactored: int points = 10; points += 5; System.out.println(points);"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Grammar Token Identifier Resolver",
+      "question": "Build a state machine that parses a stream of Java code tokens to classify whether an identifier appears in a class declaration, method declaration, or field declaration context.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-14",
+      "id": "identifiers-naming-029",
+      "explanation": "Contextual classification of identifiers is a key responsibility of compiler parsers during abstract syntax tree (AST) generation. Identifying whether a token functions as a class name, method name, or field name cannot be determined from the token alone; it depends on the preceding and following tokens. By tracking parser state transitions across the token stream, the parser resolves ambiguities: a token immediately following the class keyword is classified as a class identifier; a token preceded by a type and followed by an opening parenthesis '(' is classified as a method declaration; and a token preceded by a type and followed by an assignment or semicolon is classified as a field identifier.",
+      "hints": [
+        "Track parser states: EXPECTING_CLASS_NAME, AFTER_TYPE, IN_METHOD, IN_FIELD.",
+        "Transition to class context when observing the 'class' keyword token.",
+        "Inspect lookahead tokens: '(' indicates a method declaration, while '=' or ';' indicates a field."
+      ],
+      "sampleCode": "public class Solution {\n    public static void parseTokenContexts(String[] tokens) {\n        for (int i = 0; i < tokens.length; i++) {\n            String current = tokens[i];\n            if (current.equals(\"class\") && i + 1 < tokens.length) {\n                System.out.println(\"Class Identifier: \" + tokens[++i]);\n            } else if ((current.equals(\"int\") || current.equals(\"void\") || current.equals(\"String\")) && i + 1 < tokens.length) {\n                String nextToken = tokens[i + 1];\n                if (i + 2 < tokens.length && tokens[i + 2].equals(\"(\")) {\n                    System.out.println(\"Method Identifier: \" + nextToken);\n                    i += 2;\n                } else if (i + 2 < tokens.length && (tokens[i + 2].equals(\"=\") || tokens[i + 2].equals(\";\"))) {\n                    System.out.println(\"Field Identifier: \" + nextToken);\n                    i += 1;\n                }\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        String[] tokens = {\"public\", \"class\", \"OrderService\", \"{\", \"int\", \"orderCount\", \";\", \"void\", \"processOrder\", \"(\", \")\", \"}\"};\n        parseTokenContexts(tokens);\n    }\n}",
+      "expectedOutput": "Class Identifier: OrderService\nField Identifier: orderCount\nMethod Identifier: processOrder"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Legal Identifier Obfuscation Engine",
+      "question": "Implement an identifier obfuscator that replaces meaningful variable names with valid but confusing legal Java identifiers (using alternating combinations of `_` and `$`) while preserving program semantics.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "IDN-15",
+      "id": "identifiers-naming-030",
+      "explanation": "Bytecode and source code obfuscators (such as ProGuard) transform clear identifiers into confusing but syntactically legal identifiers to protect intellectual property. Because both the underscore character ('_') and the dollar sign ('$') are valid identifier start and part characters under JLS §3.8, alternating sequences of these symbols (e.g., $$, _$, $_$, $$_) compile cleanly while hindering human comprehension. The obfuscation engine maps unique application identifiers to generated symbol combinations and applies word-boundary substitutions across the source snippet, preserving variable references and program semantics.",
+      "hints": [
+        "Maintain a Map<String, String> to assign consistent obfuscated replacement names.",
+        "Generate names using permutations of '$' and '_' (e.g., '$', '$$', '_$', '$_$').",
+        "Substitute symbols using regex word boundaries (\\b) to avoid replacing partial tokens."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String originalSnippet = \"int totalAmount = 100; int bonus = 20; int finalScore = totalAmount + bonus;\";\n\n        Map<String, String> obfuscationMap = new HashMap<>();\n        obfuscationMap.put(\"totalAmount\", \"$_$\");\n        obfuscationMap.put(\"bonus\", \"$$\");\n        obfuscationMap.put(\"finalScore\", \"_$$\");\n\n        String obfuscated = originalSnippet;\n        for (Map.Entry<String, String> entry : obfuscationMap.entrySet()) {\n            obfuscated = obfuscated.replaceAll(\"\\\\b\" + entry.getKey() + \"\\\\b\", entry.getValue());\n        }\n\n        System.out.println(\"Original Source:\\n\" + originalSnippet);\n        System.out.println(\"Obfuscated Source:\\n\" + obfuscated);\n        System.out.println(\"Verification: All generated symbols are legal Java identifiers.\");\n    }\n}",
+      "expectedOutput": "Original Source:\nint totalAmount = 100; int bonus = 20; int finalScore = totalAmount + bonus;\nObfuscated Source:\nint $_$ = 100; int $$ = 20; int _$$ = $_$ + $$;\nVerification: All generated symbols are legal Java identifiers."
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

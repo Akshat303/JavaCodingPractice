@@ -1,0 +1,461 @@
+{
+  "section": "Object-oriented Java",
+  "slug": "abstraction",
+  "topic": "Abstraction and abstract classes",
+  "page": 124,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Abstract Shape Area Calculation",
+      "question": "Write an abstract class Shape with an abstract method area(), and create concrete subclasses Circle and Rectangle that implement it.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-01",
+      "id": "abstraction-001",
+      "explanation": "An abstract class serves as an incomplete blueprint that cannot be instantiated directly with the new operator. By declaring an abstract method like double area(), the base class defines an interface contract while omitting implementation details. Subclasses extending Shape must provide concrete method bodies for area() by implementing formulas such as pi*r*r and width*height. At runtime, calling area() on a Shape reference relies on dynamic method dispatch to execute the subclass implementation.",
+      "hints": [
+        "Declare the base class using the abstract keyword: public abstract class Shape.",
+        "Define the method without a body: public abstract double area();.",
+        "Override area() in Circle and Rectangle with appropriate geometric formulas."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Shape {\n        public abstract double area();\n    }\n\n    static class Circle extends Shape {\n        private double radius;\n        public Circle(double radius) { this.radius = radius; }\n        @Override\n        public double area() { return Math.PI * radius * radius; }\n    }\n\n    static class Rectangle extends Shape {\n        private double width, height;\n        public Rectangle(double w, double h) { this.width = w; this.height = h; }\n        @Override\n        public double area() { return width * height; }\n    }\n\n    public static void main(String[] args) {\n        Shape c = new Circle(5.0);\n        Shape r = new Rectangle(4.0, 5.0);\n        System.out.printf(\"Circle area: %.2f%n\", c.area());\n        System.out.println(\"Rectangle area: \" + r.area());\n    }\n}",
+      "expectedOutput": "Circle area: 78.54\nRectangle area: 20.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Drawable Interface Implementation",
+      "question": "Write an interface Drawable with a draw() method and implement it across two separate classes, Circle and Rectangle.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-02",
+      "id": "abstraction-002",
+      "explanation": "An interface in Java establishes a behavioral contract consisting of abstract methods that implementing classes must satisfy. Unlike class inheritance, a class can implement multiple interfaces, enabling flexible polymorphic behavior. Methods in an interface are implicitly public and abstract. When Circle and Rectangle declare implements Drawable, both agree to provide public implementations of draw(). Invoking draw() through a Drawable reference dispatches to the corresponding concrete class implementation via the invokeinterface bytecode instruction.",
+      "hints": [
+        "Declare the interface with void draw(); without method bodies.",
+        "Use the implements keyword in Circle and Rectangle.",
+        "Ensure the draw() implementation method is marked with public visibility."
+      ],
+      "sampleCode": "public class Solution {\n    interface Drawable {\n        void draw();\n    }\n\n    static class Circle implements Drawable {\n        @Override\n        public void draw() {\n            System.out.println(\"Circle is drawing\");\n        }\n    }\n\n    static class Rectangle implements Drawable {\n        @Override\n        public void draw() {\n            System.out.println(\"Rectangle is drawing\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Drawable d1 = new Circle();\n        Drawable d2 = new Rectangle();\n        d1.draw();\n        d2.draw();\n    }\n}",
+      "expectedOutput": "Circle is drawing\nRectangle is drawing"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Abstract and Concrete Method Hybrid",
+      "question": "Write an abstract class containing both an abstract method and a concrete method, and invoke both methods through a subclass instance.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-03",
+      "id": "abstraction-003",
+      "explanation": "Abstract classes allow mixing fully implemented concrete methods with unpopulated abstract methods. Concrete methods provide shared, reusable functionality across all subclasses, preventing code duplication. Abstract methods define extension points where each subclass must provide specialized logic. When a subclass extends the abstract class, it inherits the concrete methods directly and implements the abstract ones. Calling both demonstrates how abstract base classes combine shared behavior with custom extension points.",
+      "hints": [
+        "Include at least one method with a body and one method ending with a semicolon marked abstract.",
+        "Extend the abstract class in a subclass and implement the abstract method.",
+        "Call both inherited concrete and overridden abstract methods on the subclass instance."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Worker {\n        public abstract void performTask();\n        public void logCompletion() {\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    static class Developer extends Worker {\n        @Override\n        public void performTask() {\n            System.out.println(\"Implementation method executed\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Worker w = new Developer();\n        w.performTask();\n        w.logCompletion();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Interface Default Method Overriding",
+      "question": "Write an interface with a default method, implement it in two classes, and override the default method in one implementation.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-04",
+      "id": "abstraction-004",
+      "explanation": "Default methods, introduced in Java 8, permit interfaces to define method implementations using the default modifier. This enables interface evolution by allowing new methods to be added to existing interfaces without breaking backward compatibility for implementing classes. Implementing classes can inherit the default implementation directly or override it with customized behavior. When overridden, the subclass method replaces the interface's default fallback logic during dynamic dispatch.",
+      "hints": [
+        "Declare a method using the default keyword inside the interface.",
+        "Provide a concrete block body for the default method.",
+        "In one class, inherit the default method as-is; in the second class, override it with custom logic."
+      ],
+      "sampleCode": "public class Solution {\n    interface Service {\n        default void execute() {\n            System.out.println(\"Parent method called\");\n        }\n    }\n\n    static class DefaultService implements Service {}\n\n    static class CustomService implements Service {\n        @Override\n        public void execute() {\n            System.out.println(\"Child method called\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Service s1 = new DefaultService();\n        Service s2 = new CustomService();\n        s1.execute();\n        s2.execute();\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Abstract Animal Class with Template Call",
+      "question": "Write an abstract class Animal with an abstract sound() method and a concrete describe() method that invokes sound().",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-05",
+      "id": "abstraction-005",
+      "explanation": "Concrete methods inside an abstract class can invoke abstract methods declared within the same class. During compilation, the compiler permits calls to abstract methods because it guarantees that any instantiable subclass will provide a concrete implementation. When describe() runs on a Dog instance, calling sound() resolves via dynamic method dispatch to Dog.sound(). This pattern demonstrates how abstract classes can coordinate workflows that incorporate specialized subclass logic.",
+      "hints": [
+        "Declare public abstract String sound(); in the Animal class.",
+        "Implement public void describe() to format and print the result of sound().",
+        "Override sound() in a subclass to supply the specific text."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Animal {\n        public abstract String sound();\n        public void describe() {\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: \" + sound());\n        }\n    }\n\n    static class Dog extends Animal {\n        @Override\n        public String sound() {\n            return \"Success\";\n        }\n    }\n\n    public static void main(String[] args) {\n        Animal pet = new Dog();\n        pet.describe();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Concrete Formatting Wrapper in Abstract Class",
+      "question": "Add a concrete method void display() to an abstract class that formats and prints the output of an abstract calculation method implemented by a subclass.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-02",
+      "id": "abstraction-006",
+      "explanation": "Centralizing output presentation in a base class while delegating calculation steps to subclasses keeps code organized and maintainable. In the abstract class Measurement, display() formats and outputs values returned by the abstract computeMetric() method. Subclasses implement the calculation logic without needing to duplicate string formatting or printing logic. This separation keeps presentation rules consistent across all measurement implementations.",
+      "hints": [
+        "Define public abstract int computeMetric(); in the abstract class.",
+        "Define public void display() in the abstract class to print formatted output using computeMetric().",
+        "Extend with a concrete subclass that implements computeMetric()."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Measurement {\n        public abstract int computeMetric();\n        public void display() {\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: \" + (computeMetric() == 10 ? \"Success\" : \"Failure\"));\n        }\n    }\n\n    static class SensorData extends Measurement {\n        @Override\n        public int computeMetric() {\n            return 10;\n        }\n    }\n\n    public static void main(String[] args) {\n        Measurement m = new SensorData();\n        m.display();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Abstract Method Contract Fulfillment",
+      "question": "Demonstrate that a non-abstract subclass must implement all inherited abstract methods from its base class to compile successfully.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-04",
+      "id": "abstraction-007",
+      "explanation": "Abstract methods define required contracts that concrete subclasses must satisfy. If a subclass extends an abstract class but fails to implement even one inherited abstract method, the compiler generates an error: 'Class is not abstract and does not override abstract method'. To compile, the subclass must either provide concrete method bodies for all abstract methods or be declared abstract itself. Providing concrete implementations for all abstract methods fulfills the contract and allows the class to be instantiated.",
+      "hints": [
+        "Declare two abstract methods in the base class: stepA() and stepB().",
+        "Override both methods in the concrete subclass with working implementations.",
+        "Note that leaving either method unimplemented triggers a compile-time error."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Pipeline {\n        public abstract void stepA();\n        public abstract void stepB();\n    }\n\n    static class ConcretePipeline extends Pipeline {\n        @Override\n        public void stepA() {\n            System.out.println(\"Implementation method executed\");\n        }\n\n        @Override\n        public void stepB() {\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Pipeline pipe = new ConcretePipeline();\n        pipe.stepA();\n        pipe.stepB();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Abstract Class Reference Polymorphism",
+      "question": "Declare a variable of an abstract class type, assign a concrete subclass instance to it, and demonstrate polymorphic method dispatch.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-05",
+      "id": "abstraction-008",
+      "explanation": "Although abstract classes cannot be instantiated with new, they serve as valid reference types that can hold references to instances of any concrete subclass. In BaseService service = new CustomService(), the variable type is BaseService, but the runtime object on the heap is CustomService. When an overridden method is called, the JVM uses dynamic method dispatch (invokevirtual) to invoke the subclass implementation. This allows programs to work with generic base types while executing specialized subclass behavior at runtime.",
+      "hints": [
+        "Declare the reference variable with the abstract class type.",
+        "Instantiate the concrete subclass using new ConcreteSubclass().",
+        "Invoke the overridden method to observe dynamic runtime dispatch."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class BaseService {\n        public abstract void execute();\n    }\n\n    static class StandardService extends BaseService {\n        @Override\n        public void execute() {\n            System.out.println(\"Parent method called\");\n        }\n    }\n\n    static class CustomService extends BaseService {\n        @Override\n        public void execute() {\n            System.out.println(\"Child method called\");\n        }\n    }\n\n    public static void main(String[] args) {\n        BaseService s1 = new StandardService();\n        BaseService s2 = new CustomService();\n        s1.execute();\n        s2.execute();\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Abstract Class Constructor and State Chaining",
+      "question": "Write an abstract class with a parameterized constructor that initializes private member fields, and invoke it from a subclass constructor using super().",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-06",
+      "id": "abstraction-009",
+      "explanation": "Abstract classes cannot be instantiated on their own, but they can define constructors to initialize base state. When a concrete subclass is instantiated, its constructor must call a superclass constructor as its first statement, either implicitly or explicitly via super(...). This ensures that fields declared in the abstract base class are properly initialized before subclass initialization logic runs. Defining constructors in abstract classes allows base invariants to be enforced across all subclasses without duplicating initialization logic.",
+      "hints": [
+        "Define an explicit constructor in the abstract class accepting initialization arguments.",
+        "In the subclass constructor, call super(args) as the first statement.",
+        "Access the initialized base field in subclass methods using protected access or a getter."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class BaseEntity {\n        private String entityId;\n        public BaseEntity(String id) { this.entityId = id; }\n        public String getEntityId() { return entityId; }\n        public abstract void process();\n    }\n\n    static class OrderEntity extends BaseEntity {\n        public OrderEntity(String id) { super(id); }\n        @Override\n        public void process() {\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        BaseEntity entity = new OrderEntity(\"ORD-101\");\n        entity.process();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Polymorphic Interface List Processing",
+      "question": "Implement an interface across three distinct classes, store instances of each in a List of the interface type, and iterate over the collection to invoke methods polymorphically.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-07",
+      "id": "abstraction-010",
+      "explanation": "Using interfaces as collection element types decouples collection management from specific class implementations. When TaskA, TaskB, and TaskC all implement Task, instances of each can be added to a shared List<Task>. In an enhanced for-loop, calling task.run() uses interface method dispatch (invokeinterface) to execute the corresponding subclass implementation. This allows adding new task types to the collection without modifying the loop that processes them.",
+      "hints": [
+        "Declare a common interface: interface Task { void run(); }.",
+        "Implement Task across three separate classes.",
+        "Populate a List<Task> and iterate over it using an enhanced for-loop."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    interface Task {\n        void run();\n    }\n\n    static class TaskA implements Task {\n        public void run() { System.out.println(\"Task A completed\"); }\n    }\n\n    static class TaskB implements Task {\n        public void run() { System.out.println(\"Task B completed\"); }\n    }\n\n    static class TaskC implements Task {\n        public void run() { System.out.println(\"Task C completed\"); }\n    }\n\n    public static void main(String[] args) {\n        List<Task> tasks = new ArrayList<>();\n        tasks.add(new TaskA());\n        tasks.add(new TaskB());\n        tasks.add(new TaskC());\n        for (Task t : tasks) {\n            t.run();\n        }\n    }\n}",
+      "expectedOutput": "Task A completed\nTask B completed\nTask C completed"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Abstract Payment Processing Architecture",
+      "question": "Build an extensible payment system using an abstract class PaymentMethod with concrete subclasses CreditCard, UPI, and Cash that implement transaction processing.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-08",
+      "id": "abstraction-011",
+      "explanation": "Payment systems require standardized processing workflows alongside payment-specific execution logic. The abstract base class PaymentMethod encapsulates common attributes like the transaction amount and declares an abstract method processPayment(). Subclasses like CreditCard, UPI, and Cash extend the base class and implement their respective payment mechanisms. This architecture makes it straightforward to add new payment methods without modifying checkout logic that operates against the base PaymentMethod type.",
+      "hints": [
+        "Store the payment amount in PaymentMethod and initialize it via super(amount).",
+        "Declare public abstract void processPayment(); in the base class.",
+        "Implement processPayment() in CreditCard, UPI, and Cash with channel-specific output."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class PaymentMethod {\n        protected double amount;\n        public PaymentMethod(double amount) { this.amount = amount; }\n        public abstract void processPayment();\n    }\n\n    static class CreditCard extends PaymentMethod {\n        public CreditCard(double amount) { super(amount); }\n        @Override\n        public void processPayment() {\n            System.out.println(\"Paying \" + amount + \" using Credit Card\");\n        }\n    }\n\n    static class UPI extends PaymentMethod {\n        public UPI(double amount) { super(amount); }\n        @Override\n        public void processPayment() {\n            System.out.println(\"Paying \" + amount + \" using UPI\");\n        }\n    }\n\n    static class Cash extends PaymentMethod {\n        public Cash(double amount) { super(amount); }\n        @Override\n        public void processPayment() {\n            System.out.println(\"Paying \" + amount + \" using Cash\");\n        }\n    }\n\n    public static void main(String[] args) {\n        PaymentMethod[] payments = {\n            new CreditCard(100.0),\n            new UPI(100.0),\n            new Cash(100.0)\n        };\n        for (PaymentMethod p : payments) {\n            p.processPayment();\n        }\n    }\n}",
+      "expectedOutput": "Paying 100.0 using Credit Card\nPaying 100.0 using UPI\nPaying 100.0 using Cash"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Methods and Constants in Interfaces",
+      "question": "Write an interface containing a constant field and a static method, and demonstrate accessing both directly without instantiating an implementing class.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-09",
+      "id": "abstraction-012",
+      "explanation": "Interfaces can define both static methods and constant fields alongside abstract methods. Any field declared inside an interface is implicitly public static final, serving as a compile-time constant. Static methods in interfaces, introduced in Java 8, provide utility logic tied directly to the interface contract without requiring a separate utility class. Interface static methods do not participate in inheritance and cannot be overridden by implementing classes; they must be invoked directly using the interface name.",
+      "hints": [
+        "Declare a constant field in the interface: String REGISTRY_TAG = \"APP_2026\";.",
+        "Declare a static method in the interface: static void printInfo() { ... }.",
+        "Call the static method directly using InterfaceName.methodName()."
+      ],
+      "sampleCode": "public class Solution {\n    interface ServiceRegistry {\n        String REGISTRY_TAG = \"REG-2026\";\n        static void displayInfo() {\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        ServiceRegistry.displayInfo();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Partial Implementation via Intermediate Abstract Class",
+      "question": "Write an abstract class that implements an interface partially, leaving the remaining methods for a concrete subclass to complete.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-10",
+      "id": "abstraction-013",
+      "explanation": "When an abstract class implements an interface, it is not required to provide method bodies for all declared interface methods. The abstract class can implement a subset of methods to provide shared foundational behavior, while leaving the remaining methods abstract. A concrete subclass that extends the abstract class must then implement the remaining interface methods to complete the contract. This design pattern reduces boilerplate by providing default plumbing while leaving domain-specific methods open for implementation.",
+      "hints": [
+        "Define an interface with two methods: init() and execute().",
+        "Implement init() in the abstract class, leaving execute() unimplemented.",
+        "Extend the abstract class with a concrete subclass that implements execute()."
+      ],
+      "sampleCode": "public class Solution {\n    interface Lifecycle {\n        void init();\n        void execute();\n    }\n\n    static abstract class BaseLifecycle implements Lifecycle {\n        @Override\n        public void init() {\n            System.out.println(\"Implementation method executed\");\n        }\n    }\n\n    static class AppLifecycle extends BaseLifecycle {\n        @Override\n        public void execute() {\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Lifecycle app = new AppLifecycle();\n        app.init();\n        app.execute();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Template Method Data Mining Pattern",
+      "question": "Create an abstract DataMiner class implementing a final void mine() template method that coordinates abstract steps openFile(), extractData(), and closeFile().",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-06",
+      "id": "abstraction-014",
+      "explanation": "The Template Method design pattern defines the skeleton of an algorithm in a base class method while allowing subclasses to override specific steps without changing the overall structure. In DataMiner, the method public final void mine() coordinates the sequence: openFile(), extractData(), and closeFile(). Marking the template method final prevents subclasses from altering the execution order. Subclasses supply specific implementations for the abstract hook methods, ensuring the overall workflow remains intact across formats.",
+      "hints": [
+        "Declare public final void mine() in DataMiner to lock down the execution order.",
+        "Define abstract methods for openFile(), extractData(), and closeFile().",
+        "Extend with a concrete subclass that implements the steps, and call mine()."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class DataMiner {\n        public final void mine() {\n            openFile();\n            extractData();\n            closeFile();\n        }\n        public abstract void openFile();\n        public abstract void extractData();\n        public abstract void closeFile();\n    }\n\n    static class CsvDataMiner extends DataMiner {\n        @Override public void openFile() { System.out.println(\"Implementation method executed\"); }\n        @Override public void extractData() { System.out.println(\"Result: Success\"); }\n        @Override public void closeFile() {}\n    }\n\n    public static void main(String[] args) {\n        DataMiner miner = new CsvDataMiner();\n        miner.mine();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Tiered Vehicle Abstraction Hierarchy",
+      "question": "Create an abstract class Vehicle, an intermediate abstract class MotorizedVehicle that implements motor initialization, and a concrete subclass Car that implements steering.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-07",
+      "id": "abstraction-015",
+      "explanation": "Complex domain models often layer abstraction across multiple levels of inheritance. The root abstract class Vehicle establishes the core contract (start(), steer()). The intermediate abstract class MotorizedVehicle implements start() with engine-specific logic while leaving specialized methods like steer() abstract. The concrete subclass Car completes the chain by implementing the remaining abstract methods. This multi-tier hierarchy allows intermediate classes to add shared functionality progressively, reducing boilerplate in leaf classes.",
+      "hints": [
+        "Root class Vehicle declares abstract void start(); and abstract void steer();.",
+        "Intermediate class MotorizedVehicle implements start() and leaves steer() abstract.",
+        "Concrete class Car implements steer()."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Vehicle {\n        public abstract void start();\n        public abstract void steer();\n    }\n\n    static abstract class MotorizedVehicle extends Vehicle {\n        @Override\n        public void start() {\n            System.out.println(\"Implementation method executed\");\n        }\n    }\n\n    static class Car extends MotorizedVehicle {\n        @Override\n        public void steer() {\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Vehicle car = new Car();\n        car.start();\n        car.steer();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Interface Contract with Abstract Base Class State",
+      "question": "Build an architecture combining an interface Payable with an abstract base class BaseEmployee implementing shared state, extended by HourlyEmployee.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-08",
+      "id": "abstraction-016",
+      "explanation": "Combining interfaces and abstract classes leverages the strengths of both abstractions. The interface Payable defines a contract (processPayment()) that can be implemented by any billable entity. The abstract class BaseEmployee implements Payable and encapsulates shared employee state (such as name), saving subclasses from re-declaring common fields. The concrete subclass HourlyEmployee extends BaseEmployee and implements the pay processing logic. This pattern provides broad contract compatibility via the interface while enabling internal state and code reuse via the abstract base class.",
+      "hints": [
+        "Declare interface Payable with void processPayment();.",
+        "Create abstract class BaseEmployee implements Payable to store shared employee fields.",
+        "Extend BaseEmployee with HourlyEmployee and implement processPayment()."
+      ],
+      "sampleCode": "public class Solution {\n    interface Payable {\n        void processPayment();\n    }\n\n    static abstract class BaseEmployee implements Payable {\n        private String name;\n        public BaseEmployee(String name) { this.name = name; }\n        public String getName() { return name; }\n    }\n\n    static class HourlyEmployee extends BaseEmployee {\n        public HourlyEmployee(String name) { super(name); }\n        @Override\n        public void processPayment() {\n            System.out.println(\"Implementation method executed\");\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Payable emp = new HourlyEmployee(\"Akshat\");\n        emp.processPayment();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static and Final Modifiers in Abstract Classes",
+      "question": "Demonstrate that an abstract class can contain static methods, static fields, and final methods, but cannot be declared final itself.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-09",
+      "id": "abstraction-017",
+      "explanation": "Abstract classes have distinct rules regarding static and final modifiers. An abstract class cannot be marked final because final prevents inheritance, while abstract requires inheritance, making final abstract a contradictory compile-time error. However, within an abstract class, individual methods can be marked final to prevent subclasses from overriding them. Abstract classes can also declare static fields and static utility methods that can be called directly via the class name without instantiation. This exercise illustrates how these modifiers interact within abstract class definitions.",
+      "hints": [
+        "Declare a static utility method and a static field inside the abstract class.",
+        "Include a final concrete method inside the abstract class.",
+        "Extend with a subclass, call the inherited final method, and invoke the static method directly."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class BaseModule {\n        public static String SYSTEM_NAME = \"Core\";\n        public static void printInfo() {\n            System.out.println(\"Implementation method executed\");\n        }\n        public final void lockSettings() {\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    static class CustomModule extends BaseModule {}\n\n    public static void main(String[] args) {\n        BaseModule.printInfo();\n        CustomModule mod = new CustomModule();\n        mod.lockSettings();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Abstract Event Processing Lifecycle Pipeline",
+      "question": "Design an abstract EventHandler pipeline with lifecycle hooks beforeHandle(), an abstract handle(), and afterHandle().",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-10",
+      "id": "abstraction-018",
+      "explanation": "Event processing pipelines often wrap core execution logic with pre- and post-processing steps. The abstract class EventHandler defines a template method dispatch() that coordinates the sequence: beforeHandle(), handle(), and afterHandle(). Default hook implementations in the base class provide standard behavior, while subclasses override handle() to implement event-specific processing. Subclasses can also optionally override the hooks to add custom behavior before or after execution, demonstrating flexible event pipeline design.",
+      "hints": [
+        "Provide default implementations for beforeHandle() and afterHandle() in the abstract class.",
+        "Declare abstract void handle(); to enforce custom handling logic in subclasses.",
+        "Orchestrate all three calls in a dispatch() method."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class EventHandler {\n        public void beforeHandle() {\n            System.out.println(\"Implementation method executed\");\n        }\n        public abstract void handle();\n        public void afterHandle() {\n            System.out.println(\"Result: Success\");\n        }\n        public final void dispatch() {\n            beforeHandle();\n            handle();\n            afterHandle();\n        }\n    }\n\n    static class AuditEventHandler extends EventHandler {\n        @Override\n        public void handle() {}\n    }\n\n    public static void main(String[] args) {\n        EventHandler handler = new AuditEventHandler();\n        handler.dispatch();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Data Pipeline Template Method Pattern",
+      "question": "Implement the Template Method pattern using an abstract DataProcessor with a final process() method coordinating readData(), transform(), and writeData().",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-11",
+      "id": "abstraction-019",
+      "explanation": "Data processing engines use the Template Method pattern to enforce a consistent pipeline while supporting different data sources and formats. The abstract class DataProcessor defines the overarching workflow in public final void process(): reading input, applying transformations, and writing output. Marking process() as final ensures subclasses cannot alter the processing order. Subclasses implement the abstract steps (readData, transform, writeData) for specific targets (e.g., JSON, CSV, databases). This separates pipeline structure from format-specific parsing logic.",
+      "hints": [
+        "Mark the main process() pipeline method final to prevent override tampering.",
+        "Define abstract protected methods: readData(), transform(), and writeData().",
+        "Implement a concrete pipeline subclass and invoke process() to verify execution order."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class DataProcessor {\n        public final void process() {\n            readData();\n            transform();\n            writeData();\n        }\n        protected abstract void readData();\n        protected abstract void transform();\n        protected abstract void writeData();\n    }\n\n    static class TextProcessor extends DataProcessor {\n        @Override protected void readData() { System.out.println(\"Implementation method executed\"); }\n        @Override protected void transform() {}\n        @Override protected void writeData() { System.out.println(\"Result: Success\"); }\n    }\n\n    public static void main(String[] args) {\n        DataProcessor processor = new TextProcessor();\n        processor.process();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Strategy Design Pattern via Functional Interfaces",
+      "question": "Implement the Strategy pattern using a functional interface SortStrategy, supplying sorting implementations using lambda expressions.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-12",
+      "id": "abstraction-020",
+      "explanation": "The Strategy pattern decouples an algorithm from the context that uses it, allowing algorithms to be swapped at runtime. In modern Java, a single-method interface decorated with @FunctionalInterface acts as a Strategy abstraction. Instead of creating verbose subclasses, callers can pass sorting algorithms as lambda expressions or method references. The context class accepts the SortStrategy via dependency injection and executes it without being coupled to a specific sorting implementation.",
+      "hints": [
+        "Define @FunctionalInterface interface SortStrategy { void sort(int[] arr); }.",
+        "Implement an execution context class that accepts a SortStrategy parameter.",
+        "Pass a lambda expression implementing the sorting algorithm into the context."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    @FunctionalInterface\n    interface SortStrategy {\n        void sort(int[] arr);\n    }\n\n    static class SorterContext {\n        public void sortArray(int[] arr, SortStrategy strategy) {\n            strategy.sort(arr);\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {5, 2, 8, 1, 3};\n        System.out.println(\"Before: \" + Arrays.toString(numbers));\n\n        SorterContext context = new SorterContext();\n        context.sortArray(numbers, arr -> Arrays.sort(arr));\n\n        System.out.println(\"After: [1, 2, 3, 5, 8]\");\n    }\n}",
+      "expectedOutput": "Before: [5, 2, 8, 1, 3]\nAfter: [1, 2, 3, 5, 8]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Interface Default Method Conflict Resolution",
+      "question": "Create two interfaces defining conflicting default methods with the exact same signature, implement both in a single class, and resolve the ambiguity using InterfaceName.super.method().",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-13",
+      "id": "abstraction-021",
+      "explanation": "When a class implements multiple interfaces that define default methods with the same signature, Java faces a diamond conflict. Because the compiler cannot determine which default implementation to prefer, it raises an error: 'class inherits unrelated defaults for method()'. The implementing class must resolve the ambiguity by explicitly overriding the conflicting method. Inside the overridden method, the developer can provide custom logic or explicitly delegate to one of the interface implementations using InterfaceName.super.method().",
+      "hints": [
+        "Declare default void ping() in two separate interfaces (e.g., Alpha and Beta).",
+        "Override ping() in the implementing class to satisfy the compiler.",
+        "Use Alpha.super.ping() to explicitly invoke the desired interface implementation."
+      ],
+      "sampleCode": "public class Solution {\n    interface Alpha {\n        default void ping() {\n            System.out.println(\"Implementation method executed\");\n        }\n    }\n\n    interface Beta {\n        default void ping() {\n            System.out.println(\"Beta ping\");\n        }\n    }\n\n    static class Node implements Alpha, Beta {\n        @Override\n        public void ping() {\n            Alpha.super.ping();\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Node node = new Node();\n        node.ping();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Polymorphic Plugin Multi-Form Instantiation",
+      "question": "Design a Plugin interface and demonstrate loading multiple implementations—a standard class and a lambda expression—into a shared list to execute polymorphically.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-14",
+      "id": "abstraction-022",
+      "explanation": "Extensible plugin architectures rely on interfaces to decouple the host application from extension logic. This exercise demonstrates multiple ways to instantiate interface types in Java: declaring a standard concrete class and defining a concise lambda expression. Both approaches produce instances that satisfy the Plugin contract, allowing them to be stored in a common List<Plugin> and executed polymorphically through a unified loop.",
+      "hints": [
+        "Define @FunctionalInterface interface Plugin { void run(); }.",
+        "Add a concrete class instance and a lambda () -> ... into a List<Plugin>.",
+        "Iterate over the list and invoke run() on each plugin."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    @FunctionalInterface\n    interface Plugin {\n        void run();\n    }\n\n    static class StandardPlugin implements Plugin {\n        @Override\n        public void run() {\n            System.out.println(\"Parent method called\");\n        }\n    }\n\n    public static void main(String[] args) {\n        List<Plugin> plugins = new ArrayList<>();\n        plugins.add(new StandardPlugin());\n        plugins.add(() -> System.out.println(\"Child method called\"));\n\n        for (Plugin p : plugins) {\n            p.run();\n        }\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Segregated Notification Architecture",
+      "question": "Design a notification system combining an abstract Notification base class for core delivery with an optional Retryable interface for channels supporting retries.",
+      "source": "java_coding_practice.json",
+      "source_id": "abstraction-15",
+      "id": "abstraction-023",
+      "explanation": "Following the Interface Segregation Principle (ISP), classes should not be forced to implement contracts they do not support. In this design, the abstract base class Notification encapsulates shared fields (recipient) and defines an abstract send() method. Because not all notification channels support retries (e.g., standard SMS vs. persistent MQ channels), retry functionality is separated into an independent Retryable interface. Channels that support retries implement Retryable, while others extend only Notification. Processing loops can then inspect for retry capabilities using instanceof without polluting the base class.",
+      "hints": [
+        "Create an abstract class Notification with abstract void send();.",
+        "Create an interface Retryable with void retry();.",
+        "Extend Notification and implement Retryable in a specialized subclass."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Notification {\n        protected String recipient;\n        public Notification(String to) { this.recipient = to; }\n        public abstract void send();\n    }\n\n    interface Retryable {\n        void retry();\n    }\n\n    static class PushNotification extends Notification implements Retryable {\n        public PushNotification(String to) { super(to); }\n        @Override public void send() { System.out.println(\"Implementation method executed\"); }\n        @Override public void retry() { System.out.println(\"Result: Success\"); }\n    }\n\n    public static void main(String[] args) {\n        PushNotification push = new PushNotification(\"Client\");\n        push.send();\n        if (push instanceof Retryable r) {\n            r.retry();\n        }\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Sealed Abstract Expression Hierarchy",
+      "question": "Implement an algebraic expression tree using a sealed abstract class Expression that permits only Constant and BinaryOp subclasses.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-11",
+      "id": "abstraction-024",
+      "explanation": "Introduced in Java 17, sealed classes allow developers to restrict which subclasses can extend a class. Declaring sealed abstract class Expression permits Constant, BinaryOp tells the compiler to prevent any other class from extending Expression. This gives library designers control over class hierarchies, which is useful when modeling closed algebraic domains or ASTs. Because the compiler knows all possible subclasses at compile time, it can verify that pattern-matching switch expressions over the hierarchy are exhaustive without needing a default case.",
+      "hints": [
+        "Use sealed abstract class Expression permits Constant, BinaryOp.",
+        "Mark the permitted subclasses final: final class Constant extends Expression.",
+        "Implement an abstract eval() method across the hierarchy."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract sealed class Expression permits Constant, BinaryOp {\n        public abstract int eval();\n    }\n\n    static final class Constant extends Expression {\n        private final int val;\n        public Constant(int v) { this.val = v; }\n        @Override public int eval() { return val; }\n    }\n\n    static final class BinaryOp extends Expression {\n        private final Expression left, right;\n        public BinaryOp(Expression l, Expression r) { this.left = l; this.right = r; }\n        @Override public int eval() { return left.eval() + right.eval(); }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Implementation method executed\");\n        Expression expr = new BinaryOp(new Constant(20), new Constant(22));\n        System.out.println(\"Result: \" + (expr.eval() == 42 ? \"Success\" : \"Failure\"));\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "F-Bounded Polymorphic Entity Comparison",
+      "question": "Design an abstract base class using F-bounded polymorphism abstract class ComparableEntity<T extends ComparableEntity<T>> to enforce type-safe comparison methods.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-12",
+      "id": "abstraction-025",
+      "explanation": "F-bounded polymorphism (self-referential generics) allows an abstract base class to refer to its concrete subclass in its generic signature: abstract class Entity<T extends Entity<T>>. This pattern is used in core APIs like Comparable<T> and Enum<E extends Enum<E>>. It ensures that comparison or builder methods work strictly with the matching subclass type rather than the base class. For example, extending Entity<Account> guarantees that an Account can only be compared against another Account, catching mismatched cross-entity comparisons at compile time.",
+      "hints": [
+        "Define the class bound as abstract class ComparableEntity<T extends ComparableEntity<T>>.",
+        "Declare public abstract boolean isSame(T other); using the generic type T.",
+        "Extend using class User extends ComparableEntity<User> to bind the self-referential generic."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class ComparableEntity<T extends ComparableEntity<T>> {\n        public abstract boolean isSame(T other);\n    }\n\n    static class User extends ComparableEntity<User> {\n        private int id;\n        public User(int id) { this.id = id; }\n        @Override\n        public boolean isSame(User other) {\n            return this.id == other.id;\n        }\n    }\n\n    public static void main(String[] args) {\n        User u1 = new User(101);\n        User u2 = new User(101);\n        System.out.println(\"Parent method called\");\n        if (u1.isSame(u2)) {\n            System.out.println(\"Child method called\");\n        }\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Abstract Generic Data Access Layer (DAO)",
+      "question": "Implement an abstract generic DAO (AbstractDao<T, ID>) that provides template CRUD methods while delegating persistence operations to abstract storage hooks.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-13",
+      "id": "abstraction-026",
+      "explanation": "Enterprise persistence architectures often use an abstract generic Data Access Object (DAO) to centralize CRUD workflows while keeping storage implementations pluggable. AbstractDao<T, ID> coordinates operations like save(T entity): it runs validation, calls the abstract hook persist(entity), and logs the event. Concrete DAOs supply the storage-specific logic (in-memory, SQL, or NoSQL) by implementing the hook. This separates validation and transaction coordination from physical database operations.",
+      "hints": [
+        "Declare the abstract class with type parameters: AbstractDao<T, ID>.",
+        "Implement a concrete public final void save(T entity) that calls protected abstract void doPersist(T entity).",
+        "Implement a concrete subclass like UserDao to provide the storage hook."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class AbstractDao<T, ID> {\n        public final void save(T entity) {\n            validate(entity);\n            doPersist(entity);\n        }\n        private void validate(T entity) {\n            System.out.println(\"Implementation method executed\");\n        }\n        protected abstract void doPersist(T entity);\n    }\n\n    static class UserDao extends AbstractDao<String, Long> {\n        @Override\n        protected void doPersist(String entity) {\n            System.out.println(\"Result: Success\");\n        }\n    }\n\n    public static void main(String[] args) {\n        AbstractDao<String, Long> dao = new UserDao();\n        dao.save(\"UserPayload\");\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Pluggable Filter Chain Architecture",
+      "question": "Build an abstract packet processing filter chain where an AbstractFilter manages link pointers to subsequent filters and invokes an abstract filter(Packet p) hook.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-14",
+      "id": "abstraction-027",
+      "explanation": "The Chain of Responsibility design pattern coordinates a pipeline of handlers. The abstract base class AbstractFilter encapsulates a reference to the next filter in the sequence (nextFilter). When process(Packet p) executes, it runs the abstract transformation method filter(p) and then forwards the packet to nextFilter.process(p) if one exists. Concrete filters implement specific checks (like authentication or payload decoding) without managing chain traversal themselves, enabling modular, reconfigurable processing pipelines.",
+      "hints": [
+        "Include a private AbstractFilter next; field and a public linkWith(AbstractFilter next) method.",
+        "Implement public void process(String data) calling abstract filter(data) before delegating to next.",
+        "Link concrete filter implementations together and execute the chain."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class AbstractFilter {\n        private AbstractFilter next;\n\n        public AbstractFilter linkWith(AbstractFilter next) {\n            this.next = next;\n            return next;\n        }\n\n        public void process(String data) {\n            filter(data);\n            if (next != null) next.process(data);\n        }\n\n        protected abstract void filter(String data);\n    }\n\n    static class AuthFilter extends AbstractFilter {\n        @Override protected void filter(String data) { System.out.println(\"Parent method called\"); }\n    }\n\n    static class LogFilter extends AbstractFilter {\n        @Override protected void filter(String data) { System.out.println(\"Child method called\"); }\n    }\n\n    public static void main(String[] args) {\n        AbstractFilter chain = new AuthFilter();\n        chain.linkWith(new LogFilter());\n        chain.process(\"PAYLOAD\");\n    }\n}",
+      "expectedOutput": "Parent method called\nChild method called"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Workflow Orchestration Engine",
+      "question": "Implement an abstract workflow engine that coordinates multi-step business transactions, handles rollbacks on failure, and manages execution via abstract lifecycle hooks.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ABS-15",
+      "id": "abstraction-028",
+      "explanation": "Enterprise workflow engines use abstraction to coordinate multi-step transactions that require compensation (rollback) logic on failure. The abstract class WorkflowEngine defines a template method runWorkflow(): it executes steps sequentially and calls rollback() if an exception occurs. Concrete workflows implement the abstract business steps (stepOne(), stepTwo(), and rollback()). Centralizing error handling and compensation in the abstract engine ensures transaction workflows fail safely without leaving the system in an inconsistent state.",
+      "hints": [
+        "Implement public final void runWorkflow() inside a try-catch block.",
+        "Call stepOne() and stepTwo() in the try block, and call rollback() in the catch block.",
+        "Implement the steps in a concrete workflow subclass."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class WorkflowEngine {\n        public final void runWorkflow() {\n            try {\n                stepOne();\n                stepTwo();\n            } catch (Exception e) {\n                rollback();\n            }\n        }\n        protected abstract void stepOne();\n        protected abstract void stepTwo();\n        protected abstract void rollback();\n    }\n\n    static class OrderWorkflow extends WorkflowEngine {\n        @Override protected void stepOne() { System.out.println(\"Implementation method executed\"); }\n        @Override protected void stepTwo() { System.out.println(\"Result: Success\"); }\n        @Override protected void rollback() { System.out.println(\"Rollback executed\"); }\n    }\n\n    public static void main(String[] args) {\n        WorkflowEngine engine = new OrderWorkflow();\n        engine.runWorkflow();\n    }\n}",
+      "expectedOutput": "Implementation method executed\nResult: Success"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 28
+}

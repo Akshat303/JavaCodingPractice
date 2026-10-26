@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "methods",
+  "topic": "Methods and method declarations",
+  "page": 37,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic Integer Addition Function",
+      "question": "Write a static method `add(int a, int b)` that computes and returns the sum of two integer parameters, and invoke it from `main` to display the result.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-01",
+      "id": "methods-001",
+      "explanation": "Methods serve as modular, reusable functional units in Java. When a method is declared with a concrete return type such as `int`, it establishes a contract with the compiler requiring every non-exceptional execution path to terminate with a `return` statement yielding a compatible type[cite: 9]. At the bytecode level, invoking a static method pushes its arguments onto the calling thread's operand stack and emits an `invokestatic` instruction[cite: 1]. The JVM allocates a new stack frame containing local variable slots initialized with the passed arguments (`a` at slot 0, `b` at slot 1 for static methods). The computation `a + b` executes via `iadd`, and `ireturn` pops the result back to the caller's stack frame[cite: 7].",
+      "hints": [
+        "Declare the method with the `public static int` signature inside the class body.",
+        "Use the `return` keyword to pass the evaluated sum back to the caller[cite: 9].",
+        "Capture or print the returned value directly within `System.out.println`[cite: 1]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int add(int a, int b) {\n        return a + b;\n    }\n\n    public static void main(String[] args) {\n        int result = add(4, 6);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + result);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Void Asterisk Printer Method",
+      "question": "Write a void method `printStars(int n)` that outputs `n` asterisk characters consecutively on a single console line using a loop.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-02",
+      "id": "methods-002",
+      "explanation": "A method declared with a `void` return type performs actions such as side-effect I/O or state mutation without yielding a value back to the caller[cite: 9]. Inside `printStars(int n)`, a counting `for` loop iterates from 0 up to `n - 1`. During each pass, `System.out.print(\"*\")` writes an asterisk to standard output without appending a newline delimiter[cite: 1]. After the loop terminates, `System.out.println()` flushes the line buffer and moves the cursor to the subsequent terminal line[cite: 1]. In bytecode, void methods conclude with a `return` opcode that yields control to the caller with an empty evaluation stack[cite: 9].",
+      "hints": [
+        "Use `public static void` in the method signature to specify that no value is returned[cite: 9].",
+        "Use `System.out.print(\"*\")` inside the loop to avoid printing asterisks on separate lines[cite: 1].",
+        "Add a closing `System.out.println()` after the loop to advance the cursor[cite: 1]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void printStars(int n) {\n        for (int i = 0; i < n; i++) {\n            System.out.print(\"*\");\n        }\n        System.out.println();\n    }\n\n    public static void main(String[] args) {\n        printStars(5);\n    }\n}",
+      "expectedOutput": "*****"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Boolean Parity Predicate",
+      "question": "Implement a predicate method `isEven(int n)` that returns `true` if the passed integer is even and `false` otherwise, and test it in `main`.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-03",
+      "id": "methods-003",
+      "explanation": "Methods that evaluate conditions and return boolean values are known as predicates[cite: 9]. The parity of an integer is evaluated using the remainder operator (`%`)[cite: 7]. Because `n % 2 == 0` is itself a boolean expression, returning it directly (`return n % 2 == 0;`) avoids redundant `if (condition) return true; else return false;` constructs[cite: 7, 9]. At runtime, the JVM compares the remainder using the `ifeq` instruction, placing integer 1 (`true`) or 0 (`false`) onto the stack before issuing `ireturn`[cite: 7, 9]. Clean predicate methods improve code readability when composing control flow statements.",
+      "hints": [
+        "Return the direct boolean result of `n % 2 == 0` without wrapping in an `if-else`[cite: 7, 9].",
+        "Ensure the method signature specifies a `boolean` return type[cite: 9].",
+        "Notice that `n % 2 == 0` handles both positive and negative even integers correctly[cite: 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isEven(int n) {\n        return n % 2 == 0;\n    }\n\n    public static void main(String[] args) {\n        int testValue = 8;\n        System.out.println(\"Is \" + testValue + \" even? \" + isEven(testValue));\n    }\n}",
+      "expectedOutput": "Is 8 even? true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Three-Integer Maximum Selector",
+      "question": "Write a method `maxOfThree(int a, int b, int c)` that evaluates three integers and returns the greatest value.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-04",
+      "id": "methods-004",
+      "explanation": "Selecting the maximum value among multiple numbers tests conditional logic and parameter evaluation[cite: 7, 9]. Inside `maxOfThree(int a, int b, int c)`, the method initializes a tracking variable with the first parameter `a`[cite: 3]. It then compares `b` against `max`; if `b` is greater, `max` is reassigned to `b`[cite: 3]. Finally, `c` is compared against `max`, updating it if `c` is greater[cite: 3]. Alternatively, chaining `Math.max(a, Math.max(b, c))` compiles down to inline comparison instructions. Initializing from `a` ensures correct selection across both negative and positive value domains[cite: 3].",
+      "hints": [
+        "Initialize an internal variable `int max = a;` to avoid assuming values are positive[cite: 3, 9].",
+        "Compare `b` and `c` sequentially against `max` using standard relational `>` checks[cite: 7].",
+        "Return the resulting `max` variable after both checks conclude[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int maxOfThree(int a, int b, int c) {\n        int max = a;\n        if (b > max) max = b;\n        if (c > max) max = c;\n        return max;\n    }\n\n    public static void main(String[] args) {\n        int result = maxOfThree(3, 10, 7);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + result);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Iterative Factorial Computation",
+      "question": "Write a method `factorial(int n)` that computes the factorial of a non-negative integer using an iterative `for` loop and returns the total product.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-05",
+      "id": "methods-005",
+      "explanation": "The factorial of a non-negative integer $n$ (denoted as $n!$) represents the product of all positive integers less than or equal to $n$, with $0! = 1$ by mathematical definition[cite: 5]. Inside `factorial(int n)`, an accumulator variable `result` is initialized to 1[cite: 3]. A loop increments a counter `i` from 2 up to $n$, multiplying the accumulator by `i` on each iteration[cite: 5]. Iterative factorial computation operates in $O(n)$ time using $O(1)$ stack space, avoiding the stack frame overhead associated with recursive method calls[cite: 6].",
+      "hints": [
+        "Initialize the result accumulator to `1` so that `0!` correctly yields `1`[cite: 5].",
+        "Use a loop running from `2` up to `n`: `for (int i = 2; i <= n; i++)`[cite: 5].",
+        "Return the accumulated product after the loop completes[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int factorial(int n) {\n        int result = 1;\n        for (int i = 2; i <= n; i++) {\n            result *= i;\n        }\n        return result;\n    }\n\n    public static void main(String[] args) {\n        int input = 5;\n        System.out.println(\"Input: \" + input);\n        System.out.println(\"Factorial: \" + factorial(input));\n    }\n}",
+      "expectedOutput": "Input: 5\nFactorial: 120"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Simple Math Function Suite",
+      "question": "Implement a modular utility class containing static methods `add(int a, int b)`, `multiply(int a, int b)`, and `isEven(int n)`, and demonstrate their execution in `main`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-01",
+      "id": "methods-006",
+      "explanation": "Encapsulating related helper functions into utility classes is a core structural pattern in Java (exemplified by `java.lang.Math`)[cite: 5]. Each method declares explicit parameter types and a concrete return type in its header[cite: 9]. When invoked, the JVM passes arguments by value, copying the operand bits into the callee's stack frame[cite: 5, 9]. The calling method remains isolated from the execution details of the callee, receiving only the returned integer or boolean value upon completion[cite: 9]. This functional decomposition simplifies unit testing and facilitates code reuse.",
+      "hints": [
+        "Declare each method with `public static` so they can be invoked directly from `main`[cite: 1, 9].",
+        "Ensure `multiply` uses the `*` operator and returns an `int`[cite: 7, 9].",
+        "Structure `isEven` to return a `boolean` from `n % 2 == 0`[cite: 7, 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int add(int a, int b) {\n        return a + b;\n    }\n\n    public static int multiply(int a, int b) {\n        return a * b;\n    }\n\n    public static boolean isEven(int n) {\n        return n % 2 == 0;\n    }\n\n    public static void main(String[] args) {\n        int sum = add(2, 8);\n        int product = multiply(2, 5);\n        boolean even = isEven(sum);\n\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + sum);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Early Return Validation",
+      "question": "Write a method `double calculateDiscount(double price, int customerAge)` that uses guard clauses with early `return` statements to apply age-based discounts.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-02",
+      "id": "methods-007",
+      "explanation": "The early return pattern (or guard clause) validates precondition boundaries at the beginning of a method, returning immediately when specific conditions are met[cite: 9]. In `calculateDiscount(double price, int customerAge)`, checking for invalid input (`price <= 0 || customerAge < 0`) returns `0.0` right away[cite: 9]. Subsequent checks evaluate senior citizen status (`customerAge >= 65`) or child status (`customerAge < 12`) to return their specific discounts early[cite: 9]. This avoids deeply nested `if-else` blocks (the arrow anti-pattern), making the primary business logic easier to read and maintain[cite: 9].",
+      "hints": [
+        "Place boundary guards at the top of the method: `if (price <= 0) return 0.0;`[cite: 9].",
+        "Check age thresholds (`customerAge >= 65` for senior discounts) with immediate `return` statements[cite: 9].",
+        "Provide a default return statement at the end of the method body for standard rates[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static double calculateDiscount(double price, int customerAge) {\n        if (price <= 0 || customerAge < 0) {\n            return 0.0;\n        }\n        if (customerAge >= 65) {\n            return price * 0.20; // 20% senior discount\n        }\n        if (customerAge < 12) {\n            return price * 0.15; // 15% child discount\n        }\n        return price * 0.05;     // 5% standard discount\n    }\n\n    public static void main(String[] args) {\n        double discount = calculateDiscount(50.0, 70);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + (int) discount);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Geometric Area Method Overloading",
+      "question": "Implement three overloaded versions of `calculateArea`: one for a circle accepting radius (`double`), one for a rectangle accepting length and width (`double, double`), and one for a square accepting side length (`int`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-03",
+      "id": "methods-008",
+      "explanation": "Method overloading allows multiple methods within the same class to share the same name, provided they have distinct parameter lists (differing in parameter count, types, or order)[cite: 9]. At compile time, the Java compiler performs overload resolution by inspecting the static types and count of the arguments passed at the call site to bind the invocation to the matching method signature[cite: 9]. Overloading provides a consistent, intuitive API for related operations across different data types or configurations without requiring distinct method names like `calculateCircleArea` and `calculateSquareArea`[cite: 9].",
+      "hints": [
+        "Declare `calculateArea(double radius)` using `Math.PI * radius * radius`[cite: 8].",
+        "Declare `calculateArea(double length, double width)` returning `length * width`[cite: 9].",
+        "Declare `calculateArea(int side)` returning `(double) (side * side)`[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static double calculateArea(double radius) {\n        return Math.PI * radius * radius;\n    }\n\n    public static double calculateArea(double length, double width) {\n        return length * width;\n    }\n\n    public static double calculateArea(int side) {\n        return (double) side * side;\n    }\n\n    public static void main(String[] args) {\n        double radius = 7.0;\n        double area = calculateArea(radius);\n        System.out.println(\"Enter radius: \" + (int) radius);\n        System.out.printf(\"Area: %.2f%n\", area);\n    }\n}",
+      "expectedOutput": "Enter radius: 7\nArea: 153.94"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Pass-by-Value Primitive Swap Probe",
+      "question": "Write a method `swap(int a, int b)` that attempts to swap two integer parameters. Call it from `main` and print the variables before and after the call to demonstrate why the original values remain unchanged.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-04",
+      "id": "methods-009",
+      "explanation": "Java strictly uses a pass-by-value evaluation strategy for all argument passing[cite: 5]. When primitive variables are passed to a method, the runtime copies the raw values into the callee's stack frame[cite: 5]. Inside `swap(int a, int b)`, swapping `a` and `b` modifies only the local parameter variables residing in `swap`'s stack frame[cite: 5, 6]. When `swap` returns, its stack frame is discarded[cite: 6]. The caller's local variables in `main` reside in an independent stack frame and retain their original values completely unaffected[cite: 5, 6].",
+      "hints": [
+        "Implement `swap(int a, int b)` using a temporary variable inside the method[cite: 5, 9].",
+        "Print `a` and `b` in `main` before calling `swap`[cite: 5].",
+        "Print `a` and `b` in `main` after `swap` completes to show that their values did not change[cite: 5]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void swap(int a, int b) {\n        int temp = a;\n        a = b;\n        b = temp;\n    }\n\n    public static void main(String[] args) {\n        int x = 10;\n        int y = 20;\n        swap(x, y);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + x);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Varargs Summation Method",
+      "question": "Write a method `sum(int... numbers)` that accepts an arbitrary number of integer arguments using varargs syntax and returns their aggregate total.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-05",
+      "id": "methods-010",
+      "explanation": "Variable-length argument lists (varargs), introduced in Java 5, allow a method to accept zero or more arguments of a specified type[cite: 1, 9]. Syntax-wise, `int... numbers` is syntactic sugar: at compile time, javac replaces the varargs parameter with a single-dimensional array (`int[] numbers`)[cite: 1]. At the call site, the compiler bundles the passed comma-separated arguments into a newly allocated array before passing it to the method[cite: 1]. If no arguments are passed, an empty array (`new int[0]`) is provided, ensuring `numbers` is never `null` under standard invocations[cite: 1, 3].",
+      "hints": [
+        "Use the ellipsis syntax: `public static int sum(int... numbers)`[cite: 1, 9].",
+        "Iterate over `numbers` using an enhanced `for` loop as if it were a standard array[cite: 3].",
+        "Verify that calling `sum()` with zero arguments returns 0 safely without throwing an exception[cite: 3]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int sum(int... numbers) {\n        int total = 0;\n        for (int num : numbers) {\n            total += num;\n        }\n        return total;\n    }\n\n    public static void main(String[] args) {\n        int total = sum(1, 2, 3, 4);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + total);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Overloaded Geometric Surface Area Engine",
+      "question": "Implement an overloaded method `area()` that calculates the area of a circle with `area(double radius)`, a rectangle with `area(double length, double width)`, and a triangle with `area(double base, double height, boolean isTriangle)`.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-06",
+      "id": "methods-011",
+      "explanation": "Designing an overloaded method suite requires ensuring each variant has a distinct parameter signature so the compiler can differentiate between them[cite: 9]. Both a rectangle and a triangle take two `double` dimensions (length/width vs. base/height)[cite: 9]. To prevent signature collision (`area(double, double)`), the triangle overload introduces an additional parameter—such as a boolean flag or a dedicated type parameter—to establish a unique method signature[cite: 9]. This teaches students how Java's overload resolution relies strictly on parameter types and counts rather than parameter names or return types[cite: 9].",
+      "hints": [
+        "Overload 1: `area(double radius)` calculates circle area via `Math.PI * r * r`[cite: 8].",
+        "Overload 2: `area(double length, double width)` calculates rectangle area via `l * w`[cite: 9].",
+        "Overload 3: `area(double base, double height, boolean isTriangle)` calculates triangle area via `0.5 * b * h`[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static double area(double radius) {\n        return Math.PI * radius * radius;\n    }\n\n    public static double area(double length, double width) {\n        return length * width;\n    }\n\n    public static double area(double base, double height, boolean isTriangle) {\n        return 0.5 * base * height;\n    }\n\n    public static void main(String[] args) {\n        double rectArea = area(2.5, 4.0);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + (int) rectArea);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Varargs Arity Boundary Invocations",
+      "question": "Write a varargs method `sum(int... nums)` and demonstrate calling it across varying argument counts: zero arguments, a single argument, and multiple arguments.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-07",
+      "id": "methods-012",
+      "explanation": "Varargs methods provide flexible call signatures by adapting to different argument counts at compile time[cite: 1, 9]. When calling `sum()`, the compiler generates bytecode allocating an empty array (`new int[0]`)[cite: 1]. When calling `sum(42)`, it packages the value into a single-element array (`new int[]{42}`)[cite: 1]. When calling `sum(10, 20, 30)`, it bundles all three values into `new int[]{10, 20, 30}`[cite: 1]. Inside the method body, `nums` is treated as a standard array, allowing direct length checks via `nums.length` and iteration via standard loops[cite: 1, 3].",
+      "hints": [
+        "Declare `public static int sum(int... nums)`[cite: 1, 9].",
+        "Handle the zero-argument case naturally by initializing the accumulator to 0[cite: 3].",
+        "Test `sum()`, `sum(10)`, and `sum(1, 2, 3, 4)` to verify behavior across different arities[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int sum(int... nums) {\n        int total = 0;\n        for (int n : nums) {\n            total += n;\n        }\n        return total;\n    }\n\n    public static void main(String[] args) {\n        int zeroArgs = sum();\n        int singleArg = sum(10);\n        int multiArgs = sum(1, 2, 3, 4);\n\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + multiArgs);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Prime Number Generator Pipeline",
+      "question": "Write a helper method `isPrime(int n)` that checks primality in $O(\\sqrt{n})$ time, and use it in `main` to identify and print all prime numbers up to 50.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-08",
+      "id": "methods-013",
+      "explanation": "A prime number is an integer greater than 1 with no positive divisors other than 1 and itself[cite: 9]. A naive primality test checks all integers up to $n - 1$, running in $O(n)$ time[cite: 9]. The optimized approach checks divisors only up to $\\sqrt{n}$ because if $n = a \\times b$, at least one factor must be less than or equal to $\\sqrt{n}$[cite: 9]. The `isPrime(int n)` method handles base cases ($n \\le 1$ is false, $2$ and $3$ are true, even numbers are false) and then iterates by step 2 (`i += 2`) up to $\\sqrt{n}$[cite: 9]. This helper method cleanly separates primality logic from iteration and printing in `main`[cite: 9].",
+      "hints": [
+        "Return `false` immediately for numbers less than or equal to 1[cite: 9].",
+        "Handle 2 and 3 as special base cases, and reject even numbers using `n % 2 == 0`[cite: 7, 9].",
+        "Iterate with `for (int i = 3; i * i <= n; i += 2)` to check odd divisors up to $\\sqrt{n}$[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPrime(int n) {\n        if (n <= 1) return false;\n        if (n <= 3) return true;\n        if (n % 2 == 0 || n % 3 == 0) return false;\n        for (int i = 5; i * i <= n; i += 6) {\n            if (n % i == 0 || n % (i + 2) == 0) return false;\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        int target = 17;\n        System.out.println(\"Number: \" + target);\n        System.out.println(\"Is prime: \" + isPrime(target));\n    }\n}",
+      "expectedOutput": "Number: 17\nIs prime: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Pass-by-Value: Primitive vs Reference Modification",
+      "question": "Write two methods—one that attempts to modify an `int` parameter and another that modifies an element of an `int[]` array parameter—to demonstrate Java's pass-by-value semantics for primitives versus object references.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-09",
+      "id": "methods-014",
+      "explanation": "Java evaluates all method arguments using pass-by-value[cite: 5]. When passing a primitive `int`, the value bits are copied into the callee's stack frame; modifying that parameter variable has no effect on the caller's variable[cite: 5, 6]. When passing an object or array, the value being copied and passed is the reference address pointing to the heap memory[cite: 5]. Inside `modifyArray(int[] arr)`, reassigning an element (`arr[0] = 99`) mutates the underlying heap array, so the change is visible to the caller[cite: 5]. However, reassigning the reference variable itself (`arr = new int[5]`) changes only the local stack copy, leaving the caller's original array reference unchanged[cite: 5].",
+      "hints": [
+        "In `modifyPrimitive(int x)`, assign `x = 99;` and verify in `main` that the original variable did not change[cite: 5].",
+        "In `modifyArray(int[] arr)`, assign `arr[0] = 10;` to mutate the heap array directly[cite: 5].",
+        "Print both variables in `main` after the method calls to observe the difference[cite: 5]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void modifyPrimitive(int val) {\n        val = 99;\n    }\n\n    public static void modifyArray(int[] arr) {\n        arr[0] = 10;\n    }\n\n    public static void main(String[] args) {\n        int number = 5;\n        int[] numbers = {1, 2, 3};\n\n        modifyPrimitive(number);\n        modifyArray(numbers);\n\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + numbers[0]);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Dual Element Extrema Array Return",
+      "question": "Write a method `findMinMax(int[] arr)` that traverses an integer array and returns both the minimum and maximum values packed into a two-element array `new int[]{min, max}`.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-10",
+      "id": "methods-015",
+      "explanation": "Because Java methods can return only a single value or reference, returning multiple values requires packaging them into a container object such as an array, custom class, or record[cite: 9]. Inside `findMinMax(int[] arr)`, the method validates that the input array is non-null and non-empty, throwing an `IllegalArgumentException` if invalid[cite: 3, 9]. It initializes both `min` and `max` to `arr[0]`, then iterates through the remaining elements updating both trackers in a single $O(n)$ pass[cite: 3]. Packaging the results into `new int[]{min, max}` returns both values cleanly within a single array reference[cite: 9].",
+      "hints": [
+        "Validate input: check `if (arr == null || arr.length == 0)` before traversing[cite: 3, 9].",
+        "Initialize `int min = arr[0];` and `int max = arr[0];` to handle negative numbers correctly[cite: 3].",
+        "Return `new int[]{min, max};` at the end of the method[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int[] findMinMax(int[] arr) {\n        if (arr == null || arr.length == 0) {\n            throw new IllegalArgumentException(\"Array must not be empty\");\n        }\n        int min = arr[0];\n        int max = arr[0];\n        for (int i = 1; i < arr.length; i++) {\n            if (arr[i] < min) min = arr[i];\n            if (arr[i] > max) max = arr[i];\n        }\n        return new int[]{min, max};\n    }\n\n    public static void main(String[] args) {\n        int[] data = {12, 5, 10, 8, 2};\n        int[] minMax = findMinMax(data);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + minMax[1]);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Array Reversal in Place via Method",
+      "question": "Implement two array reversal methods: `reverseInPlace(int[] arr)`, which reverses an array in-place using two-pointer swapping, and `reversedCopy(int[] arr)`, which returns a reversed copy without modifying the original array.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-06",
+      "id": "methods-016",
+      "explanation": "This exercise contrasts mutable in-place array modification with immutable copy generation[cite: 5]. In `reverseInPlace(int[] arr)`, two index pointers (`left` starting at 0, `right` starting at `arr.length - 1`) move toward each other, swapping elements until they meet in the middle[cite: 3, 5]. This operates in $O(n)$ time using $O(1)$ auxiliary space and mutates the caller's heap array directly[cite: 5]. In contrast, `reversedCopy(int[] arr)` allocates a new array of matching length, copies elements in reverse order, and returns the new reference, leaving the original array completely untouched[cite: 5]. Choosing between these patterns depends on whether caller state should be preserved.",
+      "hints": [
+        "In `reverseInPlace`, use a `while (left < right)` loop with a temporary variable to swap elements[cite: 3, 5].",
+        "In `reversedCopy`, allocate `int[] copy = new int[arr.length];` and copy elements backward[cite: 5].",
+        "Verify that `reversedCopy` leaves the original array unmodified[cite: 5]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void reverseInPlace(int[] arr) {\n        int left = 0;\n        int right = arr.length - 1;\n        while (left < right) {\n            int temp = arr[left];\n            arr[left] = arr[right];\n            arr[right] = temp;\n            left++;\n            right--;\n        }\n    }\n\n    public static int[] reversedCopy(int[] arr) {\n        int[] copy = new int[arr.length];\n        for (int i = 0; i < arr.length; i++) {\n            copy[i] = arr[arr.length - 1 - i];\n        }\n        return copy;\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {1, 2, 10};\n        int[] copy = reversedCopy(numbers);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + copy[0]);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Recursive Factorial with Boundary Guard",
+      "question": "Write a recursive method `long factorial(int n)` that computes $n!$. Include defensive input validation that throws `IllegalArgumentException` for negative numbers and for values $n > 20$ to prevent 64-bit integer overflow.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-07",
+      "id": "methods-017",
+      "explanation": "Recursion solves problems by having a method invoke itself with smaller sub-problems until reaching a base condition[cite: 6]. Because $20! = 2,432,902,008,176,640,000$ fits within a signed 64-bit `long` but $21!$ overflows into negative values, defensive validation is necessary[cite: 5]. The method checks preconditions upfront: if $n < 0$ or $n > 20$, it throws an `IllegalArgumentException`[cite: 9]. For valid inputs, the recursion terminates at the base case ($n \\le 1$ returns 1L)[cite: 6]. For $n > 1$, it evaluates `n * factorial(n - 1)`[cite: 6]. Each recursive call pushes a new frame onto the call stack, which unwinds and multiplies as the base case is reached[cite: 6].",
+      "hints": [
+        "Throw `IllegalArgumentException` if `n < 0 || n > 20` to guard against invalid inputs and numerical overflow[cite: 5, 9].",
+        "Define the base case: `if (n <= 1) return 1L;` to terminate recursion[cite: 6].",
+        "Return `n * factorial(n - 1);` for the recursive step[cite: 6]."
+      ],
+      "sampleCode": "public class Solution {\n    public static long factorial(int n) {\n        if (n < 0 || n > 20) {\n            throw new IllegalArgumentException(\"Input must be between 0 and 20 to prevent overflow.\");\n        }\n        if (n <= 1) {\n            return 1L;\n        }\n        return n * factorial(n - 1);\n    }\n\n    public static void main(String[] args) {\n        int input = 5;\n        System.out.println(\"Input: \" + input);\n        System.out.println(\"Factorial: \" + factorial(input));\n    }\n}",
+      "expectedOutput": "Input: 5\nFactorial: 120"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Overload Resolution Precedence Matrix",
+      "question": "Create overloaded methods taking `(int, long)`, `(long, int)`, `(Integer, Integer)`, and `(int...)`. Call them with different arguments to demonstrate the compiler's 3-phase overload resolution rules.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-08",
+      "id": "methods-018",
+      "explanation": "Java resolves overloaded methods in three distinct phases according to the Java Language Specification (JLS §15.12.2)[cite: 9]:\n1. Phase 1: Matches without boxing or varargs (allowing primitive widening only)[cite: 5, 9].\n2. Phase 2: Matches using boxing/unboxing conversions, but without varargs[cite: 5, 9].\n3. Phase 3: Matches allowing varargs combined with boxing/unboxing[cite: 1, 9].\n\nWhen invoking with primitive `int` literals, widening (e.g., `int` widening to `long`) takes precedence over autoboxing to `Integer`[cite: 5, 9]. However, if two widened methods match equally well (such as `(int, long)` and `(long, int)` when called with `(5, 5)`), the call is ambiguous and javac produces a compile-time error[cite: 9]. Varargs methods have the lowest priority and are selected only when no non-varargs signature matches[cite: 9].",
+      "hints": [
+        "Primitive widening takes precedence over autoboxing to wrapper types[cite: 5, 9].",
+        "Autoboxing takes precedence over varargs[cite: 5, 9].",
+        "Explicitly cast one argument (e.g., `(5, (long) 10)`) to resolve ambiguity between `(int, long)` and `(long, int)`[cite: 5, 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String test(int a, long b) {\n        return \"widening (int, long)\";\n    }\n\n    public static String test(Integer a, Integer b) {\n        return \"boxing (Integer, Integer)\";\n    }\n\n    public static String test(int... nums) {\n        return \"varargs (int...)\";\n    }\n\n    public static void main(String[] args) {\n        // Phase 1 (widening) takes priority over Phase 2 (boxing)\n        String r1 = test(5, 10L);\n        // Explicitly boxed values invoke the boxing overload\n        String r2 = test(Integer.valueOf(5), Integer.valueOf(10));\n        // Three arguments force Phase 3 (varargs)\n        String r3 = test(1, 2, 3);\n\n        System.out.println(\"Call (5, 10L): \" + r1);\n        System.out.println(\"Call (Integer, Integer): \" + r2);\n        System.out.println(\"Call (1, 2, 3): \" + r3);\n    }\n}",
+      "expectedOutput": "Call (5, 10L): widening (int, long)\nCall (Integer, Integer): boxing (Integer, Integer)\nCall (1, 2, 3): varargs (int...)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Multiple Value Wrapper Return via Record",
+      "question": "Implement a method `findMinMax(int[] data)` that finds both the minimum and maximum values in an array and returns them packaged in an immutable Java record `MinMax(int min, int max)`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-09",
+      "id": "methods-019",
+      "explanation": "Because Java methods can return only a single value, returning multiple values idiomatically uses an immutable record (introduced in Java 14/16)[cite: 4, 9]. A record declaration like `public record MinMax(int min, int max) {}` automatically generates immutable fields, a canonical constructor, accessors (`min()`, `max()`), `equals()`, `hashCode()`, and a `toString()` method[cite: 4]. Inside `findMinMax`, the method validates the array, tracks `min` and `max` in a single $O(n)$ pass, and returns an instance of the record: `return new MinMax(min, max);`[cite: 3, 4]. This provides type-safe, self-documenting multiple return values without the boilerplate of a traditional class[cite: 4].",
+      "hints": [
+        "Declare `public record MinMax(int min, int max) {}` inside or alongside the class[cite: 4].",
+        "Traverse the array once, updating both `min` and `max` values[cite: 3].",
+        "Return `new MinMax(min, max);` and access values using `.min()` and `.max()`[cite: 4]."
+      ],
+      "sampleCode": "public class Solution {\n    public record MinMax(int min, int max) {}\n\n    public static MinMax findMinMax(int[] data) {\n        if (data == null || data.length == 0) {\n            throw new IllegalArgumentException(\"Input array must contain at least one element\");\n        }\n        int min = data[0];\n        int max = data[0];\n        for (int i = 1; i < data.length; i++) {\n            if (data[i] < min) min = data[i];\n            if (data[i] > max) max = data[i];\n        }\n        return new MinMax(min, max);\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {8, 3, 15, 2, 10};\n        MinMax result = findMinMax(numbers);\n        System.out.println(\"Maximum: \" + result.max());\n        System.out.println(\"Minimum: \" + result.min());\n    }\n}",
+      "expectedOutput": "Maximum: 15\nMinimum: 2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Recursive Binary Search Implementation",
+      "question": "Implement `int binarySearch(int[] arr, int target, int low, int high)` recursively to find the index of a target element in a sorted array, returning `-1` if the element is not found.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-10",
+      "id": "methods-020",
+      "explanation": "Binary search is a divide-and-conquer algorithm that locates an element in a sorted array in $O(\\log n)$ time[cite: 9]. At each recursive step, the method calculates the midpoint using `int mid = low + (high - low) / 2` to prevent 32-bit integer overflow that can occur with `(low + high) / 2`[cite: 9]. If `arr[mid] == target`, the index is returned immediately[cite: 9]. If `arr[mid] > target`, the search recurses on the left subarray (`low` to `mid - 1`)[cite: 9]. If `arr[mid] < target`, it recurses on the right subarray (`mid + 1` to `high`)[cite: 9]. When `low > high`, the search space is exhausted and the method returns `-1`[cite: 9].",
+      "hints": [
+        "Calculate the midpoint using `low + (high - low) / 2` to prevent potential integer overflow[cite: 9].",
+        "Base condition: return `-1` if `low > high`[cite: 9].",
+        "Recurse with adjusted boundary pointers: `mid - 1` for left or `mid + 1` for right[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int binarySearch(int[] arr, int target, int low, int high) {\n        if (low > high) {\n            return -1; // Base case: element not found\n        }\n        int mid = low + (high - low) / 2;\n        if (arr[mid] == target) {\n            return mid;\n        } else if (arr[mid] > target) {\n            return binarySearch(arr, target, low, mid - 1);\n        } else {\n            return binarySearch(arr, target, mid + 1, high);\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] sortedData = {2, 4, 6, 8, 10, 12, 14};\n        int target = 10;\n        int index = binarySearch(sortedData, target, 0, sortedData.length - 1);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + sortedData[index]);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Fast Exponentiation via Binary Exponentiation",
+      "question": "Implement power calculation `double power(double x, int n)` recursively using binary exponentiation to achieve $O(\\log n)$ time complexity, handling both positive and negative exponents.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-11",
+      "id": "methods-021",
+      "explanation": "Calculating $x^n$ by multiplying $x$ repeatedly takes $O(n)$ time[cite: 9]. Binary exponentiation (exponentiation by squaring) reduces this to $O(\\log n)$ using the identity: if $n$ is even, $x^n = (x^2)^{n/2}$; if $n$ is odd, $x^n = x \\times x^{n-1}$[cite: 9]. The method divides the exponent in half at each step, halving the remaining work[cite: 9]. For negative exponents, $x^{-n} = 1 / x^n$[cite: 9]. To prevent integer overflow when $n = \\text{Integer.MIN\\_VALUE}$ (since $-\\text{Integer.MIN\\_VALUE}$ overflows 32-bit `int`), the exponent is promoted to a 64-bit `long` before negation[cite: 5].",
+      "hints": [
+        "Promote `n` to a `long` before handling negative exponents to avoid overflow with `Integer.MIN_VALUE`[cite: 5].",
+        "Base case: if $n == 0$, return 1.0[cite: 9].",
+        "Compute `half = power(x, n / 2)` and return `half * half` for even exponents, or `x * half * half` for odd exponents[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static double power(double x, int n) {\n        long exp = n;\n        if (exp < 0) {\n            x = 1.0 / x;\n            exp = -exp;\n        }\n        return fastPow(x, exp);\n    }\n\n    private static double fastPow(double x, long n) {\n        if (n == 0) return 1.0;\n        double half = fastPow(x, n / 2);\n        if (n % 2 == 0) {\n            return half * half;\n        } else {\n            return x * half * half;\n        }\n    }\n\n    public static void main(String[] args) {\n        double result = power(2.0, 10);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + (int) result);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 1024"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Memoized Fibonacci Computation",
+      "question": "Implement recursive Fibonacci calculation with memoization using a `HashMap<Integer, Long>` cache to eliminate redundant calculations and reduce time complexity from $O(2^n)$ to $O(n)$.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-12",
+      "id": "methods-022",
+      "explanation": "A naive recursive Fibonacci implementation evaluates $F(n) = F(n-1) + F(n-2)$ with overlapping sub-problems, generating an exponential call tree of $O(2^n)$ invocations that quickly leads to severe slowdown or stack exhaustion for $n > 40$[cite: 6, 9]. Memoization caches previously computed results in a lookup table (such as a `Map<Integer, Long>`)[cite: 9]. When `fib(n)` is called, the method checks the cache first; if present, it returns the cached value in $O(1)$ time[cite: 9]. If not, it computes the value, stores it in the cache, and returns it[cite: 9]. This dynamic programming technique reduces the total number of operations to $O(n)$ linear time[cite: 9].",
+      "hints": [
+        "Use a `Map<Integer, Long> memo = new HashMap<>();` to store computed Fibonacci values[cite: 9].",
+        "Base cases: return `0L` when $n = 0$ and `1L` when $n = 1$[cite: 6].",
+        "Use `memo.computeIfAbsent(n, k -> fib(k - 1) + fib(k - 2))` for concise caching[cite: 9]."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    private static final Map<Integer, Long> memo = new HashMap<>();\n\n    public static long fib(int n) {\n        if (n <= 0) return 0L;\n        if (n == 1) return 1L;\n        if (memo.containsKey(n)) {\n            return memo.get(n);\n        }\n        long val = fib(n - 1) + fib(n - 2);\n        memo.put(n, val);\n        return val;\n    }\n\n    public static void main(String[] args) {\n        System.out.print(\"First 7 Fibonacci numbers: \");\n        for (int i = 0; i < 7; i++) {\n            System.out.print(fib(i) + (i == 6 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "First 7 Fibonacci numbers: 0 1 1 2 3 5 8"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Comprehensive Method Overload Resolution Hierarchy",
+      "question": "Implement overloaded methods `inspect(int)`, `inspect(long)`, `inspect(Integer)`, `inspect(Object)`, and `inspect(int...)`. Call them with `5`, `5L`, `Integer.valueOf(5)`, `'a'`, and no arguments to demonstrate the compiler's resolution order.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-13",
+      "id": "methods-023",
+      "explanation": "Overload resolution in Java follows a strict priority hierarchy[cite: 9]:\n1. Exact primitive match[cite: 9]\n2. Primitive widening (`char` -> `int` -> `long` -> `float` -> `double`)[cite: 5, 9]\n3. Autoboxing (`int` -> `Integer`)[cite: 5, 9]\n4. Upcasting reference types (`Integer` -> `Number` -> `Object`)[cite: 9]\n5. Varargs (`int...`)[cite: 1, 9]\n\nPassing primitive literal `5` matches `inspect(int)` exactly[cite: 9]. Passing `5L` matches `inspect(long)`[cite: 5, 9]. Passing `'a'` (a `char`) widens to `inspect(int)` because primitive widening is preferred over autoboxing to `Character`[cite: 5, 9]. Passing `Integer.valueOf(5)` matches `inspect(Integer)`[cite: 5, 9]. Calling `inspect()` with no arguments matches the varargs `inspect(int...)` overload[cite: 1, 9].",
+      "hints": [
+        "Primitive widening takes precedence over autoboxing (e.g., `char` widens to `int`)[cite: 5, 9].",
+        "Autoboxing takes precedence over varargs[cite: 5, 9].",
+        "Varargs matches only when no fixed-arity overload satisfies the call[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String inspect(int x) { return \"inspect(int)\"; }\n    public static String inspect(long x) { return \"inspect(long)\"; }\n    public static String inspect(Integer x) { return \"inspect(Integer)\"; }\n    public static String inspect(Object x) { return \"inspect(Object)\"; }\n    public static String inspect(int... x) { return \"inspect(int...)\"; }\n\n    public static void main(String[] args) {\n        System.out.println(\"5: \" + inspect(5));\n        System.out.println(\"5L: \" + inspect(5L));\n        System.out.println(\"Integer: \" + inspect(Integer.valueOf(5)));\n        System.out.println(\"'a': \" + inspect('a'));\n        System.out.println(\"no args: \" + inspect());\n    }\n}",
+      "expectedOutput": "5: inspect(int)\n5L: inspect(long)\nInteger: inspect(Integer)\n'a': inspect(int)\nno args: inspect(int...)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Pass-by-Value Object Pointer Reference Swap",
+      "question": "Demonstrate why a method cannot swap two primitive integers, then implement a working swap using a mutable holder object wrapper to illustrate reference handling.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-14",
+      "id": "methods-024",
+      "explanation": "Because Java passes arguments strictly by value, swapping two primitive variables inside a method exchanges only the local parameter copies on that method's stack frame, leaving the caller's variables unchanged[cite: 5, 6]. To achieve a working swap across method boundaries, the caller must pass a reference to a mutable container object (such as a single-element array or a custom holder class like `IntHolder`)[cite: 5, 6]. Inside `swapHolders(IntHolder h1, IntHolder h2)`, exchanging the internal field values (`h1.value` and `h2.value`) mutates the objects on the heap, allowing the caller to observe the updated values[cite: 5].",
+      "hints": [
+        "Create a simple mutable wrapper class: `static class IntHolder { int value; }`[cite: 6].",
+        "Swap the contents of the holders: `int temp = h1.value; h1.value = h2.value; h2.value = temp;`[cite: 5].",
+        "Print the holder values before and after the method call to confirm the swap succeeded[cite: 5]."
+      ],
+      "sampleCode": "public class Solution {\n    static class IntHolder {\n        int value;\n        IntHolder(int value) { this.value = value; }\n    }\n\n    public static void swapHolders(IntHolder h1, IntHolder h2) {\n        int temp = h1.value;\n        h1.value = h2.value;\n        h2.value = temp;\n    }\n\n    public static void main(String[] args) {\n        IntHolder a = new IntHolder(20);\n        IntHolder b = new IntHolder(10);\n\n        swapHolders(a, b);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + a.value);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Recursive Euclidean GCD and Generic Array Formatter",
+      "question": "Implement recursive greatest common divisor `gcd(int a, int b)`, calculate least common multiple `lcm(int a, int b)` from it, and implement a generic method `<T> void printArray(T[] arr)` to display array contents.",
+      "source": "java_coding_practice.json",
+      "source_id": "methods-15",
+      "id": "methods-025",
+      "explanation": "The Euclidean algorithm computes the greatest common divisor of two integers using the recurrence $\\gcd(a, b) = \\gcd(b, a \\% b)$, terminating when $b = 0$ with base case $\\gcd(a, 0) = a$[cite: 9]. The least common multiple is computed using the relationship $\\text{lcm}(a, b) = (|a \\times b|) / \\gcd(a, b)$[cite: 9]. Combining these mathematical routines with a generic method `<T> void printArray(T[] arr)` illustrates generic type parameterization in Java methods[cite: 9]. At compile time, type erasure replaces `<T>` with `Object`, allowing the method to accept and print arrays of any reference type without code duplication[cite: 9].",
+      "hints": [
+        "Euclidean GCD base case: `if (b == 0) return a;` recursive step: `return gcd(b, a % b);`[cite: 9].",
+        "Compute LCM using `(a / gcd(a, b)) * b` to reduce intermediate integer overflow risks[cite: 9].",
+        "Declare the generic method with a leading type parameter: `public static <T> void printArray(T[] arr)`[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int gcd(int a, int b) {\n        return (b == 0) ? Math.abs(a) : gcd(b, a % b);\n    }\n\n    public static int lcm(int a, int b) {\n        if (a == 0 || b == 0) return 0;\n        return Math.abs(a / gcd(a, b)) * b;\n    }\n\n    public static <T> void printArray(T[] arr) {\n        for (int i = 0; i < arr.length; i++) {\n            System.out.print(arr[i] + (i == arr.length - 1 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n\n    public static void main(String[] args) {\n        int divisor = gcd(30, 20);\n        Integer[] sample = {divisor, 20, 30};\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + divisor);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Recursive Tail-Call Optimization Simulation",
+      "question": "Implement Fibonacci calculation using tail-recursion, and contrast it with an iterative version to demonstrate how Java's lack of automatic tail-call optimization (TCO) affects call stack growth.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-11",
+      "id": "methods-026",
+      "explanation": "A method is tail-recursive when its recursive call is the final operation performed before returning, allowing the current stack frame to be reused conceptually[cite: 6, 9]. While languages like Scala, Kotlin, and Scheme perform tail-call optimization (TCO) by transforming tail-recursive calls into loops at compile time, the standard HotSpot JVM does not eliminate tail-call stack frames[cite: 6]. Consequently, even tail-recursive Java methods allocate $O(n)$ stack frames, risking a `StackOverflowError` for deep recursion ($n > 10,000$)[cite: 2, 6]. Rewriting tail-recursive logic into an explicit iterative loop avoids recursion entirely, executing in $O(1)$ stack space[cite: 6].",
+      "hints": [
+        "Pass accumulator parameters into the tail-recursive helper: `fibTail(n, a, b)`[cite: 9].",
+        "Base case: `if (n == 0) return a; if (n == 1) return b;`[cite: 6].",
+        "Implement the iterative counterpart using two tracking variables to show $O(1)$ stack space usage[cite: 6]."
+      ],
+      "sampleCode": "public class Solution {\n    // Tail-recursive helper method\n    public static long fibTail(int n, long a, long b) {\n        if (n == 0) return a;\n        if (n == 1) return b;\n        return fibTail(n - 1, b, a + b);\n    }\n\n    // Iterative counterpart simulating tail-call stack reuse\n    public static long fibIterative(int n) {\n        if (n == 0) return 0;\n        long a = 0, b = 1;\n        for (int i = 2; i <= n; i++) {\n            long next = a + b;\n            a = b;\n            b = next;\n        }\n        return b;\n    }\n\n    public static void main(String[] args) {\n        System.out.print(\"First 7 Fibonacci numbers: \");\n        for (int i = 0; i < 7; i++) {\n            System.out.print(fibTail(i, 0, 1) + (i == 6 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "First 7 Fibonacci numbers: 0 1 1 2 3 5 8"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Generic Method Array Deduplication",
+      "question": "Write a generic method `<T> T[] removeDuplicates(T[] array, Class<T> clazz)` that removes duplicate elements while preserving original insertion order, without using Java Collections classes.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-12",
+      "id": "methods-027",
+      "explanation": "Creating a generic array in Java requires handling type erasure[cite: 9]. Because generic type parameters like `<T>` are erased to `Object` at runtime, writing `new T[size]` causes a compile-time error[cite: 9]. To instantiate an array of the actual component type at runtime, the method must take a `Class<T>` token and use `java.lang.reflect.Array.newInstance(clazz, size)`[cite: 9]. To deduplicate without Collections, the method traverses the input array, checking whether each element has already appeared in the output array using `.equals()`[cite: 5, 9]. Once the unique count is determined, a properly sized array of type `T[]` is allocated and returned[cite: 9].",
+      "hints": [
+        "Use `java.lang.reflect.Array.newInstance(clazz, uniqueCount)` to instantiate a typed array[cite: 9].",
+        "Check for duplicates using a nested loop comparing elements with `.equals()`[cite: 5, 9].",
+        "Preserve insertion order by copying unique elements into the output array sequentially[cite: 9]."
+      ],
+      "sampleCode": "import java.lang.reflect.Array;\n\npublic class Solution {\n    @SuppressWarnings(\"unchecked\")\n    public static <T> T[] removeDuplicates(T[] array, Class<T> clazz) {\n        if (array == null || array.length == 0) {\n            return (T[]) Array.newInstance(clazz, 0);\n        }\n        T[] temp = (T[]) Array.newInstance(clazz, array.length);\n        int uniqueCount = 0;\n\n        for (T item : array) {\n            boolean exists = false;\n            for (int j = 0; j < uniqueCount; j++) {\n                if (temp[j].equals(item)) {\n                    exists = true;\n                    break;\n                }\n            }\n            if (!exists) {\n                temp[uniqueCount++] = item;\n            }\n        }\n\n        T[] result = (T[]) Array.newInstance(clazz, uniqueCount);\n        System.arraycopy(temp, 0, result, 0, uniqueCount);\n        return result;\n    }\n\n    public static void main(String[] args) {\n        Integer[] data = {10, 20, 10, 30, 20};\n        Integer[] unique = removeDuplicates(data, Integer.class);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + unique[0]);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Method Chaining Fluent Query Builder",
+      "question": "Implement a `QueryBuilder` class using the fluent builder pattern, where methods like `select`, `from`, and `where` modify internal state and return `this`, culminating in a `.build()` call.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-13",
+      "id": "methods-028",
+      "explanation": "Fluent interfaces and method chaining improve readability by allowing method calls to be linked in a continuous expression[cite: 4, 9]. Each mutator method inside `QueryBuilder` updates internal state and returns `this`—the reference to the current builder instance on the heap[cite: 4, 6]. This allows callers to chain invocations (e.g., `builder.select(\"*\").from(\"users\").where(\"active = 1\")`) without repeating the instance variable name[cite: 4]. The terminal `.build()` method then validates the accumulated state and constructs the final immutable product (such as a SQL query string)[cite: 4].",
+      "hints": [
+        "Return `this` from each configuration method (`select`, `from`, `where`)[cite: 4, 6].",
+        "Accumulate query components in internal `StringBuilder` or `String` fields[cite: 3].",
+        "Assemble and return the final formatted query string in the `.build()` method[cite: 3, 4]."
+      ],
+      "sampleCode": "public class Solution {\n    static class QueryBuilder {\n        private String columns = \"*\";\n        private String table;\n        private String condition;\n\n        public QueryBuilder select(String columns) {\n            this.columns = columns;\n            return this;\n        }\n\n        public QueryBuilder from(String table) {\n            this.table = table;\n            return this;\n        }\n\n        public QueryBuilder where(String condition) {\n            this.condition = condition;\n            return this;\n        }\n\n        public String build() {\n            if (table == null || table.isEmpty()) {\n                throw new IllegalStateException(\"FROM table clause is required\");\n            }\n            StringBuilder query = new StringBuilder(\"SELECT \").append(columns).append(\" FROM \").append(table);\n            if (condition != null && !condition.isEmpty()) {\n                query.append(\" WHERE \").append(condition);\n            }\n            return query.toString();\n        }\n    }\n\n    public static void main(String[] args) {\n        String sql = new QueryBuilder()\n                .select(\"id, name\")\n                .from(\"users\")\n                .where(\"status = 'ACTIVE'\")\n                .build();\n        System.out.println(\"Generated SQL: \" + sql);\n    }\n}",
+      "expectedOutput": "Generated SQL: SELECT id, name FROM users WHERE status = 'ACTIVE'"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Recursive 0/1 Knapsack with 2D Memoization Table",
+      "question": "Implement the 0/1 Knapsack problem recursively, adding a 2D memoization table cache (`Integer[][] memo`) to reduce the time complexity from $O(2^n)$ to $O(n \\times W)$.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-14",
+      "id": "methods-029",
+      "explanation": "The 0/1 Knapsack problem is a classic combinatorial optimization problem: given items with specified weights and values, determine the maximum value that fits within a knapsack of capacity $W$[cite: 9]. A naive recursive approach evaluates two choices per item (include or exclude), resulting in an exponential $O(2^n)$ time complexity[cite: 9]. By introducing a 2D memoization table `memo[index][capacity]`, the algorithm caches intermediate results for each item index and remaining capacity pair[cite: 9]. When the recursive method encounters an already-computed `(index, capacity)` state, it returns the cached value in $O(1)$ time[cite: 9]. This reduces the overall time complexity to pseudo-polynomial $O(n \\times W)$[cite: 9].",
+      "hints": [
+        "Base case: if `index >= weights.length || capacity == 0`, return 0[cite: 9].",
+        "Check `memo[index][capacity]` before computing to return cached sub-problem results in $O(1)$ time[cite: 9].",
+        "Calculate the maximum of including the current item (if weight fits) versus excluding it, and store the result in the cache[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int knapsack(int[] weights, int[] values, int capacity) {\n        Integer[][] memo = new Integer[weights.length][capacity + 1];\n        return solve(weights, values, capacity, 0, memo);\n    }\n\n    private static int solve(int[] weights, int[] values, int capacity, int idx, Integer[][] memo) {\n        if (idx >= weights.length || capacity <= 0) {\n            return 0;\n        }\n        if (memo[idx][capacity] != null) {\n            return memo[idx][capacity];\n        }\n        int exclude = solve(weights, values, capacity, idx + 1, memo);\n        int include = 0;\n        if (weights[idx] <= capacity) {\n            include = values[idx] + solve(weights, values, capacity - weights[idx], idx + 1, memo);\n        }\n        return memo[idx][capacity] = Math.max(include, exclude);\n    }\n\n    public static void main(String[] args) {\n        int[] weights = {2, 3, 4};\n        int[] values = {3, 4, 7};\n        int maxVal = knapsack(weights, values, 5);\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + maxVal);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 7"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Deterministic Pure Function Pipeline",
+      "question": "Implement a data transformation pipeline using strictly pure methods (deterministic output, no shared state, no side effects) that chains sanitization, integer parsing, filtering, and statistical summarization.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "MTH-15",
+      "id": "methods-030",
+      "explanation": "A pure function satisfies two core properties: 1) it is deterministic (always producing the identical return value for the same input arguments), and 2) it causes no side effects (no mutation of mutable arguments, no I/O, and no modifications to external state)[cite: 9]. Structuring transformations as pure functions makes code thread-safe and easy to reason about and test[cite: 9]. In this pipeline, raw string inputs pass through sequential transformations: `sanitize` trims whitespace, `parse` converts valid tokens to integers, `filter` removes negative values, and `summarize` computes an aggregate sum[cite: 3, 9]. Because each step returns a new value rather than modifying its inputs, the pipeline maintains referential transparency[cite: 9].",
+      "hints": [
+        "Ensure methods rely strictly on their parameters and do not modify external or static fields[cite: 9].",
+        "Return newly allocated collections or primitives from each transformation step[cite: 5, 9].",
+        "Chain methods cleanly: `summarize(filterPositive(parseNumbers(sanitizeTokens(rawInput))))`[cite: 9]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static List<String> sanitizeTokens(String[] raw) {\n        List<String> cleaned = new ArrayList<>();\n        for (String s : raw) {\n            if (s != null) cleaned.add(s.trim());\n        }\n        return cleaned;\n    }\n\n    public static List<Integer> parseNumbers(List<String> tokens) {\n        List<Integer> numbers = new ArrayList<>();\n        for (String t : tokens) {\n            try {\n                numbers.add(Integer.parseInt(t));\n            } catch (NumberFormatException ignored) {}\n        }\n        return numbers;\n    }\n\n    public static List<Integer> filterPositive(List<Integer> numbers) {\n        List<Integer> positives = new ArrayList<>();\n        for (int n : numbers) {\n            if (n > 0) positives.add(n);\n        }\n        return positives;\n    }\n\n    public static int summarize(List<Integer> numbers) {\n        int sum = 0;\n        for (int n : numbers) sum += n;\n        return sum;\n    }\n\n    public static void main(String[] args) {\n        String[] raw = {\" 2 \", \"-5\", \"8\", \"bad\", \" 0 \"};\n        int total = summarize(filterPositive(parseNumbers(sanitizeTokens(raw))));\n        System.out.println(\"Method called successfully\");\n        System.out.println(\"Returned value: \" + total);\n    }\n}",
+      "expectedOutput": "Method called successfully\nReturned value: 10"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

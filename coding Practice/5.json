@@ -1,0 +1,493 @@
+{
+  "section": "Basics",
+  "slug": "data-types",
+  "topic": "Primitive and reference data types",
+  "page": 18,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Primitive Data Types Declaration and Display",
+      "question": "Declare variables of all eight Java primitive types (byte, short, int, long, float, double, char, and boolean) with representative sample values, and print each variable's name and value.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-01",
+      "id": "data-types-001",
+      "explanation": "Java features eight primitive data types categorized into integer numbers (byte, short, int, long), floating-point numbers (float, double), character units (char), and logical truth values (boolean). Unlike reference types, primitive variables directly store their raw binary bit representations inside thread stack frames or object memory layouts rather than storing pointer addresses referencing the heap. Literals require explicit compiler notation: appending 'L' or 'l' denotes a 64-bit long integer literal (preventing 32-bit integer literal truncation), while appending 'F' or 'f' marks a single-precision 32-bit float literal (preventing compilation errors caused by implicit double-precision conversions). In this program, students observe how the standard PrintStream methods seamlessly format these disparate bit layouts into clean human-readable text representations.",
+      "hints": [
+        "Append an 'L' suffix to the long literal (e.g., 10000000000L) to inform javac that the literal exceeds the default 32-bit int bounds.",
+        "Append an 'f' or 'F' suffix to the float literal (e.g., 3.14f) because fractional literals default to double precision.",
+        "Enclose character literals in single quotation marks ('A') and string labels in double quotes."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        byte byteVal = 10;\n        short shortVal = 1000;\n        int intVal = 100000;\n        long longVal = 10000000000L;\n        float floatVal = 3.14f;\n        double doubleVal = 3.14159;\n        char charVal = 'A';\n        boolean boolVal = true;\n\n        System.out.println(\"byte: \" + byteVal);\n        System.out.println(\"short: \" + shortVal);\n        System.out.println(\"int: \" + intVal);\n        System.out.println(\"long: \" + longVal);\n        System.out.println(\"float: \" + floatVal);\n        System.out.println(\"double: \" + doubleVal);\n        System.out.println(\"char: \" + charVal);\n        System.out.println(\"boolean: \" + boolVal);\n    }\n}",
+      "expectedOutput": "byte: 10\nshort: 1000\nint: 100000\nlong: 10000000000\nfloat: 3.14\ndouble: 3.14159\nchar: A\nboolean: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Integer Primitive Range Boundaries",
+      "question": "Display the minimum and maximum numeric boundaries for byte, short, int, and long by accessing their respective wrapper class constants (MIN_VALUE and MAX_VALUE).",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-02",
+      "id": "data-types-002",
+      "explanation": "Every signed integral primitive type in Java is implemented using two's complement binary representation. Because memory sizes are fixed by the Java Language Specification across all target CPU platforms, their numerical boundaries are immutable: byte occupies 8 bits (-128 to 127), short occupies 16 bits (-32,768 to 32,767), int occupies 32 bits (-2^31 to 2^31 - 1), and long occupies 64 bits (-2^63 to 2^63 - 1). The standard boxed wrapper classes in java.lang (Byte, Short, Integer, Long) expose these definitive platform limits through public static final constants named MIN_VALUE and MAX_VALUE. Reading these constants helps developers choose memory-efficient types while guarding against integer overflow.",
+      "hints": [
+        "Access wrapper constants directly using class qualifiers: Byte.MIN_VALUE, Byte.MAX_VALUE, Short.MIN_VALUE, etc.",
+        "Print both MIN_VALUE and MAX_VALUE for all four signed integer wrapper classes.",
+        "Notice the asymmetrical ranges: the absolute minimum value is always 1 greater than the maximum because zero occupies a positive sign-bit slot in two's complement."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"byte: \" + Byte.MIN_VALUE + \" to \" + Byte.MAX_VALUE);\n        System.out.println(\"short: \" + Short.MIN_VALUE + \" to \" + Short.MAX_VALUE);\n        System.out.println(\"int: \" + Integer.MIN_VALUE + \" to \" + Integer.MAX_VALUE);\n        System.out.println(\"long: \" + Long.MIN_VALUE + \" to \" + Long.MAX_VALUE);\n    }\n}",
+      "expectedOutput": "byte: -128 to 127\nshort: -32768 to 32767\nint: -2147483648 to 2147483647\nlong: -9223372036854775808 to 9223372036854775807"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Celsius to Fahrenheit Temperature Conversion",
+      "question": "Write a program that converts a temperature from Celsius to Fahrenheit using 64-bit `double` precision arithmetic and displays both values.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-03",
+      "id": "data-types-003",
+      "explanation": "Converting temperatures from Celsius to Fahrenheit relies on the standard mathematical formula: F = (C * 9/5) + 32. In Java, performing this calculation requires careful attention to integer division semantics. If the formula is written using integer literals as (celsius * 9 / 5), integer truncation will discard fractional remainders when 9 / 5 is evaluated independently. Using double floating-point literals (9.0 / 5.0 or 1.8) promotes all operands to 64-bit IEEE 754 floating-point numbers via widening primitive conversion. This guarantees that fractional temperatures are calculated accurately without unwanted integer truncation.",
+      "hints": [
+        "Use 9.0 / 5.0 or 1.8 instead of integer literal 9 / 5 to prevent integer truncation.",
+        "Store temperatures in primitive double variables.",
+        "Output the initial Celsius value alongside the computed Fahrenheit result."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double celsius = 0.0;\n        double fahrenheit = (celsius * 9.0 / 5.0) + 32.0;\n\n        System.out.println(\"Celsius: \" + celsius);\n        System.out.println(\"Fahrenheit: \" + fahrenheit);\n    }\n}",
+      "expectedOutput": "Celsius: 0.0\nFahrenheit: 32.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Primitive Variable Swapping with Temporary Storage",
+      "question": "Write a Java program that swaps the values of two `int` variables using a third temporary variable and prints the variables before and after the swap.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-04",
+      "id": "data-types-004",
+      "explanation": "Swapping two variables is a fundamental algorithmic pattern in sorting and permutation algorithms. Because primitive variables directly contain their assigned literal values rather than references to shared objects, assigning one variable to another (b = a) overwrites the original value stored in the target memory location. To exchange values safely without loss, a temporary variable (temp) must hold a copy of the first variable's value on the thread stack. Once copied, the first variable receives the second variable's value, and the second variable is assigned the cached value from temp. This illustrates value copying in Java's pass-by-value memory model.",
+      "hints": [
+        "Assign the value of variable 'a' to an intermediate variable 'temp' before modifying 'a'.",
+        "Overwrite 'a' with the value of 'b', then assign 'temp' to 'b'.",
+        "Display both variables before and after the swap to show the state change."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 15;\n        int b = 42;\n\n        System.out.println(\"Before swap: a = \" + a + \", b = \" + b);\n        int temp = a;\n        a = b;\n        b = temp;\n        System.out.println(\"After swap: a = \" + a + \", b = \" + b);\n    }\n}",
+      "expectedOutput": "Before swap: a = 15, b = 42\nAfter swap: a = 42, b = 15"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Bidirectional Char and ASCII Code Conversion",
+      "question": "Write a Java program that prints the numeric ASCII code point of a given `char` literal and prints the corresponding character for a given integer code point.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-05",
+      "id": "data-types-005",
+      "explanation": "In Java, the char type is an unsigned 16-bit integer primitive (occupying 2 bytes, ranging from 0 to 65,535) representing UTF-16 code units. Because char stores raw numerical code points internally, converting between a character and its integer representation requires simple type casting. Casting a char to an int performs a zero-extending widening primitive conversion, exposing the underlying ASCII/Unicode numerical value. Conversely, casting an int down to a char truncates the value to its lower 16 bits and maps it back to its visual character representation in the Unicode table.",
+      "hints": [
+        "Cast the char literal to an int using (int) ch to extract its ASCII code point.",
+        "Cast an integer value back to a char using (char) asciiValue.",
+        "Print both mappings clearly to verify the bidirectional conversion."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        char letter = 'A';\n        int asciiFromChar = (int) letter;\n\n        int codePoint = 66;\n        char charFromInt = (char) codePoint;\n\n        System.out.println(\"Character: '\" + letter + \"' -> ASCII: \" + asciiFromChar);\n        System.out.println(\"ASCII: \" + codePoint + \" -> Character: '\" + charFromInt + \"'\");\n    }\n}",
+      "expectedOutput": "Character: 'A' -> ASCII: 65\nASCII: 66 -> Character: 'B'"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Primitive Ranges and Bytes Inspector",
+      "question": "Write a program that inspects and displays the minimum value, maximum value, bit size, and byte size for all primitive numeric types using their boxed wrapper constants.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-01",
+      "id": "data-types-006",
+      "explanation": "Standard wrapper classes in the java.lang package (Byte, Short, Integer, Long, Float, Double) encapsulate static metadata constants documenting their binary layouts. The SIZE constant provides the bit-width of the primitive type (8, 16, 32, or 64 bits), while the BYTES constant specifies the exact memory footprint in 8-bit bytes (1, 2, 4, or 8 bytes). MIN_VALUE and MAX_VALUE define the numerical boundaries of the type. For IEEE 754 floating-point types, MIN_VALUE denotes the smallest positive non-zero value, while -MAX_VALUE represents the lower boundary. Inspecting these constants clarifies how memory is allocated for primitive types across architectures.",
+      "hints": [
+        "Use Byte.SIZE and Byte.BYTES alongside MIN_VALUE and MAX_VALUE.",
+        "Observe that for Float and Double, MIN_VALUE is the smallest positive non-zero value (e.g., 1.4E-45), unlike integer types where MIN_VALUE is negative.",
+        "Format the output into a clean, legible table or labeled list."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Byte: \" + Byte.BYTES + \" bytes (\" + Byte.SIZE + \" bits), Range: [\" + Byte.MIN_VALUE + \" to \" + Byte.MAX_VALUE + \"]\");\n        System.out.println(\"Short: \" + Short.BYTES + \" bytes (\" + Short.SIZE + \" bits), Range: [\" + Short.MIN_VALUE + \" to \" + Short.MAX_VALUE + \"]\");\n        System.out.println(\"Integer: \" + Integer.BYTES + \" bytes (\" + Integer.SIZE + \" bits), Range: [\" + Integer.MIN_VALUE + \" to \" + Integer.MAX_VALUE + \"]\");\n        System.out.println(\"Long: \" + Long.BYTES + \" bytes (\" + Long.SIZE + \" bits), Range: [\" + Long.MIN_VALUE + \" to \" + Long.MAX_VALUE + \"]\");\n        System.out.println(\"Float: \" + Float.BYTES + \" bytes (\" + Float.SIZE + \" bits), Positive Min: \" + Float.MIN_VALUE + \", Max: \" + Float.MAX_VALUE);\n        System.out.println(\"Double: \" + Double.BYTES + \" bytes (\" + Double.SIZE + \" bits), Positive Min: \" + Double.MIN_VALUE + \", Max: \" + Double.MAX_VALUE);\n    }\n}",
+      "expectedOutput": "Byte: 1 bytes (8 bits), Range: [-128 to 127]\nShort: 2 bytes (16 bits), Range: [-32768 to 32767]\nInteger: 4 bytes (32 bits), Range: [-2147483648 to 2147483647]\nLong: 8 bytes (64 bits), Range: [-9223372036854775808 to 9223372036854775807]\nFloat: 4 bytes (32 bits), Positive Min: 1.4E-45, Max: 3.4028235E38\nDouble: 8 bytes (64 bits), Positive Min: 4.9E-324, Max: 1.7976931348623157E308"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Explicit Type Casting Safety Check",
+      "question": "Write a program that takes an integer value, casts it down to a primitive `byte`, and programmatically verifies whether precision loss or overflow occurred.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-02",
+      "id": "data-types-007",
+      "explanation": "Downcasting a 32-bit int to an 8-bit byte triggers a narrowing primitive conversion (JLS §5.1.3). The compiler discards the upper 24 bits of the integer, preserving only the lowest 8 bits. If the original integer falls outside the valid byte range of -128 to 127, this bit truncation corrupts the numeric magnitude and may flip the sign bit. An application can verify casting safety by checking whether the integer satisfies original >= Byte.MIN_VALUE && original <= Byte.MAX_VALUE, or by comparing the cast byte back against the original int ((byte) original == original). This validation prevents subtle truncation bugs in network serialization and byte buffer manipulation.",
+      "hints": [
+        "Cast the int to a byte using (byte) originalValue.",
+        "Compare the original value against Byte.MIN_VALUE and Byte.MAX_VALUE.",
+        "Observe how casting 130 results in -126 due to two's complement sign-bit wrap-around."
+      ],
+      "sampleCode": "public class Solution {\n    public static void checkCast(int value) {\n        byte casted = (byte) value;\n        boolean dataLoss = (casted != value);\n        System.out.println(\"Original int: \" + value + \" -> Casted byte: \" + casted + \" | Data loss occurred: \" + dataLoss);\n    }\n\n    public static void main(String[] args) {\n        checkCast(100);\n        checkCast(130);\n    }\n}",
+      "expectedOutput": "Original int: 100 -> Casted byte: 100 | Data loss occurred: false\nOriginal int: 130 -> Casted byte: -126 | Data loss occurred: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character Arithmetic and Offset",
+      "question": "Write a program that converts lowercase ASCII characters to uppercase using pure char arithmetic and numerical offsets, without calling library methods like `Character.toUpperCase()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-03",
+      "id": "data-types-008",
+      "explanation": "In the standard ASCII and Unicode tables, lowercase Latin letters ('a' through 'z', decimal 97 to 122) and uppercase Latin letters ('A' through 'Z', decimal 65 to 90) are laid out in contiguous sequences separated by a fixed offset of 32 ('a' - 'A' = 32). Performing arithmetic on char primitives promotes them to 32-bit integers during operand evaluation. Subtracting 32 (or subtracting ('a' - 'A')) shifts a lowercase character code point directly to its uppercase equivalent. The result is then cast back to a char ((char)(ch - 32)). This manual arithmetic illustrates how characters are represented as numerical values in digital systems.",
+      "hints": [
+        "Verify that the target character is within lowercase range: ch >= 'a' && ch <= 'z'.",
+        "Subtract ('a' - 'A') or 32 from the lowercase character code point.",
+        "Cast the evaluated integer arithmetic expression back to a primitive char using (char)."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String input = \"java backend\";\n        StringBuilder upper = new StringBuilder();\n\n        for (int i = 0; i < input.length(); i++) {\n            char ch = input.charAt(i);\n            if (ch >= 'a' && ch <= 'z') {\n                upper.append((char) (ch - ('a' - 'A')));\n            } else {\n                upper.append(ch);\n            }\n        }\n\n        System.out.println(\"Input: \" + input);\n        System.out.println(\"Output: \" + upper.toString());\n    }\n}",
+      "expectedOutput": "Input: java backend\nOutput: JAVA BACKEND"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Floating-Point Precision Anomaly",
+      "question": "Demonstrate why evaluating `0.1 + 0.2 == 0.3` returns `false` using standard `double` primitives, and implement a precision-safe solution using `BigDecimal`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-04",
+      "id": "data-types-009",
+      "explanation": "Floating-point primitives (float and double) adhere to the IEEE 754 binary floating-point standard. In base-2 binary, numbers like 0.1 and 0.2 cannot be represented as terminating fractions; they become repeating binary sequences, similar to 1/3 in base-10 decimal. Consequently, adding 0.1 and 0.2 produces 0.30000000000000004 rather than 0.3, causing direct equality checks (0.1 + 0.2 == 0.3) to fail. For financial, scientific, or tax calculations where exact decimal precision is mandatory, Java provides java.math.BigDecimal. Initializing BigDecimal using string literals (new BigDecimal(\"0.1\")) avoids floating-point inaccuracies and guarantees exact base-10 arithmetic.",
+      "hints": [
+        "Evaluate double sum = 0.1 + 0.2 and print the comparison result: sum == 0.3.",
+        "Construct BigDecimal instances using string literals (e.g., new BigDecimal(\"0.1\")) rather than double literals.",
+        "Use the bd1.add(bd2).compareTo(bd3) method to evaluate exact decimal equality."
+      ],
+      "sampleCode": "import java.math.BigDecimal;\n\npublic class Solution {\n    public static void main(String[] args) {\n        double primitiveSum = 0.1 + 0.2;\n        boolean primitiveEquality = (primitiveSum == 0.3);\n        System.out.println(\"primitive 0.1 + 0.2 = \" + primitiveSum);\n        System.out.println(\"primitiveSum == 0.3: \" + primitiveEquality);\n\n        BigDecimal bd1 = new BigDecimal(\"0.1\");\n        BigDecimal bd2 = new BigDecimal(\"0.2\");\n        BigDecimal bdSum = bd1.add(bd2);\n        BigDecimal expected = new BigDecimal(\"0.3\");\n        boolean bigDecimalEquality = bdSum.compareTo(expected) == 0;\n        System.out.println(\"BigDecimal 0.1 + 0.2 = \" + bdSum);\n        System.out.println(\"bdSum.compareTo(expected) == 0: \" + bigDecimalEquality);\n    }\n}",
+      "expectedOutput": "primitive 0.1 + 0.2 = 0.30000000000000004\nprimitiveSum == 0.3: false\nBigDecimal 0.1 + 0.2 = 0.3\nbdSum.compareTo(expected) == 0: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Autoboxing vs Unboxing Mechanics",
+      "question": "Demonstrate explicit boxing, unboxing, and compiler autoboxing between `int` and `Integer`. Show how unboxing a `null` wrapper reference causes a `NullPointerException`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-05",
+      "id": "data-types-010",
+      "explanation": "Java 5 introduced autoboxing and auto-unboxing to bridge the gap between primitives and their corresponding reference wrapper objects. Autoboxing is syntactic sugar: when assigning a primitive int to an Integer reference, javac generates an invocation of Integer.valueOf(int). Conversely, when assigning an Integer object back to a primitive int, javac emits a call to integerObj.intValue(). Because unboxing invokes an instance method on the wrapper object, attempting to unbox a wrapper whose reference is null throws a java.lang.NullPointerException at runtime. Understanding this mechanism helps developers avoid unexpected runtime exceptions when working with collections, generics, and ORM entity fields.",
+      "hints": [
+        "Demonstrate explicit boxing via Integer.valueOf(42) and unboxing via obj.intValue().",
+        "Demonstrate implicit autoboxing: Integer boxed = 42; int unboxed = boxed;.",
+        "Assign null to an Integer reference and unbox it inside a try-catch block catching NullPointerException."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Explicit boxing and unboxing\n        Integer explicitBoxed = Integer.valueOf(100);\n        int explicitUnboxed = explicitBoxed.intValue();\n\n        // Implicit autoboxing and unboxing\n        Integer autoBoxed = 200;\n        int autoUnboxed = autoBoxed;\n\n        System.out.println(\"Explicit: \" + explicitUnboxed + \", Auto: \" + autoUnboxed);\n\n        // Null unboxing hazard demonstration\n        Integer nullWrapper = null;\n        try {\n            int dangerous = nullWrapper; // Triggers nullWrapper.intValue()\n            System.out.println(\"Value: \" + dangerous);\n        } catch (NullPointerException npe) {\n            System.out.println(\"Caught NullPointerException: unboxing null wrapper reference!\");\n        }\n    }\n}",
+      "expectedOutput": "Explicit: 100, Auto: 200\nCaught NullPointerException: unboxing null wrapper reference!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Primitive Widening Conversion Chain",
+      "question": "Demonstrate the complete widening primitive conversion pipeline (byte -> short -> int -> long -> float -> double) and display the value at each step to observe automatic type promotion.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-06",
+      "id": "data-types-011",
+      "explanation": "Widening primitive conversions (JLS §5.1.2) occur automatically when a smaller primitive type is assigned to a larger target type without requiring an explicit cast. The conversion sequence flows from byte to short, int, long, float, and double. Conversions among integral types preserve exact numeric values through sign extension. However, converting from a 64-bit long to a 32-bit float or a 64-bit double can cause a loss of least-significant bits: while the magnitude fits within the floating-point range, the limited mantissa width (24 bits for float, 53 bits for double) may round the least-significant digits. Tracking this conversion chain illustrates how the JVM promotes types across expression evaluations.",
+      "hints": [
+        "Assign each widened variable directly to the next without explicit casts (e.g., short s = b; int i = s;).",
+        "Print the value and type name at each step in the chain.",
+        "Observe how the decimal point is introduced when transitioning from long to float."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        byte b = 42;\n        short s = b;       // Widening: byte to short\n        int i = s;         // Widening: short to int\n        long l = i;        // Widening: int to long\n        float f = l;       // Widening: long to float\n        double d = f;      // Widening: float to double\n\n        System.out.println(\"byte value: \" + b);\n        System.out.println(\"widened to short: \" + s);\n        System.out.println(\"widened to int: \" + i);\n        System.out.println(\"widened to long: \" + l);\n        System.out.println(\"widened to float: \" + f);\n        System.out.println(\"widened to double: \" + d);\n    }\n}",
+      "expectedOutput": "byte value: 42\nwidened to short: 42\nwidened to int: 42\nwidened to long: 42\nwidened to float: 42.0\nwidened to double: 42.0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Narrowing Conversions and Bit Discarding",
+      "question": "Demonstrate explicit narrowing primitive conversions: cast `130.75` down to `int`, `130` down to `byte`, and `300` down to `byte`. Print the results and explain the underlying bit truncation.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-07",
+      "id": "data-types-012",
+      "explanation": "Narrowing primitive conversions (JLS §5.1.3) require explicit casting because they can discard bits and cause data loss. When double 130.75 is cast to an int, the fractional digits are truncated toward zero, leaving 130. When int 130 (binary 00000000_00000000_00000000_10000010) is cast to an 8-bit byte, the upper 24 bits are discarded. The remaining 8 bits (10000010) represent -126 in two's complement because the most significant bit acts as the negative sign bit. Similarly, casting int 300 (binary 00000000_00000000_00000001_00101100) down to a byte keeps only the lowest 8 bits (00101100), yielding 44 (300 - 256 = 44).",
+      "hints": [
+        "Use explicit casting: (int) 130.75, (byte) 130, and (byte) 300.",
+        "Print the results with explanatory labels.",
+        "Understand that integer casts truncate toward zero, while byte casts truncate upper bits to an 8-bit width."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double floatingVal = 130.75;\n        int intFromDouble = (int) floatingVal;  // Truncates decimal fraction\n\n        int intVal130 = 130;\n        byte byteFrom130 = (byte) intVal130;    // 130 exceeds 127; wraps to -126\n\n        int intVal300 = 300;\n        byte byteFrom300 = (byte) intVal300;    // 300 % 256 yields 44\n\n        System.out.println(\"130.75 cast to int: \" + intFromDouble);\n        System.out.println(\"130 cast to byte: \" + byteFrom130);\n        System.out.println(\"300 cast to byte: \" + byteFrom300);\n    }\n}",
+      "expectedOutput": "130.75 cast to int: 130\n130 cast to byte: -126\n300 cast to byte: 44"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Integer Overflow Detection with Exact Arithmetic",
+      "question": "Demonstrate the difference between standard integer addition (which overflows silently) and `Math.addExact()`, catching the `ArithmeticException` thrown on boundary overflow.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-08",
+      "id": "data-types-013",
+      "explanation": "By default, arithmetic operations in Java overflow and underflow silently without throwing runtime warnings or exceptions. Adding 1 to Integer.MAX_VALUE (2,147,483,647) flips the sign bit in two's complement representation, wrapping around to Integer.MIN_VALUE (-2,147,483,648). This silent overflow can cause subtle bugs in financial and security-sensitive calculations. To prevent this, Java 8 introduced exact arithmetic methods in java.lang.Math (such as addExact, subtractExact, multiplyExact). These methods inspect machine overflow flags after the operation and throw a java.lang.ArithmeticException if the result exceeds the primitive range.",
+      "hints": [
+        "Add 1 to Integer.MAX_VALUE using standard + to observe silent wrap-around.",
+        "Call Math.addExact(Integer.MAX_VALUE, 1) inside a try block.",
+        "Catch java.lang.ArithmeticException to handle the detected overflow safely."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int max = Integer.MAX_VALUE;\n\n        // Unchecked silent overflow\n        int overflowed = max + 1;\n        System.out.println(\"Standard addition (silent overflow): \" + overflowed);\n\n        // Checked overflow using Math.addExact\n        try {\n            int safeResult = Math.addExact(max, 1);\n            System.out.println(\"Safe result: \" + safeResult);\n        } catch (ArithmeticException e) {\n            System.out.println(\"Caught ArithmeticException via Math.addExact: integer overflow detected!\");\n        }\n    }\n}",
+      "expectedOutput": "Standard addition (silent overflow): -2147483648\nCaught ArithmeticException via Math.addExact: integer overflow detected!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Floating-Point Comparison: Direct, Epsilon, and BigDecimal",
+      "question": "Compare the sum of `0.1 + 0.2` against `0.3` using three distinct comparison techniques: direct `==` equality, an epsilon tolerance threshold, and exact `BigDecimal` comparison.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-09",
+      "id": "data-types-014",
+      "explanation": "Because binary floating-point numbers cannot represent decimal fractions like 0.1 and 0.2 exactly, comparing floating-point numbers requires careful handling. Direct equality (a == b) fails because 0.1 + 0.2 evaluates to 0.30000000000000004. In scientific and game programming, developers use an epsilon tolerance test: Math.abs(a - b) < EPSILON (e.g., 1e-9). If the difference is smaller than the chosen epsilon threshold, the values are considered practically equal. In financial and enterprise systems where rounding tolerance is unacceptable, developers use BigDecimal, which performs exact arbitrary-precision base-10 arithmetic.",
+      "hints": [
+        "Evaluate direct equality: (0.1 + 0.2) == 0.3.",
+        "Implement epsilon comparison: Math.abs((0.1 + 0.2) - 0.3) < 1e-9.",
+        "Implement exact decimal comparison using new BigDecimal(\"0.1\").add(new BigDecimal(\"0.2\")).compareTo(new BigDecimal(\"0.3\")) == 0."
+      ],
+      "sampleCode": "import java.math.BigDecimal;\n\npublic class Solution {\n    public static void main(String[] args) {\n        double a = 0.1;\n        double b = 0.2;\n        double sum = a + b;\n        double expected = 0.3;\n\n        // Method 1: Direct comparison\n        boolean directEquals = (sum == expected);\n\n        // Method 2: Epsilon comparison\n        double epsilon = 1e-9;\n        boolean epsilonEquals = Math.abs(sum - expected) < epsilon;\n\n        // Method 3: BigDecimal comparison\n        BigDecimal bdA = new BigDecimal(\"0.1\");\n        BigDecimal bdB = new BigDecimal(\"0.2\");\n        BigDecimal bdSum = bdA.add(bdB);\n        BigDecimal bdExpected = new BigDecimal(\"0.3\");\n        boolean bigDecimalEquals = bdSum.compareTo(bdExpected) == 0;\n\n        System.out.println(\"1. Direct equality (==): \" + directEquals);\n        System.out.println(\"2. Epsilon tolerance match: \" + epsilonEquals);\n        System.out.println(\"3. BigDecimal exact match: \" + bigDecimalEquals);\n    }\n}",
+      "expectedOutput": "1. Direct equality (==): false\n2. Epsilon tolerance match: true\n3. BigDecimal exact match: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Integer Wrapper Cache Mechanics",
+      "question": "Instantiate two `Integer` objects with value `127` and two with value `128`. Compare each pair using both reference equality (`==`) and value equality (`equals()`), explaining the Integer Cache in comments.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-10",
+      "id": "data-types-015",
+      "explanation": "To optimize memory usage and performance, the Java Virtual Machine maintains an internal flyweight cache of Integer wrapper instances (JLS §5.1.7). When autoboxing or invoking Integer.valueOf(int), values within the range of -128 to 127 return pre-allocated, shared instances from the internal IntegerCache. Therefore, comparing two Integer objects with value 127 using the reference equality operator (==) evaluates to true because both references point to the exact same cached object on the heap. For values outside this range (like 128), Integer.valueOf() instantiates a new Integer object, causing == to evaluate to false. Value equality should always be checked using .equals().",
+      "hints": [
+        "Assign values using autoboxing or Integer.valueOf() to ensure the cache is used (e.g., Integer a = 127;).",
+        "Compare each pair using == for reference identity and .equals() for value equivalence.",
+        "Add comments explaining that the default cache bounds are [-128, 127] (configurable via -XX:AutoBoxCacheMax)."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Values inside the default IntegerCache range [-128, 127]\n        Integer a1 = 127;\n        Integer a2 = 127;\n        System.out.println(\"127 == 127: \" + (a1 == a2));\n        System.out.println(\"127.equals(127): \" + a1.equals(a2));\n\n        // Values outside the IntegerCache range\n        Integer b1 = 128;\n        Integer b2 = 128;\n        System.out.println(\"128 == 128: \" + (b1 == b2));\n        System.out.println(\"128.equals(128): \" + b1.equals(b2));\n    }\n}",
+      "expectedOutput": "127 == 127: true\n127.equals(127): true\n128 == 128: false\n128.equals(128): true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Primitive Integer Overflow Trap",
+      "question": "Write a program that computes factorials sequentially up to 25. Detect when `long` precision overflows using `Math.multiplyExact()` and switch automatically to `BigInteger`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-06",
+      "id": "data-types-016",
+      "explanation": "Factorials grow rapidly and quickly exceed fixed-width integer limits. A 64-bit signed long can store numbers up to 9,223,372,036,854,775,807. The factorial of 20 (20! = 2,432,902,008,176,640,000) fits within a long, but 21! overflows, wrapping around to negative values. Using Math.multiplyExact(currentFact, n) throws an ArithmeticException when computing 21!, providing a clear signal to transition calculation to java.math.BigInteger. BigInteger uses dynamic array-backed storage to support arbitrarily large numbers, bounded only by available heap memory.",
+      "hints": [
+        "Compute factorials iteratively with a long variable up to n = 20.",
+        "Catch ArithmeticException from Math.multiplyExact(longFactorial, n) at n = 21.",
+        "Transition to BigInteger.valueOf(lastValid).multiply(BigInteger.valueOf(n)) once overflow is detected."
+      ],
+      "sampleCode": "import java.math.BigInteger;\n\npublic class Solution {\n    public static void main(String[] args) {\n        long factLong = 1L;\n        int n = 1;\n        boolean overflowDetected = false;\n\n        while (n <= 22) {\n            if (!overflowDetected) {\n                try {\n                    factLong = Math.multiplyExact(factLong, n);\n                    System.out.println(n + \"! (long) = \" + factLong);\n                } catch (ArithmeticException e) {\n                    System.out.println(\"Overflow detected at \" + n + \"! Switching to BigInteger.\");\n                    overflowDetected = true;\n                    BigInteger factBig = BigInteger.valueOf(factLong).multiply(BigInteger.valueOf(n));\n                    System.out.println(n + \"! (BigInteger) = \" + factBig);\n                }\n            } else {\n                BigInteger factBig = BigInteger.valueOf(factLong);\n                for (int i = 21; i <= n; i++) {\n                    factBig = factBig.multiply(BigInteger.valueOf(i));\n                }\n                System.out.println(n + \"! (BigInteger) = \" + factBig);\n            }\n            n++;\n        }\n    }\n}",
+      "expectedOutput": "1! (long) = 1\n2! (long) = 2\n3! (long) = 6\n4! (long) = 24\n5! (long) = 120\n6! (long) = 720\n7! (long) = 5040\n8! (long) = 40320\n9! (long) = 362880\n10! (long) = 3628800\n11! (long) = 39916800\n12! (long) = 479001600\n13! (long) = 6227020800\n14! (long) = 87178291200\n15! (long) = 1307674368000\n16! (long) = 20922789888000\n17! (long) = 355687428096000\n18! (long) = 6402373705728000\n19! (long) = 121645100408832000\n20! (long) = 2432902008176640000\nOverflow detected at 21! Switching to BigInteger.\n21! (BigInteger) = 51090942171709440000\n22! (BigInteger) = 1124000727777607680000"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Integer Cache Range Tester",
+      "question": "Write a program that tests object identity (`==`) on autoboxed `Integer` instances across values from `-130` to `130`, identifying the lower and upper boundaries of the internal Integer Cache.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-07",
+      "id": "data-types-017",
+      "explanation": "According to the Java Language Specification (JLS §5.1.7), boxing conversions must return the same shared object reference for all values between -128 and 127 inclusive. To determine these boundaries programmatically, an application can autobox pairs of Integer instances across a test range (e.g., -130 to 130) and check reference equality using ==. Values where (Integer.valueOf(i) == Integer.valueOf(i)) evaluates to true define the active cache range. Values at -129 and 128 evaluate to false, confirming the default bounds of [-128, 127].",
+      "hints": [
+        "Iterate with a loop: for (int i = -130; i <= 130; i++).",
+        "Box each integer into two separate references: Integer a = i; Integer b = i;.",
+        "Check reference equality with a == b and track the lowest and highest values where it evaluates to true."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int cachedMin = Integer.MAX_VALUE;\n        int cachedMax = Integer.MIN_VALUE;\n\n        for (int i = -130; i <= 130; i++) {\n            Integer first = i;\n            Integer second = i;\n            if (first == second) {\n                if (i < cachedMin) cachedMin = i;\n                if (i > cachedMax) cachedMax = i;\n            }\n        }\n\n        System.out.println(\"Testing values outside cache: -129 == -129 is \" + (Integer.valueOf(-129) == Integer.valueOf(-129)));\n        System.out.println(\"Testing values inside cache: 100 == 100 is \" + (Integer.valueOf(100) == Integer.valueOf(100)));\n        System.out.println(\"Testing values outside cache: 128 == 128 is \" + (Integer.valueOf(128) == Integer.valueOf(128)));\n        System.out.println(\"Detected IntegerCache lower bound: \" + cachedMin);\n        System.out.println(\"Detected IntegerCache upper bound: \" + cachedMax);\n    }\n}",
+      "expectedOutput": "Testing values outside cache: -129 == -129 is false\nTesting values inside cache: 100 == 100 is true\nTesting values outside cache: 128 == 128 is false\nDetected IntegerCache lower bound: -128\nDetected IntegerCache upper bound: 127"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Reference Modification vs Reassignment",
+      "question": "Demonstrate Java's pass-by-value evaluation model by passing a custom `Point` object reference and an `int` primitive into a method that modifies object state and reassigns parameter references.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-08",
+      "id": "data-types-018",
+      "explanation": "Java strictly uses a pass-by-value evaluation model. When passing arguments to a method, the parameter variable receives a copy of the argument's value. For primitive types, this means a copy of the raw numeric bits is placed in the method's stack frame; modifying or reassigning that parameter has no effect on the caller's variable. For reference types, the value copied is the object's heap memory address. Using that copied address to mutate object fields (e.g., pt.x = 99) changes the shared object on the heap, and the caller observes the mutation. However, reassigning the parameter reference itself (pt = new Point(0, 0)) only changes the local copy on the stack, leaving the caller's reference unchanged.",
+      "hints": [
+        "Define a simple Point class with mutable fields int x and int y.",
+        "Implement a method modify(Point pt, int primitiveVal) that mutates pt.x, reassigns pt = new Point(999, 999), and increments primitiveVal.",
+        "Print values in main before and after calling the method to observe the differences."
+      ],
+      "sampleCode": "public class Solution {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        public String toString() { return \"(\" + x + \", \" + y + \")\"; }\n    }\n\n    public static void testPassByValue(Point p, int val) {\n        p.x = 50;                     // Mutates object on heap via shared reference\n        p = new Point(999, 999);      // Reassigns local copy of reference; caller unaffected\n        val = 100;                    // Reassigns local primitive copy; caller unaffected\n    }\n\n    public static void main(String[] args) {\n        Point originalPoint = new Point(10, 20);\n        int originalPrimitive = 5;\n\n        System.out.println(\"Before call: Point = \" + originalPoint + \", Primitive = \" + originalPrimitive);\n        testPassByValue(originalPoint, originalPrimitive);\n        System.out.println(\"After call:  Point = \" + originalPoint + \", Primitive = \" + originalPrimitive);\n    }\n}",
+      "expectedOutput": "Before call: Point = (10, 20), Primitive = 5\nAfter call:  Point = (50, 20), Primitive = 5"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Binary to Floating-Point Representation",
+      "question": "Write a program using `Float.floatToIntBits()` to decompose a 32-bit `float` into its IEEE 754 components: the 1-bit sign, the 8-bit biased exponent, and the 23-bit mantissa.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-09",
+      "id": "data-types-019",
+      "explanation": "Under the IEEE 754 specification, single-precision 32-bit floats are stored in three distinct bit fields: bit 31 represents the sign (0 for positive, 1 for negative); bits 30–23 store an 8-bit exponent biased by +127; and bits 22–0 store a 23-bit mantissa (significand). The Float.floatToIntBits() method returns the raw 32-bit integer bit pattern of a float value. Using bitwise shifts and bitmasks, developers can isolate each component: (bits >>> 31) extracts the sign bit, ((bits >>> 23) & 0xFF) extracts the biased exponent, and (bits & 0x7FFFFF) isolates the mantissa. This bit inspection illustrates how floating-point numbers are represented in hardware.",
+      "hints": [
+        "Convert the float to raw integer bits using Float.floatToIntBits(floatVal).",
+        "Use bitwise shift and mask operations: sign = (bits >>> 31) & 0x1, exponent = (bits >>> 23) & 0xFF, mantissa = bits & 0x7FFFFF.",
+        "Print each component in both decimal and binary string representations."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        float val = -12.5f;\n        int bits = Float.floatToIntBits(val);\n\n        int sign = (bits >>> 31) & 0x1;\n        int exponent = (bits >>> 23) & 0xFF;\n        int mantissa = bits & 0x7FFFFF;\n\n        System.out.println(\"Float Value: \" + val);\n        System.out.println(\"Raw 32-bit binary: \" + String.format(\"%32s\", Integer.toBinaryString(bits)).replace(' ', '0'));\n        System.out.println(\"Sign bit: \" + sign + \" (\" + (sign == 0 ? \"Positive\" : \"Negative\") + \")\");\n        System.out.println(\"Exponent (biased): \" + exponent + \" (Actual: \" + (exponent - 127) + \")\");\n        System.out.println(\"Mantissa (hex): 0x\" + Integer.toHexString(mantissa).toUpperCase());\n    }\n}",
+      "expectedOutput": "Float Value: -12.5\nRaw 32-bit binary: 11000001010010000000000000000000\nSign bit: 1 (Negative)\nExponent (biased): 130 (Actual: 3)\nMantissa (hex): 0x480000"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Deep vs Shallow Object Cloning",
+      "question": "Implement an `Address` class and a `Person` class containing an Address reference. Demonstrate how mutating a nested Address field affects a shallow copy but leaves a deep copy unchanged.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-10",
+      "id": "data-types-020",
+      "explanation": "Cloning determines how reference types duplicate nested object graphs. A shallow copy copies primitive values directly, but for reference fields, it copies only the memory address. Consequently, both the original and cloned objects reference the exact same nested object on the heap, and mutating the nested object through one reference modifies it for both. In contrast, a deep copy recursively instantiates new copies of all nested objects. The cloned object receives its own independent Address instance on the heap, isolating its state from subsequent mutations of the original object.",
+      "hints": [
+        "In shallowCopy(), return new Person(this.name, this.address) passing the existing Address reference.",
+        "In deepCopy(), return new Person(this.name, new Address(this.address.city)) instantiating a new Address.",
+        "Mutate the original object's address city and print the city names across all three objects."
+      ],
+      "sampleCode": "public class Solution {\n    static class Address {\n        String city;\n        Address(String city) { this.city = city; }\n    }\n\n    static class Person {\n        String name;\n        Address address;\n        Person(String name, Address address) {\n            this.name = name;\n            this.address = address;\n        }\n        Person shallowCopy() {\n            return new Person(this.name, this.address);\n        }\n        Person deepCopy() {\n            return new Person(this.name, new Address(this.address.city));\n        }\n    }\n\n    public static void main(String[] args) {\n        Address addr = new Address(\"Delhi\");\n        Person original = new Person(\"Akshat\", addr);\n        Person shallow = original.shallowCopy();\n        Person deep = original.deepCopy();\n\n        // Mutate original address\n        original.address.city = \"Mumbai\";\n\n        System.out.println(\"Original City: \" + original.address.city);\n        System.out.println(\"Shallow Copy City (shared reference): \" + shallow.address.city);\n        System.out.println(\"Deep Copy City (isolated reference): \" + deep.address.city);\n    }\n}",
+      "expectedOutput": "Original City: Mumbai\nShallow Copy City (shared reference): Mumbai\nDeep Copy City (isolated reference): Delhi"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Collection Unboxing with Null Safety Defense",
+      "question": "Iterate over a `List<Integer>` containing both valid integers and `null` elements to compute their sum, handling and recovering from potential `NullPointerException` errors caused by unboxing.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-11",
+      "id": "data-types-021",
+      "explanation": "Generic collections in Java (such as List<Integer>) store object references on the heap and cannot hold primitives directly. When calculating an aggregate sum with an enhanced for-loop (for (int val : list)), the compiler inserts an implicit call to val.intValue() for every element. If the collection contains a null reference, this implicit call throws a java.lang.NullPointerException. Robust applications prevent this by checking for null before unboxing, or by wrapping unboxing operations in try-catch blocks to skip null entries and maintain uninterrupted collection processing.",
+      "hints": [
+        "Iterate over elements as Integer objects (for (Integer val : list)) to avoid automatic unboxing at the loop boundary.",
+        "Check if val == null before accumulating it into a primitive int sum.",
+        "Demonstrate catching NullPointerException when unboxing an unverified element."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        List<Integer> numbers = Arrays.asList(10, 20, null, 40, null, 50);\n        int safeSum = 0;\n        int nullCount = 0;\n\n        for (Integer num : numbers) {\n            try {\n                // If num is null, autoboxed unboxing to int throws NPE\n                if (num == null) {\n                    throw new NullPointerException(\"Encountered null in list\");\n                }\n                safeSum += num; // Unboxing occurs safely here\n            } catch (NullPointerException e) {\n                nullCount++;\n            }\n        }\n\n        System.out.println(\"Elements processed: \" + numbers.size());\n        System.out.println(\"Null elements skipped: \" + nullCount);\n        System.out.println(\"Calculated sum: \" + safeSum);\n    }\n}",
+      "expectedOutput": "Elements processed: 6\nNull elements skipped: 2\nCalculated sum: 120"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Radix Base Converters and Manual Binary String Encoder",
+      "question": "Print the binary, octal, and hexadecimal representations of a given integer using built-in methods, and implement a manual bit-shift loop that constructs a 32-bit binary representation.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-022",
+      "id": "data-types-022",
+      "explanation": "The Integer class provides static methods for formatting integer primitives into different numerical bases: Integer.toBinaryString() (base 2), Integer.toOctalString() (base 8), and Integer.toHexString() (base 16). For negative integers, these methods format the raw two's complement 32-bit layout. Implementing manual binary conversion reinforces understanding of bitwise operations: by looping 32 times, shifting a single bit mask from left to right ((val & (1 << i)) != 0), an application constructs the binary representation from the sign bit down to the least significant bit.",
+      "hints": [
+        "Call Integer.toBinaryString(n), Integer.toOctalString(n), and Integer.toHexString(n).",
+        "Implement a manual conversion loop running from bit index 31 down to 0.",
+        "Test with negative numbers to verify that two's complement sign bits are formatted correctly."
+      ],
+      "sampleCode": "public class Solution {\n    public static String manualToBinary(int n) {\n        StringBuilder sb = new StringBuilder();\n        for (int i = 31; i >= 0; i--) {\n            int bit = (n >>> i) & 1;\n            sb.append(bit);\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        int number = -42;\n        System.out.println(\"Decimal: \" + number);\n        System.out.println(\"Library Binary: \" + Integer.toBinaryString(number));\n        System.out.println(\"Library Octal:  \" + Integer.toOctalString(number));\n        System.out.println(\"Library Hex:    \" + Integer.toHexString(number).toUpperCase());\n        System.out.println(\"Manual Binary:  \" + manualToBinary(number));\n    }\n}",
+      "expectedOutput": "Decimal: -42\nLibrary Binary: 11111111111111111111111111010110\nLibrary Octal:  37777777726\nLibrary Hex:    FFFFFFD6\nManual Binary:  11111111111111111111111111010110"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Caesar Cipher with Modular Character Arithmetic",
+      "question": "Implement a Caesar cipher encoder using char arithmetic that shifts alphabetic characters by an integer key while wrapping correctly around alphabet boundaries.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-13",
+      "id": "data-types-023",
+      "explanation": "A Caesar cipher shifts each letter in a plaintext string by a fixed number of positions down the alphabet. Implementing this cipher using char arithmetic requires modulo arithmetic to wrap around from 'Z' back to 'A' (and 'z' back to 'a'). For uppercase letters, the character is first normalized to a zero-based index (ch - 'A'), the shift is applied modulo 26 ((index + shift) % 26), and the result is offset back by 'A'. Lowercase letters follow the same pattern using 'a'. Non-alphabetic characters (such as spaces and punctuation) remain unchanged. This exercise demonstrates character manipulation and type promotion in Java.",
+      "hints": [
+        "Normalize characters to a 0-25 range by subtracting 'A' or 'a'.",
+        "Apply the shift and wrap around using modulo 26: (normalized + shift) % 26.",
+        "Add 'A' or 'a' back to the result and cast back to a char."
+      ],
+      "sampleCode": "public class Solution {\n    public static String encrypt(String text, int shift) {\n        StringBuilder result = new StringBuilder();\n        for (char ch : text.toCharArray()) {\n            if (ch >= 'A' && ch <= 'Z') {\n                char c = (char) (((ch - 'A' + shift) % 26) + 'A');\n                result.append(c);\n            } else if (ch >= 'a' && ch <= 'z') {\n                char c = (char) (((ch - 'a' + shift) % 26) + 'a');\n                result.append(c);\n            } else {\n                result.append(ch);\n            }\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        String original = \"Hello, World!\";\n        int shift = 3;\n        String encrypted = encrypt(original, shift);\n        System.out.println(\"Original:  \" + original);\n        System.out.println(\"Encrypted: \" + encrypted);\n    }\n}",
+      "expectedOutput": "Original:  Hello, World!\nEncrypted: Khoor, Zruog!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Primitive Bit and Byte Footprint Table",
+      "question": "Print the exact bit and byte storage footprints for all primitive numeric types using their standard wrapper class constants (`BYTES` and `SIZE`).",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-14",
+      "id": "data-types-024",
+      "explanation": "Unlike languages like C/C++ where type sizes vary across compilers and operating systems, the Java Virtual Machine defines fixed, platform-independent bit and byte sizes for all primitive types. Java wrapper classes expose these dimensions through public static final fields: SIZE provides the bit count, while BYTES provides the byte count (SIZE / 8). Characters use 16 bits (2 bytes), while booleans do not define BYTES or SIZE constants because their memory representation varies: the JVM specification typically compiles standalone booleans to 32-bit integer instructions and boolean arrays to packed 8-bit byte arrays.",
+      "hints": [
+        "Access the BYTES and SIZE constants directly from Byte, Short, Integer, Long, Character, Float, and Double.",
+        "Format the output into a clean, legible table.",
+        "Note in comments that boolean does not provide BYTES or SIZE constants because its representation is JVM-dependent."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"TYPE\\t\\tBYTES\\tBITS\");\n        System.out.println(\"--------------------------------\");\n        System.out.println(\"Byte\\t\\t\" + Byte.BYTES + \"\\t\" + Byte.SIZE);\n        System.out.println(\"Short\\t\\t\" + Short.BYTES + \"\\t\" + Short.SIZE);\n        System.out.println(\"Character\\t\" + Character.BYTES + \"\\t\" + Character.SIZE);\n        System.out.println(\"Integer\\t\\t\" + Integer.BYTES + \"\\t\" + Integer.SIZE);\n        System.out.println(\"Float\\t\\t\" + Float.BYTES + \"\\t\" + Float.SIZE);\n        System.out.println(\"Long\\t\\t\" + Long.BYTES + \"\\t\" + Long.SIZE);\n        System.out.println(\"Double\\t\\t\" + Double.BYTES + \"\\t\" + Double.SIZE);\n    }\n}",
+      "expectedOutput": "TYPE\t\tBYTES\tBITS\n--------------------------------\nByte\t\t1\t8\nShort\t\t2\t16\nCharacter\t2\t16\nInteger\t\t4\t32\nFloat\t\t4\t32\nLong\t\t8\t64\nDouble\t\t8\t64"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Array Reference Aliasing and Cloning",
+      "question": "Demonstrate reference aliasing by assigning one array reference to another, modifying an element, and observing that both references reflect the change. Then use `clone()` to create an independent copy and demonstrate isolation.",
+      "source": "java_coding_practice.json",
+      "source_id": "data-types-15",
+      "id": "data-types-025",
+      "explanation": "In Java, an array is an object allocated on the heap. An array variable stores a reference (memory pointer) to that heap block rather than the array elements themselves. When an array variable is assigned to another (int[] alias = original), the memory address is copied, not the underlying array. Both references alias the exact same heap memory, so modifying elements through alias modifies them for original as well. In contrast, invoking original.clone() allocates a new array on the heap and copies each element over. Modifying the cloned array does not affect the original array, demonstrating object isolation.",
+      "hints": [
+        "Create an array: int[] original = {10, 20, 30};.",
+        "Assign an alias: int[] alias = original; and modify alias[0] = 99 to demonstrate aliasing.",
+        "Create a clone: int[] cloned = original.clone(); and modify cloned[0] = 500 to show isolation."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] original = {10, 20, 30};\n        int[] alias = original; // Both references point to the same array\n\n        alias[0] = 99;\n        System.out.println(\"After aliased modification (alias[0] = 99):\");\n        System.out.println(\"Original: \" + Arrays.toString(original));\n        System.out.println(\"Alias:    \" + Arrays.toString(alias));\n\n        int[] copy = original.clone(); // Allocates an independent array copy\n        copy[0] = 500;\n        System.out.println(\"After cloned modification (copy[0] = 500):\");\n        System.out.println(\"Original: \" + Arrays.toString(original));\n        System.out.println(\"Clone:    \" + Arrays.toString(copy));\n    }\n}",
+      "expectedOutput": "After aliased modification (alias[0] = 99):\nOriginal: [99, 20, 30]\nAlias:    [99, 20, 30]\nAfter cloned modification (copy[0] = 500):\nOriginal: [99, 20, 30]\nClone:    [500, 20, 30]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Custom 64-Bit Fixed-Point Arithmetic",
+      "question": "Implement a custom 64-bit fixed-point decimal type using a raw primitive `long` where the last 4 decimal digits represent the fractional component (scale = 10,000). Implement addition, subtraction, and multiplication.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-11",
+      "id": "data-types-026",
+      "explanation": "High-frequency trading platforms and embedded systems often avoid IEEE 754 floating-point operations due to precision issues, while also avoiding BigDecimal due to object allocation overhead on the heap. Fixed-point arithmetic uses a primitive 64-bit long with a predefined scale factor (such as SCALE = 10,000 for 4 decimal places). Addition and subtraction operate directly on the raw long values (a + b, a - b). However, multiplication produces an intermediate value scaled by SCALE^2; it must be scaled back by dividing by SCALE ((a * b) / SCALE). Using primitive operations avoids heap allocations while ensuring deterministic decimal precision.",
+      "hints": [
+        "Define private static final long SCALE = 10000L; to represent 4 decimal places.",
+        "Implement multiply(long a, long b) by computing (a * b) / SCALE.",
+        "Format the raw long back to a decimal string by separating the integer quotient and remainder."
+      ],
+      "sampleCode": "public class Solution {\n    static class FixedPoint {\n        private static final long SCALE = 10000L;\n\n        public static long fromDouble(double val) {\n            return Math.round(val * SCALE);\n        }\n\n        public static double toDouble(long raw) {\n            return (double) raw / SCALE;\n        }\n\n        public static long add(long a, long b) {\n            return a + b;\n        }\n\n        public static long subtract(long a, long b) {\n            return a - b;\n        }\n\n        public static long multiply(long a, long b) {\n            return (a * b) / SCALE;\n        }\n    }\n\n    public static void main(String[] args) {\n        long val1 = FixedPoint.fromDouble(12.5000);\n        long val2 = FixedPoint.fromDouble(2.2500);\n\n        long sum = FixedPoint.add(val1, val2);\n        long diff = FixedPoint.subtract(val1, val2);\n        long product = FixedPoint.multiply(val1, val2);\n\n        System.out.printf(\"Val1: %.4f, Val2: %.4f%n\", FixedPoint.toDouble(val1), FixedPoint.toDouble(val2));\n        System.out.printf(\"Sum: %.4f%n\", FixedPoint.toDouble(sum));\n        System.out.printf(\"Difference: %.4f%n\", FixedPoint.toDouble(diff));\n        System.out.printf(\"Product: %.4f%n\", FixedPoint.toDouble(product));\n    }\n}",
+      "expectedOutput": "Val1: 12.5000, Val2: 2.2500\nSum: 14.7500\nDifference: 10.2500\nProduct: 28.1250"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Unsigned Arithmetic Operations",
+      "question": "Implement unsigned 32-bit integer comparison and division using primitive `int` and `long` types, without using built-in methods like `Integer.divideUnsigned()` or `Integer.compareUnsigned()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-12",
+      "id": "data-types-027",
+      "explanation": "Java primitives are signed by specification. An int represents values from -2^31 to 2^31 - 1. When interpreting an int as an unsigned 32-bit integer, values range from 0 to 2^32 - 1 (0 to 4,294,967,295), meaning negative values (with sign bit 1) represent numbers greater than Integer.MAX_VALUE. To implement unsigned comparison without library methods, an application masks the 32-bit int with 0xFFFFFFFFL to promote it to an unsigned 64-bit long ((long) a & 0xFFFFFFFFL). Performing division and comparison on these zero-extended longs provides correct unsigned arithmetic behavior.",
+      "hints": [
+        "Mask each 32-bit int to a 64-bit long using (val & 0xFFFFFFFFL) to clear upper sign bits.",
+        "Perform division on the masked long values: (longA / longB) and cast the result back to an int.",
+        "For unsigned comparison, compare the masked long values directly: Long.compare(longA, longB)."
+      ],
+      "sampleCode": "public class Solution {\n    public static long toUnsignedLong(int val) {\n        return val & 0xFFFFFFFFL;\n    }\n\n    public static int unsignedDivide(int dividend, int divisor) {\n        long uDividend = toUnsignedLong(dividend);\n        long uDivisor = toUnsignedLong(divisor);\n        return (int) (uDividend / uDivisor);\n    }\n\n    public static int unsignedCompare(int a, int b) {\n        long uA = toUnsignedLong(a);\n        long uB = toUnsignedLong(b);\n        return Long.compare(uA, uB);\n    }\n\n    public static void main(String[] args) {\n        int a = -1;  // Unsigned value is 4294967295\n        int b = 2;   // Unsigned value is 2\n\n        int divResult = unsignedDivide(a, b);\n        int compResult = unsignedCompare(a, b);\n\n        System.out.println(\"a = -1 (Unsigned: \" + toUnsignedLong(a) + \")\");\n        System.out.println(\"b =  2 (Unsigned: \" + toUnsignedLong(b) + \")\");\n        System.out.println(\"Unsigned Division (a / b): \" + toUnsignedLong(divResult));\n        System.out.println(\"Unsigned Comparison (a vs b): \" + compResult);\n    }\n}",
+      "expectedOutput": "a = -1 (Unsigned: 4294967295)\nb =  2 (Unsigned: 2)\nUnsigned Division (a / b): 2147483647\nUnsigned Comparison (a vs b): 1"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Bitwise Floating Point Multiplier",
+      "question": "Implement a simplified floating-point addition simulator that decomposes two positive `float` values into IEEE 754 components, aligns their exponents, adds mantissas, and normalizes the result.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-13",
+      "id": "data-types-028",
+      "explanation": "Floating-point addition in hardware follows four key stages: extracting components, aligning exponents, adding mantissas, and normalizing the result. First, the sign, 8-bit exponent, and 23-bit mantissa are extracted. For normalized floats, an implicit leading 1-bit is prepended to the mantissa (1.mantissa, or (mantissa | 0x800000)). Second, the mantissa of the number with the smaller exponent is shifted right by the difference in exponents so both numbers share a common exponent. Third, the aligned mantissas are added. Finally, if the sum overflows the 24-bit mantissa space, the result is shifted right by 1, the exponent is incremented, and the implicit leading 1-bit is removed before reassembling the float.",
+      "hints": [
+        "Extract raw bits with Float.floatToIntBits() and restore the implicit leading 1-bit via (mantissa | 0x800000).",
+        "Align the smaller number's mantissa by shifting right by (exp1 - exp2).",
+        "Normalize the mantissa sum if bit 24 is set by shifting right by 1 and incrementing the exponent."
+      ],
+      "sampleCode": "public class Solution {\n    public static float simulateFloatAddition(float f1, float f2) {\n        int b1 = Float.floatToIntBits(f1);\n        int b2 = Float.floatToIntBits(f2);\n\n        int exp1 = (b1 >>> 23) & 0xFF;\n        int exp2 = (b2 >>> 23) & 0xFF;\n        int mant1 = (b1 & 0x7FFFFF) | 0x800000;\n        int mant2 = (b2 & 0x7FFFFF) | 0x800000;\n\n        // Align exponents\n        int expDiff = exp1 - exp2;\n        if (expDiff > 0) {\n            mant2 >>>= expDiff;\n        } else if (expDiff < 0) {\n            mant1 >>>= -expDiff;\n            exp1 = exp2;\n        }\n\n        int mantSum = mant1 + mant2;\n        int finalExp = exp1;\n\n        // Normalize result if overflow occurred into bit 24\n        if ((mantSum & 0x1000000) != 0) {\n            mantSum >>>= 1;\n            finalExp++;\n        }\n\n        int resultBits = ((finalExp & 0xFF) << 23) | (mantSum & 0x7FFFFF);\n        return Float.intBitsToFloat(resultBits);\n    }\n\n    public static void main(String[] args) {\n        float a = 1.5f;\n        float b = 2.25f;\n        float simulated = simulateFloatAddition(a, b);\n        float standard = a + b;\n\n        System.out.println(\"Input A: \" + a + \", Input B: \" + b);\n        System.out.println(\"Simulated IEEE 754 Addition: \" + simulated);\n        System.out.println(\"Standard Hardware Addition:  \" + standard);\n    }\n}",
+      "expectedOutput": "Input A: 1.5, Input B: 2.25\nSimulated IEEE 754 Addition: 3.75\nStandard Hardware Addition:  3.75"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Memory Footprint Comparator",
+      "question": "Measure and compare the heap memory difference between an array of 1,000,000 primitive `int` values versus an array of 1,000,000 `Integer` wrapper objects, explaining object header overhead.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-14",
+      "id": "data-types-029",
+      "explanation": "Primitive arrays and wrapper object arrays have fundamentally different memory footprints on the Java heap. An int[] array stores 32-bit integer primitives contiguously in memory; 1,000,000 integers require ~4 MB of heap space plus a small array object header. In contrast, an Integer[] array is an array of object references. On a 64-bit JVM with Compressed OOPs enabled, each array element stores a 4-byte reference pointing to an Integer object on the heap. Each Integer object carries a 12-byte object header (8-byte Mark Word + 4-byte Klass Word) plus a 4-byte int field, totaling 16 bytes per object (aligned to 8-byte boundaries). Consequently, Integer[1,000,000] requires ~4 MB for the reference array plus ~16 MB for the objects, consuming roughly 5x more memory than an int[] array.",
+      "hints": [
+        "Run System.gc() before each measurement to establish a stable baseline.",
+        "Calculate heap consumption using Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory().",
+        "Document object overhead: 12-byte object header + 4-byte int field + reference overhead."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int size = 1_000_000;\n\n        // Primitive array: contiguous 4-byte ints\n        long primitiveBytes = (long) size * Integer.BYTES + 16; // elements + header\n\n        // Wrapper array: 4-byte reference per element + 16 bytes per Integer object (with Compressed OOPs)\n        long referenceArrayBytes = (long) size * 4 + 16;\n        long objectInstancesBytes = (long) size * 16;\n        long totalWrapperBytes = referenceArrayBytes + objectInstancesBytes;\n\n        System.out.println(\"Array size: \" + size + \" elements\");\n        System.out.printf(\"Primitive int[] memory:     ~%.2f MB%n\", primitiveBytes / (1024.0 * 1024.0));\n        System.out.printf(\"Wrapper Integer[] memory:   ~%.2f MB%n\", totalWrapperBytes / (1024.0 * 1024.0));\n        System.out.printf(\"Memory overhead factor:     ~%.1fx more memory%n\", (double) totalWrapperBytes / primitiveBytes);\n    }\n}",
+      "expectedOutput": "Array size: 1000000 elements\nPrimitive int[] memory:     ~3.81 MB\nWrapper Integer[] memory:   ~19.07 MB\nMemory overhead factor:     ~5.0x more memory"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Fast High-Precision Money Computation",
+      "question": "Implement an immutable, high-precision `Money` value object backed by a primitive `long` representing fractional cents (scale = 100) to support currency addition, multiplication, and allocation without floating-point rounding errors.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "DAT-15",
+      "id": "data-types-030",
+      "explanation": "Handling financial calculations with floating-point types (float or double) introduces rounding errors due to IEEE 754 binary representation limits. While BigDecimal provides arbitrary precision, its object allocation overhead can be a bottleneck in high-throughput payment systems. Martin Fowler's Money pattern addresses this by implementing an immutable value object backed by a primitive 64-bit long storing the amount in minor currency units (such as cents for USD or EUR). All addition, subtraction, and currency verification operations use integer arithmetic on the long value. This approach guarantees zero rounding error while delivering high performance.",
+      "hints": [
+        "Store the financial amount internally as a primitive long representing cents (e.g., $10.50 is stored as 1050L).",
+        "Make the Money class final with private final fields to ensure immutability.",
+        "Validate that operations only combine Money instances sharing the same currency code."
+      ],
+      "sampleCode": "public class Solution {\n    static final class Money {\n        private final long cents;\n        private final String currency;\n\n        public Money(long cents, String currency) {\n            this.cents = cents;\n            this.currency = currency;\n        }\n\n        public static Money of(double dollars, String currency) {\n            return new Money(Math.round(dollars * 100), currency);\n        }\n\n        public Money add(Money other) {\n            if (!this.currency.equals(other.currency)) {\n                throw new IllegalArgumentException(\"Currency mismatch\");\n            }\n            return new Money(Math.addExact(this.cents, other.cents), this.currency);\n        }\n\n        public Money multiply(double factor) {\n            return new Money(Math.round(this.cents * factor), this.currency);\n        }\n\n        public String toString() {\n            return String.format(\"%s %.2f\", currency, cents / 100.0);\n        }\n    }\n\n    public static void main(String[] args) {\n        Money price = Money.of(19.99, \"USD\");\n        Money tax = price.multiply(0.08); // 8% sales tax\n        Money total = price.add(tax);\n\n        System.out.println(\"Subtotal: \" + price);\n        System.out.println(\"Tax:      \" + tax);\n        System.out.println(\"Total:    \" + total);\n    }\n}",
+      "expectedOutput": "Subtotal: USD 19.99\nTax:      USD 1.60\nTotal:    USD 21.59"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "while-loops",
+  "topic": "While loops and repetition",
+  "page": 62,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic While Loop Counter",
+      "question": "Write a program that uses a `while` loop to print numbers from 1 to 10 separated by single spaces on one line.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-01",
+      "id": "while-loops-001",
+      "explanation": "The `while` loop is Java's foundational pre-test conditional iteration construct. Unlike a `for` loop, which bundles initialization, termination testing, and iteration stepping into a single header, a `while` loop evaluates only a continuation boolean expression prior to each iteration. The loop control variable `i` must be initialized before the loop boundary. Inside the loop body, the current value of `i` is printed, followed by an explicit update step `i++`. If the update step is omitted, the loop condition never becomes false, resulting in an infinite execution loop. In JVM bytecode, this is implemented via conditional branching opcodes such as `if_icmpgt` jumping past the loop block once `i > 10`.",
+      "hints": [
+        "Initialize the counter before entering the loop: `int i = 1;`[cite: 14].",
+        "Set the loop continuation condition to `while (i <= 10)`[cite: 14].",
+        "Increment `i++` inside the loop body to avoid an infinite loop[cite: 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int i = 1;\n        while (i <= 10) {\n            System.out.print(i + (i == 10 ? \"\" : \" \"));\n            i++;\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "1 2 3 4 5 6 7 8 9 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Iterative Digit Summation via Modulo",
+      "question": "Compute the sum of the digits of a positive integer (`1234`) using a `while` loop with `% 10` and `/ 10` operations.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-02",
+      "id": "while-loops-002",
+      "explanation": "Extracting digits from an integer arithmetically relies on base-10 positional notation. On each iteration of the `while (num > 0)` loop, the remainder operation `num % 10` isolates the least significant digit. This digit is added to a running accumulator variable `sum`. Integer division `num /= 10` shifts the remaining digits one position to the right by truncating the fractional portion. The loop terminates when all digits have been processed and `num` reaches 0. This algorithm runs in $O(\\log_{10} N)$ time and $O(1)$ space, avoiding the memory allocation overhead of converting the integer to a string.",
+      "hints": [
+        "Extract the lowest digit using `int digit = num % 10;`[cite: 11, 14].",
+        "Accumulate the digit into `sum += digit;`[cite: 14].",
+        "Truncate the number by dividing: `num /= 10;`[cite: 11, 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = 1234;\n        int temp = number;\n        int sum = 0;\n\n        while (temp > 0) {\n            sum += temp % 10;\n            temp /= 10;\n        }\n\n        System.out.println(\"Number: \" + number);\n        System.out.println(\"Sum of digits: \" + sum);\n    }\n}",
+      "expectedOutput": "Number: 1234\nSum of digits: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Integer Digit Length Counter",
+      "question": "Count and print the total number of digits in an integer (`12345`) using a `while` loop, correctly handling zero.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-03",
+      "id": "while-loops-003",
+      "explanation": "Counting digits iteratively measures how many times an integer can be divided by 10 before becoming 0. A special edge case occurs when the input number is 0: a standard `while (num > 0)` loop would immediately terminate with a count of 0, which is incorrect since 0 has one digit. By checking `if (num == 0)` upfront or using a `do-while` loop, zero is correctly counted as 1 digit. For all other numbers, taking the absolute value handles negative inputs cleanly before the loop strips digits one by one with `num /= 10`.",
+      "hints": [
+        "Handle zero separately: `if (num == 0) return 1;`[cite: 15].",
+        "Use `Math.abs(num)` to process negative integers accurately[cite: 11].",
+        "Divide by 10 on each iteration: `temp /= 10;` while incrementing `count++`[cite: 14, 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = 12345;\n        int temp = Math.abs(number);\n        int count = (temp == 0) ? 1 : 0;\n\n        while (temp > 0) {\n            count++;\n            temp /= 10;\n        }\n\n        System.out.println(\"Number: \" + number);\n        System.out.println(\"Digit count: \" + count);\n    }\n}",
+      "expectedOutput": "Number: 12345\nDigit count: 5"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Integer Reversal via Modulo Shift",
+      "question": "Reverse the digits of a positive integer (`12345`) using a `while` loop without string conversions, producing `54321`.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-04",
+      "id": "while-loops-004",
+      "explanation": "Reversing an integer numerically builds the reversed value from left to right while peeling digits from right to left. The loop executes while `num > 0`. In each cycle, `num % 10` extracts the rightmost digit. The reversed accumulator shifts its existing digits left by one decimal place (`reversed * 10`) and appends the extracted digit (`reversed = reversed * 10 + digit`). Truncating `num /= 10` advances to the next digit. This arithmetic approach operates entirely on primitive registers without allocating intermediate string or array objects.",
+      "hints": [
+        "Extract the lowest digit using `int rem = num % 10;`[cite: 14, 15].",
+        "Shift existing reversed digits: `reversed = (reversed * 10) + rem;`[cite: 14].",
+        "Truncate the input using `num /= 10;` until it reaches 0[cite: 14, 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = 12345;\n        int temp = number;\n        int reversed = 0;\n\n        while (temp > 0) {\n            int digit = temp % 10;\n            reversed = (reversed * 10) + digit;\n            temp /= 10;\n        }\n\n        System.out.println(\"Original: \" + number);\n        System.out.println(\"Reversed: \" + reversed);\n    }\n}",
+      "expectedOutput": "Original: 12345\nReversed: 54321"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Powers of Two Generator",
+      "question": "Print all powers of 2 less than 1000 on a single line separated by spaces using a `while` loop.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-05",
+      "id": "while-loops-005",
+      "explanation": "Generating exponential progressions with a `while` loop uses multiplicative updates rather than linear increments. The progression starts at $2^0 = 1$. The loop condition `while (val < 1000)` checks the boundary before each step. Inside the loop body, `val` is printed, and then doubled using either multiplication (`val *= 2`) or a bitwise left shift (`val <<= 1`). The loop terminates once `val` reaches 1024, producing the sequence of powers from 1 to 512 without evaluating fractional exponents.",
+      "hints": [
+        "Initialize the power accumulator at `int val = 1;` ($2^0$)[cite: 15].",
+        "Double the value on each iteration using `val *= 2;` or `val <<= 1;`[cite: 7].",
+        "Set the loop termination condition to `while (val < 1000)`[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int val = 1;\n        while (val < 1000) {\n            System.out.print(val + (val * 2 >= 1000 ? \"\" : \" \"));\n            val *= 2;\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "1 2 4 8 16 32 64 128 256 512"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Digit Extractor and Summer",
+      "question": "Given a large integer (`98765`), use a `while` loop with `% 10` and `/ 10` to log each extracted digit along with the cumulative running sum.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-01",
+      "id": "while-loops-006",
+      "explanation": "Iterative digit extraction decomposes multi-digit numbers into individual positional values. This problem demonstrates positional logging: as each least-significant digit is stripped with `num % 10`, the program prints the digit and the running total before discarding it with `num /= 10`. This illustrates how state changes step-by-step inside the loop, reinforcing arithmetic digit processing without relying on string manipulation.",
+      "hints": [
+        "Initialize `int sum = 0;` and store the original value in `temp`[cite: 14].",
+        "Extract digits from right to left using `int d = temp % 10;`[cite: 14, 15].",
+        "Log each step's extracted digit and updated running sum[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = 98765;\n        int temp = number;\n        int sum = 0;\n\n        System.out.println(\"Extracting digits for: \" + number);\n        while (temp > 0) {\n            int digit = temp % 10;\n            sum += digit;\n            System.out.println(\"Extracted: \" + digit + \" | Running Sum: \" + sum);\n            temp /= 10;\n        }\n        System.out.println(\"Total Digit Sum: \" + sum);\n    }\n}",
+      "expectedOutput": "Extracting digits for: 98765\nExtracted: 5 | Running Sum: 5\nExtracted: 6 | Running Sum: 11\nExtracted: 7 | Running Sum: 18\nExtracted: 8 | Running Sum: 26\nExtracted: 9 | Running Sum: 35\nTotal Digit Sum: 35"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Number Reversal with Sign Preservation",
+      "question": "Reverse an integer using a `while` loop without string conversions, preserving negative signs (e.g., `-12345` becomes `-54321`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-02",
+      "id": "while-loops-007",
+      "explanation": "Reversing signed numbers requires handling negative values explicitly. In Java, `% 10` on a negative number yields a negative remainder (e.g., `-12 % 10 == -2`). While this mathematical property can be leveraged directly, a cleaner pattern records whether the input is negative (`boolean isNegative = num < 0`), converts the number to its positive magnitude via `Math.abs(num)`, runs the standard reversal loop, and restores the negative sign at the end. This prevents sign-related edge cases while reversing the digit sequence.",
+      "hints": [
+        "Track the sign: `boolean isNegative = (num < 0);`[cite: 15].",
+        "Work with the absolute value: `int temp = Math.abs(num);`[cite: 11].",
+        "Reapply the negative sign to the reversed result if `isNegative` is true[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = -12345;\n        boolean isNegative = number < 0;\n        int temp = Math.abs(number);\n        int reversed = 0;\n\n        while (temp > 0) {\n            reversed = (reversed * 10) + (temp % 10);\n            temp /= 10;\n        }\n        if (isNegative) {\n            reversed = -reversed;\n        }\n\n        System.out.println(\"Original: \" + number);\n        System.out.println(\"Reversed: \" + reversed);\n    }\n}",
+      "expectedOutput": "Original: -12345\nReversed: -54321"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Do-While Positive Input Prompt",
+      "question": "Implement a `do-while` loop that validates user input from a simulated stream, repeating prompts until a strictly positive number ($> 0$) is entered.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-03",
+      "id": "while-loops-008",
+      "explanation": "A `do-while` loop is a post-test loop construct that always executes its body at least once before evaluating its continuation condition (`do { ... } while (condition);`). This makes it well-suited for input validation wizards and interactive prompts, where an initial input attempt is always required before validity can be checked. In this program, simulated inputs (negative numbers and zero) are rejected inside the loop, and re-prompts continue until a strictly positive integer satisfies the termination check.",
+      "hints": [
+        "Use a `do { ... } while (value <= 0);` structure to guarantee at least one execution[cite: 15].",
+        "Read or simulate input values inside the loop body[cite: 8].",
+        "Exit the loop once a strictly positive value (`> 0`) is received[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] simulatedInputs = {-5, 0, 42};\n        int index = 0;\n        int input;\n\n        do {\n            input = simulatedInputs[index++];\n            System.out.println(\"Prompt: Enter positive number -> Received: \" + input);\n            if (input <= 0) {\n                System.out.println(\"Validation failed: Number must be > 0. Re-prompting...\");\n            }\n        } while (input <= 0);\n\n        System.out.println(\"Accepted valid positive input: \" + input);\n    }\n}",
+      "expectedOutput": "Prompt: Enter positive number -> Received: -5\nValidation failed: Number must be > 0. Re-prompting...\nPrompt: Enter positive number -> Received: 0\nValidation failed: Number must be > 0. Re-prompting...\nPrompt: Enter positive number -> Received: 42\nAccepted valid positive input: 42"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Power of Two Checker via Repeated Division",
+      "question": "Determine whether an integer is an exact power of 2 using a `while` loop that repeatedly checks for odd remainders and divides by 2.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-04",
+      "id": "while-loops-009",
+      "explanation": "An integer greater than zero is an exact power of 2 if it can be divided by 2 repeatedly without producing an odd remainder until it reaches 1. Numbers less than or equal to 0 are excluded upfront. Inside `while (n > 1)`, the check `if (n % 2 != 0)` immediately identifies non-powers of two (such as 18, which divides to 9 and produces a remainder). If the number is evenly divisible by 2 on every step and eventually reduces to 1, it is confirmed as an exact power of 2.",
+      "hints": [
+        "Return false immediately if `n <= 0`[cite: 7].",
+        "Loop while `n > 1`: if `n % 2 != 0`, the number cannot be a power of 2[cite: 15].",
+        "Divide by 2 on each step (`n /= 2`), and return true if `n == 1` is reached[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPowerOfTwo(int n) {\n        if (n <= 0) return false;\n        while (n > 1) {\n            if (n % 2 != 0) {\n                return false;\n            }\n            n /= 2;\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        int test1 = 64;\n        int test2 = 50;\n        System.out.println(test1 + \" is power of 2: \" + isPowerOfTwo(test1));\n        System.out.println(test2 + \" is power of 2: \" + isPowerOfTwo(test2));\n    }\n}",
+      "expectedOutput": "64 is power of 2: true\n50 is power of 2: false"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Fibonacci Sequence up to Cap",
+      "question": "Print all Fibonacci numbers less than or equal to a specified limit $M = 50$ on a single line using a `while` loop.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-05",
+      "id": "while-loops-010",
+      "explanation": "Generating the Fibonacci sequence iteratively up to a capped threshold uses a state-transition loop. Two variables, `a` (initialized to 0) and `b` (initialized to 1), track adjacent terms. The loop condition `while (a <= limit)` ensures execution stops as soon as the current Fibonacci term exceeds the cap. Inside the body, `a` is printed, and the sequence advances using a temporary variable: `next = a + b; a = b; b = next;`. This produces terms sequentially in $O(K)$ iterations without recursion or stack allocation.",
+      "hints": [
+        "Initialize the first two terms: `int a = 0, b = 1;`[cite: 6, 9].",
+        "Loop while `a <= limit` to respect the threshold boundary[cite: 15].",
+        "Advance terms using a temporary variable: `int next = a + b; a = b; b = next;`[cite: 6]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int limit = 50;\n        int a = 0, b = 1;\n\n        System.out.print(\"Fibonacci up to \" + limit + \": \");\n        while (a <= limit) {\n            System.out.print(a + \" \");\n            int next = a + b;\n            a = b;\n            b = next;\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Fibonacci up to 50: 0 1 1 2 3 5 8 13 21 34 "
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Interactive Do-While Menu System",
+      "question": "Implement an interactive menu system using a `do-while` loop that displays choices (1: Status, 2: Process, 3: Exit) and processes actions until Exit (option 3) is selected.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-06",
+      "id": "while-loops-011",
+      "explanation": "Menu-driven terminal interfaces use `do-while` loops to guarantee the menu displays at least once. The loop presents options, reads the user's choice, and dispatches the action via a `switch` statement. The loop termination condition `while (choice != 3)` evaluates after each action executes. When option 3 is selected, the loop ends cleanly. This pattern separates user interaction into a clean prompt-evaluate-repeat cycle common in command-line tools.",
+      "hints": [
+        "Wrap the menu display and input processing in `do { ... } while (choice != 3);`[cite: 15].",
+        "Dispatch actions using a `switch (choice)` block[cite: 8].",
+        "Simulate sequential selections (e.g., 1 -> 2 -> 3) to test full menu execution[cite: 8]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] simulatedChoices = {1, 2, 3};\n        int idx = 0;\n        int choice;\n\n        do {\n            choice = simulatedChoices[idx++];\n            System.out.println(\"--- MENU ---\\n1. Status\\n2. Process\\n3. Exit\");\n            System.out.println(\"User Selected: \" + choice);\n            switch (choice) {\n                case 1:\n                    System.out.println(\"Action: System is operational.\");\n                    break;\n                case 2:\n                    System.out.println(\"Action: Processing active queue...\");\n                    break;\n                case 3:\n                    System.out.println(\"Action: Exiting system. Goodbye!\");\n                    break;\n                default:\n                    System.out.println(\"Invalid option.\");\n            }\n        } while (choice != 3);\n    }\n}",
+      "expectedOutput": "--- MENU ---\n1. Status\n2. Process\n3. Exit\nUser Selected: 1\nAction: System is operational.\n--- MENU ---\n1. Status\n2. Process\n3. Exit\nUser Selected: 2\nAction: Processing active queue...\n--- MENU ---\n1. Status\n2. Process\n3. Exit\nUser Selected: 3\nAction: Exiting system. Goodbye!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Euclidean GCD Algorithm via Modulo While Loop",
+      "question": "Compute the Greatest Common Divisor (GCD) of two integers ($a = 54, b = 24$) using Euclid's algorithm inside a `while` loop.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-07",
+      "id": "while-loops-012",
+      "explanation": "Euclid's algorithm computes the greatest common divisor of two integers based on the principle that $\\gcd(a, b) = \\gcd(b, a \\% b)$. Inside a `while (b != 0)` loop, a temporary variable holds the remainder `int temp = a % b;`. Variable `a` is updated to `b`, and `b` is updated to `temp`. The loop repeats, reducing the values on each iteration until `b` reaches 0. At that point, `a` contains the greatest common divisor. This iterative approach runs in $O(\\log(\\min(a, b)))$ time and uses $O(1)$ stack space.",
+      "hints": [
+        "Loop while the divisor is non-zero: `while (b != 0)`[cite: 9, 15].",
+        "Compute the remainder: `int temp = a % b;`[cite: 9].",
+        "Update variables: `a = b; b = temp;` and return `Math.abs(a)` after the loop[cite: 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int computeGcd(int a, int b) {\n        while (b != 0) {\n            int temp = a % b;\n            a = b;\n            b = temp;\n        }\n        return Math.abs(a);\n    }\n\n    public static void main(String[] args) {\n        int a = 54, b = 24;\n        int gcd = computeGcd(a, b);\n        System.out.println(\"GCD of \" + a + \" and \" + b + \" is: \" + gcd);\n    }\n}",
+      "expectedOutput": "GCD of 54 and 24 is: 6"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Collatz Conjecture Trajectory and Step Logger",
+      "question": "Generate and print the complete Collatz $3n + 1$ sequence for starting number $N = 6$, logging each intermediate term and the total step count.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-08",
+      "id": "while-loops-013",
+      "explanation": "The Collatz conjecture (or $3n + 1$ problem) applies rules iteratively to a positive integer: if $N$ is even, $N = N / 2$; if odd, $N = 3N + 1$. The conjecture states that this process always reaches 1. Using a `while (n != 1)` loop, the program prints each term, checks parity via `n % 2 == 0`, applies the corresponding update rule, and increments a step counter. For starting number 6, the sequence passes through 6, 3, 10, 5, 16, 8, 4, 2, and 1, taking exactly 8 steps to reach termination.",
+      "hints": [
+        "Loop while `n != 1`[cite: 15].",
+        "If even (`n % 2 == 0`), update `n = n / 2;` else `n = 3 * n + 1;`[cite: 7, 15].",
+        "Increment a counter on each step and print terms separated by spaces[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        long n = 6;\n        int steps = 0;\n\n        System.out.print(\"Collatz sequence for \" + n + \": \" + n + \" \");\n        while (n != 1) {\n            if (n % 2 == 0) {\n                n /= 2;\n            } else {\n                n = 3 * n + 1;\n            }\n            System.out.print(n + \" \");\n            steps++;\n        }\n        System.out.println(\"\\nTotal steps to reach 1: \" + steps);\n    }\n}",
+      "expectedOutput": "Collatz sequence for 6: 6 3 10 5 16 8 4 2 1 \nTotal steps to reach 1: 8"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Decimal to Binary Converter via While Loop",
+      "question": "Convert a positive decimal integer (`43`) into its base-2 binary representation using a `while` loop without using `Integer.toBinaryString()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-09",
+      "id": "while-loops-014",
+      "explanation": "Converting an integer from base 10 to base 2 uses repeated division by 2. On each iteration of `while (num > 0)`, `num % 2` yields the current lowest binary bit (0 or 1). Because bits are produced from least significant to most significant, appending each bit to the front of a `StringBuilder` (or using `reverse()` on an appended string) restores the correct big-endian order. Once `num` reaches 0, the constructed binary string is complete. This illustrates positional radix conversion without third-party libraries.",
+      "hints": [
+        "Extract the remainder bit using `int bit = num % 2;`[cite: 15].",
+        "Divide by the base: `num /= 2;`[cite: 15].",
+        "Prepend bits to a `StringBuilder` or append and reverse at the end[cite: 3, 12]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int decimal = 43;\n        int temp = decimal;\n        StringBuilder binary = new StringBuilder();\n\n        if (temp == 0) {\n            binary.append(0);\n        } else {\n            while (temp > 0) {\n                binary.append(temp % 2);\n                temp /= 2;\n            }\n            binary.reverse();\n        }\n\n        System.out.println(\"Decimal: \" + decimal);\n        System.out.println(\"Binary:  \" + binary.toString());\n    }\n}",
+      "expectedOutput": "Decimal: 43\nBinary:  101011"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Number Guessing Game Simulation",
+      "question": "Simulate a number guessing game where a fixed secret number (`42`) is matched against an array of sequential guesses, logging attempt counts and directional hints.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-10",
+      "id": "while-loops-015",
+      "explanation": "This problem models a binary search guessing game using a `while` loop driven by an array of test guesses. The secret number is set to 42. A `while` loop checks each guess: if the guess is less than 42, it logs 'Higher'; if greater, it logs 'Lower'. When the guess matches 42, the loop logs 'Correct' and terminates via `break`. Tracking the attempt counter on each iteration illustrates search state progression and loop termination on target match.",
+      "hints": [
+        "Iterate with `while (index < guesses.length)`[cite: 15].",
+        "Compare `guess` to `secret` with branching: `if (guess < secret)` log Higher, `else if (guess > secret)` log Lower[cite: 13, 15].",
+        "Terminate the loop when `guess == secret`[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int secret = 42;\n        int[] guesses = {15, 55, 35, 45, 42};\n        int idx = 0;\n        int attempts = 0;\n\n        while (idx < guesses.length) {\n            int currentGuess = guesses[idx++];\n            attempts++;\n            System.out.print(\"Attempt \" + attempts + \": Guess \" + currentGuess + \" -> \");\n            if (currentGuess < secret) {\n                System.out.println(\"Higher!\");\n            } else if (currentGuess > secret) {\n                System.out.println(\"Lower!\");\n            } else {\n                System.out.println(\"Correct! Found secret in \" + attempts + \" attempts.\");\n                break;\n            }\n        }\n    }\n}",
+      "expectedOutput": "Attempt 1: Guess 15 -> Higher!\nAttempt 2: Guess 55 -> Lower!\nAttempt 3: Guess 35 -> Higher!\nAttempt 4: Guess 45 -> Lower!\nAttempt 5: Guess 42 -> Correct! Found secret in 5 attempts."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Collatz Peak and Step Analyzer",
+      "question": "Implement a Collatz analyzer for starting number $N = 27$ that tracks both the total step count and the peak (maximum) value reached during trajectory evaluation.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-06",
+      "id": "while-loops-016",
+      "explanation": "Certain starting numbers produce long Collatz trajectories that reach values far exceeding the initial input. For example, $N = 27$ reaches a peak value of 9,232 before resolving down to 1. Using a `while (n > 1)` loop, the program tracks `peak = Math.max(peak, n)` on each step while checking parity. Using a 64-bit `long` for the accumulator prevents 32-bit integer overflow during intermediate multiplications ($3n + 1$), demonstrating safe numeric monitoring during complex loop trajectories.",
+      "hints": [
+        "Use a `long n = 27;` to prevent integer overflow during multiplication steps[cite: 5, 15].",
+        "Maintain a `peak = Math.max(peak, n);` tracker on each iteration[cite: 3, 15].",
+        "Count iterations until `n == 1` is reached[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        long n = 27;\n        long original = n;\n        long peak = n;\n        int steps = 0;\n\n        while (n > 1) {\n            if (n % 2 == 0) {\n                n /= 2;\n            } else {\n                n = 3 * n + 1;\n            }\n            if (n > peak) {\n                peak = n;\n            }\n            steps++;\n        }\n\n        System.out.println(\"Collatz Analysis for: \" + original);\n        System.out.println(\"Peak value reached:  \" + peak);\n        System.out.println(\"Total steps taken:   \" + steps);\n    }\n}",
+      "expectedOutput": "Collatz Analysis for: 27\nPeak value reached:  9232\nTotal steps taken:   111"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Euclidean GCD with Step Reduction Trace",
+      "question": "Implement the Euclidean GCD algorithm in a `while` loop that logs each reduction step, displaying quotient and remainder transitions.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-07",
+      "id": "while-loops-017",
+      "explanation": "Logging intermediate steps of the Euclidean algorithm clarifies how division reductions compute greatest common divisors. On each pass of `while (b != 0)`, the quotient `q = a / b` and remainder `r = a % b` satisfy the relation $a = q \\times b + r$. Logging these values shows how the problem size shrinks until the remainder reaches 0. The final non-zero divisor is the GCD, illustrating logarithmic reduction efficiency.",
+      "hints": [
+        "Compute quotient `q = a / b` and remainder `r = a % b` inside the loop[cite: 7].",
+        "Print the division equation $a = q \\times b + r$ for each step[cite: 15].",
+        "Update `a = b; b = r;` and return `a` once `b == 0`[cite: 9, 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 105, b = 252;\n        System.out.println(\"Computing GCD(\" + a + \", \" + b + \"):\");\n        int step = 1;\n\n        while (b != 0) {\n            int q = a / b;\n            int r = a % b;\n            System.out.printf(\"Step %d: %d = %d * %d + %d%n\", step++, a, b, q, r);\n            a = b;\n            b = r;\n        }\n        System.out.println(\"Final GCD: \" + a);\n    }\n}",
+      "expectedOutput": "Computing GCD(105, 252):\nStep 1: 105 = 252 * 0 + 105\nStep 2: 252 = 105 * 2 + 42\nStep 3: 105 = 42 * 2 + 21\nStep 4: 42 = 21 * 2 + 0\nFinal GCD: 21"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Integer Square Root via Binary Bisection",
+      "question": "Compute the floor integer square root $\\lfloor\\sqrt{N}\\rfloor$ for $N = 50$ using a binary search bisection `while` loop without using `Math.sqrt()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-08",
+      "id": "while-loops-018",
+      "explanation": "Binary search bisection finds integer square roots in $O(\\log N)$ time. The search range is initialized with `low = 1` and `high = N`. Inside `while (low <= high)`, the midpoint `mid = low + (high - low) / 2` is evaluated. To prevent 32-bit integer overflow when squaring `mid`, the comparison uses 64-bit arithmetic (`long sq = (long) mid * mid`). If `sq <= N`, `mid` is a valid floor root candidate, so `ans = mid` is recorded and `low = mid + 1` searches for a larger candidate; if `sq > N`, `high = mid - 1` narrows the upper bound.",
+      "hints": [
+        "Initialize binary bounds: `long low = 1, high = n, ans = 0;`[cite: 9, 15].",
+        "Calculate midpoint `mid = low + (high - low) / 2`[cite: 9].",
+        "Compare `mid * mid <= n` using 64-bit `long` to prevent integer overflow[cite: 5, 9]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int floorSqrt(int n) {\n        if (n < 2) return n;\n        long low = 1, high = n / 2;\n        long ans = 1;\n\n        while (low <= high) {\n            long mid = low + (high - low) / 2;\n            if (mid * mid <= n) {\n                ans = mid;\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n            }\n        }\n        return (int) ans;\n    }\n\n    public static void main(String[] args) {\n        int n = 50;\n        System.out.println(\"Input N: \" + n);\n        System.out.println(\"Floor sqrt: \" + floorSqrt(n));\n    }\n}",
+      "expectedOutput": "Input N: 50\nFloor sqrt: 7"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Palindrome Number Checker",
+      "question": "Determine whether an integer is a numeric palindrome using a `while` loop without string conversions, correctly handling negative numbers and trailing zeros.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-09",
+      "id": "while-loops-019",
+      "explanation": "A numeric palindrome reads identically forward and backward (e.g., 1221). Negative numbers cannot be palindromes because the leading minus sign does not exist at the end (e.g., -121 reversed is 121-). Numbers ending in 0 (except 0 itself) also cannot be palindromes because leading zeros are omitted in standard integers. After filtering these edge cases upfront, a `while` loop reverses the digits arithmetically. Comparing `original == reversed` evaluates palindrome status in $O(\\log_{10} N)$ time with zero object allocations.",
+      "hints": [
+        "Return false immediately if `num < 0 || (num % 10 == 0 && num != 0)`[cite: 7, 9].",
+        "Reverse digits arithmetically: `rev = rev * 10 + (temp % 10); temp /= 10;`[cite: 14, 15].",
+        "Compare `num == rev` to confirm whether the number is a palindrome[cite: 7, 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isPalindrome(int num) {\n        if (num < 0 || (num % 10 == 0 && num != 0)) return false;\n        int temp = num;\n        int reversed = 0;\n        while (temp > 0) {\n            reversed = (reversed * 10) + (temp % 10);\n            temp /= 10;\n        }\n        return num == reversed;\n    }\n\n    public static void main(String[] args) {\n        int val1 = 1221;\n        int val2 = -121;\n        System.out.println(val1 + \" is palindrome: \" + isPalindrome(val1));\n        System.out.println(val2 + \" is palindrome: \" + isPalindrome(val2));\n    }\n}",
+      "expectedOutput": "1221 is palindrome: true\n-121 is palindrome: false"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Two's Complement Binary Formatter",
+      "question": "Format a 32-bit integer into its two's complement binary representation using an unsigned right shift `>>>` in a `while` loop without library helpers.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-10",
+      "id": "while-loops-020",
+      "explanation": "Formatting an integer's full 32-bit two's complement representation requires inspecting bits from most significant (bit 31) to least significant (bit 0). A `while (shift >= 0)` loop shifts the target integer logically using unsigned right shift `>>>` by the current bit offset `(val >>> shift) & 1`. Because `>>>` shifts in zeros without sign extension, this extracts each individual bit cleanly for both positive and negative integers. Appending bits to a `StringBuilder` constructs the full binary string representation.",
+      "hints": [
+        "Initialize a bit pointer: `int shift = 31;`[cite: 15].",
+        "Extract the current bit with `(num >>> shift) & 1`[cite: 5, 7].",
+        "Decrement `shift--` inside `while (shift >= 0)` to inspect bits from left to right[cite: 5, 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String toBinary32(int num) {\n        StringBuilder sb = new StringBuilder();\n        int shift = 31;\n        while (shift >= 0) {\n            sb.append((num >>> shift) & 1);\n            shift--;\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        int val = -10;\n        System.out.println(\"Decimal: \" + val);\n        System.out.println(\"32-Bit Binary: \" + toBinary32(val));\n    }\n}",
+      "expectedOutput": "Decimal: -10\n32-Bit Binary: 11111111111111111111111111110110"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "First N Primes Generator via Nested While Loops",
+      "question": "Find and print the first $N = 8$ prime numbers sequentially using nested `while` loops.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-11",
+      "id": "while-loops-021",
+      "explanation": "Generating the first $N$ primes requires a double `while` loop structure: an outer loop runs until the prime counter reaches $N$, and an inner loop tests divisibility for each candidate. The candidate counter starts at 2. For each candidate, an inner `while (d * d <= candidate)` loop tests divisors starting from 2. If `candidate % d == 0`, the candidate is marked composite and the inner loop breaks early. If the candidate passes all checks, it is printed, and `count` increments. The candidate is then incremented, and the search continues until $N$ primes are found.",
+      "hints": [
+        "Outer loop controls the collection limit: `while (count < n)`[cite: 15].",
+        "Inner loop tests divisors up to square root: `while (d * d <= candidate)`[cite: 14, 15].",
+        "Break the inner loop immediately upon finding any divisor[cite: 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 8;\n        int count = 0;\n        int candidate = 2;\n\n        System.out.print(\"First \" + n + \" primes: \");\n        while (count < n) {\n            boolean isPrime = true;\n            int d = 2;\n            while (d * d <= candidate) {\n                if (candidate % d == 0) {\n                    isPrime = false;\n                    break;\n                }\n                d++;\n            }\n            if (isPrime) {\n                System.out.print(candidate + \" \");\n                count++;\n            }\n            candidate++;\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "First 8 primes: 2 3 5 7 11 13 17 19 "
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Newton-Raphson Square Root Approximation",
+      "question": "Approximate the square root of a number ($S = 612$) using Newton-Raphson iteration in a `while` loop until successive approximations differ by less than $10^{-9}$.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-12",
+      "id": "while-loops-022",
+      "explanation": "The Newton-Raphson method (Babylonian method) approximates square roots by refining guesses iteratively. Given target $S$ and current guess $x$, the next approximation is $x_{next} = 0.5 \\times (x + S / x)$. Starting with an initial guess $x = S / 2.0$, a `while (Math.abs(x - next) >= epsilon)` loop updates the estimate until the absolute difference between successive iterations falls below the convergence threshold $\\epsilon = 10^{-9}$. This algorithm exhibits quadratic convergence, doubling the number of correct decimal digits on each iteration.",
+      "hints": [
+        "Initialize guess with `double x = s / 2.0;`[cite: 15].",
+        "Update using `next = 0.5 * (x + s / x);`[cite: 15].",
+        "Loop while `Math.abs(x - next) >= 1e-9`[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static double sqrtNewton(double s) {\n        if (s < 0) throw new IllegalArgumentException(\"Negative input\");\n        if (s == 0) return 0.0;\n        double x = s / 2.0;\n        double next = 0.5 * (x + s / x);\n        double epsilon = 1e-9;\n\n        while (Math.abs(x - next) >= epsilon) {\n            x = next;\n            next = 0.5 * (x + s / x);\n        }\n        return next;\n    }\n\n    public static void main(String[] args) {\n        double val = 612.0;\n        double sqrt = sqrtNewton(val);\n        System.out.printf(\"Newton sqrt of %.1f: %.6f%n\", val, sqrt);\n    }\n}",
+      "expectedOutput": "Newton sqrt of 612.0: 24.738634"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Arbitrary Radix Base Converter (Bases 2 to 16)",
+      "question": "Convert a positive base-10 integer into any target base $B$ ($2 \\le B \\le 16$) using repeated division in a `while` loop with digit mapping.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-13",
+      "id": "while-loops-023",
+      "explanation": "Radix conversion generalizes decimal-to-binary conversion to arbitrary bases $B$. For bases up to 16, remainder values from 10 to 15 map to hexadecimal letter digits 'A' through 'F'. A lookup string `\"0123456789ABCDEF\"` maps each remainder directly to its character glyph. Inside `while (n > 0)`, `digits.charAt(n % base)` extracts the current digit character, and `n /= base` truncates the value. Reversing the accumulated digits produces the correct base-$B$ representation.",
+      "hints": [
+        "Use a digit character map: `\"0123456789ABCDEF\"`[cite: 15].",
+        "Extract characters with `digits.charAt(n % base)`[cite: 15].",
+        "Divide by the target base: `n /= base` until $n$ reaches 0[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String toBase(int num, int base) {\n        if (base < 2 || base > 16) throw new IllegalArgumentException(\"Unsupported base\");\n        if (num == 0) return \"0\";\n        String digits = \"0123456789ABCDEF\";\n        StringBuilder sb = new StringBuilder();\n        int temp = num;\n\n        while (temp > 0) {\n            sb.append(digits.charAt(temp % base));\n            temp /= base;\n        }\n        return sb.reverse().toString();\n    }\n\n    public static void main(String[] args) {\n        int number = 254;\n        System.out.println(\"Decimal: \" + number);\n        System.out.println(\"Hex (Base 16): \" + toBase(number, 16));\n        System.out.println(\"Octal (Base 8): \" + toBase(number, 8));\n        System.out.println(\"Binary (Base 2): \" + toBase(number, 2));\n    }\n}",
+      "expectedOutput": "Decimal: 254\nHex (Base 16): FE\nOctal (Base 8): 376\nBinary (Base 2): 11111110"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Armstrong Number Verifier via While Loop",
+      "question": "Verify whether an integer (`371`) is an Armstrong number using `while` loops for both digit counting and digit power accumulation.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-14",
+      "id": "while-loops-024",
+      "explanation": "An Armstrong number equals the sum of its own digits each raised to the power of the total digit count $k$ (e.g., $371 = 3^3 + 7^3 + 1^3 = 27 + 343 + 1 = 371$). This implementation uses two separate `while` loops: 1) The first loop counts total digits $k$ by dividing a copy of the number by 10 until it reaches 0. 2) The second loop extracts each digit with `% 10`, computes digit$^k$ using an inner multiplication loop, and adds it to an accumulator. Comparing `sum == original` confirms whether the number is an Armstrong number.",
+      "hints": [
+        "First loop: count digits $k$ with `while (temp > 0) { digits++; temp /= 10; }`[cite: 14].",
+        "Second loop: extract digits and compute `digit^k` with an inner multiplication loop[cite: 14].",
+        "Compare the final accumulated sum against the original integer[cite: 14]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isArmstrong(int num) {\n        if (num < 0) return false;\n        int temp = num;\n        int k = 0;\n        while (temp > 0) {\n            k++;\n            temp /= 10;\n        }\n        temp = num;\n        int sum = 0;\n        while (temp > 0) {\n            int d = temp % 10;\n            int p = 1;\n            for (int i = 0; i < k; i++) p *= d;\n            sum += p;\n            temp /= 10;\n        }\n        return sum == num;\n    }\n\n    public static void main(String[] args) {\n        int val = 371;\n        System.out.println(\"Number: \" + val);\n        System.out.println(\"Is Armstrong: \" + isArmstrong(val));\n    }\n}",
+      "expectedOutput": "Number: 371\nIs Armstrong: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Compound Interest Doubling Simulation",
+      "question": "Simulate an initial financial deposit growing at a 7% annual compound interest rate using a `while` loop, and calculate the exact number of years required for the principal to double.",
+      "source": "java_coding_practice.json",
+      "source_id": "while-loops-15",
+      "id": "while-loops-025",
+      "explanation": "Financial compound interest accumulates according to $A_{t+1} = A_t \\times (1 + r)$. Estimating the doubling time with the Rule of 72 gives $72 / 7 \\approx 10.28$ years. A discrete simulation verifies this using a `while (balance < target)` loop. Starting with a balance of $10,000, each iteration represents one year: `balance += balance * 0.07`, and `years` increments by 1. The loop terminates when the balance reaches or exceeds the $20,000 target. The simulation completes in 11 annual compounding periods, confirming the financial projection.",
+      "hints": [
+        "Define target as `double target = initialDeposit * 2.0;`[cite: 15].",
+        "Loop while `balance < target`[cite: 15].",
+        "Compound annually: `balance += balance * 0.07;` and increment `years++`[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double principal = 10000.0;\n        double balance = principal;\n        double target = principal * 2.0;\n        double rate = 0.07;\n        int years = 0;\n\n        while (balance < target) {\n            balance += balance * rate;\n            years++;\n        }\n\n        System.out.printf(\"Initial Deposit: $%.2f%n\", principal);\n        System.out.println(\"Years to double at 7%%: \" + years);\n        System.out.printf(\"Final balance: $%.2f%n\", balance);\n    }\n}",
+      "expectedOutput": "Initial Deposit: $10000.00\nYears to double at 7%: 11\nFinal balance: $21048.52"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Newton-Raphson Precision Bound Loop",
+      "question": "Implement Newton-Raphson square root approximation in a `while` loop that tracks the iteration count until the relative error $|x_{new} - x_{old}| / x_{new}$ drops below $10^{-7}$.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-11",
+      "id": "while-loops-026",
+      "explanation": "Numerical convergence criteria evaluate whether successive iterative estimates have stabilized. For large floating-point numbers, checking absolute difference $|x - x_{next}|$ can fail due to precision limits. A relative error check $|x - x_{next}| / x_{next} < \\epsilon$ provides scale-invariant termination. The loop refines guesses using $x_{next} = 0.5 \\times (x + N / x)$ and logs iteration counts to show rapid quadratic convergence toward the root.",
+      "hints": [
+        "Use relative error: `Math.abs(x - next) / next < 1e-7`[cite: 15].",
+        "Track iteration count with `int iter = 0;` inside the loop[cite: 14].",
+        "Update `x = next;` on each step before recomputing[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double n = 1000000.0;\n        double x = n / 2.0;\n        double next = 0.5 * (x + n / x);\n        int iterations = 1;\n        double epsilon = 1e-7;\n\n        while ((Math.abs(x - next) / next) >= epsilon) {\n            x = next;\n            next = 0.5 * (x + n / x);\n            iterations++;\n        }\n\n        System.out.println(\"Input N: \" + n);\n        System.out.printf(\"Square Root: %.4f%n\", next);\n        System.out.println(\"Iterations to converge: \" + iterations);\n    }\n}",
+      "expectedOutput": "Input N: 1000000.0\nSquare Root: 1000.0000\nIterations to converge: 14"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Repeating Decimal Fraction Detector",
+      "question": "Given numerator and denominator ($1/6$), compute the decimal representation using long division in a `while` loop, enclosing repeating fractional sequences in parentheses.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-12",
+      "id": "while-loops-027",
+      "explanation": "Fractional decimal expansion produces repeating digits when the denominator contains prime factors other than 2 or 5. Simulating long division with a `while (rem != 0)` loop detects recurring cycles. A `Map<Long, Integer>` records each remainder alongside the string position where it was first observed. If a remainder reappears, the sequence between its initial position and the current end is repeating. The program inserts an opening parenthesis at the recorded position and a closing parenthesis at the end, formatting repeating decimals cleanly (e.g., $1/6 = 0.1(6)$).",
+      "hints": [
+        "Record remainder positions using `Map<Long, Integer> seen = new HashMap<>();`[cite: 9, 15].",
+        "If `seen.containsKey(rem)`, insert parentheses around the repeating slice and break[cite: 15].",
+        "Compute next digit using `rem * 10 / den` and update `rem = (rem * 10) % den`[cite: 7, 15]."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static String fractionToDecimal(int num, int den) {\n        if (num == 0) return \"0\";\n        StringBuilder sb = new StringBuilder();\n        sb.append(num / den);\n        long rem = num % den;\n        if (rem == 0) return sb.toString();\n\n        sb.append(\".\");\n        Map<Long, Integer> map = new HashMap<>();\n        while (rem != 0) {\n            if (map.containsKey(rem)) {\n                int index = map.get(rem);\n                sb.insert(index, \"(\");\n                sb.append(\")\");\n                break;\n            }\n            map.put(rem, sb.length());\n            rem *= 10;\n            sb.append(rem / den);\n            rem %= den;\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        int num = 1, den = 6;\n        System.out.println(\"Fraction: \" + num + \"/\" + den);\n        System.out.println(\"Decimal:  \" + fractionToDecimal(num, den));\n    }\n}",
+      "expectedOutput": "Fraction: 1/6\nDecimal:  0.1(6)"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Alphanumeric Base Conversion Engine (Base 2 to 36)",
+      "question": "Implement an alphanumeric base conversion engine in a `while` loop that converts positive long integers into arbitrary bases up to base 36 (using digits '0'-'9' and 'A'-'Z').",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-13",
+      "id": "while-loops-028",
+      "explanation": "Base 36 represents the maximum radix supported by standard alphanumeric characters: 10 decimal digits ('0'-'9') plus 26 English letters ('A'-'Z'). Converting a number to base $B$ ($2 \\le B \\le 36$) repeatedly divides by $B$ inside a `while (n > 0)` loop. The remainder `rem = n % base` maps to a character: remainders 0–9 map to `'0' + rem`, and remainders 10–35 map to `'A' + (rem - 10)`. Appending characters and reversing the string produces the base-$B$ representation, commonly used for compact identifiers, hash representations, and URL shortening.",
+      "hints": [
+        "Map remainders $\\ge 10$ using `(char) ('A' + (rem - 10))`[cite: 5, 15].",
+        "Map remainders $< 10$ using `(char) ('0' + rem)`[cite: 5, 15].",
+        "Divide by base `n /= base` and reverse the `StringBuilder` at the end[cite: 12, 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String toBase36(long n, int base) {\n        if (base < 2 || base > 36) throw new IllegalArgumentException(\"Radix out of range\");\n        if (n == 0) return \"0\";\n        StringBuilder sb = new StringBuilder();\n        long temp = n;\n\n        while (temp > 0) {\n            int rem = (int) (temp % base);\n            if (rem < 10) {\n                sb.append((char) ('0' + rem));\n            } else {\n                sb.append((char) ('A' + (rem - 10)));\n            }\n            temp /= base;\n        }\n        return sb.reverse().toString();\n    }\n\n    public static void main(String[] args) {\n        long value = 48550L;\n        System.out.println(\"Decimal: \" + value);\n        System.out.println(\"Base 36: \" + toBase36(value, 36));\n    }\n}",
+      "expectedOutput": "Decimal: 48550\nBase 36: 11GE"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Wheel Factorization Prime Decomposer",
+      "question": "Implement prime factorization for a large integer ($N = 315$) using an optimized `while` loop that factors out 2s and odd divisors up to $\\sqrt{N}$.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-14",
+      "id": "while-loops-029",
+      "explanation": "Prime factorization decomposes an integer into its prime components (e.g., $315 = 3^2 \\times 5 \\times 7$). The fundamental theorem of arithmetic guarantees that this decomposition is unique. An optimized trial division approach uses two `while` loops: 1) The first loop divides out all factors of 2 (`while (n % 2 == 0)`). 2) The second loop tests odd factors `d` starting from 3 up to $\\sqrt{n}$ (`while (d * d <= n)`). Whenever `n % d == 0`, `d` is recorded as a prime factor and `n /= d` reduces the search space. If $n > 1$ remains after testing all divisors up to $\\sqrt{n}$, the remaining value is itself prime.",
+      "hints": [
+        "Factor out all 2s with `while (n % 2 == 0) { log(2); n /= 2; }`[cite: 15].",
+        "Test odd divisors: `while (d * d <= n)`, dividing out repeated factors of `d`[cite: 14, 15].",
+        "If $n > 1$ remains after the loop, record $n$ as the final prime factor[cite: 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void factorize(int n) {\n        System.out.print(\"Prime factors of \" + n + \": \");\n        while (n % 2 == 0) {\n            System.out.print(2 + \" \");\n            n /= 2;\n        }\n        int d = 3;\n        while (d * d <= n) {\n            while (n % d == 0) {\n                System.out.print(d + \" \");\n                n /= d;\n            }\n            d += 2;\n        }\n        if (n > 1) {\n            System.out.print(n);\n        }\n        System.out.println();\n    }\n\n    public static void main(String[] args) {\n        factorize(315);\n    }\n}",
+      "expectedOutput": "Prime factors of 315: 3 3 5 7 "
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Dynamic Buffer Resizing Simulation",
+      "question": "Simulate the geometric resizing mechanism of an `ArrayList` in a `while` loop that reads streaming chunks and doubles array capacity whenever full.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "WHL-15",
+      "id": "while-loops-030",
+      "explanation": "Java's `ArrayList` provides dynamic resizing by growing its internal backing array when full. This simulation models that behavior using a primitive `int[]` buffer and a `while` loop. The buffer begins with initial capacity 2. As incoming elements are added, the loop checks `if (size == buffer.length)`. When full, a new array is allocated with doubled capacity (`newCap = buffer.length * 2`), existing elements are copied over via `System.arraycopy()`, and the buffer reference is updated. This geometric doubling achieves amortized $O(1)$ append time, balancing reallocation overhead against memory usage.",
+      "hints": [
+        "Check capacity before inserting: `if (size == buffer.length)`[cite: 15].",
+        "Double capacity: `int[] newBuffer = new int[buffer.length * 2];`[cite: 15].",
+        "Copy elements over using `System.arraycopy(buffer, 0, newBuffer, 0, size);`[cite: 9, 15]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] stream = {10, 20, 30, 40, 50};\n        int[] buffer = new int[2];\n        int size = 0;\n        int streamIdx = 0;\n\n        System.out.println(\"Initial buffer capacity: \" + buffer.length);\n        while (streamIdx < stream.length) {\n            if (size == buffer.length) {\n                int newCapacity = buffer.length * 2;\n                int[] newBuffer = new int[newCapacity];\n                System.arraycopy(buffer, 0, newBuffer, 0, size);\n                buffer = newBuffer;\n                System.out.println(\"Capacity exceeded! Resized to: \" + buffer.length);\n            }\n            buffer[size++] = stream[streamIdx++];\n        }\n\n        System.out.println(\"Final buffer size: \" + size + \" | Total capacity: \" + buffer.length);\n    }\n}",
+      "expectedOutput": "Initial buffer capacity: 2\nCapacity exceeded! Resized to: 4\nCapacity exceeded! Resized to: 8\nFinal buffer size: 5 | Total capacity: 8"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

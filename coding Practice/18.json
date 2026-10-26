@@ -1,0 +1,461 @@
+{
+  "section": "Arrays and strings",
+  "slug": "arrays",
+  "topic": "Arrays",
+  "page": 74,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Array Initialization and Dual Printing",
+      "question": "Declare, initialize, and display a 5-element integer array using both an iterative loop and the utility method `java.util.Arrays.toString()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-01",
+      "id": "arrays-001",
+      "explanation": "In Java, an array is a dynamically created object allocated on the heap that stores a fixed-length contiguous sequence of elements of the same type. Array creation with an array initializer syntax like `int[] arr = {10, 20, 30, 40, 50};` allocates the underlying storage and populates elements in a single step. Printing an array directly via `System.out.println(arr)` outputs its default Object `toString()` representation (type indicator followed by identity hash code, e.g., `[I@15db9742`). To display the contents in human-readable format, developers either iterate across the indices using a loop or invoke `Arrays.toString(arr)`, which formats elements inside brackets separated by commas.",
+      "hints": [
+        "Initialize the array using inline literal syntax: `int[] arr = {10, 20, 30, 40, 50};`.",
+        "Import `java.util.Arrays` to access the utility method `Arrays.toString()`.",
+        "Traverse using `arr.length` in a loop to inspect elements individually."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {10, 20, 30, 40, 50};\n\n        System.out.print(\"Loop: \");\n        for (int i = 0; i < numbers.length; i++) {\n            System.out.print(numbers[i] + (i == numbers.length - 1 ? \"\" : \" \"));\n        }\n        System.out.println();\n\n        System.out.println(\"Array: \" + Arrays.toString(numbers));\n    }\n}",
+      "expectedOutput": "Loop: 10 20 30 40 50\nArray: [10, 20, 30, 40, 50]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Array Sum and Average Calculator",
+      "question": "Traverse an integer array using a loop to compute both the aggregate sum and the floating-point average of its elements.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-02",
+      "id": "arrays-002",
+      "explanation": "Calculating cumulative metrics over an array requires accumulating values in an external variable. When computing the arithmetic average, dividing an integer sum by an integer array length using `/` performs integer truncation, discarding fractional remainders. To preserve decimal accuracy, the sum or length must be explicitly cast to a `double` prior to division (`(double) sum / arr.length`). This promotes the division operation to 64-bit IEEE 754 floating-point arithmetic. Empty arrays must also be checked defensively to prevent division by zero.",
+      "hints": [
+        "Use an enhanced `for-each` loop to sum values: `for (int num : arr) sum += num;`.",
+        "Cast `sum` to `double` before dividing by `arr.length` to avoid integer truncation.",
+        "Format the output to show the array contents, sum, and decimal average."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {10, 20, 30, 40};\n        int sum = 0;\n\n        for (int n : numbers) {\n            sum += n;\n        }\n        double average = (double) sum / numbers.length;\n\n        System.out.println(\"Array: \" + Arrays.toString(numbers));\n        System.out.println(\"Sum: \" + sum);\n        System.out.println(\"Average: \" + average);\n    }\n}",
+      "expectedOutput": "Array: [10, 20, 30, 40]\nSum: 100\nAverage: 25.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Array Extrema Discovery",
+      "question": "Find the maximum and minimum elements in an unsorted integer array in a single traversal pass.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-03",
+      "id": "arrays-003",
+      "explanation": "Finding extrema in an array requires establishing an initial baseline from the data itself. A common bug is initializing `min` and `max` to 0, which yields incorrect results if all elements are strictly negative or strictly positive. The correct pattern initializes both trackers to `arr[0]`. The loop then iterates starting from index 1 through the end of the array. At each step, `Math.max()` and `Math.min()` update the trackers whenever a higher or lower value is encountered. This completes in $O(N)$ linear time and $O(1)$ space.",
+      "hints": [
+        "Initialize `int max = arr[0];` and `int min = arr[0];` to avoid assumption errors.",
+        "Iterate starting from index 1: `for (int i = 1; i < arr.length; i++)`.",
+        "Update the trackers: `if (arr[i] > max) max = arr[i];` and `if (arr[i] < min) min = arr[i];`."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {12, 5, 27, 3, 18};\n        int max = numbers[0];\n        int min = numbers[0];\n\n        for (int i = 1; i < numbers.length; i++) {\n            if (numbers[i] > max) max = numbers[i];\n            if (numbers[i] < min) min = numbers[i];\n        }\n\n        System.out.println(\"Array: \" + Arrays.toString(numbers));\n        System.out.println(\"Maximum: \" + max);\n        System.out.println(\"Minimum: \" + min);\n    }\n}",
+      "expectedOutput": "Array: [12, 5, 27, 3, 18]\nMaximum: 27\nMinimum: 3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "In-Place Array Reversal",
+      "question": "Reverse an integer array in place without allocating a secondary array, and print the reversed array.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-04",
+      "id": "arrays-004",
+      "explanation": "Reversing an array in place uses two index pointers moving toward each other from opposite ends. Pointer `left` starts at index 0, and pointer `right` starts at `arr.length - 1`. On each iteration of a `while (left < right)` loop, a temporary variable holds `arr[left]`, `arr[left]` is overwritten with `arr[right]`, and `arr[right]` receives the cached temporary value. The pointers then advance (`left++`, `right--`). This operates in $O(N)$ time and $O(1)$ auxiliary memory, modifying the original array directly on the heap.",
+      "hints": [
+        "Initialize two pointer indices: `int left = 0;` and `int right = arr.length - 1;`.",
+        "Use a temporary variable `temp` to swap `arr[left]` and `arr[right]`.",
+        "Continue swapping while `left < right`."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] arr = {5, 10, 15, 20};\n        System.out.println(\"Original: \" + Arrays.toString(arr));\n\n        int left = 0;\n        int right = arr.length - 1;\n        while (left < right) {\n            int temp = arr[left];\n            arr[left] = arr[right];\n            arr[right] = temp;\n            left++;\n            right--;\n        }\n\n        System.out.println(\"Reversed: \" + Arrays.toString(arr));\n    }\n}",
+      "expectedOutput": "Original: [5, 10, 15, 20]\nReversed: [20, 15, 10, 5]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Even and Odd Parity Counter",
+      "question": "Count and display the total number of even and odd integers in an array using the remainder operator (`%`).",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-05",
+      "id": "arrays-005",
+      "explanation": "Categorizing numbers by parity uses the modulo operator `%`. In Java, testing `num % 2 == 0` identifies even numbers. Testing `num % 2 != 0` identifies odd numbers, correctly handling negative integers where `% 2` evaluates to -1. The program iterates through the array, incrementing an `evenCount` or `oddCount` variable on each element. This demonstrates conditional counting in a single linear pass.",
+      "hints": [
+        "Initialize counters `int evenCount = 0;` and `int oddCount = 0;`.",
+        "Check parity using `if (n % 2 == 0) evenCount++; else oddCount++;`.",
+        "Use `n % 2 != 0` rather than `n % 2 == 1` to support negative odd numbers correctly."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {12, 17, 19, 24, 30, 31, 44};\n        int evenCount = 0;\n        int oddCount = 0;\n\n        for (int n : numbers) {\n            if (n % 2 == 0) {\n                evenCount++;\n            } else {\n                oddCount++;\n            }\n        }\n\n        System.out.println(\"Array: \" + Arrays.toString(numbers));\n        System.out.println(\"Even count: \" + evenCount);\n        System.out.println(\"Odd count:  \" + oddCount);\n    }\n}",
+      "expectedOutput": "Array: [12, 17, 19, 24, 30, 31, 44]\nEven count: 4\nOdd count:  3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Two-Pointer Array Reversal Method",
+      "question": "Implement a reusable method `reverse(int[] arr)` that reverses an integer array in place and verify its mutation in `main`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-01",
+      "id": "arrays-006",
+      "explanation": "Because Java passes object references by value, passing an array reference into a method gives the method a copy of the heap memory address. Modifying array elements inside the method (`arr[left] = arr[right]`) mutates the caller's array directly on the heap. Using the two-pointer technique swaps elements in place from the outer boundaries inward, reversing the sequence in $O(N)$ time and $O(1)$ space without requiring a return value.",
+      "hints": [
+        "Declare `public static void reverse(int[] arr)`.",
+        "Swap elements symmetrically using indices `i` and `arr.length - 1 - i` up to the midpoint `arr.length / 2`.",
+        "Print the array in `main` after invoking `reverse(arr)` to confirm the mutation."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void reverse(int[] arr) {\n        if (arr == null || arr.length <= 1) return;\n        int left = 0, right = arr.length - 1;\n        while (left < right) {\n            int temp = arr[left];\n            arr[left] = arr[right];\n            arr[right] = temp;\n            left++;\n            right--;\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] data = {1, 2, 3, 4, 5, 6};\n        reverse(data);\n        System.out.println(\"Reversed array: \" + Arrays.toString(data));\n    }\n}",
+      "expectedOutput": "Reversed array: [6, 5, 4, 3, 2, 1]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Second Largest Element in Single Pass",
+      "question": "Find the second largest unique value in an unsorted array in a single traversal pass ($O(N)$ time) without sorting.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-02",
+      "id": "arrays-007",
+      "explanation": "Finding the second largest element in a single pass requires tracking two variables: `first` and `second`, both initialized to `Integer.MIN_VALUE`. For each element `x`, if `x > first`, the previous `first` becomes the new `second`, and `first` is updated to `x`. If `x` is smaller than `first` but strictly greater than `second` (`x > second && x != first`), `second` is updated to `x`. Duplicate occurrences of the maximum value are ignored. This operates in $O(N)$ time and $O(1)$ space, avoiding the $O(N \\log N)$ cost of sorting.",
+      "hints": [
+        "Initialize `int first = Integer.MIN_VALUE;` and `int second = Integer.MIN_VALUE;`.",
+        "When an element exceeds `first`, shift `first` into `second` before updating `first`.",
+        "Check `else if (num > second && num != first)` to handle elements between `first` and `second`."
+      ],
+      "sampleCode": "public class Solution {\n    public static int getSecondLargest(int[] arr) {\n        int first = Integer.MIN_VALUE;\n        int second = Integer.MIN_VALUE;\n\n        for (int num : arr) {\n            if (num > first) {\n                second = first;\n                first = num;\n            } else if (num > second && num != first) {\n                second = num;\n            }\n        }\n        return second;\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {12, 35, 1, 10, 34, 1};\n        int second = getSecondLargest(numbers);\n        System.out.println(\"Second largest element: \" + second);\n    }\n}",
+      "expectedOutput": "Second largest element: 34"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Array Sorted Check",
+      "question": "Write a method `isSorted(int[] arr)` that returns `true` if an array is sorted in non-decreasing order, and `false` otherwise.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-03",
+      "id": "arrays-008",
+      "explanation": "An array is sorted in non-decreasing order if every element is less than or equal to the element that follows it ($arr[i] \\le arr[i+1]$ for all valid $i$). The verification method iterates from index 0 up to `arr.length - 2`. If it encounters an inversion where `arr[i] > arr[i + 1]`, the array is not sorted, and the method returns `false` immediately. If the loop completes without finding any inversions, the array is confirmed sorted and returns `true`. This provides an $O(N)$ linear-time check with early exit.",
+      "hints": [
+        "Loop from index `0` up to `arr.length - 2`.",
+        "Check adjacent pairs: `if (arr[i] > arr[i + 1]) return false;`.",
+        "Return `true` after the loop completes if no inversions were detected."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isSorted(int[] arr) {\n        if (arr == null || arr.length <= 1) return true;\n        for (int i = 0; i < arr.length - 1; i++) {\n            if (arr[i] > arr[i + 1]) {\n                return false;\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        int[] a = {1, 2, 3, 5, 8};\n        int[] b = {5, 2, 8, 1, 3};\n        System.out.println(\"Is 'a' sorted: \" + isSorted(a));\n        System.out.println(\"Is 'b' sorted: \" + isSorted(b));\n    }\n}",
+      "expectedOutput": "Is 'a' sorted: true\nIs 'b' sorted: false"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Direct Addressing Element Frequency Counter",
+      "question": "Count and print the frequency of numbers (range 0 to 100) in an integer array using a direct-addressing lookup array.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-04",
+      "id": "arrays-009",
+      "explanation": "When element values fall within a known, small integer range (such as 0 to 100), a direct-addressing frequency array provides $O(1)$ counting without hash table overhead. An integer array `freq` of size 101 is allocated, with each index initialized to 0. A single pass over the input array increments `freq[num]++` for each value. A second pass over `freq` prints the counts for elements that appeared at least once (`freq[i] > 0`). This illustrates bucket counting and direct addressing.",
+      "hints": [
+        "Allocate `int[] freq = new int[101];` to cover values 0 through 100.",
+        "Increment counts: `for (int val : arr) freq[val]++;`.",
+        "Iterate over `freq` and print entries where `freq[i] > 0`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[] numbers = {10, 20, 10, 5, 20, 10, 99};\n        int[] freq = new int[101];\n\n        for (int n : numbers) {\n            if (n >= 0 && n <= 100) {\n                freq[n]++;\n            }\n        }\n\n        for (int i = 0; i < freq.length; i++) {\n            if (freq[i] > 0) {\n                System.out.println(\"Value \" + i + \": \" + freq[i] + \" times\");\n            }\n        }\n    }\n}",
+      "expectedOutput": "Value 5: 1 times\nValue 10: 3 times\nValue 20: 2 times\nValue 99: 1 times"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Jagged Array Initialization and Index Product Mapping",
+      "question": "Declare, allocate, and populate a jagged (ragged) 2D array where row $i$ has length $i + 1$, filling each cell with the product of its row and column indices ($i \\times j$).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-05",
+      "id": "arrays-010",
+      "explanation": "In Java, multidimensional arrays are implemented as arrays of arrays. A jagged (or ragged) array is a 2D array where each row can have a different length. The outer array is allocated first with `new int[rows][]`, leaving inner row references uninitialized (`null`). A loop then instantiates each row with its specific capacity: `ragged[i] = new int[i + 1]`. Inner loops can then populate and read cells safely. This flexibility allows memory optimization for triangular matrices, graph adjacency lists, and varying-length datasets.",
+      "hints": [
+        "Declare the jagged array leaving the column dimension empty: `int[][] ragged = new int[4][];`.",
+        "Allocate each row independently: `ragged[i] = new int[i + 1];`.",
+        "Populate cells with `ragged[i][j] = i * j;` using nested loops."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int rows = 4;\n        int[][] ragged = new int[rows][];\n\n        for (int i = 0; i < rows; i++) {\n            ragged[i] = new int[i + 1];\n            for (int j = 0; j <= i; j++) {\n                ragged[i][j] = i * j;\n            }\n        }\n\n        System.out.println(\"Jagged Array Structure:\");\n        for (int[] row : ragged) {\n            for (int val : row) {\n                System.out.print(val + \" \");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "Jagged Array Structure:\n0 \n0 1 \n0 2 4 \n0 3 6 9 "
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Search Dual Implementation: Linear vs Binary",
+      "question": "Implement both linear search and iterative binary search on a sorted integer array, comparing their search behaviors.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-06",
+      "id": "arrays-011",
+      "explanation": "Linear search scans elements sequentially from left to right, running in $O(N)$ time without requiring sorted input. Binary search requires the array to be sorted beforehand, but eliminates half the remaining search space on each step by comparing the target with the midpoint (`mid = low + (high - low) / 2`). This achieves $O(\\log N)$ time complexity. Comparing both search methods on the same sorted array demonstrates the performance benefit of binary search for large datasets.",
+      "hints": [
+        "In `binarySearch`, use `int mid = low + (high - low) / 2;` to avoid integer overflow.",
+        "Update bounds: `low = mid + 1;` if target is greater, or `high = mid - 1;` if target is smaller.",
+        "Return the matching index or `-1` if not found."
+      ],
+      "sampleCode": "public class Solution {\n    public static int linearSearch(int[] arr, int target) {\n        for (int i = 0; i < arr.length; i++) {\n            if (arr[i] == target) return i;\n        }\n        return -1;\n    }\n\n    public static int binarySearch(int[] arr, int target) {\n        int low = 0, high = arr.length - 1;\n        while (low <= high) {\n            int mid = low + (high - low) / 2;\n            if (arr[mid] == target) return mid;\n            else if (arr[mid] < target) low = mid + 1;\n            else high = mid - 1;\n        }\n        return -1;\n    }\n\n    public static void main(String[] args) {\n        int[] sorted = {2, 5, 8, 12, 19, 27, 33};\n        int target = 19;\n        System.out.println(\"Linear Search index: \" + linearSearch(sorted, target));\n        System.out.println(\"Binary Search index: \" + binarySearch(sorted, target));\n    }\n}",
+      "expectedOutput": "Linear Search index: 4\nBinary Search index: 4"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "In-Place Sorted Array Deduplication",
+      "question": "Remove duplicate elements from a sorted integer array in place, returning the new unique length and displaying the deduplicated prefix.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-07",
+      "id": "arrays-012",
+      "explanation": "In a sorted array, duplicate values are grouped contiguously. Deduplicating in place uses two pointers: a write pointer `uniqueIdx` (starting at 0) and a read pointer `i` (starting at 1). As `i` traverses the array, if `arr[i] != arr[uniqueIdx]`, a new unique element has been found. The write pointer increments (`uniqueIdx++`), and the new element is written to `arr[uniqueIdx] = arr[i]`. This removes duplicates in a single pass ($O(N)$ time and $O(1)$ extra space) without allocating a new array.",
+      "hints": [
+        "If `arr.length == 0`, return 0.",
+        "Use a write index `int k = 0;` and scan with `for (int i = 1; i < arr.length; i++)`.",
+        "Copy new values forward: `if (arr[i] != arr[k]) { k++; arr[k] = arr[i]; }`."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static int removeDuplicates(int[] arr) {\n        if (arr == null || arr.length == 0) return 0;\n        int k = 0;\n        for (int i = 1; i < arr.length; i++) {\n            if (arr[i] != arr[k]) {\n                k++;\n                arr[k] = arr[i];\n            }\n        }\n        return k + 1;\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {1, 1, 2, 2, 3, 4, 4, 5};\n        int newLength = removeDuplicates(numbers);\n        System.out.println(\"Unique count: \" + newLength);\n        System.out.print(\"Deduplicated prefix: \");\n        for (int i = 0; i < newLength; i++) {\n            System.out.print(numbers[i] + (i == newLength - 1 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Unique count: 5\nDeduplicated prefix: 1 2 3 4 5"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Cyclic Right Array Rotation by K Positions",
+      "question": "Rotate an array to the right by $K$ positions in $O(N)$ time and $O(1)$ extra space using array reversals.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-08",
+      "id": "arrays-013",
+      "explanation": "Rotating an array to the right by $K$ positions can be solved efficiently using three reversals. First, $K$ is normalized using modulo arithmetic (`k = k % n`) to handle rotations larger than the array length. The algorithm then: 1) reverses the entire array, 2) reverses the first $K$ elements, and 3) reverses the remaining $N - K$ elements. This achieves in-place rotation in $O(N)$ time and $O(1)$ space without requiring auxiliary array allocation.",
+      "hints": [
+        "Normalize the shift: `k = k % arr.length;`.",
+        "Reverse the entire array from index `0` to `n - 1`.",
+        "Reverse the first `k` elements (`0` to `k - 1`), then reverse the rest (`k` to `n - 1`)."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void reverseRange(int[] arr, int start, int end) {\n        while (start < end) {\n            int temp = arr[start];\n            arr[start] = arr[end];\n            arr[end] = temp;\n            start++;\n            end--;\n        }\n    }\n\n    public static void rotateRight(int[] arr, int k) {\n        if (arr == null || arr.length <= 1) return;\n        int n = arr.length;\n        k = k % n;\n        reverseRange(arr, 0, n - 1);\n        reverseRange(arr, 0, k - 1);\n        reverseRange(arr, k, n - 1);\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {1, 2, 3, 4, 5, 6, 7};\n        rotateRight(numbers, 3);\n        System.out.println(\"Rotated array (right by 3): \" + Arrays.toString(numbers));\n    }\n}",
+      "expectedOutput": "Rotated array (right by 3): [5, 6, 7, 1, 2, 3, 4]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "2D Matrix Grid Row and Column Summations",
+      "question": "Display a 2D integer matrix and compute the aggregate sum for each individual row and each individual column.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-09",
+      "id": "arrays-014",
+      "explanation": "Traversing a 2D matrix uses row-major and column-major iteration. For an $R \\times C$ matrix, row sums iterate through each row `r`, summing `matrix[r][c]` across columns `c`. Column sums invert the loop order: the outer loop iterates through column `c`, and the inner loop sums `matrix[r][c]` down rows `r`. This exercise demonstrates multidimensional array indexing and coordinate traversal in grid structures.",
+      "hints": [
+        "Compute row sums by iterating columns within each row: `rowSum += matrix[r][c]`.",
+        "Compute column sums by iterating rows for each column: `colSum += matrix[r][c]`.",
+        "Format the output to display each row and column total clearly."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][] grid = {\n            {1, 2, 3},\n            {4, 5, 6},\n            {7, 8, 9}\n        };\n\n        System.out.println(\"Row Sums:\");\n        for (int r = 0; r < grid.length; r++) {\n            int rowSum = 0;\n            for (int c = 0; c < grid[r].length; c++) {\n                rowSum += grid[r][c];\n            }\n            System.out.println(\"Row \" + r + \": \" + rowSum);\n        }\n\n        System.out.println(\"Column Sums:\");\n        for (int c = 0; c < grid[0].length; c++) {\n            int colSum = 0;\n            for (int r = 0; r < grid.length; r++) {\n                colSum += grid[r][c];\n            }\n            System.out.println(\"Col \" + c + \": \" + colSum);\n        }\n    }\n}",
+      "expectedOutput": "Row Sums:\nRow 0: 6\nRow 1: 15\nRow 2: 24\nColumn Sums:\nCol 0: 12\nCol 1: 15\nCol 2: 18"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Sorted Array Merging Algorithm",
+      "question": "Merge two pre-sorted integer arrays into a single sorted array in $O(N + M)$ time using two pointers.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-10",
+      "id": "arrays-015",
+      "explanation": "Merging two sorted arrays is the core merge step of the Merge Sort algorithm. An output array of length $N + M$ is allocated. Pointers `p1` and `p2` track positions in `arr1` and `arr2`, while `k` tracks position in the result. At each step, the smaller of `arr1[p1]` and `arr2[p2]` is copied into `result[k]`, and that pointer advances. Once one array is exhausted, remaining elements from the other array are copied over. This completes in $O(N + M)$ linear time.",
+      "hints": [
+        "Allocate `int[] merged = new int[a.length + b.length];`.",
+        "Compare elements while `p1 < a.length && p2 < b.length`, copying the smaller value.",
+        "Copy any remaining elements from either array into the result array."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static int[] mergeSorted(int[] a, int[] b) {\n        int[] result = new int[a.length + b.length];\n        int i = 0, j = 0, k = 0;\n\n        while (i < a.length && j < b.length) {\n            if (a[i] <= b[j]) {\n                result[k++] = a[i++];\n            } else {\n                result[k++] = b[j++];\n            }\n        }\n        while (i < a.length) result[k++] = a[i++];\n        while (j < b.length) result[k++] = b[j++];\n\n        return result;\n    }\n\n    public static void main(String[] args) {\n        int[] a = {1, 3, 5, 7};\n        int[] b = {2, 4, 6, 8, 10};\n        int[] merged = mergeSorted(a, b);\n        System.out.println(\"Merged array: \" + Arrays.toString(merged));\n    }\n}",
+      "expectedOutput": "Merged array: [1, 2, 3, 4, 5, 6, 7, 8, 10]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Array Left Rotation by K Positions",
+      "question": "Rotate an array of size $N$ to the left by $K$ positions in $O(N)$ time and $O(1)$ extra space using array reversal.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-06",
+      "id": "arrays-016",
+      "explanation": "Left rotation shifts elements toward lower indices, wrapping elements that shift off the front back to the end. Like right rotation, this can be solved using three in-place reversals: 1) reverse the first $K$ elements (`0` to `k - 1`), 2) reverse the remaining $N - K$ elements (`k` to `n - 1`), and 3) reverse the entire array (`0` to `n - 1`). Normalizing `k = k % n` handles rotation counts larger than the array length, executing in $O(N)$ time and $O(1)$ space.",
+      "hints": [
+        "Normalize shift: `k = k % arr.length;`.",
+        "Reverse the first `k` elements (`0` to `k - 1`).",
+        "Reverse the rest (`k` to `n - 1`), then reverse the entire array (`0` to `n - 1`)."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void reverseRange(int[] arr, int start, int end) {\n        while (start < end) {\n            int temp = arr[start];\n            arr[start] = arr[end];\n            arr[end] = temp;\n            start++;\n            end--;\n        }\n    }\n\n    public static void rotateLeft(int[] arr, int k) {\n        if (arr == null || arr.length <= 1) return;\n        int n = arr.length;\n        k = k % n;\n        reverseRange(arr, 0, k - 1);\n        reverseRange(arr, k, n - 1);\n        reverseRange(arr, 0, n - 1);\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {1, 2, 3, 4, 5, 6, 7};\n        rotateLeft(numbers, 2);\n        System.out.println(\"Rotated array (left by 2): \" + Arrays.toString(numbers));\n    }\n}",
+      "expectedOutput": "Rotated array (left by 2): [3, 4, 5, 6, 7, 1, 2]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Move Zeroes to End",
+      "question": "Move all zeroes in an integer array to the end while maintaining the relative order of non-zero elements in-place.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-08",
+      "id": "arrays-017",
+      "explanation": "Moving zeroes to the end of an array while preserving non-zero element order uses a two-pointer partitioning approach. A pointer `insertPos` tracks the position where the next non-zero element should be written. As the array is traversed, every non-zero element is copied to `arr[insertPos++]`. Once all non-zero elements have been copied forward, a second loop fills the remaining positions from `insertPos` to `arr.length - 1` with zeros. This completes in $O(N)$ time with $O(1)$ extra memory.",
+      "hints": [
+        "Track the write index: `int insertPos = 0;`.",
+        "Copy non-zero values forward: `if (arr[i] != 0) arr[insertPos++] = arr[i];`.",
+        "Fill remaining indices from `insertPos` to `arr.length - 1` with `0`."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void moveZeroes(int[] arr) {\n        int insertPos = 0;\n        for (int num : arr) {\n            if (num != 0) {\n                arr[insertPos++] = num;\n            }\n        }\n        while (insertPos < arr.length) {\n            arr[insertPos++] = 0;\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] data = {0, 1, 0, 3, 12};\n        moveZeroes(data);\n        System.out.println(\"Zeroes moved to end: \" + Arrays.toString(data));\n    }\n}",
+      "expectedOutput": "Zeroes moved to end: [1, 3, 12, 0, 0]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Matrix Transposition",
+      "question": "Given an $M \\times N$ matrix, write a function that computes and returns its $N \\times M$ transpose.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-09",
+      "id": "arrays-018",
+      "explanation": "Transposing a matrix swaps rows and columns. For an $M \\times N$ matrix, the transposed matrix has dimensions $N \\times M$, where the element at row `r` and column `c` maps to row `c` and column `r` in the result (`transposed[c][r] = matrix[r][c]`). The method allocates a new matrix of swapped dimensions and uses nested loops to copy elements, completing in $O(M \\times N)$ time.",
+      "hints": [
+        "Allocate the output matrix with swapped dimensions: `new int[cols][rows]`.",
+        "Use nested loops to iterate over rows and columns of the original matrix.",
+        "Assign values: `transposed[c][r] = matrix[r][c];`."
+      ],
+      "sampleCode": "public class Solution {\n    public static int[][] transpose(int[][] matrix) {\n        int rows = matrix.length;\n        int cols = matrix[0].length;\n        int[][] result = new int[cols][rows];\n\n        for (int r = 0; r < rows; r++) {\n            for (int c = 0; c < cols; c++) {\n                result[c][r] = matrix[r][c];\n            }\n        }\n        return result;\n    }\n\n    public static void main(String[] args) {\n        int[][] original = {\n            {1, 2, 3},\n            {4, 5, 6}\n        };\n        int[][] transposed = transpose(original);\n        System.out.println(\"Transposed Matrix (3x2):\");\n        for (int[] row : transposed) {\n            System.out.println(row[0] + \" \" + row[1]);\n        }\n    }\n}",
+      "expectedOutput": "Transposed Matrix (3x2):\n1 4\n2 5\n3 6"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Find Missing Number in 1 to N",
+      "question": "Given an array containing $N-1$ distinct integers in the range $[1, N]$, find the missing number using XOR bitwise arithmetic in $O(N)$ time and $O(1)$ space.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-10",
+      "id": "arrays-019",
+      "explanation": "Finding a missing number from $1$ to $N$ using XOR arithmetic leverages two mathematical properties of exclusive OR: $x \\oplus x = 0$ (self-inverse) and $x \\oplus 0 = x$ (identity). By XORing all integers from $1$ to $N$ together with every element present in the array, all duplicate numbers cancel to 0, leaving only the missing number. Unlike summing numbers ($N(N+1)/2$), XOR arithmetic avoids potential integer overflow when $N$ is large, operating in $O(N)$ time and $O(1)$ auxiliary space.",
+      "hints": [
+        "XOR all expected numbers from `1` to `n` into an accumulator.",
+        "XOR every element in the given array into the same accumulator.",
+        "The resulting value is the missing number."
+      ],
+      "sampleCode": "public class Solution {\n    public static int findMissingNumber(int[] arr, int n) {\n        int xorAll = 0;\n        for (int i = 1; i <= n; i++) {\n            xorAll ^= i;\n        }\n        for (int num : arr) {\n            xorAll ^= num;\n        }\n        return xorAll;\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {1, 2, 4, 5, 6}; // Missing 3 from 1..6\n        int missing = findMissingNumber(numbers, 6);\n        System.out.println(\"Missing number: \" + missing);\n    }\n}",
+      "expectedOutput": "Missing number: 3"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Second Largest Distinct Value Finder",
+      "question": "Find the second largest distinct integer in an array, returning `Integer.MIN_VALUE` if no distinct second largest element exists.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-11",
+      "id": "arrays-020",
+      "explanation": "Finding the second largest distinct value requires handling edge cases where all elements are identical. Variables `largest` and `secondLargest` are initialized to `Integer.MIN_VALUE`. During traversal, if `num > largest`, `secondLargest` receives the previous `largest` value, and `largest` is updated. If `num < largest` but `num > secondLargest`, `secondLargest` is updated. Identical values are ignored. If `secondLargest` remains `Integer.MIN_VALUE` after the loop, no distinct second largest element exists.",
+      "hints": [
+        "Initialize `int largest = Integer.MIN_VALUE;` and `int second = Integer.MIN_VALUE;`.",
+        "Update `second` whenever a new `largest` is found.",
+        "Ignore duplicate values matching `largest`."
+      ],
+      "sampleCode": "public class Solution {\n    public static int findSecondLargest(int[] arr) {\n        int largest = Integer.MIN_VALUE;\n        int second = Integer.MIN_VALUE;\n\n        for (int num : arr) {\n            if (num > largest) {\n                second = largest;\n                largest = num;\n            } else if (num > second && num != largest) {\n                second = num;\n            }\n        }\n        return second;\n    }\n\n    public static void main(String[] args) {\n        int[] values = {10, 20, 4, 45, 99, 99};\n        int second = findSecondLargest(values);\n        System.out.println(\"Second distinct largest: \" + second);\n    }\n}",
+      "expectedOutput": "Second distinct largest: 45"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Kadane's Algorithm for Maximum Subarray Sum",
+      "question": "Implement Kadane's algorithm to find the maximum sum of a contiguous subarray in an integer array in $O(N)$ time and $O(1)$ space.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-12",
+      "id": "arrays-021",
+      "explanation": "Kadane's algorithm finds the contiguous subarray with the largest sum in linear $O(N)$ time. At each index, it decides whether to add the current element to the existing running subarray or start a new subarray beginning at the current element: `currentMax = Math.max(x, currentMax + x)`. The overall maximum `globalMax` is updated at each step: `globalMax = Math.max(globalMax, currentMax)`. Initializing both variables with `arr[0]` handles arrays consisting entirely of negative numbers, avoiding the need for $O(N^2)$ brute-force sub-array evaluations.",
+      "hints": [
+        "Initialize `int currentMax = arr[0];` and `int globalMax = arr[0];`.",
+        "At each element, compute `currentMax = Math.max(arr[i], currentMax + arr[i]);`.",
+        "Update `globalMax = Math.max(globalMax, currentMax);` on each step."
+      ],
+      "sampleCode": "public class Solution {\n    public static int maxSubArraySum(int[] arr) {\n        int currentMax = arr[0];\n        int globalMax = arr[0];\n\n        for (int i = 1; i < arr.length; i++) {\n            currentMax = Math.max(arr[i], currentMax + arr[i]);\n            globalMax = Math.max(globalMax, currentMax);\n        }\n        return globalMax;\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {-2, 1, -3, 4, -1, 2, 1, -5, 4};\n        int maxSum = maxSubArraySum(numbers);\n        System.out.println(\"Maximum Subarray Sum: \" + maxSum);\n    }\n}",
+      "expectedOutput": "Maximum Subarray Sum: 6"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "In-Place Matrix Rotation 90 Degrees Clockwise",
+      "question": "Rotate an $N \\times N$ square matrix 90 degrees clockwise in place using transposition followed by row reversal, without allocating a secondary matrix.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-13",
+      "id": "arrays-022",
+      "explanation": "Rotating an $N \\times N$ matrix 90 degrees clockwise in place can be decomposed into two geometric steps: 1) transpose the matrix along its main diagonal, and 2) reverse each row horizontally. Transposition swaps `matrix[i][j]` with `matrix[j][i]` for all $j > i$. Reversing each row swaps elements from the outer columns inward using two pointers. This combination rotates the matrix clockwise in $O(N^2)$ time and $O(1)$ auxiliary space.",
+      "hints": [
+        "Step 1: Transpose the matrix by swapping `matrix[i][j]` and `matrix[j][i]` for $j > i$.",
+        "Step 2: Reverse each row by swapping `matrix[i][left]` and `matrix[i][right]` while `left < right`.",
+        "This achieves in-place rotation with zero auxiliary memory allocation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void rotate(int[][] matrix) {\n        int n = matrix.length;\n        // Step 1: Transpose\n        for (int i = 0; i < n; i++) {\n            for (int j = i + 1; j < n; j++) {\n                int temp = matrix[i][j];\n                matrix[i][j] = matrix[j][i];\n                matrix[j][i] = temp;\n            }\n        }\n        // Step 2: Reverse each row\n        for (int i = 0; i < n; i++) {\n            int left = 0, right = n - 1;\n            while (left < right) {\n                int temp = matrix[i][left];\n                matrix[i][left] = matrix[i][right];\n                matrix[i][right] = temp;\n                left++;\n                right--;\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        int[][] mat = {\n            {1, 2, 3},\n            {4, 5, 6},\n            {7, 8, 9}\n        };\n        rotate(mat);\n        System.out.println(\"Rotated Matrix (90 deg):\");\n        for (int[] row : mat) {\n            System.out.println(row[0] + \" \" + row[1] + \" \" + row[2]);\n        }\n    }\n}",
+      "expectedOutput": "Rotated Matrix (90 deg):\n7 4 1\n8 5 2\n9 6 3"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Two Sum Target Search via HashMap",
+      "question": "Solve the Two Sum problem in $O(N)$ time using a `HashMap` to find the indices of two numbers that sum to a target value.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-14",
+      "id": "arrays-023",
+      "explanation": "The Two Sum problem finds two elements in an array that sum to a target value. A brute-force nested loop runs in $O(N^2)$ time. Using a `HashMap<Integer, Integer>` (mapping numbers to their array indices) reduces this to $O(N)$ linear time. As each element `arr[i]` is visited, the required complement `target - arr[i]` is checked against the map. If the complement exists, its stored index and `i` form the solution. If not, `arr[i]` and its index are added to the map. This achieves an $O(N)$ runtime using $O(N)$ space.",
+      "hints": [
+        "Compute the complement: `int complement = target - arr[i];`.",
+        "Check if `map.containsKey(complement)`.",
+        "If found, return `new int[]{map.get(complement), i}`; otherwise, `map.put(arr[i], i)`."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static int[] twoSum(int[] numbers, int target) {\n        Map<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < numbers.length; i++) {\n            int complement = target - numbers[i];\n            if (map.containsKey(complement)) {\n                return new int[]{map.get(complement), i};\n            }\n            map.put(numbers[i], i);\n        }\n        return new int[]{-1, -1};\n    }\n\n    public static void main(String[] args) {\n        int[] numbers = {2, 7, 11, 15};\n        int target = 9;\n        int[] indices = twoSum(numbers, target);\n        System.out.println(\"Two Sum indices: \" + Arrays.toString(indices));\n    }\n}",
+      "expectedOutput": "Two Sum indices: [0, 1]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Dutch National Flag Three-Way Partitioning",
+      "question": "Sort an array containing only 0s, 1s, and 2s in-place in a single pass using Dijkstra's Dutch National Flag three-way partitioning algorithm.",
+      "source": "java_coding_practice.json",
+      "source_id": "arrays-15",
+      "id": "arrays-024",
+      "explanation": "Dijkstra's Dutch National Flag algorithm partitions an array of three distinct values (0, 1, 2) in a single pass using three pointers: `low`, `mid`, and `high`. The pointers maintain four sections: `[0, low-1]` contains 0s, `[low, mid-1]` contains 1s, `[mid, high]` contains unexamined elements, and `[high+1, n-1]` contains 2s. If `arr[mid] == 0`, elements at `low` and `mid` are swapped, and both pointers increment. If `arr[mid] == 1`, `mid` increments. If `arr[mid] == 2`, elements at `mid` and `high` are swapped, and `high` decrements (without advancing `mid`, so the swapped element can be evaluated). This sorts the array in $O(N)$ time and $O(1)$ space.",
+      "hints": [
+        "Initialize pointers: `int low = 0, mid = 0, high = arr.length - 1;`.",
+        "Loop while `mid <= high`.",
+        "Swap and advance: on 0, swap(`low`, `mid`) and advance both; on 1, advance `mid`; on 2, swap(`mid`, `high`) and decrement `high`."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void sortColors(int[] arr) {\n        int low = 0, mid = 0, high = arr.length - 1;\n        while (mid <= high) {\n            if (arr[mid] == 0) {\n                int temp = arr[low];\n                arr[low] = arr[mid];\n                arr[mid] = temp;\n                low++;\n                mid++;\n            } else if (arr[mid] == 1) {\n                mid++;\n            } else {\n                int temp = arr[mid];\n                arr[mid] = arr[high];\n                arr[high] = temp;\n                high--;\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] items = {2, 0, 2, 1, 1, 0};\n        sortColors(items);\n        System.out.println(\"Sorted colors: \" + Arrays.toString(items));\n    }\n}",
+      "expectedOutput": "Sorted colors: [0, 0, 1, 1, 2, 2]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Rotate Matrix by 90 Degrees In-Place",
+      "question": "Given an $N \\times N$ 2D matrix, rotate it 90 degrees clockwise in-place without allocating a temporary matrix, and print the resulting grid.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-11",
+      "id": "arrays-025",
+      "explanation": "Rotating an $N \\times N$ matrix in place avoids allocating extra heap memory. The rotation combines two operations: transposing the matrix across its main diagonal, followed by reversing each row horizontally. Transposition swaps `matrix[i][j]` with `matrix[j][i]` for all $j > i$. Reversing each row swaps elements between outer columns inward until the pointers meet. This achieves an in-place 90-degree clockwise rotation in $O(N^2)$ time and $O(1)$ space.",
+      "hints": [
+        "Transpose elements: swap `matrix[i][j]` with `matrix[j][i]` for $j > i$.",
+        "Reverse columns in each row using a two-pointer swap.",
+        "Verify the rotation on a $3 \\times 3$ matrix."
+      ],
+      "sampleCode": "public class Solution {\n    public static void rotate(int[][] matrix) {\n        int n = matrix.length;\n        // Transpose\n        for (int i = 0; i < n; i++) {\n            for (int j = i + 1; j < n; j++) {\n                int tmp = matrix[i][j];\n                matrix[i][j] = matrix[j][i];\n                matrix[j][i] = tmp;\n            }\n        }\n        // Reverse rows\n        for (int i = 0; i < n; i++) {\n            int l = 0, r = n - 1;\n            while (l < r) {\n                int tmp = matrix[i][l];\n                matrix[i][l] = matrix[i][r];\n                matrix[i][r] = tmp;\n                l++;\n                r--;\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        int[][] mat = {\n            {1, 2, 3},\n            {4, 5, 6},\n            {7, 8, 9}\n        };\n        rotate(mat);\n        System.out.println(\"Rotated 90 degrees:\");\n        for (int[] row : mat) {\n            System.out.println(row[0] + \" \" + row[1] + \" \" + row[2]);\n        }\n    }\n}",
+      "expectedOutput": "Rotated 90 degrees:\n7 4 1\n8 5 2\n9 6 3"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Trapping Rain Water",
+      "question": "Given $N$ non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining using two pointers.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-13",
+      "id": "arrays-026",
+      "explanation": "The amount of water trapped above any bar at index $i$ is bounded by the minimum of the highest bars to its left and right, minus its own height: $\\min(\\text{maxLeft}, \\text{maxRight}) - \\text{height}[i]$. The two-pointer technique solves this in $O(N)$ time and $O(1)$ space. Pointers `left` and `right` start at opposite ends of the array, tracking `leftMax` and `rightMax`. At each step, the pointer with the smaller boundary advances inward: if `leftMax < rightMax`, trapped water at `left` depends only on `leftMax`, so `leftMax - height[left]` is added to total water, and `left` advances. If `rightMax` is smaller, water at `right` depends on `rightMax`, and `right` advances. This computes the total trapped water in a single linear pass.",
+      "hints": [
+        "Initialize pointers `int left = 0, right = height.length - 1;`.",
+        "Track `leftMax` and `rightMax` along each boundary.",
+        "Advance the pointer with the smaller maximum, adding trapped water to the total."
+      ],
+      "sampleCode": "public class Solution {\n    public static int trap(int[] height) {\n        if (height == null || height.length <= 2) return 0;\n        int left = 0, right = height.length - 1;\n        int leftMax = 0, rightMax = 0;\n        int totalWater = 0;\n\n        while (left < right) {\n            if (height[left] < height[right]) {\n                if (height[left] >= leftMax) leftMax = height[left];\n                else totalWater += leftMax - height[left];\n                left++;\n            } else {\n                if (height[right] >= rightMax) rightMax = height[right];\n                else totalWater += rightMax - height[right];\n                right--;\n            }\n        }\n        return totalWater;\n    }\n\n    public static void main(String[] args) {\n        int[] elevations = {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1};\n        int water = trap(elevations);\n        System.out.println(\"Total Trapped Rain Water: \" + water);\n    }\n}",
+      "expectedOutput": "Total Trapped Rain Water: 6"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Dutch National Flag Algorithm",
+      "question": "Given an array consisting only of 0s, 1s, and 2s, sort the array in-place in a single pass with $O(1)$ auxiliary space.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-14",
+      "id": "arrays-027",
+      "explanation": "This problem uses Dijkstra's Dutch National Flag partitioning algorithm to sort an array containing only three discrete values (0, 1, and 2) in a single pass. The algorithm maintains three pointers: `low`, `mid`, and `high`. Elements before `low` are 0s, elements between `low` and `mid - 1` are 1s, and elements after `high` are 2s. The pointer `mid` scans through unexamined elements: if `arr[mid] == 0`, it swaps with `arr[low]` and advances both pointers; if `arr[mid] == 1`, it advances; if `arr[mid] == 2`, it swaps with `arr[high]` and decrements `high`. This sorts the array in $O(N)$ time using $O(1)$ space without counting occurrences or allocating a secondary array.",
+      "hints": [
+        "Initialize `int low = 0, mid = 0, high = arr.length - 1;`.",
+        "On 0: swap `arr[low]` and `arr[mid]`, then `low++` and `mid++`.",
+        "On 2: swap `arr[mid]` and `arr[high]`, then `high--` without advancing `mid`."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void sort012(int[] a) {\n        int low = 0, mid = 0, high = a.length - 1;\n        while (mid <= high) {\n            switch (a[mid]) {\n                case 0 -> {\n                    int temp = a[low];\n                    a[low] = a[mid];\n                    a[mid] = temp;\n                    low++;\n                    mid++;\n                }\n                case 1 -> mid++;\n                case 2 -> {\n                    int temp = a[mid];\n                    a[mid] = a[high];\n                    a[high] = temp;\n                    high--;\n                }\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] arr = {0, 1, 2, 0, 1, 2, 1, 0};\n        sort012(arr);\n        System.out.println(\"Sorted 0-1-2 array: \" + Arrays.toString(arr));\n    }\n}",
+      "expectedOutput": "Sorted 0-1-2 array: [0, 0, 0, 1, 1, 1, 2, 2]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Next Permutation",
+      "question": "Implement the next lexicographical permutation algorithm on an array of integers in place, rearranging numbers into the lexicographically next greater permutation.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ARR-15",
+      "id": "arrays-028",
+      "explanation": "Finding the next lexicographical permutation of an array follows a four-step algorithm: 1) Scan from right to left to find the first index `i` where `arr[i] < arr[i + 1]`. If no such index exists, the array is in descending order (the largest possible permutation); reversing the entire array wraps it back to the smallest permutation. 2) If index `i` is found, scan from the right end again to locate the first element `arr[j]` strictly greater than `arr[i]`. 3) Swap `arr[i]` and `arr[j]`. 4) Reverse the subarray from `i + 1` to the end of the array to minimize the newly created suffix. This produces the next lexicographical permutation in $O(N)$ time and $O(1)$ space.",
+      "hints": [
+        "Step 1: Find the first decreasing element from the right: `arr[i] < arr[i + 1]`.",
+        "Step 2: Find the element just larger than `arr[i]` from the right and swap them.",
+        "Step 3: Reverse the elements from index `i + 1` to the end of the array."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void nextPermutation(int[] nums) {\n        int i = nums.length - 2;\n        while (i >= 0 && nums[i] >= nums[i + 1]) {\n            i--;\n        }\n        if (i >= 0) {\n            int j = nums.length - 1;\n            while (nums[j] <= nums[i]) {\n                j--;\n            }\n            swap(nums, i, j);\n        }\n        reverse(nums, i + 1, nums.length - 1);\n    }\n\n    private static void swap(int[] a, int i, int j) {\n        int tmp = a[i];\n        a[i] = a[j];\n        a[j] = tmp;\n    }\n\n    private static void reverse(int[] a, int l, int r) {\n        while (l < r) {\n            swap(a, l++, r--);\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] permutation = {1, 2, 3};\n        nextPermutation(permutation);\n        System.out.println(\"Next permutation: \" + Arrays.toString(permutation));\n    }\n}",
+      "expectedOutput": "Next permutation: [1, 3, 2]"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 28
+}

@@ -1,0 +1,461 @@
+{
+  "section": "Methods and control flow",
+  "slug": "for-loops",
+  "topic": "For and nested loops",
+  "page": 59,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic Sequential For-Loop Counter",
+      "question": "Write a program that uses a standard three-clause `for` loop to print numbers from 1 to 10 separated by single spaces on one line.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-01",
+      "id": "for-loops-001",
+      "explanation": "The standard `for` loop in Java consists of three distinct control expressions separated by semicolons: initialization, termination condition, and iteration step. In `for (int i = 1; i <= 10; i++)`, the loop control variable `i` is allocated in the current stack frame and initialized to 1. Before each iteration, the JVM evaluates the condition `i <= 10` using comparison bytecodes like `if_icmpgt`. If true, the body executes, printing `i`. After the body, the iteration expression `i++` increments the counter directly in its local variable slot via the `iinc` bytecode instruction before re-evaluating the condition. This deterministic sequence provides predictable bounded iteration over numeric intervals.",
+      "hints": [
+        "Initialize the loop counter at `int i = 1`.",
+        "Set the termination condition to `i <= 10`.",
+        "Use `System.out.print(i + (i == 10 ? \"\" : \" \"))` to format space-separated output on a single line."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 10; i++) {\n            System.out.print(i + (i == 10 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "1 2 3 4 5 6 7 8 9 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Natural Number Iterative Accumulation",
+      "question": "Write a program that calculates and displays the sum of the first $n$ natural numbers for $n = 5$ using a `for` loop accumulator.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-02",
+      "id": "for-loops-002",
+      "explanation": "Iterative accumulation is a fundamental looping pattern where a variable declared outside the loop scope aggregates values produced on each cycle. The accumulator `sum` is initialized to 0 on the stack before the loop starts. As the loop advances from 1 through $n$, the compound assignment `sum += i` retrieves the current accumulator value, adds the loop variable, and stores the updated total back in place. Declaring `sum` outside the loop ensures its state outlives the loop body, allowing the accumulated result to be retrieved and printed after loop termination.",
+      "hints": [
+        "Declare `int sum = 0;` before entering the loop to store the running total.",
+        "Iterate from `1` through `n` inclusive using `for (int i = 1; i <= n; i++)`.",
+        "Add the loop counter to the accumulator inside the loop using `sum += i;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 5;\n        int sum = 0;\n        for (int i = 1; i <= n; i++) {\n            sum += i;\n        }\n        System.out.println(\"n = \" + n);\n        System.out.println(\"Sum = \" + sum);\n    }\n}",
+      "expectedOutput": "n = 5\nSum = 15"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Linear Multiplication Table Generator",
+      "question": "Write a program that uses a `for` loop to generate and display the multiplication table for the number 5 from 1 through 10.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-03",
+      "id": "for-loops-003",
+      "explanation": "Linear table generation combines loop iteration with dynamic formatted output. During each iteration of `for (int i = 1; i <= 10; i++)`, the multiplicand remains constant while the multiplier `i` increments by 1. The product is calculated inline using the multiplication operator `number * i`. The JVM evaluates the string concatenation expressions, converting primitives to strings via `StringConcatFactory` or `StringBuilder`, and flushes each formatted row to standard output. This highlights how loop control variables act as arithmetic scaling factors in procedural calculations.",
+      "hints": [
+        "Fix the base number as a constant or variable `int num = 5;`.",
+        "Iterate `i` from `1` up to `10`.",
+        "Print each product row in the format: `num + \" x \" + i + \" = \" + (num * i)`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int num = 5;\n        for (int i = 1; i <= 10; i++) {\n            System.out.println(num + \" x \" + i + \" = \" + (num * i));\n        }\n    }\n}",
+      "expectedOutput": "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Iterative Factorial Computation",
+      "question": "Compute the factorial of a positive integer $n$ ($n = 5$) using a `for` loop and print the calculated result.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-04",
+      "id": "for-loops-004",
+      "explanation": "Factorial computation ($n!$) represents the cumulative product of all positive integers from 1 up to $n$, with $0! = 1$ by definition. In an iterative loop, the accumulator variable `factorial` must be initialized to 1 rather than 0 to avoid zeroing out the multiplicative chain. The loop variable `i` iterates from 2 through $n$, updating the product with `factorial *= i` on each step. Using a `for` loop executes in $O(n)$ time using $O(1)$ auxiliary stack space, avoiding the call stack frame overhead and potential `StackOverflowError` risks associated with deep recursive calls.",
+      "hints": [
+        "Initialize the product accumulator to `1`: `int factorial = 1;`.",
+        "Loop from `1` (or `2`) up to `n`: `for (int i = 1; i <= n; i++)`.",
+        "Accumulate the product using compound multiplication: `factorial *= i;`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 5;\n        int factorial = 1;\n        for (int i = 1; i <= n; i++) {\n            factorial *= i;\n        }\n        System.out.println(\"Input: \" + n);\n        System.out.println(\"Factorial: \" + factorial);\n    }\n}",
+      "expectedOutput": "Input: 5\nFactorial: 120"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Stepped Loop Even Number Filter",
+      "question": "Write a `for` loop with a step increment of 2 that prints all even numbers from 2 up to 50 on a single line separated by spaces.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-05",
+      "id": "for-loops-005",
+      "explanation": "A loop's update clause is not restricted to single-unit increments (`i++`); it can incorporate arbitrary step expressions like `i += 2`. When generating even sequences, starting at 2 and stepping by 2 eliminates the need for modulo parity checks (`i % 2 == 0`) inside the loop body. The JVM executes half as many branch evaluations, jumping straight to the next target value. This demonstrates loop index stride optimization, producing arithmetic progression sequences directly in the control header.",
+      "hints": [
+        "Start the loop counter at `int i = 2;`.",
+        "Update the counter by two on each step using `i += 2`.",
+        "Terminate when `i <= 50` and print values separated by spaces."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        for (int i = 2; i <= 50; i += 2) {\n            System.out.print(i + (i == 50 ? \"\" : \" \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multiplication Table Generator",
+      "question": "Write a parameterized multiplication table generator method that accepts an integer multiplier and prints lines from 1 to 10 in a formatted grid.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-01",
+      "id": "for-loops-006",
+      "explanation": "Encapsulating a multiplication table within a reusable method demonstrates parameter-driven loop control. The method `printTable(int base)` receives the target number as a local argument. The `for` loop binds the multiplier `i` from 1 to 10, computing each step's product dynamically. Formatting the string dynamically via `System.out.println` creates a consistent grid presentation. This separates computation logic into reusable method units while using standard loop counters for iteration.",
+      "hints": [
+        "Create a static method `printTable(int multiplier)` containing the loop.",
+        "Iterate `i` from 1 to 10 inside the method.",
+        "Format output cleanly to display multiplicand, multiplier, and product."
+      ],
+      "sampleCode": "public class Solution {\n    public static void printTable(int multiplier) {\n        for (int i = 1; i <= 10; i++) {\n            System.out.println(multiplier + \" x \" + i + \" = \" + (multiplier * i));\n        }\n    }\n\n    public static void main(String[] args) {\n        printTable(5);\n    }\n}",
+      "expectedOutput": "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Sum of First N Natural Numbers",
+      "question": "Compute the sum of natural numbers from 1 to $N$ ($N = 10$) using a `for` loop, and compare the loop accumulator against the closed-form formula $N(N+1)/2$.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-02",
+      "id": "for-loops-007",
+      "explanation": "This problem contrasts iterative $O(N)$ accumulation with Gauss's closed-form mathematical formula $N(N + 1) / 2$, which evaluates in $O(1)$ time. An iterative loop increments `sum` on each pass, performing $N$ additions. The closed-form formula evaluates the sum using a single multiplication and division. Computing both values and asserting equality validates loop correctness against algebraic theory, highlighting the performance difference between iterative execution and closed-form arithmetic.",
+      "hints": [
+        "Accumulate iteratively using `for (int i = 1; i <= n; i++) sum += i;`.",
+        "Calculate the closed-form formula using `(n * (n + 1)) / 2`.",
+        "Verify and print both results alongside a boolean match confirmation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 10;\n        int loopSum = 0;\n        for (int i = 1; i <= n; i++) {\n            loopSum += i;\n        }\n        int formulaSum = (n * (n + 1)) / 2;\n        System.out.println(\"Loop Sum: \" + loopSum);\n        System.out.println(\"Formula Sum: \" + formulaSum);\n        System.out.println(\"Matches: \" + (loopSum == formulaSum));\n    }\n}",
+      "expectedOutput": "Loop Sum: 55\nFormula Sum: 55\nMatches: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Even Number Countdown",
+      "question": "Write a `for` loop that counts down from 20 to 0 by decrements of 2, printing the even numbers on a single line separated by commas.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-03",
+      "id": "for-loops-008",
+      "explanation": "Reverse iteration decrements the loop control variable from an upper bound down to a lower bound. In `for (int i = 20; i >= 0; i -= 2)`, the counter starts at 20, the termination condition verifies `i >= 0`, and the step expression decrements by 2. Handing punctuation formatting requires conditional checks: a trailing comma is appended for all elements except the final index `0`. This reinforces boundary detection and decremental step control.",
+      "hints": [
+        "Initialize at the upper limit: `int i = 20`.",
+        "Use the continuation condition `i >= 0`.",
+        "Decrement with `i -= 2` and omit the comma after the final value `0`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        for (int i = 20; i >= 0; i -= 2) {\n            System.out.print(i + (i == 0 ? \"\" : \", \"));\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Enhanced For-Each Loop Iteration",
+      "question": "Iterate through an array of strings using the enhanced `for-each` loop and print only the strings whose length is strictly greater than 4 characters.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-05",
+      "id": "for-loops-009",
+      "explanation": "Introduced in Java 5, the enhanced `for-each` loop (`for (Type item : array)`) provides readable traversal over arrays and `Iterable` collections. The compiler desugars array `for-each` loops into a standard indexed loop with a hidden integer index and cached length field. Inside the loop, `item.length()` inspects string length, and strings meeting the filter condition `item.length() > 4` are printed. This eliminates manual index tracking and prevents off-by-one `ArrayIndexOutOfBoundsException` errors.",
+      "hints": [
+        "Declare a string array such as `String[] words = {\"Java\", \"Python\", \"C\", \"Kotlin\", \"Rust\"};`.",
+        "Use `for (String word : words)` to traverse elements without tracking indices.",
+        "Check `if (word.length() > 4)` before printing matching strings."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String[] languages = {\"Java\", \"Python\", \"C\", \"Kotlin\", \"Rust\", \"JavaScript\"};\n        for (String lang : languages) {\n            if (lang.length() > 4) {\n                System.out.println(lang);\n            }\n        }\n    }\n}",
+      "expectedOutput": "Python\nKotlin\nJavaScript"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Right-Angled Asterisk Triangle",
+      "question": "Using nested `for` loops, print a right-angled triangle pattern of asterisks with $n = 4$ rows, where row $i$ contains exactly $i$ asterisks.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-06",
+      "id": "for-loops-010",
+      "explanation": "Nested loops represent multidimensional coordination: an outer loop controls the vertical row progression, while an inner loop manages the horizontal column character placement. In a right-angled triangle, the inner loop bound depends on the current outer loop index: `for (int j = 1; j <= i; j++)`. For row $i=1$, the inner loop executes once; for row $i=4$, it executes four times. Calling `System.out.print(\"*\")` writes asterisks sequentially on the current row, and `System.out.println()` advances to the next line when the inner loop terminates.",
+      "hints": [
+        "Use outer loop `for (int i = 1; i <= n; i++)` to control row count.",
+        "Use inner loop `for (int j = 1; j <= i; j++)` to print stars for the current row.",
+        "Emit `System.out.println()` after the inner loop finishes to move to the next row."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= i; j++) {\n                System.out.print(\"*\");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "*\n**\n***\n****"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Centered Asterisk Pyramid",
+      "question": "Write nested `for` loops to render a centered pyramid of asterisks with $n = 4$ rows, using leading spaces for geometric symmetry.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-07",
+      "id": "for-loops-011",
+      "explanation": "A centered pyramid combines leading whitespace offsets with an odd-numbered character progression. For a pyramid of height $n$ and row $i$ (1-indexed), the row requires $(n - i)$ leading spaces to center the apex over the base. The number of asterisks follows the arithmetic progression $(2i - 1)$, producing 1, 3, 5, and 7 stars across successive rows. Two separate inner loops handle this: the first prints leading spaces, and the second prints asterisks, producing a balanced pyramid in monospace displays.",
+      "hints": [
+        "Outer loop runs `for (int i = 1; i <= n; i++)`.",
+        "First inner loop prints spaces: `for (int s = 1; s <= n - i; s++) System.out.print(\" \");`.",
+        "Second inner loop prints stars: `for (int j = 1; j <= (2 * i - 1); j++) System.out.print(\"*\");`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        for (int i = 1; i <= n; i++) {\n            for (int s = 1; s <= n - i; s++) {\n                System.out.print(\" \");\n            }\n            for (int j = 1; j <= (2 * i - 1); j++) {\n                System.out.print(\"*\");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "   *\n  ***\n *****\n*******"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Sequential Numeric Triangle",
+      "question": "Print a 4-row numeric triangle pattern where each row $i$ displays the digits from 1 through $i$ consecutively.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-08",
+      "id": "for-loops-012",
+      "explanation": "Printing numeric patterns uses the inner loop variable directly as the output character. While star patterns print static literals, numeric triangles print the inner loop index `j`. The outer loop runs `for (int i = 1; i <= n; i++)`, and the inner loop runs `for (int j = 1; j <= i; j++)`, outputting `j` on each pass. This prints `1` on row 1, `12` on row 2, up through `1234` on row 4, illustrating how inner loop counters provide dynamic coordinate data.",
+      "hints": [
+        "Outer loop manages row count: `for (int i = 1; i <= n; i++)`.",
+        "Inner loop counts columns: `for (int j = 1; j <= i; j++)`.",
+        "Print `j` directly using `System.out.print(j)` inside the inner loop."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= i; j++) {\n                System.out.print(j);\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "1\n12\n123\n1234"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Prime Number Discovery via Nested Loops",
+      "question": "Find and print all prime numbers up to $n = 30$ using nested `for` loops, validating divisibility up to $\\sqrt{i}$.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-09",
+      "id": "for-loops-013",
+      "explanation": "Prime discovery over a numeric range uses nested loops with an early-exit flag. The outer loop iterates through candidate integers `i` from 2 up to $n$. For each candidate, a boolean flag `isPrime` is initialized to true. The inner loop tests potential divisors `d` starting from 2 up to $\\sqrt{i}$ (`d * d <= i`). If `i % d == 0`, `i` is composite; `isPrime` is set to false, and a `break` statement terminates the inner loop early. If no divisor divides `i` evenly, `isPrime` remains true and the candidate is printed.",
+      "hints": [
+        "Outer loop tests candidates: `for (int i = 2; i <= n; i++)`.",
+        "Inner loop tests divisors up to $\\sqrt{i}$: `for (int d = 2; d * d <= i; d++)`.",
+        "Set an `isPrime = false` flag and `break` as soon as `i % d == 0` is detected."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 30;\n        System.out.print(\"Primes up to \" + n + \": \");\n        for (int i = 2; i <= n; i++) {\n            boolean isPrime = true;\n            for (int d = 2; d * d <= i; d++) {\n                if (i % d == 0) {\n                    isPrime = false;\n                    break;\n                }\n            }\n            if (isPrime) {\n                System.out.print(i + \" \");\n            }\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Primes up to 30: 2 3 5 7 11 13 17 19 23 29 "
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Numeric Palindrome Verification",
+      "question": "Reverse the digits of an integer using a loop with modulo arithmetic and determine whether the number is a numeric palindrome.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-10",
+      "id": "for-loops-014",
+      "explanation": "Reversing an integer arithmetically extracts digits from right to left without converting the number to a string. On each iteration of `for (int temp = original; temp > 0; temp /= 10)`, the rightmost digit is isolated using `temp % 10`. The reversed accumulator shifts its existing digits left by one decimal place (`reversed * 10`) and appends the new digit. After the loop extracts all digits, comparing `original == reversed` determines whether the number reads identically backward and forward, confirming palindrome status.",
+      "hints": [
+        "Store the original value in a separate variable: `int original = num;`.",
+        "Extract the lowest digit using `int digit = temp % 10;`.",
+        "Shift and accumulate: `reversed = reversed * 10 + digit;`, then truncate `temp /= 10`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int num = 12321;\n        int original = num;\n        int reversed = 0;\n\n        for (int temp = num; temp > 0; temp /= 10) {\n            int digit = temp % 10;\n            reversed = (reversed * 10) + digit;\n        }\n\n        boolean isPalindrome = (original == reversed);\n        System.out.println(\"Number: \" + original);\n        System.out.println(\"Reversed: \" + reversed);\n        System.out.println(\"Is Palindrome: \" + isPalindrome);\n    }\n}",
+      "expectedOutput": "Number: 12321\nReversed: 12321\nIs Palindrome: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Inverted Pyramid Pattern",
+      "question": "Using nested loops, print a centered inverted pyramid of asterisks for height $N = 4$, decreasing width by two stars per descending row.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-06",
+      "id": "for-loops-015",
+      "explanation": "An inverted pyramid reverses the coordinate math of a standard pyramid. The outer loop decrements row index `i` from $N$ down to 1. On each row, the number of leading spaces increases as $(N - i)$, while the number of asterisks decreases as $(2i - 1)$, producing 7, 5, 3, and 1 stars on successive lines. The inner loops mirror this structure: the first loop outputs leading spaces, and the second outputs asterisks, demonstrating reverse geometric coordinate rendering.",
+      "hints": [
+        "Run outer loop downward: `for (int i = n; i >= 1; i--)`.",
+        "Print leading spaces: `for (int s = 0; s < n - i; s++) System.out.print(\" \");`.",
+        "Print asterisks: `for (int j = 1; j <= (2 * i - 1); j++) System.out.print(\"*\");`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        for (int i = n; i >= 1; i--) {\n            for (int s = 0; s < n - i; s++) {\n                System.out.print(\" \");\n            }\n            for (int j = 1; j <= (2 * i - 1); j++) {\n                System.out.print(\"*\");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "*******\n *****\n  ***\n   *"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Prime Number Range Finder",
+      "question": "Write nested `for` loops to identify, count, and display all prime numbers in the range from 100 to 150.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-07",
+      "id": "for-loops-016",
+      "explanation": "Finding primes over an arbitrary interval $[A, B]$ requires checking divisibility across a bounded range. The outer loop iterates from 100 through 150. Even numbers are skipped early, and odd candidates are tested for divisors up to $\\sqrt{i}$ (`d * d <= i`). A counter tracks total primes found in the interval. Breaking the divisor loop immediately upon finding any factor minimizes unnecessary iterations, demonstrating efficient composite filtering across numeric ranges.",
+      "hints": [
+        "Iterate the outer loop across the range: `for (int i = 100; i <= 150; i++)`.",
+        "Optimize by skipping even numbers: `if (i % 2 == 0) continue;`.",
+        "Test odd divisors: `for (int d = 3; d * d <= i; d += 2)` with early `break` on `i % d == 0`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int start = 100, end = 150;\n        int count = 0;\n        System.out.print(\"Primes between \" + start + \" and \" + end + \": \");\n        for (int i = start; i <= end; i++) {\n            if (i < 2) continue;\n            boolean isPrime = (i % 2 != 0 || i == 2);\n            for (int d = 3; d * d <= i && isPrime; d += 2) {\n                if (i % d == 0) {\n                    isPrime = false;\n                }\n            }\n            if (isPrime) {\n                System.out.print(i + \" \");\n                count++;\n            }\n        }\n        System.out.println(\"\\nTotal primes found: \" + count);\n    }\n}",
+      "expectedOutput": "Primes between 100 and 150: 101 103 107 109 113 127 131 137 139 149 \nTotal primes found: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Matrix Multiplication Engine",
+      "question": "Implement matrix multiplication for two 2D matrices $A (2 \\times 3)$ and $B (3 \\times 2)$ using 3 nested `for` loops, printing the resulting product matrix.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-08",
+      "id": "for-loops-017",
+      "explanation": "Matrix multiplication relies on three nested loops to compute dot products of rows and columns. To multiply an $M \\times K$ matrix by a $K \\times N$ matrix, the outer loop `i` iterates over rows of $A$ ($M$), the middle loop `j` iterates over columns of $B$ ($N$), and the innermost loop `k` iterates over the common dimension ($K$). Each resulting cell `C[i][j]` accumulates the sum of products: `C[i][j] += A[i][k] * B[k][j]`. This algorithm runs in $O(M \\times N \\times K)$ time, illustrating coordinate transformation over multidimensional arrays.",
+      "hints": [
+        "Initialize result matrix `int[][] c = new int[m][n];`.",
+        "Loop `i` over rows of $A$, loop `j` over columns of $B$, and loop `k` over the shared dimension.",
+        "Accumulate into the cell using `c[i][j] += a[i][k] * b[k][j];`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int[][] a = {\n            {1, 2, 3},\n            {4, 5, 6}\n        };\n        int[][] b = {\n            {7, 8},\n            {9, 1},\n            {2, 3}\n        };\n        int rowsA = a.length;\n        int colsA = a[0].length;\n        int colsB = b[0].length;\n        int[][] c = new int[rowsA][colsB];\n\n        for (int i = 0; i < rowsA; i++) {\n            for (int j = 0; j < colsB; j++) {\n                for (int k = 0; k < colsA; k++) {\n                    c[i][j] += a[i][k] * b[k][j];\n                }\n            }\n        }\n\n        System.out.println(\"Product Matrix (2x2):\");\n        for (int[] row : c) {\n            for (int val : row) {\n                System.out.print(val + \" \");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "Product Matrix (2x2):\n31 19 \n85 55 "
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Diamond Pattern Generator",
+      "question": "Write a program using nested loops that prints a symmetric diamond shape of asterisks for an odd total width $W = 7$.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-10",
+      "id": "for-loops-018",
+      "explanation": "Rendering a symmetrical diamond combines an upright pyramid with an inverted pyramid. For an odd width $W$, the upper half (including the center line) has height $M = (W / 2) + 1$, where row $i$ prints $(M - i)$ leading spaces followed by $(2i - 1)$ asterisks. The lower inverted half has height $(M - 1)$, where row $i$ runs in reverse to print leading spaces and stars symmetrically. Splitting the figure into upper and lower loop nests produces a clean, balanced diamond pattern.",
+      "hints": [
+        "Calculate midpoint `int m = (width / 2) + 1;`.",
+        "Upper half loop: `for (int i = 1; i <= m; i++)` printing spaces and $(2i - 1)$ stars.",
+        "Lower half loop: `for (int i = m - 1; i >= 1; i--)` mirroring the spacing and star counts."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int width = 7;\n        int m = (width / 2) + 1;\n\n        // Upper half including center row\n        for (int i = 1; i <= m; i++) {\n            for (int s = 1; s <= m - i; s++) System.out.print(\" \");\n            for (int j = 1; j <= (2 * i - 1); j++) System.out.print(\"*\");\n            System.out.println();\n        }\n        // Lower half\n        for (int i = m - 1; i >= 1; i--) {\n            for (int s = 1; s <= m - i; s++) System.out.print(\" \");\n            for (int j = 1; j <= (2 * i - 1); j++) System.out.print(\"*\");\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "   *\n  ***\n *****\n*******\n *****\n  ***\n   *"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Hollow Diamond Pattern Generator",
+      "question": "Using nested loops, print a hollow diamond pattern of asterisks of height $n = 5$, where only the boundary edges contain asterisks.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-11",
+      "id": "for-loops-019",
+      "explanation": "A hollow diamond extends the standard diamond pattern by replacing interior asterisks with spaces. On each row $i$, the loop outputs leading spaces, an opening asterisk, interior spaces, and a closing asterisk. The single top and bottom vertices print only one asterisk without interior spacing. On intermediate rows, the number of interior spaces follows the sequence $2i - 3$. By checking `if (j == 1 || j == 2 * i - 1)` inside the character loop, the program prints asterisks only along the outer boundary, producing a hollow geometric outline.",
+      "hints": [
+        "Upper half: print `n - i` leading spaces, then print `*` at the first and last position of row $i$.",
+        "Lower half: reverse the outer loop index from `n - 1` down to 1.",
+        "Check boundaries: `if (j == 1 || j == 2 * i - 1) System.out.print(\"*\"); else System.out.print(\" \");`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 4;\n        // Upper half\n        for (int i = 1; i <= n; i++) {\n            for (int s = 1; s <= n - i; s++) System.out.print(\" \");\n            for (int j = 1; j <= (2 * i - 1); j++) {\n                if (j == 1 || j == (2 * i - 1)) System.out.print(\"*\");\n                else System.out.print(\" \");\n            }\n            System.out.println();\n        }\n        // Lower half\n        for (int i = n - 1; i >= 1; i--) {\n            for (int s = 1; s <= n - i; s++) System.out.print(\" \");\n            for (int j = 1; j <= (2 * i - 1); j++) {\n                if (j == 1 || j == (2 * i - 1)) System.out.print(\"*\");\n                else System.out.print(\" \");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "   *\n  * *\n *   *\n*     *\n *   *\n  * *\n   *"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Pascal's Triangle Row Generator",
+      "question": "Print Pascal's Triangle for $n = 5$ rows using nested loops and the binomial coefficient formula $\\binom{i}{j}$.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-12",
+      "id": "for-loops-020",
+      "explanation": "Pascal's Triangle displays binomial coefficients, where entry $(i, j)$ corresponds to $\\binom{i}{j} = \\frac{i!}{j!(i-j)!}$. Rather than computing factorials directly—which quickly overflows 32-bit integers—each entry can be derived from the preceding value in the same row using the recurrence $\\binom{i}{j} = \\binom{i}{j-1} \\times \\frac{i - j + 1}{j}$. The outer loop manages row index `i`, while the inner loop computes and prints each term `val` inline using integer arithmetic. Leading spaces center the rows, rendering the triangle symmetrically.",
+      "hints": [
+        "Initialize `int val = 1;` at the start of each row `i`.",
+        "Print leading spaces `n - i` to center the triangle.",
+        "Update subsequent terms using `val = val * (i - j) / j;` inside the inner loop."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 5;\n        for (int i = 0; i < n; i++) {\n            for (int s = 0; s < n - i - 1; s++) {\n                System.out.print(\" \");\n            }\n            int val = 1;\n            for (int j = 0; j <= i; j++) {\n                System.out.print(val + \" \");\n                val = val * (i - j) / (j + 1);\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "    1 \n   1 1 \n  1 2 1 \n 1 3 3 1 \n1 4 6 4 1 "
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Armstrong Number Range Search",
+      "question": "Find and print all Armstrong numbers (numbers equal to the sum of their digits raised to the power of the digit count) between 1 and 1000 using loops.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-13",
+      "id": "for-loops-021",
+      "explanation": "An Armstrong number (narcissistic number) of $k$ digits equals the sum of each of its digits raised to the $k$-th power (e.g., $153 = 1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153$). The outer loop iterates through numbers from 1 to 1000. For each candidate, a first loop counts total digits $k$. A second loop extracts digits from right to left using `% 10`, raises each to power $k$, and accumulates the sum. Comparing `sum == candidate` identifies and prints matching Armstrong numbers across the range.",
+      "hints": [
+        "Count digits $k$ by dividing a copy of the number by 10 until it reaches 0.",
+        "Extract digits with `temp % 10` and compute `Math.pow(digit, k)`.",
+        "Compare accumulated sum against the original number and print on match."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.print(\"Armstrong numbers (1-1000): \");\n        for (int i = 1; i <= 1000; i++) {\n            int temp = i;\n            int digits = 0;\n            while (temp > 0) {\n                digits++;\n                temp /= 10;\n            }\n            temp = i;\n            int sum = 0;\n            while (temp > 0) {\n                int d = temp % 10;\n                int pow = 1;\n                for (int p = 0; p < digits; p++) pow *= d;\n                sum += pow;\n                temp /= 10;\n            }\n            if (sum == i) {\n                System.out.print(i + \" \");\n            }\n        }\n        System.out.println();\n    }\n}",
+      "expectedOutput": "Armstrong numbers (1-1000): 1 2 3 4 5 6 7 8 9 153 370 371 407 "
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Validated Matrix Multiplication Engine",
+      "question": "Implement matrix multiplication for two 2D matrices, validating dimension compatibility ($Cols(A) == Rows(B)$) before execution and handling incompatible dimensions gracefully.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-14",
+      "id": "for-loops-022",
+      "explanation": "Defensive matrix multiplication verifies algebraic compatibility before allocating memory or executing loops. For two matrices $A$ and $B$, multiplication is valid only when $A$'s column count equals $B$'s row count. If `a[0].length != b.length`, the dimensions are incompatible and an `IllegalArgumentException` is thrown. When compatible, three nested loops compute the dot product for each cell `c[i][j]`. Validating dimensions upfront prevents out-of-bounds index errors during inner loop execution.",
+      "hints": [
+        "Check compatibility: `if (a[0].length != b.length) throw new IllegalArgumentException(...);`.",
+        "Allocate result matrix with dimensions `new int[a.length][b[0].length]`.",
+        "Use three nested loops: row iterator `i`, column iterator `j`, and dot-product accumulator `k`."
+      ],
+      "sampleCode": "public class Solution {\n    public static int[][] multiplyMatrices(int[][] a, int[][] b) {\n        if (a[0].length != b.length) {\n            throw new IllegalArgumentException(\"Dimension mismatch: A columns must equal B rows\");\n        }\n        int[][] c = new int[a.length][b[0].length];\n        for (int i = 0; i < a.length; i++) {\n            for (int j = 0; j < b[0].length; j++) {\n                for (int k = 0; k < a[0].length; k++) {\n                    c[i][j] += a[i][k] * b[k][j];\n                }\n            }\n        }\n        return c;\n    }\n\n    public static void main(String[] args) {\n        int[][] a = {{2, 3}, {4, 1}};\n        int[][] b = {{1, 0}, {3, 2}};\n        int[][] result = multiplyMatrices(a, b);\n        System.out.println(\"Multiplication result:\");\n        for (int[] row : result) {\n            System.out.println(row[0] + \" \" + row[1]);\n        }\n    }\n}",
+      "expectedOutput": "Multiplication result:\n11 6\n7 2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Pythagorean Triplet Search",
+      "question": "Using nested `for` loops, find and print all integer pairs $(a, b)$ with $1 \\le a < b \\le 30$ such that $a^2 + b^2 = c^2$ for an integer $c$.",
+      "source": "java_coding_practice.json",
+      "source_id": "for-loops-15",
+      "id": "for-loops-023",
+      "explanation": "Finding Pythagorean triplets highlights nested loop bounds optimization. The outer loop picks $a$ from 1 to 30, and the inner loop picks $b$ starting from $a + 1$ up to 30, enforcing the constraint $a < b$ to eliminate duplicate permutations like $(3, 4)$ and $(4, 3)$. Inside the loops, the sum of squares `sumSq = a * a + b * b` is evaluated. The square root $c = \\sqrt{sumSq}$ is computed and truncated to an integer. If $c \\times c == sumSq$, then $(a, b, c)$ forms a valid Pythagorean triplet.",
+      "hints": [
+        "Outer loop runs `for (int a = 1; a <= 30; a++)`.",
+        "Inner loop enforces order: `for (int b = a + 1; b <= 30; b++)`.",
+        "Check perfect square: compute `int c = (int) Math.sqrt(a * a + b * b);` and test `if (c * c == a * a + b * b)`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Pythagorean pairs (a, b) with a < b <= 30:\");\n        for (int a = 1; a <= 30; a++) {\n            for (int b = a + 1; b <= 30; b++) {\n                int sumSq = (a * a) + (b * b);\n                int c = (int) Math.sqrt(sumSq);\n                if (c * c == sumSq) {\n                    System.out.println(\"(\" + a + \", \" + b + \") -> c = \" + c);\n                }\n            }\n        }\n    }\n}",
+      "expectedOutput": "Pythagorean pairs (a, b) with a < b <= 30:\n(3, 4) -> c = 5\n(5, 12) -> c = 13\n(6, 8) -> c = 10\n(7, 24) -> c = 25\n(8, 15) -> c = 17\n(9, 12) -> c = 15\n(10, 24) -> c = 26\n(12, 16) -> c = 20\n(15, 20) -> c = 25\n(18, 24) -> c = 30\n(20, 21) -> c = 29"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Clockwise Spiral Matrix Populator",
+      "question": "Given an integer $N = 3$, use bounded loops to populate an $N \\times N$ matrix with sequential integers from 1 to $N^2$ in clockwise spiral order.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-11",
+      "id": "for-loops-024",
+      "explanation": "Populating a matrix in spiral order uses four boundary markers: `top`, `bottom`, `left`, and `right`. An outer loop runs while `val <= N * N`. Inside, four directional loops traverse the current perimeter: 1) left to right along `top`, incrementing `top`; 2) top to bottom along `right`, decrementing `right`; 3) right to left along `bottom`, decrementing `bottom`; and 4) bottom to top along `left`, incrementing `left`. Boundary adjustments peel away outer layers layer by layer until the entire matrix is filled in $O(N^2)$ time.",
+      "hints": [
+        "Initialize four boundaries: `top = 0`, `bottom = n - 1`, `left = 0`, `right = n - 1`.",
+        "Loop while `val <= n * n` and traverse boundaries clockwise.",
+        "Adjust boundary pointers (`top++`, `right--`, `bottom--`, `left++`) after completing each side."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int n = 3;\n        int[][] matrix = new int[n][n];\n        int val = 1;\n        int top = 0, bottom = n - 1, left = 0, right = n - 1;\n\n        while (val <= n * n) {\n            for (int j = left; j <= right && val <= n * n; j++) matrix[top][j] = val++;\n            top++;\n            for (int i = top; i <= bottom && val <= n * n; i++) matrix[i][right] = val++;\n            right--;\n            for (int j = right; j >= left && val <= n * n; j--) matrix[bottom][j] = val++;\n            bottom--;\n            for (int i = bottom; i >= top && val <= n * n; i--) matrix[i][left] = val++;\n            left++;\n        }\n\n        System.out.println(\"Spiral Matrix (3x3):\");\n        for (int[] row : matrix) {\n            for (int cell : row) System.out.printf(\"%2d \", cell);\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "Spiral Matrix (3x3):\n 1  2  3 \n 8  9  4 \n 7  6  5 "
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Sudoku Grid Verification Engine",
+      "question": "Implement a Sudoku grid validation engine using loops and bitmasks to verify that every row, column, and $3 \\times 3$ sub-box contains digits 1-9 without duplicates.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-12",
+      "id": "for-loops-025",
+      "explanation": "Validating a completed 9x9 Sudoku board requires verifying three constraints: each of the 9 rows, each of the 9 columns, and each of the nine 3x3 sub-boxes must contain digits 1 through 9 with no duplicates. Using bitmasks tracks seen digits efficiently. For each cell value `v`, the bit `1 << v` is checked against a mask using bitwise AND: `(seen & (1 << v)) != 0` indicates a duplicate. If not seen, `seen |= (1 << v)` records the digit. Checking rows, columns, and sub-boxes with bitwise operations runs in $O(1)$ auxiliary space.",
+      "hints": [
+        "Track seen digits in each row, column, and sub-box using a bitmask integer.",
+        "Map sub-box coordinates using `int boxIndex = (r / 3) * 3 + (c / 3)`.",
+        "Check for duplicates using `(mask & (1 << val)) != 0`, then record with `mask |= (1 << val)`."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isValidSudoku(char[][] board) {\n        int[] rows = new int[9];\n        int[] cols = new int[9];\n        int[] boxes = new int[9];\n\n        for (int r = 0; r < 9; r++) {\n            for (int c = 0; c < 9; c++) {\n                char ch = board[r][c];\n                if (ch == '.') continue;\n                int val = ch - '0';\n                int bit = 1 << val;\n                int boxIdx = (r / 3) * 3 + (c / 3);\n\n                if ((rows[r] & bit) != 0 || (cols[c] & bit) != 0 || (boxes[boxIdx] & bit) != 0) {\n                    return false;\n                }\n                rows[r] |= bit;\n                cols[c] |= bit;\n                boxes[boxIdx] |= bit;\n            }\n        }\n        return true;\n    }\n\n    public static void main(String[] args) {\n        char[][] board = {\n            {'5','3','.','.','7','.','.','.','.'},\n            {'6','.','.','1','9','5','.','.','.'},\n            {'.','9','8','.','.','.','.','6','.'},\n            {'8','.','.','.','6','.','.','.','3'},\n            {'4','.','.','8','.','3','.','.','1'},\n            {'7','.','.','.','2','.','.','.','6'},\n            {'.','6','.','.','.','.','2','8','.'},\n            {'.','.','.','4','1','9','.','.','5'},\n            {'.','.','.','.','8','.','.','7','9'}\n        };\n        System.out.println(\"Is valid Sudoku configuration: \" + isValidSudoku(board));\n    }\n}",
+      "expectedOutput": "Is valid Sudoku configuration: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Floyd's Cycle Finding in Array Jump Paths",
+      "question": "Given an array representing jump pointer indices, implement Floyd's Cycle-Finding Algorithm (tortoise and hare) using pointer stepping to detect cycles.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-13",
+      "id": "for-loops-026",
+      "explanation": "Floyd's Cycle-Finding Algorithm detects cycles in index jump paths using two pointer variables moving at different speeds. The slow pointer ('tortoise') advances one step per iteration (`slow = arr[slow]`), while the fast pointer ('hare') advances two steps (`fast = arr[arr[fast]]`). If the jump path contains no cycle, the fast pointer reaches out-of-bounds indices and terminates. If a cycle exists, the faster pointer eventually laps and meets the slow pointer inside the loop. This algorithm detects cycles in $O(N)$ time using $O(1)$ auxiliary space without requiring hash sets or modifying the array.",
+      "hints": [
+        "Initialize `int slow = 0, fast = 0;`.",
+        "Advance `slow = arr[slow];` by one step and `fast = arr[arr[fast]];` by two steps.",
+        "Check bounds before jumping; if `slow == fast`, a cycle exists."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean hasCycle(int[] jumps) {\n        if (jumps == null || jumps.length == 0) return false;\n        int slow = 0, fast = 0;\n        while (fast < jumps.length && jumps[fast] < jumps.length && jumps[jumps[fast]] < jumps.length) {\n            slow = jumps[slow];\n            fast = jumps[jumps[fast]];\n            if (slow == fast) {\n                return true; // Cycle detected\n            }\n        }\n        return false;\n    }\n\n    public static void main(String[] args) {\n        int[] jumpPath = {1, 2, 3, 4, 1}; // Jumps: 0->1->2->3->4->1 (cycle)\n        System.out.println(\"Cycle detected in jump path: \" + hasCycle(jumpPath));\n    }\n}",
+      "expectedOutput": "Cycle detected in jump path: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Sliding Window Subarray Maximums",
+      "question": "Compute and print the maximum value for every contiguous subarray of size $K = 3$ across an integer array using a sliding window loop without external collections.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-14",
+      "id": "for-loops-027",
+      "explanation": "Sliding window algorithms process contiguous subsets of data across sequential bounds. For an array of length $N$ and window size $K$, there are $(N - K + 1)$ valid subarrays. The outer loop positions the window's starting index `i` from 0 to $N - K$. For each window position, an inner loop traverses indices from `i` to `i + K - 1` to find the maximum element in that window. Tracking window boundaries across loop indices allows computing localized extrema across streaming sequences.",
+      "hints": [
+        "Outer loop runs from `0` to `arr.length - k`.",
+        "Inner loop scans from `i` up to `i + k - 1`.",
+        "Find the maximum within the current window and print it before shifting the window."
+      ],
+      "sampleCode": "public class Solution {\n    public static void printKMax(int[] arr, int k) {\n        System.out.print(\"Sliding window maximums (k=\" + k + \"): \");\n        for (int i = 0; i <= arr.length - k; i++) {\n            int max = arr[i];\n            for (int j = 1; j < k; j++) {\n                if (arr[i + j] > max) {\n                    max = arr[i + j];\n                }\n            }\n            System.out.print(max + \" \");\n        }\n        System.out.println();\n    }\n\n    public static void main(String[] args) {\n        int[] data = {1, 3, -1, -3, 5, 3, 6, 7};\n        printKMax(data, 3);\n    }\n}",
+      "expectedOutput": "Sliding window maximums (k=3): 3 3 5 5 6 7 "
+    },
+    {
+      "difficulty": "Hard",
+      "title": "ASCII Mandelbrot Fractal Renderer",
+      "question": "Write nested loops mapping console screen coordinates $(x, y)$ to the complex plane to iterate $z = z^2 + c$ and render an ASCII visualization of the Mandelbrot set.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "FOR-15",
+      "id": "for-loops-028",
+      "explanation": "Rendering the Mandelbrot set in ASCII maps console character positions to coordinates on the complex plane. The outer loop iterates over vertical screen coordinates `y`, and the inner loop iterates over horizontal coordinates `x`. Screen coordinates are scaled to complex numbers $c = c_r + c_i i$ (typically $c_r \\in [-2.0, 1.0]$ and $c_i \\in [-1.0, 1.0]$). An innermost loop iterates the recurrence $z_{k+1} = z_k^2 + c$, updating real and imaginary components with $z_r' = z_r^2 - z_i^2 + c_r$ and $z_i' = 2 z_r z_i + c_i$. If the magnitude $z_r^2 + z_i^2$ exceeds 4 before reaching the iteration limit, the point escapes; otherwise, it belongs to the set and is printed as `*`.",
+      "hints": [
+        "Map pixel coordinates $(x, y)$ to complex ranges $c_r \\in [-2.0, 0.5]$ and $c_i \\in [-1.0, 1.0]$.",
+        "Iterate the recurrence $z_r' = z_r^2 - z_i^2 + c_r$ and $z_i' = 2 z_r z_i + c_i$ up to a maximum step limit (e.g., 30).",
+        "Print `*` if the point stays bounded ($z_r^2 + z_i^2 \\le 4.0$), else print a space."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int width = 30, height = 12;\n        int maxIter = 50;\n\n        for (int y = 0; y < height; y++) {\n            double ci = -1.0 + (y * 2.0 / (height - 1));\n            for (int x = 0; x < width; x++) {\n                double cr = -2.0 + (x * 2.5 / (width - 1));\n                double zr = 0.0, zi = 0.0;\n                int iter = 0;\n                while ((zr * zr + zi * zi) <= 4.0 && iter < maxIter) {\n                    double nextZr = (zr * zr) - (zi * zi) + cr;\n                    double nextZi = (2.0 * zr * zi) + ci;\n                    zr = nextZr;\n                    zi = nextZi;\n                    iter++;\n                }\n                System.out.print(iter == maxIter ? \"*\" : \" \");\n            }\n            System.out.println();\n        }\n    }\n}",
+      "expectedOutput": "                              \n                    *         \n               ** *****       \n             **********       \n           **************     \n         *****************    \n         *****************    \n           **************     \n             **********       \n               ** *****       \n                    *         \n                              "
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 28
+}

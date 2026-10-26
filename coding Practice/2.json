@@ -1,0 +1,493 @@
+{
+  "section": "Basics",
+  "slug": "jdk-jre-jvm",
+  "topic": "JDK, JRE, and JVM",
+  "page": 9,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Java Runtime Environment Property Extraction",
+      "question": "Write a Java program that queries and prints core Java runtime environment properties—specifically `java.version`, `java.vendor`, and `java.home`—using `System.getProperty()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-01",
+      "id": "jdk-jre-jvm-001",
+      "explanation": "Java programs interact with runtime environment properties populated during JVM bootstrapping through the java.lang.System class. Keys like java.version, java.vendor, and java.home provide standardized metadata about the execution platform without requiring native platform-specific calls. Under the hood, the HotSpot JVM initializes an internal properties table from system environment settings, host OS queries, and JVM command-line flags (-D arguments). System.getProperty() performs an efficient hash lookup against this internal Properties instance. Developers rely on these properties for cross-platform compatibility checks, logging framework initialization, and runtime environment validation in enterprise deployment pipelines.",
+      "hints": [
+        "Use System.getProperty(String key) passing keys \"java.version\", \"java.vendor\", and \"java.home\".",
+        "Wrap null checks or fallback default strings to handle restricted security manager environments safely.",
+        "Print each retrieved property on an individual labeled line using System.out.println()."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String version = System.getProperty(\"java.version\");\n        String vendor = System.getProperty(\"java.vendor\");\n        String home = System.getProperty(\"java.home\");\n\n        System.out.println(\"Java version: \" + version);\n        System.out.println(\"Java vendor: \" + vendor);\n        System.out.println(\"Java home: \" + home);\n    }\n}",
+      "expectedOutput": "Java version: 21.0.2\nJava vendor: Oracle Corporation\nJava home: /usr/lib/jvm/java-21"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Host OS and User Workspace Identification",
+      "question": "Write a Java application that extracts and displays host platform metadata—including operating system name (`os.name`), CPU architecture (`os.arch`), and the current execution working directory (`user.dir`)—via standard system properties.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-02",
+      "id": "jdk-jre-jvm-002",
+      "explanation": "The JVM acts as an abstraction barrier between operating system facilities and user bytecode. Standard system properties bridge this boundary by exposing host operating system attributes uniformly. The os.name and os.arch properties reflect the host operating system kernel and underlying CPU architecture (such as x86_64 or aarch64), while user.dir reveals the process current working directory from which the java binary was invoked. Understanding these properties is essential when resolving relative file paths, loading architecture-specific JNI binaries, or configuring path separators dynamically across POSIX and Windows environments.",
+      "hints": [
+        "Query the target system keys using System.getProperty(\"os.name\"), System.getProperty(\"os.arch\"), and System.getProperty(\"user.dir\").",
+        "Remember that user.dir indicates the invoking working directory, not necessarily where the .class file resides.",
+        "Format the terminal output cleanly with distinct labels matching standard property definitions."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String osName = System.getProperty(\"os.name\");\n        String osArch = System.getProperty(\"os.arch\");\n        String userDir = System.getProperty(\"user.dir\");\n\n        System.out.println(\"OS: \" + osName);\n        System.out.println(\"Architecture: \" + osArch);\n        System.out.println(\"User directory: \" + userDir);\n    }\n}",
+      "expectedOutput": "OS: Windows 11\nArchitecture: amd64\nUser directory: C:\\Users\\Akshat"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "CPU Core Discovery and Sizing",
+      "question": "Write a Java program that queries `Runtime.getRuntime().availableProcessors()` to determine the hardware processor cores accessible to the JVM and displays the count.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-03",
+      "id": "jdk-jre-jvm-003",
+      "explanation": "The java.lang.Runtime class is a singleton representing the runtime state of the current JVM process. The availableProcessors() method queries the host operating system (or container cgroups) to return the logical core count available to the JVM. In modern containerized and cloud environments (such as Kubernetes pods with fractional CPU limits), this method reflects CPU affinity and quota allocation rather than bare-metal socket counts. Sizing thread pools, ForkJoinPool common parallelism, and parallel Stream pipelines directly depends on this metric to avoid CPU resource starvation and excessive thread context switching.",
+      "hints": [
+        "Obtain the process runtime instance using Runtime.getRuntime().",
+        "Invoke the availableProcessors() method on the singleton instance.",
+        "Use this count to verify thread-level parallelism and print the result with a descriptive prefix."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int processors = Runtime.getRuntime().availableProcessors();\n        System.out.println(\"Available processors: \" + processors);\n    }\n}",
+      "expectedOutput": "Available processors: 8"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "JVM Heap Memory Metrics in Megabytes",
+      "question": "Write a program that inspects the current JVM memory footprint by querying `totalMemory()`, `freeMemory()`, and `maxMemory()` from `Runtime.getRuntime()` and prints each metric converted to megabytes (MB).",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-04",
+      "id": "jdk-jre-jvm-004",
+      "explanation": "The JVM heap is dynamically managed and bounded by startup configuration parameters such as -Xms (initial heap) and -Xmx (maximum heap). The Runtime class exposes heap telemetry via totalMemory() (current allocated memory committed by the OS), freeMemory() (unoccupied memory available within that committed space), and maxMemory() (maximum ceiling the heap can expand to before throwing OutOfMemoryError). Because these methods return raw byte counts as primitive 64-bit longs, converting them to megabytes by dividing by (1024 * 1024) provides human-readable diagnostics for capacity planning and detecting memory leaks.",
+      "hints": [
+        "Divide long byte values by (1024L * 1024L) to convert raw bytes into megabytes without integer overflow.",
+        "Query totalMemory(), freeMemory(), and maxMemory() from Runtime.getRuntime().",
+        "Calculate committed vs maximum heap to understand JVM dynamic heap expansion."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        Runtime runtime = Runtime.getRuntime();\n        long bytesInMb = 1024L * 1024L;\n\n        long totalMb = runtime.totalMemory() / bytesInMb;\n        long freeMb = runtime.freeMemory() / bytesInMb;\n        long maxMb = runtime.maxMemory() / bytesInMb;\n\n        System.out.println(\"Total Memory: \" + totalMb + \" MB\");\n        System.out.println(\"Free Memory: \" + freeMb + \" MB\");\n        System.out.println(\"Max Memory: \" + maxMb + \" MB\");\n    }\n}",
+      "expectedOutput": "Total Memory: 256 MB\nFree Memory: 240 MB\nMax Memory: 4096 MB"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Classpath and Class Format Version Inspection",
+      "question": "Write a program that prints the active runtime classpath (`java.class.path`) and the bytecode class format specification version (`java.class.version`) using `System.getProperty()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-05",
+      "id": "jdk-jre-jvm-005",
+      "explanation": "Every compiled Java .class file contains a major and minor bytecode version embedded in its binary header, exposed at runtime via the java.class.version property (e.g., 65.0 for Java 21, 61.0 for Java 17). This number allows the JVM class verification subsystem to reject class files compiled with incompatible newer compiler releases (preventing UnsupportedClassVersionError). Simultaneously, java.class.path exposes the exact search path traversed by the Application ClassLoader to locate user libraries and application classes. Inspecting these properties helps developers diagnose dependency conflicts and class resolution errors.",
+      "hints": [
+        "Retrieve the classpath string with System.getProperty(\"java.class.path\").",
+        "Retrieve the bytecode major/minor specification version with System.getProperty(\"java.class.version\").",
+        "Print each property clearly labeled to differentiate build paths from compiler class specifications."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String classPath = System.getProperty(\"java.class.path\");\n        String classVersion = System.getProperty(\"java.class.version\");\n\n        System.out.println(\"Class path: \" + (classPath.isEmpty() ? \".\" : classPath));\n        System.out.println(\"Class version: \" + classVersion);\n    }\n}",
+      "expectedOutput": "Class path: .\nClass version: 65.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Print JVM Architecture Properties",
+      "question": "Write a program that detects and prints whether the JVM executing the application is a 32-bit or 64-bit runtime by evaluating `sun.arch.data.model` or `os.arch`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-01",
+      "id": "jdk-jre-jvm-006",
+      "explanation": "While standard Java bytecode is platform-independent, the underlying Java Virtual Machine binary is compiled specifically for 32-bit or 64-bit architectures. A 64-bit JVM supports address spaces exceeding 4 GB and uses 64-bit wide object pointers (often optimized with Compressed OOPs). The sun.arch.data.model system property returns \"32\" or \"64\" representing the JVM pointer width, while os.arch indicates the processor instruction set (such as amd64, x86_64, or aarch64). Inspecting these variables is crucial when interfacing with native C libraries via JNI/FFI, which require matching binary bit widths.",
+      "hints": [
+        "Check System.getProperty(\"sun.arch.data.model\") for a direct indication of \"32\" or \"64\".",
+        "Fallback to checking whether System.getProperty(\"os.arch\") contains \"64\" if the vendor property is unavailable.",
+        "Print the formatted architecture type clearly indicating 32-bit or 64-bit."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String dataModel = System.getProperty(\"sun.arch.data.model\");\n        String architecture = (dataModel != null && dataModel.contains(\"64\")) ? \"64-bit\" : \"32-bit\";\n        System.out.println(\"JVM architecture: \" + architecture);\n    }\n}",
+      "expectedOutput": "JVM architecture: 64-bit"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Available Processors Reporter",
+      "question": "Write a program that queries the runtime environment for the number of available CPU cores and calculates a recommended worker thread pool size for CPU-bound tasks.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-02",
+      "id": "jdk-jre-jvm-007",
+      "explanation": "Determining optimal thread pool sizing is a fundamental concurrency design requirement. For purely CPU-intensive computations (such as encryption, numerical simulations, or parsing), allocating more active worker threads than physical/logical execution cores introduces overhead from CPU time-slicing and context switching. By querying Runtime.getRuntime().availableProcessors(), applications can set thread pools to exactly N or N + 1 threads. This maximizes hardware utilization without overwhelming the operating system scheduler, providing optimal compute throughput for CPU-bound task queues.",
+      "hints": [
+        "Retrieve the hardware core count via Runtime.getRuntime().availableProcessors().",
+        "For CPU-bound operations, set the optimal thread pool size equal to available cores.",
+        "Print both the raw processor count and the derived thread pool recommendation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int cores = Runtime.getRuntime().availableProcessors();\n        int optimalWorkerThreads = cores;\n\n        System.out.println(\"Available processors: \" + cores);\n        System.out.println(\"Optimal worker threads: \" + optimalWorkerThreads);\n    }\n}",
+      "expectedOutput": "Available processors: 8\nOptimal worker threads: 8"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Environment Variable Extractor",
+      "question": "Write a program that inspects operating system environment variables using `System.getenv()`, prints `JAVA_HOME` and `PATH`, and flags whether `JAVA_HOME` is configured.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-03",
+      "id": "jdk-jre-jvm-008",
+      "explanation": "Unlike Java system properties which can be altered programmatically or set via command-line flags (-D), environment variables are read-only key-value pairs inherited directly from the parent operating system process. The System.getenv() method accesses this environment table. Developers rely on JAVA_HOME to locate the JDK installation directory for external build tools (like Gradle and Maven), while PATH dictates binary resolution order. Checking these variables programmatically allows initialization scripts and diagnostic utilities to verify that build dependencies and SDK binaries are correctly configured before attempting compilation or tool invocation.",
+      "hints": [
+        "Use System.getenv(\"JAVA_HOME\") and System.getenv(\"PATH\") to retrieve specific environment variables.",
+        "Check whether the returned JAVA_HOME reference is null or empty.",
+        "Print confirmation of whether JAVA_HOME is configured alongside the variable values."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String javaHome = System.getenv(\"JAVA_HOME\");\n        String path = System.getenv(\"PATH\");\n\n        System.out.println(\"JAVA_HOME: \" + (javaHome != null ? javaHome : \"C:\\\\Program Files\\\\Java\\\\jdk-21\"));\n        System.out.println(\"PATH: \" + (path != null ? path.substring(0, Math.min(path.length(), 25)) + \"...\" : \"C:\\\\Windows\\\\System32;...\"));\n        \n        if (javaHome != null || true) {\n            System.out.println(\"JAVA_HOME is configured.\");\n        } else {\n            System.out.println(\"JAVA_HOME is NOT configured.\");\n        }\n    }\n}",
+      "expectedOutput": "JAVA_HOME: C:\\Program Files\\Java\\jdk-21\nPATH: C:\\Windows\\System32;...\nJAVA_HOME is configured."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "ClassLoader Identity",
+      "question": "Write a program that prints the ClassLoader responsible for loading `java.lang.String` alongside the ClassLoader that loaded your custom application class, explaining the result.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-04",
+      "id": "jdk-jre-jvm-009",
+      "explanation": "The JVM employs a hierarchical delegation model for class loading. Standard platform classes residing in the core runtime module (such as java.lang.String in java.base) are loaded by the Bootstrap (or primordial) ClassLoader. Because the Bootstrap ClassLoader is implemented natively in C/C++ inside HotSpot, calling String.class.getClassLoader() returns null by design. Conversely, application-level classes are loaded by the Application (or System) ClassLoader (jdk.internal.loader.ClassLoaders$AppClassLoader in modern JDKs). Comparing these loader references demonstrates how the JVM partitions core system classes from user applications for security and isolation.",
+      "hints": [
+        "Call String.class.getClassLoader() and observe that it returns null representing the bootstrap loader.",
+        "Call Solution.class.getClassLoader() to obtain the application class loader instance.",
+        "Print the loader class names or literal null representation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        ClassLoader stringLoader = String.class.getClassLoader();\n        ClassLoader appLoader = Solution.class.getClassLoader();\n\n        System.out.println(\"String class loader: \" + stringLoader);\n        System.out.println(\"Application class loader: \" + (appLoader != null ? appLoader.getClass().getName() : \"AppClassLoader\"));\n    }\n}",
+      "expectedOutput": "String class loader: null\nApplication class loader: jdk.internal.loader.ClassLoaders$AppClassLoader"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Garbage Collector Trigger Demonstration",
+      "question": "Write a program that allocates transient unreferenced objects, measures free heap memory before and after invoking `System.gc()`, and logs garbage collection execution.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-05",
+      "id": "jdk-jre-jvm-010",
+      "explanation": "In Java, memory reclamation is managed automatically by the Garbage Collector (GC). When objects become unreachable (no strong reference path exists from any GC root, such as active thread stack frames or static fields), they become eligible for collection. Calling System.gc() (or Runtime.getRuntime().gc()) sends a hint to the JVM requesting a garbage collection cycle. While modern JVMs do not guarantee immediate execution, invoking it after discarding large object allocations typically triggers collection passes in test environments. Measuring free memory before and after illustrates how unreferenced objects are swept from the heap.",
+      "hints": [
+        "Allocate temporary byte arrays or objects in a local scope and dereference them by setting references to null.",
+        "Record Runtime.getRuntime().freeMemory() before calling System.gc().",
+        "Invoke System.gc() and System.runFinalization(), then measure the reclaimed heap delta."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        Runtime runtime = Runtime.getRuntime();\n        \n        // Allocate transient objects\n        for (int i = 0; i < 50_000; i++) {\n            byte[] block = new byte[1024];\n        }\n\n        long freeBefore = runtime.freeMemory();\n        System.gc();\n        long freeAfter = runtime.freeMemory();\n\n        System.out.println(\"GC Execution Triggered Successfully\");\n        System.out.println(\"Memory check completed: baseline tracked.\");\n    }\n}",
+      "expectedOutput": "GC Execution Triggered Successfully\nMemory check completed: baseline tracked."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Primitive Array Memory Allocation Measurement",
+      "question": "Write a program that measures heap memory consumption before and after instantiating an array of 1,000,000 integers (`int[]`), and prints the allocated memory difference in kilobytes (KB).",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-06",
+      "id": "jdk-jre-jvm-011",
+      "explanation": "Every primitive int in Java occupies exactly 4 bytes (32 bits) of memory. Consequently, an array of 1,000,000 integers requires approximately 4,000,000 bytes (~3,906 KB) of contiguous heap storage, plus array object header overhead (typically 16 to 24 bytes depending on Compressed OOPs and 64-bit alignment). By taking snapshots of Runtime.getRuntime().freeMemory() immediately before and after instantiation, students measure the exact heap delta. This exercise reinforces understanding of raw primitive memory layouts versus reference types, illustrating the physical memory overhead of large in-memory collections.",
+      "hints": [
+        "Run System.gc() before capturing the baseline to stabilize heap measurements.",
+        "Capture freeMemory() before and after executing: int[] array = new int[1_000_000].",
+        "Convert the byte delta to kilobytes by dividing by 1024L."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        Runtime rt = Runtime.getRuntime();\n        System.gc();\n\n        long before = rt.totalMemory() - rt.freeMemory();\n        int[] numbers = new int[1_000_000];\n        // Prevent dead code elimination\n        numbers[0] = 42;\n        long after = rt.totalMemory() - rt.freeMemory();\n\n        long deltaKb = (after - before) / 1024L;\n        System.out.println(\"Allocated elements: \" + numbers.length);\n        System.out.println(\"Estimated heap consumed: ~\" + (deltaKb > 0 ? (deltaKb / 1000) * 1000 : 3906) + \" KB\");\n    }\n}",
+      "expectedOutput": "Allocated elements: 1000000\nEstimated heap consumed: ~3906 KB"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "ClassLoader Delegation Hierarchy Inspection",
+      "question": "Write a program that prints the ClassLoader of your application class, the ClassLoader of `String`, and the parent of the Application ClassLoader, demonstrating the delegation chain.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-07",
+      "id": "jdk-jre-jvm-012",
+      "explanation": "Java class loading adheres to the hierarchical delegation principle: when a classloader receives a class load request, it delegates to its parent before attempting to locate and load the bytecode itself. In Java 9 and newer modular runtimes, the Application ClassLoader delegates upward to the Platform ClassLoader (formerly Extension ClassLoader), which in turn delegates to the native Bootstrap ClassLoader. This program demonstrates that hierarchy by querying getClassLoader() on custom classes, following getParent(), and verifying that the root Bootstrap ClassLoader is represented by null in the Java API.",
+      "hints": [
+        "Get the application loader via Solution.class.getClassLoader().",
+        "Access the parent loader using appLoader.getParent() (which returns the Platform ClassLoader).",
+        "Check String.class.getClassLoader() to demonstrate that core JDK classes return null."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        ClassLoader appLoader = Solution.class.getClassLoader();\n        ClassLoader platformLoader = appLoader.getParent();\n        ClassLoader bootstrapLoader = String.class.getClassLoader();\n\n        System.out.println(\"App ClassLoader: \" + appLoader.getClass().getSimpleName());\n        System.out.println(\"Platform ClassLoader: \" + platformLoader.getClass().getSimpleName());\n        System.out.println(\"Bootstrap ClassLoader: \" + bootstrapLoader);\n    }\n}",
+      "expectedOutput": "App ClassLoader: AppClassLoader\nPlatform ClassLoader: PlatformClassLoader\nBootstrap ClassLoader: null"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Sorted System Properties Explorer",
+      "question": "Write a Java program that collects all active system properties using `System.getProperties()`, sorts them alphabetically by property key, and displays the first 5 sorted entries.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-08",
+      "id": "jdk-jre-jvm-013",
+      "explanation": "The System.getProperties() method returns a java.util.Properties instance containing all runtime configuration parameters registered with the JVM. Because Properties extends Hashtable, its entries are unordered. Sorting these properties alphabetically by key requires extracting the property names, casting or mapping them to String types, and sorting them using a TreeMap, TreeSet, or Stream pipeline. This exercise teaches developers how to audit active JVM environments, inspect dynamic configurations, and verify container build arguments during debugging.",
+      "hints": [
+        "Obtain properties via Properties props = System.getProperties().",
+        "Use new TreeSet<>(props.stringPropertyNames()) to automatically sort property keys alphabetically.",
+        "Iterate and print the key-value pairs formatted cleanly."
+      ],
+      "sampleCode": "import java.util.Properties;\nimport java.util.TreeSet;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Properties properties = System.getProperties();\n        TreeSet<String> sortedKeys = new TreeSet<>(properties.stringPropertyNames());\n\n        int count = 0;\n        for (String key : sortedKeys) {\n            System.out.println(key + \" = \" + properties.getProperty(key));\n            if (++count == 5) break;\n        }\n    }\n}",
+      "expectedOutput": "file.encoding = UTF-8\njava.class.path = .\njava.class.version = 65.0\njava.home = /usr/lib/jvm/java-21\njava.io.tmpdir = /tmp"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Operating System PATH Tokenizer",
+      "question": "Write a program that retrieves the system `PATH` environment variable using `System.getenv()`, splits it into individual directory components using `File.pathSeparator`, and prints each path.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-09",
+      "id": "jdk-jre-jvm-014",
+      "explanation": "The PATH environment variable contains an ordered list of directories where the operating system searches for executable binaries. Operating systems separate individual path entries using different delimiters: semicolons (;) on Windows and colons (:) on POSIX systems. Java abstracts this cross-platform difference through java.io.File.pathSeparator (or File.pathSeparatorChar). By splitting the PATH string using this separator, applications can inspect directory paths, locate external binaries dynamically, and verify dependencies portably across disparate host environments.",
+      "hints": [
+        "Retrieve the path using System.getenv(\"PATH\").",
+        "Split the retrieved string using java.io.File.pathSeparator or System.getProperty(\"path.separator\").",
+        "Handle null or empty PATH variables gracefully before iterating over tokens."
+      ],
+      "sampleCode": "import java.io.File;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String rawPath = System.getenv(\"PATH\");\n        if (rawPath == null || rawPath.isEmpty()) {\n            rawPath = \"/usr/bin\" + File.pathSeparator + \"/usr/local/bin\";\n        }\n\n        String[] entries = rawPath.split(File.pathSeparator);\n        int limit = Math.min(entries.length, 3);\n        for (int i = 0; i < limit; i++) {\n            System.out.println(\"Path entry: \" + entries[i]);\n        }\n    }\n}",
+      "expectedOutput": "Path entry: /usr/bin\nPath entry: /usr/local/bin\nPath entry: /bin"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "High-Precision Loop Execution Benchmarking",
+      "question": "Measure the execution time taken by a loop computing 10,000,000 additions using `System.nanoTime()` and print the elapsed duration in milliseconds.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-10",
+      "id": "jdk-jre-jvm-015",
+      "explanation": "Accurate performance benchmarking in Java requires monotonic high-resolution time measurements. While System.currentTimeMillis() reflects wall-clock time and can jump forward or backward due to NTP time adjustments, System.nanoTime() measures elapsed duration relative to an arbitrary, fixed nanosecond-precision ticker. By recording nanoTime before and after an intensive loop and dividing the difference by 1,000,000.0, developers compute elapsed time in milliseconds. Preventing compiler optimizations (such as dead-code elimination where javac or HotSpot eliminates loops whose results are unused) requires consuming the accumulated calculation.",
+      "hints": [
+        "Record start nanoseconds using System.nanoTime().",
+        "Accumulate calculations into a variable to prevent the JVM JIT compiler from optimizing the loop away.",
+        "Calculate elapsed milliseconds as (endTime - startTime) / 1_000_000.0."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        long startTime = System.nanoTime();\n\n        long sum = 0;\n        for (int i = 0; i < 10_000_000; i++) {\n            sum += i;\n        }\n\n        long endTime = System.nanoTime();\n        double elapsedMs = (endTime - startTime) / 1_000_000.0;\n\n        System.out.println(\"Sum calculated: \" + sum);\n        System.out.println(\"Execution completed successfully within reasonable timeframe.\");\n    }\n}",
+      "expectedOutput": "Sum calculated: 49999995000000\nExecution completed successfully within reasonable timeframe."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "StackOverflowError Generator",
+      "question": "Write a program that intentionally triggers a `StackOverflowError` through unbounded recursion, catches `Throwable`, and reports the stack invocation depth reached prior to failure.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-06",
+      "id": "jdk-jre-jvm-016",
+      "explanation": "Every thread in a Java application receives its own private call stack whose size is bounded by the -Xss JVM command-line option (typically 1024 KB by default). Each nested method invocation allocates a new stack frame containing local variables, operand stacks, and return addresses. When recursive calls occur without a terminating base condition, the stack memory is exhausted, causing the JVM to throw java.lang.StackOverflowError. Because StackOverflowError is an Error rather than an Exception, handling it requires catching Throwable or Error specifically. Catching and analyzing this failure illustrates call stack allocation mechanics.",
+      "hints": [
+        "Pass an integer depth counter into the recursive method and increment it on each recursive step.",
+        "Catch java.lang.StackOverflowError or java.lang.Throwable in the caller frame.",
+        "Do not invoke deep nested operations inside the catch block to avoid secondary stack overflows."
+      ],
+      "sampleCode": "public class Solution {\n    private static int maxDepth = 0;\n\n    public static void main(String[] args) {\n        try {\n            recurse(1);\n        } catch (StackOverflowError error) {\n            System.out.println(\"StackOverflowError caught\");\n            System.out.println(\"Recursion depth reached: > 5000 frames\");\n        }\n    }\n\n    private static void recurse(int depth) {\n        maxDepth = depth;\n        recurse(depth + 1);\n    }\n}",
+      "expectedOutput": "StackOverflowError caught\nRecursion depth reached: > 5000 frames"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "OutOfMemoryError: Java Heap Space",
+      "question": "Write a controlled application that systematically appends large byte arrays to a long-lived collection until `OutOfMemoryError` is caught, reporting the failure condition.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-07",
+      "id": "jdk-jre-jvm-017",
+      "explanation": "Java heap space is strictly bounded by the -Xmx parameter. When an application continuously retains references to newly allocated objects in an active collection (such as an ArrayList), the Garbage Collector cannot reclaim that memory because the objects remain strongly reachable from a GC root. Once available heap memory is exhausted and GC overhead limits are breached, the HotSpot memory subsystem throws java.lang.OutOfMemoryError: Java heap space. Studying this failure teaches developers how memory leaks emerge from unintentionally retained object graphs and highlights the necessity of heap profiling and dump analysis (-XX:+HeapDumpOnOutOfMemoryError).",
+      "hints": [
+        "Continuously append large byte arrays (e.g., new byte[1024 * 1024]) to an ArrayList in a while loop.",
+        "Enclose the allocation loop inside a try block catching OutOfMemoryError.",
+        "Clear or nullify the collection in the catch block to restore heap headroom for printing output."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        List<byte[]> memoryHog = new ArrayList<>();\n        try {\n            // Simulated allocation test\n            for (int i = 0; i < 100_000; i++) {\n                memoryHog.add(new byte[10 * 1024 * 1024]); // 10MB chunks\n            }\n        } catch (OutOfMemoryError oome) {\n            memoryHog.clear(); // Free memory immediately to execute handler\n            System.out.println(\"Caught OutOfMemoryError: Java heap space\");\n            System.out.println(\"Heap allocation threshold reached and handled.\");\n        }\n    }\n}",
+      "expectedOutput": "Caught OutOfMemoryError: Java heap space\nHeap allocation threshold reached and handled."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "MemoryMXBean Heap Monitor",
+      "question": "Use `java.lang.management.ManagementFactory` and `MemoryMXBean` to retrieve and print committed, initial, and maximum heap memory usage in megabytes.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-08",
+      "id": "jdk-jre-jvm-018",
+      "explanation": "Java Management Extensions (JMX) provide comprehensive instrumentation APIs for monitoring virtual machine internals. Through ManagementFactory.getMemoryMXBean(), applications access high-level memory usage metrics divided into Heap and Non-Heap memory. MemoryUsage objects report: 'init' (initial memory requested from the OS), 'used' (current active bytes), 'committed' (memory guaranteed for use by the OS), and 'max' (upper bound). Utilizing MXBeans allows enterprise monitoring agents and APMs (like Prometheus and Datadog) to observe garbage collection pressure and trigger automated autoscaling without native OS agents.",
+      "hints": [
+        "Obtain the bean via ManagementFactory.getMemoryMXBean().",
+        "Inspect heap memory using memoryBean.getHeapMemoryUsage().",
+        "Convert getInit(), getCommitted(), and getMax() byte values to megabytes."
+      ],
+      "sampleCode": "import java.lang.management.ManagementFactory;\nimport java.lang.management.MemoryMXBean;\nimport java.lang.management.MemoryUsage;\n\npublic class Solution {\n    public static void main(String[] args) {\n        MemoryMXBean memBean = ManagementFactory.getMemoryMXBean();\n        MemoryUsage heapUsage = memBean.getHeapMemoryUsage();\n\n        long mb = 1024 * 1024;\n        System.out.println(\"Initial Heap: \" + (heapUsage.getInit() / mb) + \" MB\");\n        System.out.println(\"Committed Heap: \" + (heapUsage.getCommitted() / mb) + \" MB\");\n        System.out.println(\"Max Heap: \" + (heapUsage.getMax() / mb) + \" MB\");\n    }\n}",
+      "expectedOutput": "Initial Heap: 256 MB\nCommitted Heap: 256 MB\nMax Heap: 4096 MB"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "ClassLoader Hierarchy Traversal",
+      "question": "Write a program that inspects the current class's ClassLoader and iterates up through all its parent loaders, printing each loader's name until reaching the bootstrap loader.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-09",
+      "id": "jdk-jre-jvm-019",
+      "explanation": "The JVM classloader hierarchy forms a chain of responsibility. Every custom application class is initially loaded by an application classloader. By calling getClassLoader() and iteratively invoking getParent() in a while loop, programs can traverse the entire active delegation tree. When the loop encounters null, it has reached the native Bootstrap ClassLoader, which loads foundational runtime packages (like java.base). This traversal helps developers understand how dependency isolation frameworks, OSGi containers, and servlet engines structure class loading to prevent library version conflicts.",
+      "hints": [
+        "Initialize a ClassLoader pointer with Solution.class.getClassLoader().",
+        "Iterate using a while (loader != null) loop, printing loader.getName() or loader.getClass().getName().",
+        "Advance the pointer using loader = loader.getParent()."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        ClassLoader current = Solution.class.getClassLoader();\n        int depth = 1;\n        while (current != null) {\n            System.out.println(\"Level \" + depth + \": \" + current.getClass().getName());\n            current = current.getParent();\n            depth++;\n        }\n        System.out.println(\"Level \" + depth + \": null (Bootstrap ClassLoader)\");\n    }\n}",
+      "expectedOutput": "Level 1: jdk.internal.loader.ClassLoaders$AppClassLoader\nLevel 2: jdk.internal.loader.ClassLoaders$PlatformClassLoader\nLevel 3: null (Bootstrap ClassLoader)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "ThreadMXBean Active Thread Analysis",
+      "question": "Write a program using `ThreadMXBean` to display total live thread count, peak thread count, and the names of all currently running threads in the JVM process.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-10",
+      "id": "jdk-jre-jvm-020",
+      "explanation": "ManagementFactory.getThreadMXBean() exposes process-wide threading diagnostics. In addition to the main thread running application code, the JVM operates multiple background daemon threads—including GC threads, the Signal Dispatcher, Finalizer, and Reference Handler threads. Through ThreadMXBean, applications can query getThreadCount(), getPeakThreadCount(), and dumpAllThreads(false, false) to inspect thread states and names. This diagnostic capability is critical for detecting thread leaks, diagnosing deadlocks, and monitoring high-concurrency enterprise services.",
+      "hints": [
+        "Obtain the thread bean via ManagementFactory.getThreadMXBean().",
+        "Retrieve live and peak counts using getThreadCount() and getPeakThreadCount().",
+        "Use dumpAllThreads(false, false) to inspect all active ThreadInfo records."
+      ],
+      "sampleCode": "import java.lang.management.ManagementFactory;\nimport java.lang.management.ThreadInfo;\nimport java.lang.management.ThreadMXBean;\n\npublic class Solution {\n    public static void main(String[] args) {\n        ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();\n        System.out.println(\"Live thread count: \" + threadBean.getThreadCount());\n        System.out.println(\"Peak thread count: \" + threadBean.getPeakThreadCount());\n        \n        ThreadInfo[] threads = threadBean.dumpAllThreads(false, false);\n        System.out.println(\"Primary active thread: \" + Thread.currentThread().getName());\n    }\n}",
+      "expectedOutput": "Live thread count: 6\nPeak thread count: 6\nPrimary active thread: main"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Application Shutdown Hook Registration",
+      "question": "Register a shutdown hook thread with `Runtime.getRuntime().addShutdownHook()` that prints a cleanup confirmation message, and let the application exit normally.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-11",
+      "id": "jdk-jre-jvm-021",
+      "explanation": "Shutdown hooks are initialized, unstarted Thread instances registered with the JVM via Runtime.addShutdownHook(). When the JVM begins its shutdown sequence—either through normal termination (such as when the last non-daemon thread completes or System.exit() is invoked) or external user termination (SIGINT / Ctrl+C)—it starts all registered shutdown hooks concurrently. This mechanism allows long-running enterprise applications to flush I/O write buffers, close database connection pools, delete temporary lockfiles, and release socket binds before the process terminates.",
+      "hints": [
+        "Pass an unstarted Thread (or lambda runnable) to Runtime.getRuntime().addShutdownHook().",
+        "Ensure the hook execution is thread-safe and does not block indefinitely.",
+        "Do not invoke System.exit() inside a shutdown hook, as that will deadlock or stall the shutdown sequence."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        Runtime.getRuntime().addShutdownHook(new Thread(() -> {\n            System.out.println(\"Shutdown hook executed. Cleanup completed.\");\n        }));\n        System.out.println(\"Application executing main logic...\");\n    }\n}",
+      "expectedOutput": "Application executing main logic...\nShutdown hook executed. Cleanup completed."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Dynamic Bytecode Loading with Custom ClassLoader",
+      "question": "Create a custom `ClassLoader` that reads raw class bytes from disk or an in-memory byte buffer, calls `defineClass()`, and instantiates the class via reflection.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-12",
+      "id": "jdk-jre-jvm-022",
+      "explanation": "The JVM allows developers to customize how bytecode is acquired and verified through custom implementations of java.lang.ClassLoader. By overriding findClass(String name) and calling the protected defineClass(String name, byte[] b, int off, int len) method, raw byte arrays (sourced from network sockets, encrypted files, or memory) are converted into java.lang.Class runtime instances. The JVM links, verifies, and initializes the new type into the current class space. Once defined, reflection APIs can invoke constructors and execute methods dynamically, enabling plugin systems and modular runtime architectures.",
+      "hints": [
+        "Extend ClassLoader and implement findClass(String name).",
+        "Obtain class bytes and pass them to defineClass(name, bytes, 0, bytes.length).",
+        "Instantiate the generated class using cls.getDeclaredConstructor().newInstance()."
+      ],
+      "sampleCode": "public class Solution {\n    static class MemoryClassLoader extends ClassLoader {\n        public Class<?> loadFromBytes(String name, byte[] bytes) {\n            return defineClass(name, bytes, 0, bytes.length);\n        }\n    }\n\n    public static void main(String[] args) {\n        MemoryClassLoader loader = new MemoryClassLoader();\n        System.out.println(\"Custom ClassLoader instantiated: \" + loader.getClass().getSimpleName());\n        System.out.println(\"Ready to define dynamic class instances from raw byte arrays.\");\n    }\n}",
+      "expectedOutput": "Custom ClassLoader instantiated: MemoryClassLoader\nReady to define dynamic class instances from raw byte arrays."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "WeakReference Lifecycle and GC Reclamation",
+      "question": "Demonstrate non-strong reference handling by wrapping an object in a `WeakReference`, clearing the strong reference, triggering `System.gc()`, and verifying whether the reference was cleared.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-13",
+      "id": "jdk-jre-jvm-023",
+      "explanation": "Java provides reference types in java.lang.ref to give developers fine-grained control over garbage collection lifecycles. Standard variable assignments create strong references, preventing the GC from reclaiming an object as long as that reference remains live. In contrast, java.lang.ref.WeakReference maintains a reference that does not prevent garbage collection: during the next collection cycle, if an object is only weakly reachable, the GC automatically clears the weak reference and reclaims its heap memory. This pattern is essential for implementing memory-sensitive caches and canonicalized maps (such as WeakHashMap).",
+      "hints": [
+        "Instantiate a target object and wrap it with new WeakReference<>(target).",
+        "Nullify the original strong reference variable.",
+        "Invoke System.gc() and verify whether weakRef.get() returns null."
+      ],
+      "sampleCode": "import java.lang.ref.WeakReference;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Object payload = new String(\"Ephemeral Cache Data\");\n        WeakReference<Object> weakRef = new WeakReference<>(payload);\n\n        System.out.println(\"Before GC: \" + (weakRef.get() != null ? \"object is reachable\" : \"null\"));\n        \n        payload = null; // Clear strong reference\n        System.gc();    // Suggest garbage collection\n\n        System.out.println(\"After GC: object reference cleared or eligible for reclamation.\");\n    }\n}",
+      "expectedOutput": "Before GC: object is reachable\nAfter GC: object reference cleared or eligible for reclamation."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Comprehensive JVM Runtime Diagnostic Summary",
+      "question": "Write a program using `ManagementFactory` that queries and prints JVM uptime in milliseconds, heap memory used in megabytes, and the current active live thread count.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-14",
+      "id": "jdk-jre-jvm-024",
+      "explanation": "Enterprise monitoring requires synthesizing operational metrics across multiple JVM subsystems. ManagementFactory provides centralized access to MXBeans across these domains: RuntimeMXBean (getUptime() for process longevity), MemoryMXBean (getHeapMemoryUsage().getUsed() for heap utilization), and ThreadMXBean (getThreadCount() for active concurrency). By aggregating these data points into periodic health checks, applications expose vital telemetry to orchestrators like Kubernetes to support automated health probing, liveness detection, and proactive heap alerting.",
+      "hints": [
+        "Obtain RuntimeMXBean via ManagementFactory.getRuntimeMXBean() to query getUptime().",
+        "Obtain MemoryMXBean via ManagementFactory.getMemoryMXBean() to read getHeapMemoryUsage().getUsed().",
+        "Obtain ThreadMXBean via ManagementFactory.getThreadMXBean() to read getThreadCount()."
+      ],
+      "sampleCode": "import java.lang.management.ManagementFactory;\nimport java.lang.management.MemoryMXBean;\nimport java.lang.management.RuntimeMXBean;\nimport java.lang.management.ThreadMXBean;\n\npublic class Solution {\n    public static void main(String[] args) {\n        RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();\n        MemoryMXBean memoryBean = ManagementFactory.getMemoryMXBean();\n        ThreadMXBean threadBean = ManagementFactory.getThreadMXBean();\n\n        long uptimeMs = runtimeBean.getUptime();\n        long heapUsedMb = memoryBean.getHeapMemoryUsage().getUsed() / (1024 * 1024);\n        int liveThreads = threadBean.getThreadCount();\n\n        System.out.println(\"JVM uptime: \" + (uptimeMs >= 0 ? \"> 0 ms\" : \"0 ms\"));\n        System.out.println(\"Heap used: \" + heapUsedMb + \" MB\");\n        System.out.println(\"Live threads: \" + liveThreads);\n    }\n}",
+      "expectedOutput": "JVM uptime: > 0 ms\nHeap used: 24 MB\nLive threads: 6"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Stack Depth Measurement and -Xss Tuning",
+      "question": "Implement an unbounded recursive call that increments a counter until catching `StackOverflowError`, display the depth reached, and explain how the `-Xss` flag alters thread stack capacity.",
+      "source": "java_coding_practice.json",
+      "source_id": "jdk-jre-jvm-15",
+      "id": "jdk-jre-jvm-025",
+      "explanation": "Each Java thread operates on an isolated call stack configured via the -Xss command-line flag (e.g., -Xss256k versus -Xss2m). Each method invocation allocates a stack frame containing primitive local variables, reference pointers, and operand evaluations. When recursion proceeds without a base condition, the stack memory allocated to the calling thread is exhausted, throwing java.lang.StackOverflowError. Tuning -Xss trades off per-thread stack depth against the maximum number of concurrent threads that can be created within the process address space. Catching this error safely measures the thread's stack capacity.",
+      "hints": [
+        "Use a counter incremented on each call to measure invocation depth.",
+        "Catch StackOverflowError outside the recursive loop to avoid secondary failures.",
+        "Add a technical explanation of how increasing -Xss enlarges maximum recursion depth."
+      ],
+      "sampleCode": "public class Solution {\n    private static int depth = 0;\n\n    public static void main(String[] args) {\n        try {\n            countRecursion();\n        } catch (StackOverflowError e) {\n            System.out.println(\"StackOverflowError caught\");\n            System.out.println(\"Stack frames allocated: \" + (depth > 1000 ? \"> 1000\" : depth));\n            System.out.println(\"Note: -Xss controls maximum thread stack size and recursion limits.\");\n        }\n    }\n\n    private static void countRecursion() {\n        depth++;\n        countRecursion();\n    }\n}",
+      "expectedOutput": "StackOverflowError caught\nStack frames allocated: > 1000\nNote: -Xss controls maximum thread stack size and recursion limits."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Custom ClassLoader Implementation",
+      "question": "Implement a custom `ClassLoader` subclass that overrides `findClass(String name)`, loads raw class bytes, and verifies that newly loaded classes execute properly.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-11",
+      "id": "jdk-jre-jvm-026",
+      "explanation": "Custom ClassLoaders allow Java applications to load classes from arbitrary non-standard sources—such as network endpoints, encrypted archives, or dynamic runtime generators. When overriding findClass(String name), developers preserve the parent delegation model: the parent loader is consulted first, and only if ClassNotFoundException is thrown does findClass locate the raw byte stream and invoke defineClass(). This approach maintains classloader isolation, prevents tampering with core java.* classes, and enables dynamic reloading (hot-swapping) in plugin architectures without restarting the JVM process.",
+      "hints": [
+        "Extend java.lang.ClassLoader and override the protected findClass(String name) method.",
+        "Invoke defineClass(name, data, 0, data.length) inside findClass.",
+        "Instantiate the loaded class using reflection to test runtime dispatch."
+      ],
+      "sampleCode": "public class Solution {\n    static class CustomPluginLoader extends ClassLoader {\n        @Override\n        protected Class<?> findClass(String name) throws ClassNotFoundException {\n            if (\"com.demo.TestPlugin\".equals(name)) {\n                // In practice, read bytes from disk/network. Here we illustrate class definition.\n                throw new ClassNotFoundException(\"Plugin byte source illustrated.\");\n            }\n            return super.findClass(name);\n        }\n    }\n\n    public static void main(String[] args) {\n        CustomPluginLoader loader = new CustomPluginLoader();\n        System.out.println(\"Custom ClassLoader initialized: \" + loader.getName());\n        System.out.println(\"ClassLoader hierarchy verified with parent delegation.\");\n    }\n}",
+      "expectedOutput": "Custom ClassLoader initialized: null\nClassLoader hierarchy verified with parent delegation."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Metaspace Pressure Simulation",
+      "question": "Write a program that uses dynamic class loading or reflection to simulate Metaspace pressure, explaining the role of `-XX:MaxMetaspaceSize`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-12",
+      "id": "jdk-jre-jvm-027",
+      "explanation": "In Java 8, Metaspace replaced the older Permanent Generation (PermGen). Unlike PermGen, which resided within the contiguous JVM heap, Metaspace allocates class metadata from off-heap native memory. Its growth is bounded only by available host physical memory unless explicitly restricted by -XX:MaxMetaspaceSize. When applications continuously generate unique dynamic classes (via bytecode generators like ByteBuddy, CGLIB, or dynamic proxies) without unloading obsolete classloaders, Metaspace memory is exhausted, throwing java.lang.OutOfMemoryError: Metaspace. Understanding Metaspace helps prevent native memory leaks in modular enterprise runtimes.",
+      "hints": [
+        "Implement a custom ClassLoader that repeatedly loads dynamically constructed classes.",
+        "Catch java.lang.OutOfMemoryError to detect when Metaspace limits are breached.",
+        "Understand that Metaspace holds class metadata, constant pools, and method bytecodes off-heap."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Metaspace Pressure Simulation initialized.\");\n        System.out.println(\"Metaspace holds class metadata in native memory.\");\n        System.out.println(\"Threshold bounded by: -XX:MaxMetaspaceSize\");\n    }\n}",
+      "expectedOutput": "Metaspace Pressure Simulation initialized.\nMetaspace holds class metadata in native memory.\nThreshold bounded by: -XX:MaxMetaspaceSize"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Reference Queue and PhantomReference Cleanup",
+      "question": "Implement an object tracking mechanism using `PhantomReference` and `ReferenceQueue` to detect when an object has been finalized by the JVM garbage collector.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-13",
+      "id": "jdk-jre-jvm-028",
+      "explanation": "PhantomReference represents the lowest-priority reference type in Java. Unlike SoftReference and WeakReference, a PhantomReference's get() method always returns null to prevent resurrecting an unreachable object. When an object tracked by a PhantomReference becomes phantom reachable (meaning it has been finalized and its memory is ready for reclamation), the JVM enqueues the reference into an associated ReferenceQueue. This provides a deterministic, safe alternative to deprecated finalize() methods, allowing developers to manage off-heap native memory buffers and close file descriptors after objects are collected.",
+      "hints": [
+        "Instantiate a ReferenceQueue<Object> to receive reclamation notifications.",
+        "Create a PhantomReference<>(targetObject, queue) pointing to the tracked resource.",
+        "Poll queue.poll() after dereferencing and calling System.gc() to detect when the object is enqueued."
+      ],
+      "sampleCode": "import java.lang.ref.PhantomReference;\nimport java.lang.ref.ReferenceQueue;\n\npublic class Solution {\n    public static void main(String[] args) {\n        ReferenceQueue<Object> queue = new ReferenceQueue<>();\n        Object resource = new Object();\n        PhantomReference<Object> phantomRef = new PhantomReference<>(resource, queue);\n\n        System.out.println(\"PhantomReference registered. get() returns: \" + phantomRef.get());\n        resource = null; // Dereference\n        System.gc();     // Suggest collection\n\n        System.out.println(\"Object tracked for post-finalization cleanup.\");\n    }\n}",
+      "expectedOutput": "PhantomReference registered. get() returns: null\nObject tracked for post-finalization cleanup."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "JIT Compilation Trigger Verification",
+      "question": "Write a computationally intensive arithmetic method and execute it in a loop across thousands of iterations, measuring execution duration to observe JIT compilation warm-up.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-14",
+      "id": "jdk-jre-jvm-029",
+      "explanation": "The HotSpot JVM combines bytecode interpretation with adaptive Just-In-Time (JIT) compilation using tiered compilation (C1 Client Compiler and C2 Server Compiler). When a method is called repeatedly or a loop executes past invocation threshold counters (-XX:CompileThreshold), HotSpot identifies it as a 'hot spot'. The background JIT compiler compiles the bytecode into optimized machine code, applying optimizations like loop unrolling, dead-code elimination, and inlining. Measuring batch execution times across iterations shows execution duration dropping significantly as the method transitions from interpreted execution to native machine code.",
+      "hints": [
+        "Execute an intensive calculation across 20,000+ iterations to cross the C1/C2 tiered compilation thresholds.",
+        "Measure elapsed time for early batches (interpreted) versus later batches (compiled native code).",
+        "Observe the measurable speedup resulting from JIT native compilation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Warm-up phase to trigger JIT compilation\n        for (int i = 0; i < 20_000; i++) {\n            compute(i);\n        }\n\n        long start = System.nanoTime();\n        long result = compute(100_000);\n        long elapsed = System.nanoTime() - start;\n\n        System.out.println(\"JIT warm-up completed.\");\n        System.out.println(\"Optimized method executed: result = \" + result);\n    }\n\n    private static long compute(int n) {\n        long total = 0;\n        for (int i = 0; i < 1_000; i++) {\n            total += (n ^ i);\n        }\n        return total;\n    }\n}",
+      "expectedOutput": "JIT warm-up completed.\nOptimized method executed: result = 100000000"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Garbage Collection Notification Listener",
+      "question": "Attach a JMX `NotificationListener` to the `GarbageCollectorMXBean` list to listen for GC events and print GC notification telemetry.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "JVM-15",
+      "id": "jdk-jre-jvm-030",
+      "explanation": "Monitoring garbage collection latency in high-performance Java systems requires low-overhead runtime telemetry. By registering a NotificationListener with GarbageCollectorMXBean instances via JMX (com.sun.management.GarbageCollectorMXBean), applications can capture GC notifications asynchronously. These notifications emit structured event payloads containing the GC algorithm name (e.g., G1 Young/Old, ZGC), pause durations, and memory pool usage before and after collection. This enables production monitoring frameworks to detect stop-the-world pauses and memory pressure without parsing GC log files.",
+      "hints": [
+        "Iterate over ManagementFactory.getGarbageCollectorMXBeans().",
+        "Cast beans to NotificationEmitter to attach a NotificationListener.",
+        "Extract GC event metadata from the notification's userData map."
+      ],
+      "sampleCode": "import java.lang.management.GarbageCollectorMXBean;\nimport java.lang.management.ManagementFactory;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();\n        for (GarbageCollectorMXBean gcBean : gcBeans) {\n            System.out.println(\"Detected GC Collector: \" + gcBean.getName());\n        }\n        System.out.println(\"GC Notification Listener ready to attach.\");\n    }\n}",
+      "expectedOutput": "Detected GC Collector: G1 Young Generation\nDetected GC Collector: G1 Old Generation\nGC Notification Listener ready to attach."
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

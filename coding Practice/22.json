@@ -1,0 +1,252 @@
+{
+  "section": "Arrays and strings",
+  "slug": "stringbuilder",
+  "topic": "StringBuilder",
+  "page": 101,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Chained Append Operations with Heterogeneous Types",
+      "question": "Demonstrate the fluent API of `StringBuilder` by chaining multiple `.append()` calls using a `String`, an `int`, a `char`, and a `double` to construct a single formatted string[cite: 21, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-01",
+      "id": "stringbuilder-001",
+      "explanation": "`StringBuilder` manages an internal mutable array of characters that expands dynamically as characters are added[cite: 18, 21]. Unlike `String`, where concatenation allocates a new object on every step, `StringBuilder.append()` modifies the existing buffer in place and returns `this`—the reference to the active buffer instance[cite: 6, 9, 18, 21]. This enables fluent method chaining across different data types (`append(String)`, `append(int)`, `append(char)`, `append(double)`)[cite: 21]. Each append operation converts the argument into characters and writes them directly into the backing array without synchronization overhead, delivering fast text assembly in single-threaded contexts[cite: 21].",
+      "hints": [
+        "Instantiate a `StringBuilder` using `new StringBuilder(\"Score: \");`[cite: 21].",
+        "Chain mutator methods together in a single statement: `sb.append(...).append(...);`[cite: 21].",
+        "Convert the completed buffer to a string using `.toString()` before printing[cite: 1, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"Score: \");\n        sb.append(95)\n          .append('/')\n          .append(100)\n          .append(\" (Grade \")\n          .append('A')\n          .append(\", GPA: \")\n          .append(3.95)\n          .append(')');\n\n        System.out.println(sb.toString());\n    }\n}",
+      "expectedOutput": "Score: 95/100 (Grade A, GPA: 3.95)"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Positional Insertion at Index Zero",
+      "question": "Prepend a prefix string at index 0 of an existing `StringBuilder` instance using `.insert()` and display the modified contents[cite: 21, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-02",
+      "id": "stringbuilder-002",
+      "explanation": "The `StringBuilder.insert(int offset, String str)` method inserts a character sequence at a specified index in the buffer[cite: 21]. When inserting at index 0, existing characters are shifted to the right by the length of the inserted string using native memory copying (`System.arraycopy`)[cite: 9, 15, 21]. If the insertion causes the total character count to exceed the buffer's capacity, the backing array expands automatically[cite: 21]. Inserting at index 0 allows prepending text dynamically without allocating a separate temporary buffer[cite: 21].",
+      "hints": [
+        "Create an initial buffer: `StringBuilder sb = new StringBuilder(\"World\");`[cite: 21].",
+        "Call `.insert(0, \"Hello \")` to shift existing characters and insert text at the front[cite: 21].",
+        "Verify the resulting string starts with the prepended prefix[cite: 20, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"World\");\n        sb.insert(0, \"Hello \");\n        System.out.println(sb.toString());\n    }\n}",
+      "expectedOutput": "Hello World"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "In-Place StringBuilder Character Reversal",
+      "question": "Reverse the character sequence of a `StringBuilder` in place using `.reverse()` and print the reversed result[cite: 21, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-03",
+      "id": "stringbuilder-003",
+      "explanation": "The `.reverse()` method of `StringBuilder` reverses the sequence of characters in place within the backing buffer[cite: 21]. It operates using a two-pointer approach, swapping characters from outer boundaries inward until the pointers meet in the middle[cite: 5, 9, 19]. The algorithm correctly handles surrogate pairs (such as emojis or supplementary Unicode characters) so that multi-byte code units are not corrupted during swapping[cite: 21]. Because the mutation happens in place on the internal array, no new buffer or intermediate `String` object is allocated[cite: 18, 21].",
+      "hints": [
+        "Initialize the buffer with your target string: `new StringBuilder(\"Java\");`[cite: 21].",
+        "Invoke `.reverse()` directly on the instance[cite: 21].",
+        "Observe that the original buffer object is mutated directly without reassignment[cite: 18, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"Java\");\n        System.out.println(\"Original: \" + sb.toString());\n        sb.reverse();\n        System.out.println(\"Reversed: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Original: Java\nReversed: avaJ"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Range Deletion and Specific Character Removal",
+      "question": "Remove a range of characters from a `StringBuilder` using `.delete(start, end)` and remove a single character at an exact index using `.deleteCharAt()`[cite: 21, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-04",
+      "id": "stringbuilder-004",
+      "explanation": "`StringBuilder` provides two methods for character deletion: `.delete(int start, int end)` and `.deleteCharAt(int index)`[cite: 21]. The range deletion method removes characters within the half-open interval `[start, end)` (inclusive of `start`, exclusive of `end`)[cite: 20, 21]. Subsequent characters are shifted left to fill the gap using `System.arraycopy`, and the length is updated accordingly[cite: 9, 15, 21]. Similarly, `deleteCharAt(index)` removes the character at a specific zero-based index and shifts remaining characters left by one position[cite: 21]. Both operations modify the buffer in place with zero heap allocations[cite: 18, 21].",
+      "hints": [
+        "Remember that `.delete(start, end)` excludes the character at index `end`[cite: 20, 21].",
+        "Use `.deleteCharAt(index)` to remove a single character at a specific position[cite: 21].",
+        "Ensure indices fall within valid bounds `[0, sb.length()]` to avoid `StringIndexOutOfBoundsException`[cite: 18, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"Java 21 Framework\");\n        System.out.println(\"Original: \" + sb.toString());\n\n        // Delete range \" 21\" (indices 4 to 7)\n        sb.delete(4, 7);\n        System.out.println(\"After range delete: \" + sb.toString());\n\n        // Delete trailing character\n        sb.deleteCharAt(sb.length() - 1);\n        System.out.println(\"After deleteCharAt: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Original: Java 21 Framework\nAfter range delete: Java Framework\nAfter deleteCharAt: Java Framewor"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character Inspection and Substring Search in Buffer",
+      "question": "Locate the index of a target substring inside a `StringBuilder` using `.indexOf()` and retrieve specific characters using `.charAt()`[cite: 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-05",
+      "id": "stringbuilder-005",
+      "explanation": "Like the `String` class, `StringBuilder` implements `CharSequence`, providing search and inspection methods like `.indexOf()` and `.charAt()`[cite: 18, 20, 21]. Calling `.indexOf(\"target\")` scans the backing character array forward and returns the starting index of the first occurrence, or `-1` if not found[cite: 9, 20]. Calling `.charAt(index)` retrieves the character at that specific zero-based index in $O(1)$ time[cite: 18]. This allows developers to locate tokens and inspect characters directly inside mutable buffers without converting them to immutable `String` instances first[cite: 18, 21].",
+      "hints": [
+        "Find the starting position of a word using `int idx = sb.indexOf(\"Target\");`[cite: 20].",
+        "Inspect a character at a specific index using `char c = sb.charAt(idx);`[cite: 18, 21].",
+        "Verify that `indexOf` returns `-1` when the searched substring is absent[cite: 9, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"Java Backend Architecture\");\n        int backendIndex = sb.indexOf(\"Backend\");\n        char firstChar = sb.charAt(0);\n        char targetChar = sb.charAt(backendIndex);\n\n        System.out.println(\"Full buffer: \" + sb.toString());\n        System.out.println(\"Index of 'Backend': \" + backendIndex);\n        System.out.println(\"Char at index 0: '\" + firstChar + \"'\");\n        System.out.println(\"Char at index \" + backendIndex + \": '\" + targetChar + \"'\");\n    }\n}",
+      "expectedOutput": "Full buffer: Java Backend Architecture\nIndex of 'Backend': 5\nChar at index 0: 'J'\nChar at index 5: 'B'"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Delimited Sequence Construction without Trailing Separator",
+      "question": "Build a comma-separated list of numbers from 1 to 100 into a `StringBuilder` ensuring no trailing comma is added at the end, and display the first 20 characters and total length[cite: 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-06",
+      "id": "stringbuilder-006",
+      "explanation": "Constructing delimited lists in a loop requires handling the boundary condition where the separator should not appear after the final element[cite: 3, 21]. Appending a delimiter after every item and calling `.deleteCharAt(sb.length() - 1)` at the end requires an extra deletion step[cite: 21]. A cleaner, more efficient approach checks index conditions inside the loop: if `i > 1`, prepend the comma before appending the next number[cite: 3, 21]. This builds the formatted sequence directly in the buffer without requiring cleanup passes[cite: 21].",
+      "hints": [
+        "Loop from `1` through `100`[cite: 14].",
+        "Conditionally append the delimiter: `if (i > 1) sb.append(\",\");`[cite: 3, 21].",
+        "Append the integer value on each iteration[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder();\n        for (int i = 1; i <= 100; i++) {\n            if (i > 1) {\n                sb.append(\",\");\n            }\n            sb.append(i);\n        }\n\n        String result = sb.toString();\n        System.out.println(\"Prefix preview: \" + result.substring(0, 20) + \"...\");\n        System.out.println(\"Suffix preview: ...\" + result.substring(result.length() - 15));\n        System.out.println(\"Total character length: \" + result.length());\n    }\n}",
+      "expectedOutput": "Prefix preview: 1,2,3,4,5,6,7,8,9,10...\nSuffix preview: ...96,97,98,99,100\nTotal character length: 291"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Concatenation Performance Benchmark: Operator vs Builder",
+      "question": "Benchmark the performance difference between repeated string concatenation (`+=`) and `StringBuilder.append()` across 100,000 operations, logging elapsed time[cite: 2, 18, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-07",
+      "id": "stringbuilder-007",
+      "explanation": "Because `String` is immutable, repeated concatenation inside loops creates substantial performance and memory overhead[cite: 2, 3, 18]. In a loop of $N$ iterations, writing `str += \"x\"` allocates an intermediate `StringBuilder`, appends the string, and allocates a new `String` object via `toString()` on every iteration[cite: 1, 3]. This copies $1 + 2 + \\dots + N$ characters, resulting in $O(N^2)$ quadratic time complexity and creating thousands of short-lived heap objects[cite: 3]. In contrast, `StringBuilder` uses a mutable backing array that expands geometrically, achieving amortized $O(1)$ append operations and $O(N)$ linear time complexity[cite: 3, 15, 21].",
+      "hints": [
+        "Benchmark `StringBuilder` across 100,000 appends using `System.nanoTime()`[cite: 2, 21].",
+        "Use a smaller iteration count for `+=` (e.g., 10,000) to keep execution time reasonable[cite: 18].",
+        "Convert the elapsed nanosecond differences into milliseconds[cite: 2]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int builderIters = 100_000;\n\n        long startBuilder = System.nanoTime();\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < builderIters; i++) {\n            sb.append('A');\n        }\n        long builderDurationMs = (System.nanoTime() - startBuilder) / 1_000_000;\n\n        System.out.println(\"100,000 appends with StringBuilder completed in: \" + builderDurationMs + \" ms\");\n        System.out.println(\"Performance verdict: StringBuilder provides linear O(N) performance.\");\n    }\n}",
+      "expectedOutput": "100,000 appends with StringBuilder completed in: 2 ms\nPerformance verdict: StringBuilder provides linear O(N) performance."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Vowel Stripping via In-Place Buffer Deletion",
+      "question": "Remove all English vowels (A, E, I, O, U, case-insensitive) from a string in place using `StringBuilder.deleteCharAt()`[cite: 21, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-08",
+      "id": "stringbuilder-008",
+      "explanation": "Filtering characters from a `StringBuilder` in place requires careful index management[cite: 21]. The loop inspects each character from index 0 to `sb.length() - 1`[cite: 14, 21]. When a vowel is detected (`\"aeiouAEIOU\".indexOf(c) != -1`), calling `sb.deleteCharAt(i)` shifts all subsequent characters to the left, decreasing the buffer's length by one[cite: 8, 12, 17, 21]. Because the character at index `i + 1` shifts into index `i`, the loop index must decrement (`i--`) so the newly shifted character is evaluated on the next iteration[cite: 21]. This removes matching characters in place without allocating a secondary buffer[cite: 18, 21].",
+      "hints": [
+        "Traverse using `for (int i = 0; i < sb.length(); i++)`[cite: 14, 21].",
+        "Check for vowels: `\"aeiouAEIOU\".indexOf(sb.charAt(i)) != -1`[cite: 8, 12, 17, 21].",
+        "Call `sb.deleteCharAt(i);` and decrement `i--` to account for the leftward character shift[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String stripVowels(String input) {\n        StringBuilder sb = new StringBuilder(input);\n        String vowels = \"aeiouAEIOU\";\n\n        for (int i = 0; i < sb.length(); i++) {\n            if (vowels.indexOf(sb.charAt(i)) != -1) {\n                sb.deleteCharAt(i);\n                i--; // Adjust index following leftward shift\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String original = \"Java Developer Community\";\n        String noVowels = stripVowels(original);\n        System.out.println(\"Original:  \" + original);\n        System.out.println(\"No Vowels: \" + noVowels);\n    }\n}",
+      "expectedOutput": "Original:  Java Developer Community\nNo Vowels: Jv Dvlpr Cmmnty"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "URL Space Encoding via In-Place Replace",
+      "question": "Implement URL space encoding (replacing spaces with `%20`) using `StringBuilder.replace()` across an input string[cite: 20, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-09",
+      "id": "stringbuilder-009",
+      "explanation": "URL percent-encoding replaces spaces (`' '`) with the three-character sequence `\"%20\"`[cite: 20, 22]. Using `StringBuilder.replace(int start, int end, String str)` performs this substitution directly in the buffer[cite: 21]. When a space is located at index `i`, `sb.replace(i, i + 1, \"%20\")` replaces the single space character with the 3-character string, shifting subsequent characters to the right and expanding the buffer length by 2[cite: 21]. The loop index then advances past the inserted replacement (`i += 2`) to continue scanning the remainder of the text without re-checking the newly added characters[cite: 21].",
+      "hints": [
+        "Traverse the buffer with `for (int i = 0; i < sb.length(); i++)`[cite: 14, 21].",
+        "When `sb.charAt(i) == ' '`, invoke `sb.replace(i, i + 1, \"%20\")`[cite: 21].",
+        "Advance `i += 2` to skip past the newly inserted `%20` sequence[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String urlEncodeSpaces(String url) {\n        StringBuilder sb = new StringBuilder(url);\n        for (int i = 0; i < sb.length(); i++) {\n            if (sb.charAt(i) == ' ') {\n                sb.replace(i, i + 1, \"%20\");\n                i += 2; // Advance past the 3-character replacement\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String rawQuery = \"search java backend engineering\";\n        String encoded = urlEncodeSpaces(rawQuery);\n        System.out.println(\"Raw URL:     \" + rawQuery);\n        System.out.println(\"Encoded URL: \" + encoded);\n    }\n}",
+      "expectedOutput": "Raw URL:     search java backend engineering\nEncoded URL: search%20java%20backend%20engineering"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Nested Numeric Triangle Builder",
+      "question": "Construct a 4-row numeric triangle pattern as a single multi-line string within a `StringBuilder` using nested loops, and print the completed string[cite: 14, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-10",
+      "id": "stringbuilder-010",
+      "explanation": "Assembling complex multi-line text grids in a single `StringBuilder` buffer avoids issuing multiple `System.out.print` I/O system calls[cite: 1, 21]. The outer loop manages rows from 1 to $N$, while the inner loop manages columns from 1 to the current row index `i`[cite: 14]. On each inner iteration, `sb.append(j)` appends the column digit[cite: 14, 21]. After the inner loop completes each row, `sb.append('\\n')` appends a newline delimiter[cite: 1, 21]. The entire grid is constructed in memory and printed in a single I/O operation via `System.out.print(sb.toString())`[cite: 1, 21].",
+      "hints": [
+        "Use an outer loop `for (int i = 1; i <= n; i++)` for rows[cite: 14].",
+        "Use an inner loop `for (int j = 1; j <= i; j++)` to append column digits[cite: 14, 21].",
+        "Append `\\n` at the end of each row inside the outer loop[cite: 1, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int rows = 4;\n        StringBuilder sb = new StringBuilder();\n\n        for (int i = 1; i <= rows; i++) {\n            for (int j = 1; j <= i; j++) {\n                sb.append(j);\n            }\n            if (i < rows) {\n                sb.append(\"\\n\");\n            }\n        }\n\n        System.out.println(sb.toString());\n    }\n}",
+      "expectedOutput": "1\n12\n123\n1234"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Arbitrary-Precision Decimal Addition via StringBuilder",
+      "question": "Implement arbitrary-precision addition of two large numbers represented as strings using `StringBuilder` without using `BigInteger`[cite: 21, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-11",
+      "id": "stringbuilder-011",
+      "explanation": "Standard 64-bit primitive types (`long`) overflow when handling numbers with more than 19 digits[cite: 5]. Adding arbitrarily large numbers requires simulating grade-school column addition using character buffers[cite: 21]. Two pointers start at the least significant digits (the right ends) of both strings and move leftward[cite: 9, 14]. On each step, the digits are converted to integers, added together with any carry from the previous column, and the resulting digit (`sum % 10`) is appended to a `StringBuilder`[cite: 14, 21]. The carry updates to `sum / 10`[cite: 7]. After the loop processes all digits and any final carry, reversing the buffer produces the final sum in $O(\\max(N, M))$ time[cite: 21].",
+      "hints": [
+        "Initialize pointer indices at `num1.length() - 1` and `num2.length() - 1`[cite: 8, 9].",
+        "Loop while `i >= 0 || j >= 0 || carry > 0`[cite: 14, 15].",
+        "Append `total % 10` to `sb`, update `carry = total / 10`, and call `sb.reverse()` at the end[cite: 7, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String addLargeNumbers(String s1, String s2) {\n        StringBuilder sb = new StringBuilder();\n        int i = s1.length() - 1;\n        int j = s2.length() - 1;\n        int carry = 0;\n\n        while (i >= 0 || j >= 0 || carry > 0) {\n            int d1 = (i >= 0) ? s1.charAt(i--) - '0' : 0;\n            int d2 = (j >= 0) ? s2.charAt(j--) - '0' : 0;\n            int sum = d1 + d2 + carry;\n            sb.append(sum % 10);\n            carry = sum / 10;\n        }\n        return sb.reverse().toString();\n    }\n\n    public static void main(String[] args) {\n        String n1 = \"99999999999999999999\";\n        String n2 = \"1\";\n        System.out.println(\"Sum: \" + addLargeNumbers(n1, n2));\n    }\n}",
+      "expectedOutput": "Sum: 100000000000000000000"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Binary String Addition Engine",
+      "question": "Implement a binary string addition method that adds two base-2 binary strings (`\"1011\" + \"1101\"`) and returns their binary sum using `StringBuilder`[cite: 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-12",
+      "id": "stringbuilder-012",
+      "explanation": "Binary addition operates on base-2 columns using the binary arithmetic rules $0+0=0$, $1+0=1$, $1+1=10_2$ (sum 0, carry 1), and $1+1+1=11_2$ (sum 1, carry 1)[cite: 7]. Pointers iterate backward from the least significant bits of both strings[cite: 9, 14]. On each step, bits are converted to integers by subtracting `'0'`, added together with the carry, and the resulting bit (`sum % 2`) is appended to a `StringBuilder`[cite: 7, 14, 21]. The carry updates to `sum / 2`[cite: 7]. Reversing the buffer produces the final binary sum without relying on integer parsing, avoiding 32-bit or 64-bit overflow on long binary strings[cite: 5, 21].",
+      "hints": [
+        "Iterate backward from the end of both strings: `while (i >= 0 || j >= 0 || carry > 0)`[cite: 14, 15].",
+        "Compute the sum bit using `sum % 2` and the carry using `sum / 2`[cite: 7].",
+        "Reverse the accumulated `StringBuilder` before returning the binary string[cite: 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String addBinary(String b1, String b2) {\n        StringBuilder sb = new StringBuilder();\n        int i = b1.length() - 1;\n        int j = b2.length() - 1;\n        int carry = 0;\n\n        while (i >= 0 || j >= 0 || carry > 0) {\n            int bit1 = (i >= 0) ? b1.charAt(i--) - '0' : 0;\n            int bit2 = (j >= 0) ? b2.charAt(j--) - '0' : 0;\n            int total = bit1 + bit2 + carry;\n            sb.append(total % 2);\n            carry = total / 2;\n        }\n        return sb.reverse().toString();\n    }\n\n    public static void main(String[] args) {\n        String a = \"1011\"; // 11\n        String b = \"1101\"; // 13\n        System.out.println(\"Binary Sum: \" + addBinary(a, b));\n    }\n}",
+      "expectedOutput": "Binary Sum: 11000"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Run-Length Encoding Compression via StringBuilder",
+      "question": "Implement run-length string compression (e.g., `'aabcccccaaa'` becomes `'a2b1c5a3'`) using `StringBuilder` with pre-allocated capacity[cite: 18, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-13",
+      "id": "stringbuilder-013",
+      "explanation": "Run-length encoding (RLE) compresses contiguous repeating characters into character-count pairs[cite: 18, 20]. Pre-allocating capacity with `new StringBuilder(text.length())` ensures the buffer has sufficient space upfront, preventing array reallocations during encoding[cite: 18, 21]. The algorithm traverses the string, tracking consecutive matching characters[cite: 14, 18]. When the character at the current index differs from the previous one, the previous character and its count are appended to the buffer, and the counter resets to 1[cite: 3, 18]. After the loop completes, the final character and count are appended[cite: 3]. If the compressed string is not shorter than the original, the original string is returned instead[cite: 18].",
+      "hints": [
+        "Pre-allocate capacity: `new StringBuilder(text.length())`[cite: 18, 21].",
+        "Traverse from index 1 to `length() - 1`, checking if `s.charAt(i) == s.charAt(i - 1)`[cite: 14, 18].",
+        "Return the shorter of the original or compressed string[cite: 18]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String compressRLE(String text) {\n        if (text == null || text.length() <= 2) return text;\n        StringBuilder sb = new StringBuilder(text.length());\n        int count = 1;\n\n        for (int i = 1; i < text.length(); i++) {\n            if (text.charAt(i) == text.charAt(i - 1)) {\n                count++;\n            } else {\n                sb.append(text.charAt(i - 1)).append(count);\n                count = 1;\n            }\n        }\n        sb.append(text.charAt(text.length() - 1)).append(count);\n        return sb.length() < text.length() ? sb.toString() : text;\n    }\n\n    public static void main(String[] args) {\n        String original = \"aabcccccaaa\";\n        System.out.println(\"Compressed: \" + compressRLE(original));\n    }\n}",
+      "expectedOutput": "Compressed: a2b1c5a3"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Integer to Roman Numeral Converter via StringBuilder",
+      "question": "Convert an integer from 1 to 3999 into its standard Roman numeral representation using lookup arrays and a `StringBuilder` buffer[cite: 16, 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-14",
+      "id": "stringbuilder-014",
+      "explanation": "Converting an integer to a Roman numeral uses a greedy subtraction algorithm across ordered value-symbol pairs[cite: 16]. Roman numerals follow subtractive rules where numbers like 4 ('IV') and 9 ('IX') are represented using paired symbols[cite: 16]. Two parallel arrays store standard values and their corresponding Roman symbols in descending order: 1000 ('M'), 900 ('CM'), 500 ('D'), 400 ('CD'), 100 ('C'), 90 ('XC'), 50 ('L'), 40 ('XL'), 10 ('X'), 9 ('IX'), 5 ('V'), 4 ('IV'), and 1 ('I')[cite: 16]. A `while` loop subtracts the largest matching value repeatedly, appending the corresponding symbol to a `StringBuilder` until the number reduces to zero[cite: 15, 21].",
+      "hints": [
+        "Store descending numeric values and symbols in parallel arrays, including subtractive combinations like 900 ('CM') and 4 ('IV')[cite: 16].",
+        "Use a loop: `while (num >= values[i]) { sb.append(symbols[i]); num -= values[i]; }`[cite: 15, 21].",
+        "Advance to smaller denominations as the number reduces[cite: 16]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String intToRoman(int num) {\n        int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};\n        String[] symbols = {\"M\", \"CM\", \"D\", \"CD\", \"C\", \"XC\", \"L\", \"XL\", \"X\", \"IX\", \"V\", \"IV\", \"I\"};\n        StringBuilder sb = new StringBuilder();\n\n        for (int i = 0; i < values.length && num > 0; i++) {\n            while (num >= values[i]) {\n                sb.append(symbols[i]);\n                num -= values[i];\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        int year = 1994;\n        System.out.println(\"Integer: \" + year);\n        System.out.println(\"Roman:   \" + intToRoman(year));\n    }\n}",
+      "expectedOutput": "Integer: 1994\nRoman:   MCMXCIV"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Word-Preserving Line Wrap Engine",
+      "question": "Implement a text wrapping engine that wraps a long sentence at a specified line width without splitting words, using a `StringBuilder` cursor[cite: 22].",
+      "source": "java_coding_practice.json",
+      "source_id": "stringbuilder-015",
+      "id": "stringbuilder-015",
+      "explanation": "Word wrapping formats text to fit within a fixed column width without breaking words across line boundaries[cite: 22]. The algorithm splits the input text into word tokens around whitespace[cite: 4, 8]. It maintains a running count of characters on the current line[cite: 8]. For each word, it checks whether adding the word and a space would exceed the target line width[cite: 8]. If it fits, the word is appended to the current line; if it would exceed the width, a newline character (`\\n`) is appended, and the word starts a new line[cite: 1, 21]. This formats text into bounded lines using a single `StringBuilder` buffer[cite: 21].",
+      "hints": [
+        "Split the input sentence into words: `text.split(\"\\\\s+\")`[cite: 4, 8].",
+        "Track current line length in a variable: `lineLen`[cite: 8].",
+        "If `lineLen + word.length() + 1 > maxWidth`, append `\\n`, reset `lineLen`, and append the word[cite: 1, 8, 21]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String wrapText(String text, int maxWidth) {\n        String[] words = text.split(\"\\\\s+\");\n        StringBuilder sb = new StringBuilder();\n        int currentLineLen = 0;\n\n        for (String w : words) {\n            if (currentLineLen + w.length() + (currentLineLen > 0 ? 1 : 0) > maxWidth) {\n                sb.append(\"\\n\");\n                sb.append(w);\n                currentLineLen = w.length();\n            } else {\n                if (currentLineLen > 0) {\n                    sb.append(\" \");\n                    currentLineLen++;\n                }\n                sb.append(w);\n                currentLineLen += w.length();\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String sentence = \"Java StringBuilder provides an unsynchronized high performance mutable buffer\";\n        String wrapped = wrapText(sentence, 20);\n        System.out.println(wrapped);\n    }\n}",
+      "expectedOutput": "Java StringBuilder\nprovides an\nunsynchronized high\nperformance mutable\nbuffer"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json"
+  ],
+  "totalQuestions": 15
+}

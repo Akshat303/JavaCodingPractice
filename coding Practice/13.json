@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "if-statements",
+  "topic": "If and else-if decisions",
+  "page": 55,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Number Sign Classification",
+      "question": "Write a program that takes an integer and classifies it as positive, negative, or zero using an `if-else if-else` decision ladder.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-01",
+      "id": "if-statements-001",
+      "explanation": "Decision branching in Java begins with the `if-else if-else` ladder. The Java Virtual Machine evaluates conditional expressions from top to bottom. Each conditional expression inside the `if` or `else if` clause must evaluate to a primitive `boolean` type (`true` or `false`). When the first condition `n > 0` evaluates to true, the JVM executes that specific block and jumps past the remainder of the ladder. If it is false, evaluation falls through sequentially to `n < 0`. If none of the conditional branches evaluate to true, the terminal `else` branch executes by default, correctly capturing the zero boundary.",
+      "hints": [
+        "Check `number > 0` for positive numbers, then `number < 0` for negative numbers.",
+        "Use a final `else` block to capture the zero case without an extra conditional expression.",
+        "Print the input number and its resulting sign classification."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = -5;\n        String result;\n        if (number > 0) {\n            result = \"Positive\";\n        } else if (number < 0) {\n            result = \"Negative\";\n        } else {\n            result = \"Zero\";\n        }\n        System.out.println(\"Number: \" + number);\n        System.out.println(\"Result: \" + result);\n    }\n}",
+      "expectedOutput": "Number: -5\nResult: Negative"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Voting Eligibility Check",
+      "question": "Write a program that checks whether a citizen is eligible to vote based on their age (threshold $\\ge 18$).",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-02",
+      "id": "if-statements-002",
+      "explanation": "Binary branching models decisions with exactly two outcomes. In this task, an individual either meets the legal voting age criterion or does not. The relational operator `>=` compares the primitive integer `age` against the threshold literal `18`. If the predicate evaluates to true, the statement or block directly attached to the `if` executes. Otherwise, control flows to the `else` block. In compiled bytecode, this compiles to a conditional comparison instruction like `if_icmplt` (branch if less than) jumping over the true branch when the condition fails.",
+      "hints": [
+        "Use the relational operator `>=` to include 18 as an eligible age.",
+        "Structure the condition as `if (age >= 18)`.",
+        "Provide an `else` branch for ages under 18."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int age = 20;\n        System.out.println(\"Age: \" + age);\n        if (age >= 18) {\n            System.out.println(\"Eligible to vote: Yes\");\n        } else {\n            System.out.println(\"Eligible to vote: No\");\n        }\n    }\n}",
+      "expectedOutput": "Age: 20\nEligible to vote: Yes"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Largest of Three Numbers",
+      "question": "Find and print the largest of three numbers using an `if-else if-else` structure.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-03",
+      "id": "if-statements-003",
+      "explanation": "Selecting an extremum among multiple values tests compound conditional evaluation using short-circuit logical operators. To identify if variable `a` is the strictly largest or tied for largest, both `a >= b` and `a >= c` must hold true simultaneously, combined with the logical AND operator `&&`. If that compound condition fails, the second branch checks `b >= a && b >= c`. If that also fails, `c` is guaranteed to be the largest by deduction, allowing the final `else` clause to assign `c` as the maximum without redundant evaluations.",
+      "hints": [
+        "Use the logical AND operator `&&` to combine comparison tests.",
+        "Check `a >= b && a >= c` for the first branch, then `b >= a && b >= c` for the second.",
+        "Handle ties safely by using greater-than-or-equal-to `>=`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 12, b = 45, c = 23;\n        int largest;\n        if (a >= b && a >= c) {\n            largest = a;\n        } else if (b >= a && b >= c) {\n            largest = b;\n        } else {\n            largest = c;\n        }\n        System.out.println(\"Numbers: \" + a + \", \" + b + \", \" + c);\n        System.out.println(\"Largest: \" + largest);\n    }\n}",
+      "expectedOutput": "Numbers: 12, 45, 23\nLargest: 45"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Score Grade Mapping",
+      "question": "Given an exam score between 0 and 100, print the corresponding letter grade ('A', 'B', 'C', 'D', 'F') using an `else-if` ladder.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-04",
+      "id": "if-statements-004",
+      "explanation": "Mapping continuous numerical intervals to categorical grades demonstrates descending range evaluation in an `else-if` chain. When evaluating descending thresholds ($90, 80, 70, 60$), checking `score >= 90` first guarantees that subsequent branches only execute if `score < 90`. This eliminates redundant upper-bound checks like `score < 90 && score >= 80`, allowing clean singular expressions such as `else if (score >= 80)`. This sequential elimination pattern improves readability and minimizes bytecode branching overhead.",
+      "hints": [
+        "Order branches from highest threshold down to lowest (90, 80, 70, 60).",
+        "Avoid redundant upper-bound checks; if the first branch fails, `score < 90` is already guaranteed.",
+        "Catch all scores below 60 in the final fallback `else` block."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int score = 85;\n        char grade;\n        if (score >= 90) {\n            grade = 'A';\n        } else if (score >= 80) {\n            grade = 'B';\n        } else if (score >= 70) {\n            grade = 'C';\n        } else if (score >= 60) {\n            grade = 'D';\n        } else {\n            grade = 'F';\n        }\n        System.out.println(\"Score: \" + score);\n        System.out.println(\"Grade: \" + grade);\n    }\n}",
+      "expectedOutput": "Score: 85\nGrade: B"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Basic Leap Year Verifier",
+      "question": "Write a program that checks whether a given year is a leap year using standard modulo arithmetic rules.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-05",
+      "id": "if-statements-005",
+      "explanation": "A year in the Gregorian calendar is a leap year if it is divisible by 4, except for century years (divisible by 100), which must also be divisible by 400. In Java, this rule can be formulated either as a compound boolean expression or an nested `if-else` hierarchy. Testing `(year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)` leverages operator precedence where `%` runs first, relational comparisons `==` and `!=` second, logical `&&` third, and logical `||` last. The short-circuit evaluation guarantees that if the first sub-clause is true, the expensive century check is bypassed.",
+      "hints": [
+        "Use `%` to test divisibility by checking if remainder equals zero.",
+        "Combine conditions: divisible by 4 and not divisible by 100, or divisible by 400.",
+        "Ensure parenthesization groups the `&&` condition prior to the `||` condition."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024;\n        boolean isLeap;\n        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {\n            isLeap = true;\n        } else {\n            isLeap = false;\n        }\n        System.out.println(\"Year: \" + year);\n        System.out.println(\"Is Leap Year: \" + isLeap);\n    }\n}",
+      "expectedOutput": "Year: 2024\nIs Leap Year: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Odd, Even, or Zero Checker",
+      "question": "Write an if-else decision ladder to categorize a number as 'Negative', 'Zero', 'Positive Odd', or 'Positive Even'.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-01",
+      "id": "if-statements-006",
+      "explanation": "Hierarchical categorization often requires evaluating primary numeric properties before testing secondary properties. The program first filters negative numbers (`n < 0`) and zero (`n == 0`). Once a number is verified to be strictly positive, a nested parity condition `n % 2 == 0` distinguishes between 'Positive Even' and 'Positive Odd'. Alternatively, a linear `else-if` ladder can evaluate these four mutually exclusive states directly. Factoring out negative and zero checks first ensures that parity checks only run on valid positive integers.",
+      "hints": [
+        "First check if `n < 0`, then if `n == 0`.",
+        "For positive numbers, check parity using `n % 2 == 0`.",
+        "Assign the classification string and print the result."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int number = 10;\n        String classification;\n        if (number < 0) {\n            classification = \"Negative\";\n        } else if (number == 0) {\n            classification = \"Zero\";\n        } else if (number % 2 == 0) {\n            classification = \"Positive Even\";\n        } else {\n            classification = \"Positive Odd\";\n        }\n        System.out.println(\"Input: \" + number);\n        System.out.println(\"Result: \" + classification);\n    }\n}",
+      "expectedOutput": "Input: 10\nResult: Positive Even"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Academic Grade Categorizer",
+      "question": "Take an exam score and validate that it falls between 0 and 100. If valid, print 'A', 'B', 'C', 'D', or 'F'; otherwise, reject it with 'Invalid Score'.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-02",
+      "id": "if-statements-007",
+      "explanation": "Defensive input validation should precede domain logic. This problem enforces an input validation guard before evaluating grade thresholds. If `score < 0 || score > 100`, the score is rejected as out-of-range, and the method terminates early. Only after the score is validated does the descending `if-else if` ladder evaluate letter grade thresholds. This separation between input sanitization and business calculation is a core practice in professional software engineering.",
+      "hints": [
+        "Guard the input with `score < 0 || score > 100` before evaluating grade boundaries.",
+        "Once validated, use an `else if` ladder descending from 90, 80, 70, down to 60.",
+        "Print 'Invalid Score' whenever the boundary guard fails."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int score = 78;\n        System.out.println(\"Input Score: \" + score);\n        if (score < 0 || score > 100) {\n            System.out.println(\"Result: Invalid Score\");\n        } else if (score >= 90) {\n            System.out.println(\"Result: A\");\n        } else if (score >= 80) {\n            System.out.println(\"Result: B\");\n        } else if (score >= 70) {\n            System.out.println(\"Result: C\");\n        } else if (score >= 60) {\n            System.out.println(\"Result: D\");\n        } else {\n            System.out.println(\"Result: F\");\n        }\n    }\n}",
+      "expectedOutput": "Input Score: 78\nResult: C"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Leap Year Calculator",
+      "question": "Implement leap year logic: a year is a leap year if divisible by 4, except when divisible by 100 unless also divisible by 400. Provide clear diagnostic output for both outcomes.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-03",
+      "id": "if-statements-008",
+      "explanation": "This exercise reinforces Boolean logic formulation for calendar calculations. The leap year rule balances astronomical orbital periods against the calendar year: a year must be divisible by 4 (`year % 4 == 0`), but century years (`year % 100 == 0`) are excluded unless divisible by 400 (`year % 400 == 0`). The expression `(year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)` evaluates to `true` for years like 2000 and 2024, and `false` for 1900 and 2100. Structuring this as an `if-else` block provides clear diagnostic reporting.",
+      "hints": [
+        "Check century exceptions: a year divisible by 100 is only a leap year if also divisible by 400.",
+        "Combine the logic into `(year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)`.",
+        "Print whether the tested year is a leap year or a common year."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int year = 1900;\n        System.out.println(\"Testing Year: \" + year);\n        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {\n            System.out.println(\"Result: Leap Year\");\n        } else {\n            System.out.println(\"Result: Common Year\");\n        }\n    }\n}",
+      "expectedOutput": "Testing Year: 1900\nResult: Common Year"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Triangle Validity and Type",
+      "question": "Given three side lengths, first verify if they can form a valid triangle using the Triangle Inequality Theorem ($a + b > c, a + c > b, b + c > a$). If valid, determine if it is Equilateral, Isosceles, or Scalene.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-04",
+      "id": "if-statements-009",
+      "explanation": "Geometric validation requires confirming that input values satisfy the Triangle Inequality Theorem: the sum of the lengths of any two sides must be strictly greater than the length of the remaining side ($a + b > c$, $a + c > b$, and $b + c > a$). If any condition fails, the sides cannot form a closed triangle. Once validated, classification proceeds conditionally: if all three sides are equal ($a == b && b == c$), it is Equilateral; if any two sides match ($a == b \vert{}\vert{} b == c \vert{}\vert{} a == c$), it is Isosceles; otherwise, all sides are distinct, making it Scalene.",
+      "hints": [
+        "First check the Triangle Inequality Theorem: `a + b > c && a + c > b && b + c > a`.",
+        "If invalid, print 'Invalid Triangle' and skip classification.",
+        "Classify valid triangles: check all three sides equal first, then check any two sides equal, else scalene."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 5, b = 5, c = 8;\n        System.out.println(\"Sides: \" + a + \", \" + b + \", \" + c);\n        if (a + b > c && a + c > b && b + c > a) {\n            if (a == b && b == c) {\n                System.out.println(\"Result: Equilateral Triangle\");\n            } else if (a == b || b == c || a == c) {\n                System.out.println(\"Result: Isosceles Triangle\");\n            } else {\n                System.out.println(\"Result: Scalene Triangle\");\n            }\n        } else {\n            System.out.println(\"Result: Invalid Triangle\");\n        }\n    }\n}",
+      "expectedOutput": "Sides: 5, 5, 8\nResult: Isosceles Triangle"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Nested If Eligibility Gate",
+      "question": "Write a nested conditional structure checking a job candidate's age (>= 18), education ('Degree'), and experience (>= 2 years), returning specific rejection diagnostics for each failure.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-05",
+      "id": "if-statements-010",
+      "explanation": "Nested `if` statements allow sequential, multi-stage qualification checks where subsequent conditions are only evaluated if earlier prerequisites pass. This allows reporting targeted feedback for each specific failure point. If `age < 18`, the candidate is immediately rejected for age. If age is valid, the check proceeds to education; if not equal to 'Degree', a qualification error is logged. Finally, years of experience are evaluated. This provides granular feedback compared to a single compound condition, where the specific cause of failure is lost.",
+      "hints": [
+        "Evaluate prerequisites sequentially: test age first, then education, then experience.",
+        "Provide a unique rejection message for each condition's `else` block.",
+        "Compare string values using `.equalsIgnoreCase()` rather than reference equality `==`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int age = 22;\n        String education = \"Degree\";\n        int experienceYears = 1;\n\n        System.out.println(\"Candidate: Age=\" + age + \", Edu=\" + education + \", Exp=\" + experienceYears);\n        if (age >= 18) {\n            if (\"Degree\".equalsIgnoreCase(education)) {\n                if (experienceYears >= 2) {\n                    System.out.println(\"Result: Candidate Approved\");\n                } else {\n                    System.out.println(\"Result: Rejected - Requires at least 2 years experience\");\n                }\n            } else {\n                System.out.println(\"Result: Rejected - Higher education degree required\");\n            }\n        } else {\n            System.out.println(\"Result: Rejected - Minimum age requirement of 18 not met\");\n        }\n    }\n}",
+      "expectedOutput": "Candidate: Age=22, Edu=Degree, Exp=1\nResult: Rejected - Requires at least 2 years experience"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Triangle Classification with Degenerate Rejection",
+      "question": "Given three floating-point sides, validate that they are positive and satisfy the strict triangle inequality, then classify the triangle as Equilateral, Isosceles, or Scalene.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-06",
+      "id": "if-statements-011",
+      "explanation": "Geometric classification on floating-point numbers requires handling boundary conditions and non-positive inputs. Side lengths must be strictly greater than zero ($a > 0, b > 0, c > 0$). Degenerate triangles (where $a + b = c$) must be rejected using strict inequalities ($a + b > c$). For floating-point comparisons, direct equality checks like $a == b$ can be sensitive to precision artifacts, but for exact literals, standard relational operators apply. Evaluating `a == b && b == c` first ensures that equilateral triangles are classified correctly before checking the broader isosceles condition.",
+      "hints": [
+        "Validate positivity: check that all sides are strictly positive (`a > 0 && b > 0 && c > 0`).",
+        "Enforce strict triangle inequality: `(a + b > c) && (a + c > b) && (b + c > a)`.",
+        "Classify in order: equilateral first, then isosceles, then scalene."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double a = 6.0, b = 6.0, c = 6.0;\n        System.out.println(\"Sides: \" + a + \", \" + b + \", \" + c);\n        if (a > 0 && b > 0 && c > 0 && (a + b > c) && (a + c > b) && (b + c > a)) {\n            if (a == b && b == c) {\n                System.out.println(\"Classification: Equilateral\");\n            } else if (a == b || b == c || a == c) {\n                System.out.println(\"Classification: Isosceles\");\n            } else {\n                System.out.println(\"Classification: Scalene\");\n            }\n        } else {\n            System.out.println(\"Classification: Invalid\");\n        }\n    }\n}",
+      "expectedOutput": "Sides: 6.0, 6.0, 6.0\nClassification: Equilateral"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Quadratic Roots Nature and Value Solver",
+      "question": "Given coefficients $a$, $b$, and $c$, determine the nature of the roots of the quadratic equation $ax^2 + bx + c = 0$ using the discriminant ($b^2 - 4ac$), and calculate the roots.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-07",
+      "id": "if-statements-012",
+      "explanation": "Quadratic root evaluation highlights branching based on the discriminant ($D = b^2 - 4ac$). If $a == 0$, the equation degenerates to a linear equation ($bx + c = 0$) rather than a quadratic. For quadratic equations ($a \\neq 0$), three distinct branches exist: 1) $D > 0$: two distinct real roots exist, computed via $(-b \\pm \\sqrt{D}) / (2a)$; 2) $D == 0$: exactly one repeated real root exists, given by $-b / (2a)$; 3) $D < 0$: roots are complex conjugate pairs with real part $-b / (2a)$ and imaginary part $\\sqrt{-D} / (2a)$.",
+      "hints": [
+        "First check if `a == 0` to handle the linear equation edge case.",
+        "Calculate the discriminant `d = b * b - 4 * a * c`.",
+        "Branch on `d > 0`, `d == 0`, and `d < 0`, using `Math.sqrt()` to compute the root values."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double a = 1, b = -5, c = 6;\n        System.out.println(\"Coefficients: a=\" + a + \", b=\" + b + \", c=\" + c);\n        if (a == 0) {\n            System.out.println(\"Equation is linear, not quadratic.\");\n        } else {\n            double d = b * b - 4 * a * c;\n            if (d > 0) {\n                double r1 = (-b + Math.sqrt(d)) / (2 * a);\n                double r2 = (-b - Math.sqrt(d)) / (2 * a);\n                System.out.printf(\"Two distinct real roots: %.1f and %.1f%n\", r1, r2);\n            } else if (d == 0) {\n                double r = -b / (2 * a);\n                System.out.printf(\"One repeated real root: %.1f%n\", r);\n            } else {\n                System.out.println(\"Complex conjugate roots exist.\");\n            }\n        }\n    }\n}",
+      "expectedOutput": "Coefficients: a=1.0, b=-5.0, c=6.0\nTwo distinct real roots: 3.0 and 2.0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Body Mass Index (BMI) Categorizer",
+      "question": "Calculate Body Mass Index (BMI) from weight (kg) and height (m) using $\\text{BMI} = \\text{weight} / \\text{height}^2$, and classify it into standard health categories.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-08",
+      "id": "if-statements-013",
+      "explanation": "This exercise models medical calculation thresholds using conditional branching. First, the inputs are validated to ensure height and weight are positive values, preventing division by zero. BMI is computed using the formula $\\text{BMI} = \\text{weight} / (\\text{height} \\times \\text{height})$. An `if-else if` ladder then categorizes the resulting index based on World Health Organization standards: Underweight ($< 18.5$), Normal weight ($18.5$ to $24.9$), Overweight ($25.0$ to $29.9$), and Obese ($\\ge 30.0$).",
+      "hints": [
+        "Validate that `weight > 0` and `height > 0` before calculating.",
+        "Calculate `bmi = weight / (height * height)`.",
+        "Use an `else if` ladder checking thresholds 18.5, 25.0, and 30.0."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double weightKg = 70.0;\n        double heightM = 1.75;\n        if (weightKg <= 0 || heightM <= 0) {\n            System.out.println(\"Invalid biometric inputs.\");\n            return;\n        }\n        double bmi = weightKg / (heightM * heightM);\n        String category;\n        if (bmi < 18.5) {\n            category = \"Underweight\";\n        } else if (bmi < 25.0) {\n            category = \"Normal weight\";\n        } else if (bmi < 30.0) {\n            category = \"Overweight\";\n        } else {\n            category = \"Obese\";\n        }\n        System.out.printf(\"BMI: %.1f%n\", bmi);\n        System.out.println(\"Category: \" + category);\n    }\n}",
+      "expectedOutput": "BMI: 22.9\nCategory: Normal weight"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "ATM Withdrawal Validator",
+      "question": "Simulate an ATM withdrawal transaction with validation checks for: amount must be a positive multiple of 100, account has sufficient funds, and withdrawal does not exceed the daily limit.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-09",
+      "id": "if-statements-014",
+      "explanation": "ATM withdrawal validation models real-world business constraints using defensive guard clauses. A valid transaction must satisfy three distinct business rules: 1) Physical denomination constraint: the requested amount must be positive and evenly divisible by 100 (`amount > 0 && amount % 100 == 0`); 2) Daily security constraint: the amount must not exceed the daily withdrawal limit; 3) Account balance constraint: the requested withdrawal must not exceed the current available balance. Using an `if-else` hierarchy reports the exact reason for rejection when a transaction fails.",
+      "hints": [
+        "Check denomination rule: `amount > 0 && amount % 100 == 0`.",
+        "Check daily limit: `amount <= dailyLimit`.",
+        "Check account balance: `amount <= balance`, and update the remaining balance if all checks pass."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int balance = 5000;\n        int dailyLimit = 2000;\n        int request = 1500;\n\n        System.out.println(\"Request: $\" + request + \", Balance: $\" + balance + \", Limit: $\" + dailyLimit);\n        if (request <= 0 || request % 100 != 0) {\n            System.out.println(\"Transaction Failed: Amount must be positive multiple of $100.\");\n        } else if (request > dailyLimit) {\n            System.out.println(\"Transaction Failed: Amount exceeds daily withdrawal limit.\");\n        } else if (request > balance) {\n            System.out.println(\"Transaction Failed: Insufficient funds.\");\n        } else {\n            balance -= request;\n            System.out.println(\"Transaction Approved. Dispensing $\" + request);\n            System.out.println(\"Remaining Balance: $\" + balance);\n        }\n    }\n}",
+      "expectedOutput": "Request: $1500, Balance: $5000, Limit: $2000\nTransaction Approved. Dispensing $1500\nRemaining Balance: $3500"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Day of Week Classifier",
+      "question": "Read a day number (1 for Monday to 7 for Sunday), validate that it falls within 1-7, and classify it as 'Weekday' or 'Weekend'.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-10",
+      "id": "if-statements-015",
+      "explanation": "This exercise maps integers to calendar categories using range checks and grouping conditions. First, the day number is validated against the acceptable range (`day < 1 || day > 7`). Once validated, the logic groups the days: values from 1 to 5 (Monday through Friday) are categorized as 'Weekday', while values 6 and 7 (Saturday and Sunday) are categorized as 'Weekend'. Structuring this with an `else-if` ladder ensures invalid values are caught before classification.",
+      "hints": [
+        "Validate boundaries first: check `if (day < 1 || day > 7)`.",
+        "Group weekdays using `if (day >= 1 && day <= 5)`.",
+        "Group weekend days using `else if (day == 6 || day == 7)`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int day = 6;\n        System.out.println(\"Day number: \" + day);\n        if (day < 1 || day > 7) {\n            System.out.println(\"Classification: Invalid Day\");\n        } else if (day >= 1 && day <= 5) {\n            System.out.println(\"Classification: Weekday\");\n        } else {\n            System.out.println(\"Classification: Weekend\");\n        }\n    }\n}",
+      "expectedOutput": "Day number: 6\nClassification: Weekend"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Progressive Tax Bracket Calculator",
+      "question": "Calculate progressive income tax across 4 brackets: 10% up to $10,000; 15% from $10,001 to $50,000; 25% from $50,001 to $100,000; and 35% above $100,000.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-06",
+      "id": "if-statements-016",
+      "explanation": "Progressive tax systems apply different tax rates to incremental portions of income rather than taxing the entire income at a single rate. For an income of $65,000, the first $10,000 is taxed at 10% ($1,000); the next $40,000 (from $10,001 to $50,000) is taxed at 15% ($6,000); and the remaining $15,000 (from $50,001 to $65,000) is taxed at 25% ($3,750), totaling $10,750 in tax. Implementing this requires using conditional statements that calculate tax bracket by bracket, accumulating the taxes owed across each tier.",
+      "hints": [
+        "Do not multiply total income by a single tax rate; tax only the portion of income within each bracket.",
+        "Use conditional thresholds to accumulate tax tier by tier from lowest to highest.",
+        "Compute remaining income in each bracket using differences like `income - 50000`."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double income = 65000.0;\n        double tax = 0.0;\n\n        if (income <= 10000) {\n            tax = income * 0.10;\n        } else if (income <= 50000) {\n            tax = (10000 * 0.10) + ((income - 10000) * 0.15);\n        } else if (income <= 100000) {\n            tax = (10000 * 0.10) + (40000 * 0.15) + ((income - 50000) * 0.25);\n        } else {\n            tax = (10000 * 0.10) + (40000 * 0.15) + (50000 * 0.25) + ((income - 100000) * 0.35);\n        }\n\n        System.out.printf(\"Taxable Income: $%.2f%n\", income);\n        System.out.printf(\"Calculated Tax: $%.2f%n\", tax);\n    }\n}",
+      "expectedOutput": "Taxable Income: $65000.00\nCalculated Tax: $10750.00"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Quadratic Equation Discriminant Analysis",
+      "question": "Given coefficients $a$, $b$, and $c$, evaluate the discriminant ($b^2 - 4ac$) using conditionals to determine if there are two distinct real roots, one root, or complex roots.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-07",
+      "id": "if-statements-017",
+      "explanation": "Evaluating the nature of polynomial roots demonstrates branching based on algebraic discriminants. In the quadratic equation $ax^2 + bx + c = 0$, the discriminant $D = b^2 - 4ac$ governs the behavior of the roots. If $D > 0$, the square root yields a real number, producing two distinct real roots. If $D == 0$, the square root vanishes, yielding a single repeated rational root ($-b / 2a$). If $D < 0$, the square root produces an imaginary value, resulting in complex conjugate roots. Using an `if-else if-else` structure classifies the solution space cleanly.",
+      "hints": [
+        "Compute `discriminant = (b * b) - (4 * a * c)`.",
+        "Branch on `discriminant > 0`, `discriminant == 0`, and `discriminant < 0`.",
+        "Print the classification and number of roots for each outcome."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double a = 2, b = 4, c = 5;\n        double discriminant = (b * b) - (4 * a * c);\n        System.out.println(\"Discriminant value: \" + discriminant);\n        if (discriminant > 0) {\n            System.out.println(\"Root Nature: Two distinct real roots\");\n        } else if (discriminant == 0) {\n            System.out.println(\"Root Nature: One repeated real root\");\n        } else {\n            System.out.println(\"Root Nature: Two complex conjugate roots\");\n        }\n    }\n}",
+      "expectedOutput": "Discriminant value: -24.0\nRoot Nature: Two complex conjugate roots"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Overlapping Interval Detector",
+      "question": "Given two closed intervals $[start1, end1]$ and $[start2, end2]$, write conditionals to detect if they overlap and compute their intersection.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-08",
+      "id": "if-statements-018",
+      "explanation": "Interval intersection is a core geometric and scheduling algorithm. Two closed intervals $[s1, e1]$ and $[s2, e2]$ overlap if and only if the start of each interval is less than or equal to the end of the other: `s1 <= e2 && s2 <= e1`. If they overlap, their intersection is defined by the maximum of the start points and the minimum of the end points: $[\\max(s1, s2), \\min(e1, e2)]$. If this condition does not hold, the intervals are disjoint. Testing this condition with an `if-else` check allows applications to detect scheduling conflicts and compute overlap durations efficiently.",
+      "hints": [
+        "Check for overlap using `start1 <= end2 && start2 <= end1`.",
+        "If overlapping, compute intersection start as `Math.max(start1, start2)` and end as `Math.min(end1, end2)`.",
+        "Provide an `else` branch reporting that no overlap exists."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int s1 = 3, e1 = 8;\n        int s2 = 5, e2 = 12;\n        System.out.println(\"Interval 1: [\" + s1 + \", \" + e1 + \"]\");\n        System.out.println(\"Interval 2: [\" + s2 + \", \" + e2 + \"]\");\n        if (s1 <= e2 && s2 <= e1) {\n            int intStart = Math.max(s1, s2);\n            int intEnd = Math.min(e1, e2);\n            System.out.println(\"Overlap Detected: [\" + intStart + \", \" + intEnd + \"]\");\n        } else {\n            System.out.println(\"No Overlap Detected.\");\n        }\n    }\n}",
+      "expectedOutput": "Interval 1: [3, 8]\nInterval 2: [5, 12]\nOverlap Detected: [5, 8]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Calendar Date Validity Checker",
+      "question": "Given year, month (1-12), and day (1-31), validate whether the combination forms a legal calendar date, accounting for month lengths and leap years.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-09",
+      "id": "if-statements-019",
+      "explanation": "Date validation requires handling varying month lengths and leap years. Months are validated in three groups: 1) Months with 31 days (January, March, May, July, August, October, December); 2) Months with 30 days (April, June, September, November); 3) February, which has 29 days in a leap year and 28 days in a common year. An `if-else if` ladder validates that the month falls between 1 and 12, calculates the maximum allowable days for that month, and confirms that the day falls between 1 and that maximum.",
+      "hints": [
+        "Check that `month >= 1 && month <= 12` and `year >= 1`.",
+        "Determine max days for the month: 31 for months (1, 3, 5, 7, 8, 10, 12), 30 for months (4, 6, 9, 11).",
+        "For February (month 2), use leap year logic to allow 29 days if a leap year, else 28 days."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int year = 2024, month = 2, day = 29;\n        boolean valid = false;\n        if (year >= 1 && month >= 1 && month <= 12) {\n            int maxDays;\n            if (month == 2) {\n                boolean isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);\n                maxDays = isLeap ? 29 : 28;\n            } else if (month == 4 || month == 6 || month == 9 || month == 11) {\n                maxDays = 30;\n            } else {\n                maxDays = 31;\n            }\n            valid = (day >= 1 && day <= maxDays);\n        }\n        System.out.printf(\"Date: %04d-%02d-%02d%n\", year, month, day);\n        System.out.println(\"Is Valid Date: \" + valid);\n    }\n}",
+      "expectedOutput": "Date: 2024-02-29\nIs Valid Date: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Rock-Paper-Scissors Arbiter",
+      "question": "Implement game arbiter logic that accepts Player 1 and Player 2 moves ('Rock', 'Paper', 'Scissors') and determines the winner or a tie using concise conditional checks.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-10",
+      "id": "if-statements-020",
+      "explanation": "Game arbiter logic maps combinations of player moves to game outcomes. In Rock-Paper-Scissors, the game is a tie if both players choose the same move. If the moves differ, Player 1 wins in three specific scenarios: Rock beats Scissors, Scissors beats Paper, or Paper beats Rock. By combining these three winning conditions into a single compound expression with logical OR (`||`), the arbiter can resolve the game in three branches: check for a tie first, check if Player 1 wins, and fall back to Player 2 winning otherwise.",
+      "hints": [
+        "Check for a tie first using `.equalsIgnoreCase()` on both moves.",
+        "Combine Player 1's three winning conditions into a single `if` statement using `||`.",
+        "If neither a tie nor a Player 1 win occurs, Player 2 is the winner by default."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String p1 = \"Rock\";\n        String p2 = \"Scissors\";\n        System.out.println(\"Player 1: \" + p1 + \", Player 2: \" + p2);\n        if (p1.equalsIgnoreCase(p2)) {\n            System.out.println(\"Result: Tie\");\n        } else if ((p1.equalsIgnoreCase(\"Rock\") && p2.equalsIgnoreCase(\"Scissors\")) ||\n                   (p1.equalsIgnoreCase(\"Scissors\") && p2.equalsIgnoreCase(\"Paper\")) ||\n                   (p1.equalsIgnoreCase(\"Paper\") && p2.equalsIgnoreCase(\"Rock\"))) {\n            System.out.println(\"Result: Player 1 Wins\");\n        } else {\n            System.out.println(\"Result: Player 2 Wins\");\n        }\n    }\n}",
+      "expectedOutput": "Player 1: Rock, Player 2: Scissors\nResult: Player 1 Wins"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Utility Slab Billing Calculator",
+      "question": "Compute an electricity bill with stepped slab rates: $1.50/unit for the first 100 units, $2.50/unit for the next 100 units (101-200), and $4.00/unit for any units above 200.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-11",
+      "id": "if-statements-021",
+      "explanation": "Utility billing uses stepped slab pricing, where consumption is billed incrementally across usage tiers. A consumer who uses 250 units is not billed for all 250 units at the highest rate. Instead, the first 100 units are billed at $1.50 ($150.00); the next 100 units (units 101 to 200) are billed at $2.50 ($250.00); and the remaining 50 units (above 200) are billed at $4.00 ($200.00), for a total bill of $600.00. Using an `if-else if` ladder calculates the charges tier by tier, ensuring units are billed at their respective rates.",
+      "hints": [
+        "Handle usage $\\le 100$ in the first branch at 1.50 per unit.",
+        "For usage $\\le 200$, bill the first 100 units at 1.50 and the remainder `(units - 100)` at 2.50.",
+        "For usage $> 200$, add the fixed charges for the first two slabs ($150 + $250) and bill `(units - 200)` at 4.00."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int units = 250;\n        double totalBill = 0.0;\n\n        if (units <= 100) {\n            totalBill = units * 1.50;\n        } else if (units <= 200) {\n            totalBill = (100 * 1.50) + ((units - 100) * 2.50);\n        } else {\n            totalBill = (100 * 1.50) + (100 * 2.50) + ((units - 200) * 4.00);\n        }\n\n        System.out.println(\"Units Consumed: \" + units);\n        System.out.printf(\"Total Electricity Bill: $%.2f%n\", totalBill);\n    }\n}",
+      "expectedOutput": "Units Consumed: 250\nTotal Electricity Bill: $600.00"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Progressive Tax and Effective Rate Engine",
+      "question": "Calculate progressive income tax and compute the effective tax rate (total tax divided by total income expressed as a percentage) across income tiers.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-12",
+      "id": "if-statements-022",
+      "explanation": "Computing tax liability alongside the effective tax rate demonstrates the distinction between marginal and effective taxation. Marginal tax rates apply only to income within a specific bracket, whereas the effective tax rate represents the overall percentage of total income paid in taxes (`effectiveRate = (tax / income) * 100`). Calculating both metrics requires conditional logic to sum the tax owed across each bracket, followed by computing the effective rate. Handling non-positive income with a guard check prevents division by zero.",
+      "hints": [
+        "Accumulate taxes across brackets progressively using `if-else if`.",
+        "Compute the effective rate: `(totalTax / income) * 100.0`.",
+        "Format both the tax and effective percentage to two decimal places."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double income = 85000.0;\n        double tax = 0.0;\n\n        if (income <= 20000) {\n            tax = income * 0.05;\n        } else if (income <= 60000) {\n            tax = (20000 * 0.05) + ((income - 20000) * 0.15);\n        } else {\n            tax = (20000 * 0.05) + (40000 * 0.15) + ((income - 60000) * 0.25);\n        }\n\n        double effectiveRate = (income > 0) ? (tax / income) * 100.0 : 0.0;\n        System.out.printf(\"Income: $%.2f%n\", income);\n        System.out.printf(\"Total Tax: $%.2f%n\", tax);\n        System.out.printf(\"Effective Tax Rate: %.2f%%%n\", effectiveRate);\n    }\n}",
+      "expectedOutput": "Income: $85000.00\nTotal Tax: $13250.00\nEffective Tax Rate: 15.59%"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Calendar Date Validator with Diagnostic Reporting",
+      "question": "Write a validation method that inspects year, month, and day inputs, returning a descriptive error string if the date is invalid (e.g., non-existent leap day, invalid month, day out of range).",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-13",
+      "id": "if-statements-023",
+      "explanation": "Validating calendar dates with descriptive error reporting requires evaluating conditions sequentially and generating specific diagnostic messages for each failure. Checking `year < 1` reports an invalid year error; checking `month < 1 || month > 12` reports an invalid month error; and checking the day against the month's maximum allowed days catches invalid days (such as April 31 or February 29 in a common year). Evaluating these checks in order ensures the diagnostic message points directly to the underlying cause.",
+      "hints": [
+        "Check year first, then month range, then day range.",
+        "Use leap year logic (`(y % 4 == 0 && y % 100 != 0) || y % 400 == 0`) to determine February's day limit.",
+        "Return specific diagnostic strings for each validation failure."
+      ],
+      "sampleCode": "public class Solution {\n    public static String validateDate(int y, int m, int d) {\n        if (y < 1) return \"Invalid year\";\n        if (m < 1 || m > 12) return \"Invalid month\";\n        boolean isLeap = (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0);\n        int maxDay;\n        if (m == 2) maxDay = isLeap ? 29 : 28;\n        else if (m == 4 || m == 6 || m == 9 || m == 11) maxDay = 30;\n        else maxDay = 31;\n\n        if (d < 1 || d > maxDay) {\n            return \"Invalid day for specified month (max: \" + maxDay + \")\";\n        }\n        return \"Valid Date\";\n    }\n\n    public static void main(String[] args) {\n        int y = 2023, m = 2, d = 29;\n        System.out.printf(\"Testing %04d-%02d-%02d: %s%n\", y, m, d, validateDate(y, m, d));\n    }\n}",
+      "expectedOutput": "Testing 2023-02-29: Invalid day for specified month (max: 28)"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Rock-Paper-Scissors Move Arbiter",
+      "question": "Implement an arbiter method that evaluates two game moves and returns 'Player 1', 'Player 2', 'Tie', or 'Invalid Move' if either move is unrecognized.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-14",
+      "id": "if-statements-024",
+      "explanation": "Game arbiter implementations should validate input moves before evaluating game rules. This method first checks whether both moves belong to the set of valid options ('Rock', 'Paper', 'Scissors'); if either move is unrecognized, it returns 'Invalid Move'. If valid, it checks for a tie. If the moves differ, it evaluates Player 1's three winning combinations: Rock beats Scissors, Scissors beats Paper, and Paper beats Rock. If none of these match, Player 2 is the winner by elimination.",
+      "hints": [
+        "Validate inputs against the three legal moves before evaluating game rules.",
+        "Check for a tie using `m1.equalsIgnoreCase(m2)`.",
+        "Test Player 1's winning combinations with `||`, returning 'Player 2' otherwise."
+      ],
+      "sampleCode": "public class Solution {\n    public static String play(String m1, String m2) {\n        boolean v1 = m1.matches(\"(?i)rock|paper|scissors\");\n        boolean v2 = m2.matches(\"(?i)rock|paper|scissors\");\n        if (!v1 || !v2) return \"Invalid Move\";\n        if (m1.equalsIgnoreCase(m2)) return \"Tie\";\n        if ((m1.equalsIgnoreCase(\"rock\") && m2.equalsIgnoreCase(\"scissors\")) ||\n            (m1.equalsIgnoreCase(\"scissors\") && m2.equalsIgnoreCase(\"paper\")) ||\n            (m1.equalsIgnoreCase(\"paper\") && m2.equalsIgnoreCase(\"rock\"))) {\n            return \"Player 1\";\n        }\n        return \"Player 2\";\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Winner: \" + play(\"Paper\", \"Rock\"));\n    }\n}",
+      "expectedOutput": "Winner: Player 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "24-Hour to 12-Hour Converter and Greeter",
+      "question": "Given hours (0-23) and minutes (0-59), validate the input, convert the time to 12-hour AM/PM format, and print an appropriate time-of-day greeting.",
+      "source": "java_coding_practice.json",
+      "source_id": "if-statements-15",
+      "id": "if-statements-025",
+      "explanation": "Converting 24-hour time to 12-hour AM/PM format involves arithmetic conversions and conditional time-of-day mapping. The inputs are validated to ensure hours fall in $0..23$ and minutes in $0..59$. For 12-hour conversion, hour 0 maps to 12 AM, hours 1 to 11 map to AM, hour 12 maps to 12 PM, and hours 13 to 23 map to PM with the hour computed as `hour - 12`. An `if-else if` ladder then maps the 24-hour time to an appropriate greeting: Morning (05:00-11:59), Afternoon (12:00-16:59), Evening (17:00-20:59), and Night (21:00-04:59).",
+      "hints": [
+        "Validate boundaries: `hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59`.",
+        "Convert hours: `hour % 12 == 0 ? 12 : hour % 12`, with period `hour >= 12 ? \"PM\" : \"AM\"`.",
+        "Map greetings: morning (5 to 11), afternoon (12 to 16), evening (17 to 20), and night otherwise."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int h = 14, m = 30;\n        if (h < 0 || h > 23 || m < 0 || m > 59) {\n            System.out.println(\"Invalid time input.\");\n            return;\n        }\n        int h12 = (h % 12 == 0) ? 12 : h % 12;\n        String ampm = (h >= 12) ? \"PM\" : \"AM\";\n\n        String greeting;\n        if (h >= 5 && h < 12) greeting = \"Good Morning\";\n        else if (h >= 12 && h < 17) greeting = \"Good Afternoon\";\n        else if (h >= 17 && h < 21) greeting = \"Good Evening\";\n        else greeting = \"Good Night\";\n\n        System.out.printf(\"Converted Time: %02d:%02d %s%n\", h12, m, ampm);\n        System.out.println(\"Greeting: \" + greeting);\n    }\n}",
+      "expectedOutput": "Converted Time: 02:30 PM\nGreeting: Good Afternoon"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Point Inside Bounding Box and Polygon",
+      "question": "Implement point-in-bounding-box validation followed by the ray-casting algorithm to determine if a point $(x, y)$ lies within a 2D polygon defined by vertices.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-11",
+      "id": "if-statements-026",
+      "explanation": "Determining whether a point falls inside an arbitrary 2D polygon uses the ray-casting algorithm (crossing number algorithm). A horizontal ray is cast from the test point $(px, py)$ to positive infinity along the X-axis. For each polygon edge formed by vertices $(x_i, y_i)$ and $(x_j, y_j)$, the algorithm tests whether the ray intersects the edge. An intersection occurs if $py$ falls between $y_i$ and $y_j$, and the computed X-intersection coordinate lies to the right of $px$. If the total number of edge intersections is odd, the point is inside the polygon; if even, it is outside.",
+      "hints": [
+        "First check if the point lies within the polygon's axis-aligned bounding box to fail fast.",
+        "For each edge, check if `(yi > py) != (yj > py)` to see if the edge straddles the ray vertically.",
+        "Compute the X-intersection: `px < (xj - xi) * (py - yi) / (yj - yi) + xi` and toggle an `inside` boolean."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isInside(double[] polyX, double[] polyY, double px, double py) {\n        int n = polyX.length;\n        boolean inside = false;\n        for (int i = 0, j = n - 1; i < n; j = i++) {\n            if ((polyY[i] > py) != (polyY[j] > py) &&\n                (px < (polyX[j] - polyX[i]) * (py - polyY[i]) / (polyY[j] - polyY[i]) + polyX[i])) {\n                inside = !inside;\n            }\n        }\n        return inside;\n    }\n\n    public static void main(String[] args) {\n        double[] px = {0, 10, 10, 0};\n        double[] py = {0, 0, 10, 10};\n        double tx = 5, ty = 5;\n        System.out.println(\"Testing Point (\" + tx + \", \" + ty + \") in square:\");\n        System.out.println(\"Result: \" + (isInside(px, py, tx, ty) ? \"Inside\" : \"Outside\"));\n    }\n}",
+      "expectedOutput": "Testing Point (5.0, 5.0) in square:\nResult: Inside"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Loan Underwriting Decision Engine",
+      "question": "Implement a loan approval rules engine that evaluates credit score, debt-to-income (DTI) ratio, employment duration, and collateral using guard clauses with early returns.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-12",
+      "id": "if-statements-027",
+      "explanation": "Financial underwriting systems evaluate credit risk using multi-factor decision rules. Implementing these rules with nested `if-else` blocks creates complex, error-prone branching. Using guard clauses with early returns simplifies the structure: rules are evaluated sequentially as preconditions, returning immediate rejection reasons as soon as a criterion fails. An applicant must have a credit score $\\ge 650$, a debt-to-income ratio $\\le 43\\%$, and at least 2 years of employment (or provide collateral exceeding 120% of the loan amount). This structure makes the approval pipeline clear, testable, and easy to maintain.",
+      "hints": [
+        "Evaluate criteria sequentially using early returns: `if (creditScore < 650) return \"Denied: Low Credit Score\";`.",
+        "Check DTI threshold: `if (dtiRatio > 0.43) return \"Denied: High Debt-to-Income\";`.",
+        "Evaluate conditional fallback rules: if employment is under 2 years, require collateral $\\ge 1.2 \\times \\text{loanAmount}$."
+      ],
+      "sampleCode": "public class Solution {\n    public static String evaluateLoan(int creditScore, double dti, int empYears, double loan, double collateral) {\n        if (creditScore < 650) return \"Denied: Credit score below 650\";\n        if (dti > 0.43) return \"Denied: Debt-to-income ratio exceeds 43%\";\n        if (empYears < 2 && collateral < (1.20 * loan)) {\n            return \"Denied: Insufficient employment history and inadequate collateral\";\n        }\n        return \"Approved: Loan criteria satisfied\";\n    }\n\n    public static void main(String[] args) {\n        String decision = evaluateLoan(720, 0.35, 1, 100000, 150000);\n        System.out.println(\"Underwriting Decision: \" + decision);\n    }\n}",
+      "expectedOutput": "Underwriting Decision: Approved: Loan criteria satisfied"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Condition Complexity Refactoring",
+      "question": "Refactor a complex 6-condition nested `if-else` access authorization tree into clean guard clauses with early returns, verifying identical evaluation results.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-13",
+      "id": "if-statements-028",
+      "explanation": "Deeply nested conditional logic (the 'arrow anti-pattern') obscures execution paths and increases cyclomatic complexity. Refactoring nested conditionals into guard clauses inverts conditional checks to handle rejection cases early, keeping the happy path unindented at the end of the method. For user authorization, checks verify in order: account is active, email is verified, account is not locked, authentication token is not expired, IP address is allowlisted, and user possesses the required role. Each failed check exits immediately with a specific error message.",
+      "hints": [
+        "Invert positive checks into early-exit rejections: replace `if (isActive) { ... }` with `if (!isActive) return \"Account Disabled\";`.",
+        "Place each guard clause on its own line to keep failure handling distinct.",
+        "Allow successful execution to reach the end of the method naturally without nesting."
+      ],
+      "sampleCode": "public class Solution {\n    public static String authorize(boolean active, boolean verified, boolean locked, boolean tokenValid, boolean ipAllowed, boolean admin) {\n        if (!active) return \"Deny: Account inactive\";\n        if (!verified) return \"Deny: Email unverified\";\n        if (locked) return \"Deny: Account locked\";\n        if (!tokenValid) return \"Deny: Token expired\";\n        if (!ipAllowed) return \"Deny: IP unauthorized\";\n        if (!admin) return \"Deny: Insufficient role\";\n        return \"Allow: Access granted\";\n    }\n\n    public static void main(String[] args) {\n        String status = authorize(true, true, false, true, true, true);\n        System.out.println(\"Access Check: \" + status);\n    }\n}",
+      "expectedOutput": "Access Check: Allow: Access granted"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Three-Slot Schedule Conflict Resolver",
+      "question": "Given three appointment time slots on the same day ($[s1, e1]$, $[s2, e2]$, $[s3, e3]$), evaluate all possible overlaps to classify the schedule as: 'Triple Overlap', 'Pairwise Overlaps', or 'All Distinct'.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-14",
+      "id": "if-statements-029",
+      "explanation": "Resolving calendar conflicts across three intervals requires checking multiple pairwise intersections. Two intervals $[a, b]$ and $[c, d]$ overlap if $a < d \\land c < b$. For three intervals (1, 2, and 3), there are three possible pairwise overlaps: $O_{12}$ (1 and 2), $O_{23}$ (2 and 3), and $O_{13}$ (1 and 3). A triple overlap occurs when all three intervals share a common time window ($O_{12} \\land O_{23} \\land O_{13}$ and $\\max(s1, s2, s3) < \\min(e1, e2, e3)$). If a triple overlap does not exist, the presence of any individual pairwise overlap flags the schedule as 'Pairwise Overlaps'. If none overlap, the schedule is 'All Distinct'.",
+      "hints": [
+        "Define an overlap helper condition: `startA < endB && startB < endA`.",
+        "Check pairwise overlaps: `o12`, `o23`, and `o13`.",
+        "Evaluate triple overlap first: `Math.max(s1, Math.max(s2, s3)) < Math.min(e1, Math.min(e2, e3))`."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean overlap(int s1, int e1, int s2, int e2) {\n        return s1 < e2 && s2 < e1;\n    }\n\n    public static void main(String[] args) {\n        int s1 = 9, e1 = 11;\n        int s2 = 10, e2 = 12;\n        int s3 = 10, e3 = 13;\n\n        boolean o12 = overlap(s1, e1, s2, e2);\n        boolean o23 = overlap(s2, e2, s3, e3);\n        boolean o13 = overlap(s1, e1, s3, e3);\n\n        int maxStart = Math.max(s1, Math.max(s2, s3));\n        int minEnd = Math.min(e1, Math.min(e2, e3));\n        boolean triple = maxStart < minEnd;\n\n        if (triple) {\n            System.out.println(\"Schedule Conflict: Triple Overlap\");\n        } else if (o12 || o23 || o13) {\n            System.out.println(\"Schedule Conflict: Pairwise Overlaps\");\n        } else {\n            System.out.println(\"Schedule Conflict: All Distinct\");\n        }\n    }\n}",
+      "expectedOutput": "Schedule Conflict: Triple Overlap"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Finite State Machine Transition Validator",
+      "question": "Implement an order workflow state machine (CREATED -> PAID -> SHIPPED -> DELIVERED, with CANCELLED permitted from CREATED or PAID) that validates whether requested state transitions are legally permitted.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CND-15",
+      "id": "if-statements-030",
+      "explanation": "State machine transition validation ensures that entity status changes follow defined business workflows. In this order lifecycle, valid transitions are: 1) `CREATED` can transition to `PAID` or `CANCELLED`; 2) `PAID` can transition to `SHIPPED` or `CANCELLED`; 3) `SHIPPED` can transition only to `DELIVERED`; 4) `DELIVERED` and `CANCELLED` are terminal states with no permitted transitions. Using an `if-else` decision matrix validates incoming requests against the current state, preventing illegal transitions (such as shipping an unpaid order or cancelling a delivered package).",
+      "hints": [
+        "Group transitions by current state using an `if-else if` ladder.",
+        "Check requested targets: from 'CREATED', allow only 'PAID' or 'CANCELLED'.",
+        "Terminal states ('DELIVERED', 'CANCELLED') reject all outgoing transitions."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isValidTransition(String from, String to) {\n        if (\"CREATED\".equals(from)) {\n            return \"PAID\".equals(to) || \"CANCELLED\".equals(to);\n        } else if (\"PAID\".equals(from)) {\n            return \"SHIPPED\".equals(to) || \"CANCELLED\".equals(to);\n        } else if (\"SHIPPED\".equals(from)) {\n            return \"DELIVERED\".equals(to);\n        } else if (\"DELIVERED\".equals(from) || \"CANCELLED\".equals(from)) {\n            return false; // Terminal states\n        }\n        return false;\n    }\n\n    public static void main(String[] args) {\n        String current = \"PAID\";\n        String nextValid = \"SHIPPED\";\n        String nextInvalid = \"DELIVERED\";\n\n        System.out.println(current + \" -> \" + nextValid + \": \" + isValidTransition(current, nextValid));\n        System.out.println(current + \" -> \" + nextInvalid + \": \" + isValidTransition(current, nextInvalid));\n    }\n}",
+      "expectedOutput": "PAID -> SHIPPED: true\nPAID -> DELIVERED: false"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

@@ -1,0 +1,493 @@
+{
+  "section": "Object-oriented Java",
+  "slug": "encapsulation",
+  "topic": "Encapsulation",
+  "page": 105,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic Student Field Encapsulation",
+      "question": "Implement a `Student` class that encapsulates `name` and `age` fields using the `private` access modifier, exposing them safely through public getter and setter methods[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-01",
+      "id": "encapsulation-001",
+      "explanation": "Encapsulation is a fundamental object-oriented programming principle that binds an object's internal data together with the operations that manipulate it, restricting direct external access to its internal state[cite: 23]. Declaring fields as `private` ensures they cannot be read or modified directly from outside the class boundary[cite: 23]. Instead, callers must interact through public accessor (`getName`, `getAge`) and mutator (`setName`, `setAge`) methods[cite: 23]. This indirection allows the declaring class to maintain complete control over its internal state, facilitating future implementation changes—such as internal data conversions or logging—without altering external code that depends on the class contract[cite: 23].",
+      "hints": [
+        "Declare `name` and `age` with the `private` access modifier inside the `Student` class[cite: 23].",
+        "Implement public getter methods that return the respective field values[cite: 23].",
+        "Implement public setter methods using `this.fieldName = fieldName;` to resolve variable shadowing[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Student {\n        private String name;\n        private int age;\n\n        public String getName() {\n            return name;\n        }\n\n        public void setName(String name) {\n            this.name = name;\n        }\n\n        public int getAge() {\n            return age;\n        }\n\n        public void setAge(int age) {\n            this.age = age;\n        }\n    }\n\n    public static void main(String[] args) {\n        Student student = new Student();\n        student.setName(\"Akshat\");\n        student.setAge(26);\n        System.out.println(\"Student name: \" + student.getName());\n        System.out.println(\"Student age: \" + student.getAge());\n    }\n}",
+      "expectedOutput": "Student name: Akshat\nStudent age: 26"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Setter Input Validation Guard",
+      "question": "Enhance a `Person` class setter method to validate that the provided `age` is strictly greater than zero, printing an error message and rejecting invalid updates[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-02",
+      "id": "encapsulation-002",
+      "explanation": "Beyond providing simple indirection, encapsulation enables defensive data validation by intercepting modification requests before state changes occur[cite: 23]. If member variables were left public, external code could assign nonsensical values—such as a negative age—compromising object integrity[cite: 23]. By placing validation checks inside mutator methods (`if (age > 0)`), the class acts as a gatekeeper that guarantees only valid data updates internal fields[cite: 23]. When invalid data is passed, the setter can log an error, ignore the request, or throw an exception, ensuring the object maintains consistent internal state throughout its lifecycle[cite: 23].",
+      "hints": [
+        "Check whether `newAge > 0` before assigning the field in `setAge()`[cite: 23].",
+        "Print an error message when validation fails to indicate rejected updates[cite: 23].",
+        "Only update the private `age` field if the input value passes validation[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Person {\n        private int age;\n\n        public int getAge() {\n            return age;\n        }\n\n        public void setAge(int age) {\n            if (age > 0) {\n                this.age = age;\n                System.out.println(\"Age updated: \" + this.age);\n            } else {\n                System.out.println(\"Error: Age must be greater than 0\");\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        Person person = new Person();\n        person.setAge(26);\n        person.setAge(-5);\n    }\n}",
+      "expectedOutput": "Age updated: 26\nError: Age must be greater than 0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Read-Only Immutable Configuration Model",
+      "question": "Implement an immutable, read-only configuration class that initializes its private fields via a constructor and exposes only getter methods without setters[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-03",
+      "id": "encapsulation-003",
+      "explanation": "A class can be made read-only by providing accessor methods while omitting mutator methods entirely[cite: 23]. When all instance fields are declared `private` and `final`, their values must be assigned during object construction and cannot be reassigned thereafter[cite: 23]. Exposing only getters allows external callers to read the object's properties while preventing any post-instantiation modifications[cite: 23]. This pattern is essential for configuration objects, security credentials, and value objects in concurrent architectures, as immutable instances can be shared safely across threads without synchronization locks[cite: 23].",
+      "hints": [
+        "Declare the fields as `private final String name;` and `private final int age;`[cite: 23].",
+        "Initialize both fields through a parameterized constructor[cite: 23].",
+        "Provide public getter methods but omit setter methods to enforce read-only semantics[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class ReadOnlyPerson {\n        private final String name;\n        private final int age;\n\n        public ReadOnlyPerson(String name, int age) {\n            this.name = name;\n            this.age = age;\n        }\n\n        public String getName() {\n            return name;\n        }\n\n        public int getAge() {\n            return age;\n        }\n    }\n\n    public static void main(String[] args) {\n        ReadOnlyPerson person = new ReadOnlyPerson(\"Akshat\", 26);\n        System.out.println(\"Name: \" + person.getName());\n        System.out.println(\"Age: \" + person.getAge());\n    }\n}",
+      "expectedOutput": "Name: Akshat\nAge: 26"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Account Balance Mutator Encapsulation",
+      "question": "Create an `Account` class that encapsulates a private `balance` variable and exposes controlled business operations for deposits and withdrawals rather than a direct setter[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-04",
+      "id": "encapsulation-004",
+      "explanation": "Encapsulation encourages designing classes around domain-specific operations rather than raw field mutators[cite: 23]. In a financial account model, exposing a public `setBalance(double amount)` method violates encapsulation by allowing external code to overwrite account balances arbitrarily[cite: 23]. Instead, the `balance` field remains strictly `private`, and modifications occur exclusively through domain methods like `deposit(double amount)` and `withdraw(double amount)`[cite: 23]. These methods enforce business rules—such as disallowing negative deposits or overdrawing funds—ensuring the account's state transitions safely and predictably[cite: 23].",
+      "hints": [
+        "Declare `private double balance;` with an initial non-negative balance[cite: 23].",
+        "Implement `deposit(double amount)` to validate that the deposit amount is positive[cite: 23].",
+        "Implement `withdraw(double amount)` to ensure the withdrawal does not exceed the current balance[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Account {\n        private double balance;\n\n        public Account(double initialBalance) {\n            if (initialBalance >= 0) {\n                this.balance = initialBalance;\n            }\n        }\n\n        public double getBalance() {\n            return balance;\n        }\n\n        public void deposit(double amount) {\n            if (amount > 0) {\n                balance += amount;\n            }\n        }\n\n        public boolean withdraw(double amount) {\n            if (amount > 0 && amount <= balance) {\n                balance -= amount;\n                return true;\n            }\n            return false;\n        }\n    }\n\n    public static void main(String[] args) {\n        Account acc = new Account(100.0);\n        acc.deposit(50.0);\n        acc.withdraw(30.0);\n        System.out.println(\"Current Balance: $\" + acc.getBalance());\n    }\n}",
+      "expectedOutput": "Current Balance: $120.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Encapsulated State String Representation",
+      "question": "Implement an encapsulated `UserProfile` class with private fields, validation-backed accessors, and an overridden `toString()` method that formats object state[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-05",
+      "id": "encapsulation-005",
+      "explanation": "Overriding `toString()` in an encapsulated class provides a clean string representation of internal state without exposing field references directly[cite: 23]. By default, `Object.toString()` returns the class name and identity hashcode[cite: 19]. By overriding `toString()`, the class formats private field values (`username`, `role`, `status`) into a readable format useful for debugging and logging[cite: 23]. Because `toString()` constructs and returns a new `String` object, the internal state remains safely encapsulated while allowing outside observers to inspect its current values[cite: 18, 23].",
+      "hints": [
+        "Keep fields `private` and initialize them via a constructor[cite: 23].",
+        "Override the `public String toString()` method inherited from `java.lang.Object`[cite: 19, 23].",
+        "Assemble and return formatted field values using string concatenation or `String.format()`[cite: 1, 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class UserProfile {\n        private String username;\n        private String role;\n        private boolean active;\n\n        public UserProfile(String username, String role, boolean active) {\n            this.username = username;\n            this.role = role;\n            this.active = active;\n        }\n\n        @Override\n        public String toString() {\n            return \"UserProfile[username='\" + username + \"', role='\" + role + \"', active=\" + active + \"]\";\n        }\n    }\n\n    public static void main(String[] args) {\n        UserProfile profile = new UserProfile(\"akshat_dev\", \"ADMIN\", true);\n        System.out.println(profile.toString());\n    }\n}",
+      "expectedOutput": "UserProfile[username='akshat_dev', role='ADMIN', active=true]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Encapsulated Employee Model",
+      "question": "Create an `Employee` class with private fields (`id`, `name`, `salary`). Enforce validation in setters (salary cannot be negative) and verify state access in `main`[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-01",
+      "id": "encapsulation-006",
+      "explanation": "Business data models must enforce domain integrity rules within their setters to maintain clean object state[cite: 23]. The `Employee` model encapsulates identification, personal details, and monetary compensation[cite: 23]. If salary mutators permitted negative numbers, downstream calculations like payroll generation or tax withholding could produce erroneous results[cite: 23]. By verifying that `salary >= 0.0` within `setSalary()`, the class guarantees that salary data remains non-negative throughout the object's life, demonstrating defensive object-oriented design[cite: 23].",
+      "hints": [
+        "Declare `private int id;`, `private String name;`, and `private double salary;`[cite: 23].",
+        "In `setSalary(double salary)`, ensure the value is rejected if `salary < 0`[cite: 23].",
+        "Expose public getters for each field to allow safe inspection of internal values[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Employee {\n        private int id;\n        private String name;\n        private double salary;\n\n        public Employee(int id, String name, double salary) {\n            this.id = id;\n            this.name = name;\n            setSalary(salary);\n        }\n\n        public int getId() { return id; }\n        public String getName() { return name; }\n        public double getSalary() { return salary; }\n\n        public void setSalary(double salary) {\n            if (salary >= 0) {\n                this.salary = salary;\n            } else {\n                System.out.println(\"Validation error: Salary cannot be negative.\");\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        Employee emp = new Employee(101, \"Akshat\", 75000.0);\n        emp.setSalary(-1000.0);\n        System.out.println(\"Employee: \" + emp.getName() + \" | Salary: $\" + emp.getSalary());\n    }\n}",
+      "expectedOutput": "Validation error: Salary cannot be negative.\nEmployee: Akshat | Salary: $75000.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Read-Only and Write-Only Properties",
+      "question": "Design an encapsulated `CredentialVault` class containing a read-only property (getter only) and a write-only property (setter only, such as a write-once password)[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-02",
+      "id": "encapsulation-007",
+      "explanation": "Encapsulation provides asymmetrical access control, allowing properties to be configured as read-only or write-only based on security requirements[cite: 23]. A read-only property (like `systemId`) provides a public getter with no corresponding setter, preventing external modifications once initialized[cite: 23]. Conversely, a write-only property (like a secret password) provides a setter with no getter[cite: 23]. This prevents passwords or sensitive tokens from being read into memory or printed in logs, allowing credentials to be updated while keeping their raw values inaccessible to external classes[cite: 23].",
+      "hints": [
+        "Declare `private final String systemId;` with only a getter method to make it read-only[cite: 23].",
+        "Declare `private String secretKey;` with only a setter method to make it write-only[cite: 23].",
+        "Provide a verification method `verifySecret(String attempt)` instead of a raw getter[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class CredentialVault {\n        private final String systemId;\n        private String secretPassword;\n\n        public CredentialVault(String systemId) {\n            this.systemId = systemId;\n        }\n\n        // Read-only property\n        public String getSystemId() {\n            return systemId;\n        }\n\n        // Write-only property\n        public void setSecretPassword(String secretPassword) {\n            this.secretPassword = secretPassword;\n        }\n\n        public boolean verifyPassword(String input) {\n            return this.secretPassword != null && this.secretPassword.equals(input);\n        }\n    }\n\n    public static void main(String[] args) {\n        CredentialVault vault = new CredentialVault(\"SYS-CLUSTER-01\");\n        vault.setSecretPassword(\"MasterKey2026\");\n\n        System.out.println(\"System ID: \" + vault.getSystemId());\n        System.out.println(\"Password verification: \" + vault.verifyPassword(\"MasterKey2026\"));\n    }\n}",
+      "expectedOutput": "System ID: SYS-CLUSTER-01\nPassword verification: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Student Grading Encapsulation",
+      "question": "Implement an encapsulated `Student` class that stores raw scores privately and exposes a derived, computed read-only property `getLetterGrade()` without exposing mutable score arrays[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-03",
+      "id": "encapsulation-008",
+      "explanation": "Encapsulation allows classes to expose derived business properties without maintaining separate redundant fields or exposing raw underlying data[cite: 23]. In this student model, raw assignment scores are stored in a private list or array[cite: 23]. Instead of requiring client code to compute averages manually, the class provides a derived read-only method `getLetterGrade()`[cite: 23]. This method computes the mean score internally and maps it to a letter grade ('A', 'B', 'C', 'F')[cite: 13, 23]. Encapsulating this calculation guarantees that grading criteria remain centralized within the model and are applied consistently[cite: 23].",
+      "hints": [
+        "Store numerical scores in a private collection or primitive array[cite: 19, 23].",
+        "Provide an `addScore(double score)` method that validates score bounds ($0$ to $100$)[cite: 23].",
+        "Compute average score and return letter grades ('A', 'B', etc.) within `getLetterGrade()`[cite: 13, 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Student {\n        private final String name;\n        private double totalScore = 0;\n        private int examCount = 0;\n\n        public Student(String name) {\n            this.name = name;\n        }\n\n        public void addExamScore(double score) {\n            if (score >= 0 && score <= 100) {\n                totalScore += score;\n                examCount++;\n            }\n        }\n\n        public char getLetterGrade() {\n            if (examCount == 0) return 'N';\n            double avg = totalScore / examCount;\n            if (avg >= 90) return 'A';\n            if (avg >= 80) return 'B';\n            if (avg >= 70) return 'C';\n            return 'F';\n        }\n\n        public String getName() { return name; }\n    }\n\n    public static void main(String[] args) {\n        Student s = new Student(\"Akshat\");\n        s.addExamScore(88.0);\n        s.addExamScore(92.0);\n        System.out.println(\"Student: \" + s.getName());\n        System.out.println(\"Computed Grade: \" + s.getLetterGrade());\n    }\n}",
+      "expectedOutput": "Student: Akshat\nComputed Grade: A"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Range-Checked Thermostat",
+      "question": "Implement an encapsulated `Thermostat` class that stores temperature in Celsius and prevents setting temperatures outside the safe operating range of 10°C to 35°C[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-04",
+      "id": "encapsulation-009",
+      "explanation": "Hardware controllers and IoT systems rely on encapsulated domain limits to protect equipment from operating outside safe environmental boundaries[cite: 23]. The `Thermostat` class encapsulates a private `temperatureCelsius` field[cite: 23]. Its mutator method `setTemperature(double temp)` validates incoming values against fixed operating limits ($10.0$ to $35.0$ °C)[cite: 23]. Out-of-bounds adjustments are rejected with an informative warning, keeping the thermostat within safe operating parameters and demonstrating defensive encapsulation[cite: 23].",
+      "hints": [
+        "Define boundary constants: `public static final double MIN_TEMP = 10.0;` and `MAX_TEMP = 35.0;`[cite: 4].",
+        "In `setTemperature(double temp)`, check `if (temp >= MIN_TEMP && temp <= MAX_TEMP)`[cite: 23].",
+        "Reject invalid temperatures with a message and preserve the previous valid temperature[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Thermostat {\n        public static final double MIN_TEMP = 10.0;\n        public static final double MAX_TEMP = 35.0;\n        private double currentTemperature;\n\n        public Thermostat(double initialTemp) {\n            if (initialTemp >= MIN_TEMP && initialTemp <= MAX_TEMP) {\n                this.currentTemperature = initialTemp;\n            } else {\n                this.currentTemperature = 20.0; // default safe fallback\n            }\n        }\n\n        public double getTemperature() { return currentTemperature; }\n\n        public void setTemperature(double temp) {\n            if (temp >= MIN_TEMP && temp <= MAX_TEMP) {\n                this.currentTemperature = temp;\n                System.out.println(\"Temperature set to: \" + temp + \"°C\");\n            } else {\n                System.out.println(\"Error: Temperature out of bounds [10.0 - 35.0°C]\");\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        Thermostat t = new Thermostat(22.0);\n        t.setTemperature(38.5);\n        t.setTemperature(24.0);\n    }\n}",
+      "expectedOutput": "Error: Temperature out of bounds [10.0 - 35.0°C]\nTemperature set to: 24.0°C"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Encapsulated Shopping Cart Item",
+      "question": "Build an `Item` class where unit price and discount percentages are private, ensuring total discounted price calculations are computed strictly internally[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-05",
+      "id": "encapsulation-010",
+      "explanation": "Encapsulating pricing rules ensures financial calculations remain consistent across an application[cite: 23]. By keeping `unitPrice`, `quantity`, and `discountRate` private, external components cannot apply discounts incorrectly or bypass rounding policies[cite: 23]. Instead, the class exposes a public `getTotalPrice()` method that computes the final price internally: `unitPrice * quantity * (1.0 - discountRate)`[cite: 23]. This prevents financial calculation bugs by centralizing pricing formulas inside the domain model[cite: 23].",
+      "hints": [
+        "Declare `private double unitPrice;`, `private int quantity;`, and `private double discountRate;`[cite: 23].",
+        "Ensure constructor arguments validate that price, quantity, and discount rate fall within valid ranges[cite: 23].",
+        "Implement `public double getTotalPrice()` returning the discounted price[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Item {\n        private String name;\n        private double unitPrice;\n        private int quantity;\n        private double discountRate; // e.g. 0.10 for 10%\n\n        public Item(String name, double unitPrice, int quantity, double discountRate) {\n            this.name = name;\n            this.unitPrice = Math.max(0, unitPrice);\n            this.quantity = Math.max(1, quantity);\n            this.discountRate = (discountRate >= 0 && discountRate <= 1.0) ? discountRate : 0.0;\n        }\n\n        public double getTotalPrice() {\n            return (unitPrice * quantity) * (1.0 - discountRate);\n        }\n    }\n\n    public static void main(String[] args) {\n        Item item = new Item(\"Mechanical Keyboard\", 120.0, 2, 0.15); // 15% off\n        System.out.printf(\"Calculated Total Price: $%.2f%n\", item.getTotalPrice());\n    }\n}",
+      "expectedOutput": "Calculated Total Price: $204.00"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Exception-Driven Invariant Protection",
+      "question": "Implement a `BankAccount` class with validated deposit and withdrawal methods that throw an `IllegalArgumentException` for invalid amounts and an `IllegalStateException` for insufficient funds[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-06",
+      "id": "encapsulation-011",
+      "explanation": "Professional encapsulation enforces domain constraints by throwing standard runtime exceptions when invalid operations are attempted[cite: 23]. Rather than silently failing or returning error codes, mutator methods validate preconditions immediately[cite: 9, 23]. Invoking `deposit()` or `withdraw()` with a non-positive value violates method preconditions, throwing an `IllegalArgumentException`[cite: 9, 23]. Attempting to withdraw more than the available balance violates business state invariants, throwing an `IllegalStateException`[cite: 23]. This prevents invalid operations from corrupting account state, and integrates cleanly with application exception-handling pipelines[cite: 23].",
+      "hints": [
+        "Throw `IllegalArgumentException` when `amount <= 0` in deposit or withdraw methods[cite: 9, 23].",
+        "Throw `IllegalStateException` when `amount > balance` during withdrawal attempts[cite: 23].",
+        "Demonstrate error handling in `main` using structured `try-catch` blocks[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BankAccount {\n        private double balance;\n\n        public BankAccount(double initialBalance) {\n            if (initialBalance < 0) throw new IllegalArgumentException(\"Initial balance cannot be negative\");\n            this.balance = initialBalance;\n        }\n\n        public double getBalance() { return balance; }\n\n        public void deposit(double amount) {\n            if (amount <= 0) throw new IllegalArgumentException(\"Deposit amount must be positive\");\n            balance += amount;\n        }\n\n        public void withdraw(double amount) {\n            if (amount <= 0) throw new IllegalArgumentException(\"Withdrawal amount must be positive\");\n            if (amount > balance) throw new IllegalStateException(\"Insufficient funds for withdrawal\");\n            balance -= amount;\n        }\n    }\n\n    public static void main(String[] args) {\n        BankAccount acc = new BankAccount(500.0);\n        try {\n            acc.withdraw(600.0);\n        } catch (IllegalStateException e) {\n            System.out.println(\"Caught expected exception: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Caught expected exception: Insufficient funds for withdrawal"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Immutable Value Object with Functional Mutation",
+      "question": "Write an immutable `Point` class with private final coordinates and a `withX(int newX)` method that returns a new `Point` without mutating the original instance[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-07",
+      "id": "encapsulation-012",
+      "explanation": "Functional mutation allows immutable objects to support state changes by returning modified copies rather than altering existing instances[cite: 23]. The `Point` class encapsulates `private final int x;` and `private final int y;` fields[cite: 6, 23]. To update a coordinate, the class provides a copy-on-write method `withX(int newX)` that returns `new Point(newX, this.y)`[cite: 23]. The calling instance remains completely unmodified in memory[cite: 18, 23]. This pattern is widely used in modern libraries (such as the `java.time` package, e.g., `LocalDate.withYear()`), providing safe state transitions in concurrent applications without synchronization locks[cite: 6, 23].",
+      "hints": [
+        "Declare the class `final` and mark all coordinate fields `private final int`[cite: 5, 23].",
+        "Implement `withX(int newX)` returning `new Point(newX, this.y);`[cite: 23].",
+        "Verify in `main` that the original Point's coordinates remain unchanged after calling `withX()`[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static final class Point {\n        private final int x;\n        private final int y;\n\n        public Point(int x, int y) {\n            this.x = x;\n            this.y = y;\n        }\n\n        public int getX() { return x; }\n        public int getY() { return y; }\n\n        public Point withX(int newX) {\n            return new Point(newX, this.y);\n        }\n\n        @Override\n        public String toString() { return \"(\" + x + \", \" + y + \")\"; }\n    }\n\n    public static void main(String[] args) {\n        Point original = new Point(10, 20);\n        Point modified = original.withX(99);\n\n        System.out.println(\"Original Point: \" + original);\n        System.out.println(\"Modified Point: \" + modified);\n    }\n}",
+      "expectedOutput": "Original Point: (10, 20)\nModified Point: (99, 20)"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Encapsulated Collection with Defensive Accessors",
+      "question": "Implement an encapsulated `Roster` class that stores a `List<String>` privately, never exposes the internal collection reference directly, and provides controlled add and remove methods[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-08",
+      "id": "encapsulation-013",
+      "explanation": "Returning direct references to private collections breaks encapsulation because external callers can modify the internal collection without the class's knowledge or validation[cite: 10, 23]. To prevent this, accessor methods should return either a defensive copy (`new ArrayList<>(internalList)`) or an unmodifiable view (`Collections.unmodifiableList(internalList)`)[cite: 10, 23]. Additionally, membership modifications should occur exclusively through dedicated domain methods (`addMember`, `removeMember`) that enforce validation rules[cite: 23]. This keeps collection modifications under the class's control and protects internal state[cite: 23].",
+      "hints": [
+        "Store elements in a private `List<String> members = new ArrayList<>();`[cite: 23].",
+        "In `getMembers()`, return `new ArrayList<>(members)` or `Collections.unmodifiableList(members)`[cite: 10, 23].",
+        "Provide public `addMember(String name)` and `removeMember(String name)` methods[cite: 23]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    static class Roster {\n        private final List<String> members = new ArrayList<>();\n\n        public void addMember(String member) {\n            if (member != null && !member.trim().isEmpty() && !members.contains(member)) {\n                members.add(member.trim());\n            }\n        }\n\n        // Defensive copy prevents outside corruption\n        public List<String> getMembers() {\n            return new ArrayList<>(members);\n        }\n    }\n\n    public static void main(String[] args) {\n        Roster roster = new Roster();\n        roster.addMember(\"Alice\");\n        roster.addMember(\"Bob\");\n\n        List<String> leaked = roster.getMembers();\n        leaked.clear(); // Attempt external modification\n\n        System.out.println(\"Roster elements preserved: \" + roster.getMembers().size());\n    }\n}",
+      "expectedOutput": "Roster elements preserved: 2"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Computed Read-Only Annual Compensation",
+      "question": "Write an `Employee` class that encapsulates a monthly salary with negative-value validation, and exposes a computed read-only `getAnnualSalary()` property[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-09",
+      "id": "encapsulation-014",
+      "explanation": "Storing both monthly and annual salary fields in an object introduces data redundancy, risking synchronization bugs if one field is updated without the other[cite: 23]. Encapsulation addresses this by storing only the primary state variable (`monthlySalary`) privately and computing derived values dynamically through read-only accessors[cite: 23]. Calling `getAnnualSalary()` computes `monthlySalary * 12` on demand[cite: 23]. Validating that `monthlySalary >= 0` inside the mutator guarantees that both the monthly salary and derived annual salary remain non-negative throughout the object's lifecycle[cite: 23].",
+      "hints": [
+        "Store only `private double monthlySalary;` to avoid redundant state fields[cite: 23].",
+        "Validate `monthlySalary >= 0` inside the setter[cite: 23].",
+        "Implement `public double getAnnualSalary()` returning `monthlySalary * 12.0`[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Employee {\n        private double monthlySalary;\n\n        public Employee(double monthlySalary) {\n            setMonthlySalary(monthlySalary);\n        }\n\n        public double getMonthlySalary() { return monthlySalary; }\n\n        public void setMonthlySalary(double monthlySalary) {\n            if (monthlySalary >= 0) {\n                this.monthlySalary = monthlySalary;\n            }\n        }\n\n        public double getAnnualSalary() {\n            return this.monthlySalary * 12.0;\n        }\n    }\n\n    public static void main(String[] args) {\n        Employee emp = new Employee(5000.0);\n        System.out.println(\"Monthly Salary: $\" + emp.getMonthlySalary());\n        System.out.println(\"Annual Compensation: $\" + emp.getAnnualSalary());\n    }\n}",
+      "expectedOutput": "Monthly Salary: $5000.0\nAnnual Compensation: $60000.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multi-Unit Temperature Converter Model",
+      "question": "Implement an encapsulated `Temperature` class that stores temperature in Celsius internally and exposes computed getters for Fahrenheit and Kelvin[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-10",
+      "id": "encapsulation-015",
+      "explanation": "Encapsulating internal data formats decouples callers from an object's underlying storage representation[cite: 23]. The `Temperature` class stores values in a single canonical unit: `celsius`[cite: 23]. It validates that temperatures cannot fall below absolute zero ($-273.15$ °C)[cite: 23]. Callers can retrieve the temperature in alternative units through computed accessors: `getFahrenheit()` computes $(C \\times 9/5) + 32$, and `getKelvin()` computes $C + 273.15$[cite: 7, 23]. If the internal storage unit is later changed to Kelvin, the public interface remains consistent, protecting callers from underlying implementation changes[cite: 23].",
+      "hints": [
+        "Enforce absolute zero validation: reject values below `-273.15` in `setCelsius()`[cite: 23].",
+        "Implement `getFahrenheit()` returning `(celsius * 9.0 / 5.0) + 32.0`[cite: 5].",
+        "Implement `getKelvin()` returning `celsius + 273.15`[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Temperature {\n        private double celsius;\n\n        public Temperature(double celsius) {\n            setCelsius(celsius);\n        }\n\n        public double getCelsius() { return celsius; }\n\n        public void setCelsius(double celsius) {\n            if (celsius >= -273.15) {\n                this.celsius = celsius;\n            }\n        }\n\n        public double getFahrenheit() {\n            return (celsius * 9.0 / 5.0) + 32.0;\n        }\n\n        public double getKelvin() {\n            return celsius + 273.15;\n        }\n    }\n\n    public static void main(String[] args) {\n        Temperature t = new Temperature(100.0);\n        System.out.printf(\"Celsius:    %.2f°C%n\", t.getCelsius());\n        System.out.printf(\"Fahrenheit: %.2f°F%n\", t.getFahrenheit());\n        System.out.printf(\"Kelvin:     %.2fK%n\", t.getKelvin());\n    }\n}",
+      "expectedOutput": "Celsius:    100.00°C\nFahrenheit: 212.00°F\nKelvin:     373.15K"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Defensive Copying of Mutable Objects",
+      "question": "Implement a `Period` class with `Date start` and `Date end` fields using defensive copying in both the constructor and getters to prevent external modification[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-06",
+      "id": "encapsulation-016",
+      "explanation": "Because `java.util.Date` is a mutable object, declaring fields as `private final Date start;` does not make an object immutable on its own[cite: 5, 10, 23]. If a constructor stores the incoming reference directly, the caller can mutate the date externally using `date.setTime(0)`[cite: 5, 10]. Similarly, if a getter returns the internal reference directly, external callers can modify the object's internal date[cite: 10, 23]. To maintain immutability, the constructor must make defensive copies of incoming date arguments before validation, and getters must return new date copies (`new Date(field.getTime())`)[cite: 10, 23]. This prevents external modifications from altering internal state[cite: 10, 23].",
+      "hints": [
+        "In the constructor, defensively copy: `this.start = new Date(start.getTime());`[cite: 10, 23].",
+        "Validate invariant `start.compareTo(end) <= 0` after making the copies[cite: 23].",
+        "In getters, return new defensive copies: `return new Date(this.start.getTime());`[cite: 10, 23]."
+      ],
+      "sampleCode": "import java.util.Date;\n\npublic class Solution {\n    static final class Period {\n        private final Date start;\n        private final Date end;\n\n        public Period(Date start, Date end) {\n            this.start = new Date(start.getTime());\n            this.end = new Date(end.getTime());\n            if (this.start.compareTo(this.end) > 0) {\n                throw new IllegalArgumentException(\"Start date must precede end date\");\n            }\n        }\n\n        public Date getStart() {\n            return new Date(start.getTime());\n        }\n\n        public Date getEnd() {\n            return new Date(end.getTime());\n        }\n    }\n\n    public static void main(String[] args) {\n        Date start = new Date(1700000000000L);\n        Date end = new Date(1700050000000L);\n        Period period = new Period(start, end);\n\n        // External mutation attempt via input reference\n        start.setTime(0L);\n        // External mutation attempt via getter reference\n        period.getEnd().setTime(0L);\n\n        System.out.println(\"Period start protected: \" + (period.getStart().getTime() == 1700000000000L));\n        System.out.println(\"Period end protected:   \" + (period.getEnd().getTime() == 1700050000000L));\n    }\n}",
+      "expectedOutput": "Period start protected: true\nPeriod end protected:   true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Unmodifiable Collection Exposure",
+      "question": "Create an encapsulated `Course` class holding student enrollments, exposing the student list as an unmodifiable view via `Collections.unmodifiableList()`[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-07",
+      "id": "encapsulation-017",
+      "explanation": "While defensive copying allocates a new collection on every getter call, exposing an unmodifiable view via `Collections.unmodifiableList(internalList)` provides read-only access with zero allocation overhead[cite: 10, 23]. The wrapper delegates read operations (`get`, `size`, `iterator`) directly to the underlying collection while intercepting mutator methods (`add`, `remove`, `clear`), throwing an `UnsupportedOperationException` on modification attempts[cite: 10, 23]. Enrollment changes are restricted to explicit domain methods like `enrollStudent()`, protecting collection invariants while providing efficient read-only access[cite: 23].",
+      "hints": [
+        "Store students in `private final List<String> students = new ArrayList<>();`[cite: 23].",
+        "Return `Collections.unmodifiableList(students)` from `getStudents()`[cite: 10, 23].",
+        "Demonstrate that calling `.add()` on the returned view throws an `UnsupportedOperationException`[cite: 10, 23]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.List;\n\npublic class Solution {\n    static class Course {\n        private final String courseName;\n        private final List<String> enrolledStudents = new ArrayList<>();\n\n        public Course(String courseName) {\n            this.courseName = courseName;\n        }\n\n        public void enrollStudent(String studentName) {\n            if (studentName != null && !studentName.isBlank()) {\n                enrolledStudents.add(studentName.trim());\n            }\n        }\n\n        public List<String> getStudents() {\n            return Collections.unmodifiableList(enrolledStudents);\n        }\n    }\n\n    public static void main(String[] args) {\n        Course course = new Course(\"Computer Science\");\n        course.enrollStudent(\"Akshat\");\n\n        List<String> view = course.getStudents();\n        try {\n            view.add(\"MaliciousActor\");\n        } catch (UnsupportedOperationException e) {\n            System.out.println(\"External mutation blocked by unmodifiable collection wrapper!\");\n        }\n        System.out.println(\"Total enrolled students: \" + course.getStudents().size());\n    }\n}",
+      "expectedOutput": "External mutation blocked by unmodifiable collection wrapper!\nTotal enrolled students: 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Stateful Bank Account with Overdraft Invariants",
+      "question": "Design an encapsulated `BankAccount` class where overdraft limits and balance invariants are validated inside the class without exposing internal calculation flags[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-08",
+      "id": "encapsulation-018",
+      "explanation": "Advanced encapsulation manages complex business rules that combine multiple state variables[cite: 23]. In an account with an approved overdraft facility, the total available funds equal `balance + overdraftLimit`[cite: 23]. Exposing these fields directly would allow client code to miscalculate balances or bypass limits[cite: 23]. By encapsulating both fields, operations like `withdraw()` enforce the overdraft boundary (`amount <= balance + overdraftLimit`) and track overdraft fees internally[cite: 23]. Callers interact through high-level methods without managing the underlying accounting logic[cite: 23].",
+      "hints": [
+        "Declare `private double balance;` and `private double overdraftLimit;`[cite: 23].",
+        "In `withdraw(amount)`, verify that `amount <= (balance + overdraftLimit)`[cite: 23].",
+        "Apply account maintenance fees internally when the balance drops below zero[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BankAccount {\n        private double balance;\n        private final double overdraftLimit;\n\n        public BankAccount(double initialBalance, double overdraftLimit) {\n            this.balance = initialBalance;\n            this.overdraftLimit = Math.max(0, overdraftLimit);\n        }\n\n        public boolean withdraw(double amount) {\n            if (amount <= 0 || amount > (balance + overdraftLimit)) {\n                return false; // Transaction rejected: exceeds combined limit\n            }\n            balance -= amount;\n            return true;\n        }\n\n        public double getBalance() { return balance; }\n    }\n\n    public static void main(String[] args) {\n        BankAccount acc = new BankAccount(100.0, 200.0); // Can spend up to $300\n        boolean tx1 = acc.withdraw(250.0); // Valid: uses $150 overdraft\n        boolean tx2 = acc.withdraw(100.0); // Rejected: exceeds remaining limit\n\n        System.out.println(\"Transaction 1 ($250) approved: \" + tx1);\n        System.out.println(\"Transaction 2 ($100) approved: \" + tx2);\n        System.out.println(\"Current Balance: $\" + acc.getBalance());\n    }\n}",
+      "expectedOutput": "Transaction 1 ($250) approved: true\nTransaction 2 ($100) approved: false\nCurrent Balance: $-150.0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Encapsulated Password Management",
+      "question": "Implement an encapsulated `UserCredentials` class that stores salted password hashes privately and exposes only `validatePassword(attempt)` without exposing raw credentials[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-09",
+      "id": "encapsulation-019",
+      "explanation": "Security credentials should be encapsulated using one-way cryptographic hashing to prevent storing or exposing plaintext passwords[cite: 23]. The `UserCredentials` class encapsulates a salt and a derived password hash[cite: 23]. Plaintext passwords are never stored in fields or exposed through getters[cite: 23]. When `validatePassword(attempt)` is invoked, the method applies the stored salt to the candidate password, hashes the result, and compares the resulting hash in constant time[cite: 23]. This encapsulation pattern ensures sensitive credentials remain protected even if an object reference is inspected by external code[cite: 23].",
+      "hints": [
+        "Store only `private final String salt;` and `private final String passwordHash;`[cite: 23].",
+        "Compute hashes inside private helper methods using cryptographic hashing or simple salting[cite: 10, 23].",
+        "Implement `validatePassword(String candidate)` to compare computed hashes[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class UserCredentials {\n        private final String username;\n        private final String salt;\n        private final String passwordHash;\n\n        public UserCredentials(String username, String rawPassword) {\n            this.username = username;\n            this.salt = \"SALT_KEY_\" + username.hashCode();\n            this.passwordHash = hash(rawPassword, this.salt);\n        }\n\n        private String hash(String raw, String salt) {\n            return Integer.toHexString((raw + salt).hashCode());\n        }\n\n        public boolean validatePassword(String attempt) {\n            return this.passwordHash.equals(hash(attempt, this.salt));\n        }\n\n        public String getUsername() { return username; }\n    }\n\n    public static void main(String[] args) {\n        UserCredentials user = new UserCredentials(\"akshat\", \"Secret2026\");\n        System.out.println(\"User: \" + user.getUsername());\n        System.out.println(\"Check incorrect: \" + user.validatePassword(\"wrong_pass\"));\n        System.out.println(\"Check correct:   \" + user.validatePassword(\"Secret2026\"));\n    }\n}",
+      "expectedOutput": "User: akshat\nCheck incorrect: false\nCheck correct:   true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Bounded Circular Buffer Encapsulation",
+      "question": "Encapsulate a fixed-capacity circular queue inside a `CircularBuffer` class, exposing only `enqueue()` and `dequeue()` while hiding internal pointer arithmetic[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-10",
+      "id": "encapsulation-020",
+      "explanation": "Data structures use encapsulation to hide pointer mechanics and storage layouts behind clean APIs[cite: 23]. A bounded circular queue wraps an internal array alongside `head`, `tail`, and `size` pointer indices[cite: 23]. If these pointers were public, external code could corrupt the circular wrap-around arithmetic (`index = (index + 1) % capacity`)[cite: 7, 23]. By marking the array and pointers `private`, the class exposes only `enqueue(item)` and `dequeue()`, providing a reliable, bounds-checked FIFO queue while hiding internal pointer mechanics[cite: 23].",
+      "hints": [
+        "Declare `private final int[] buffer;` alongside `private int head = 0, tail = 0, size = 0;`[cite: 23].",
+        "In `enqueue(int val)`, check whether the buffer is full before advancing the tail with modulo arithmetic[cite: 7, 23].",
+        "In `dequeue()`, check whether the buffer is empty before retrieving the element and advancing the head[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class CircularBuffer {\n        private final int[] buffer;\n        private int head = 0;\n        private int tail = 0;\n        private int size = 0;\n\n        public CircularBuffer(int capacity) {\n            this.buffer = new int[capacity];\n        }\n\n        public boolean enqueue(int val) {\n            if (size == buffer.length) return false;\n            buffer[tail] = val;\n            tail = (tail + 1) % buffer.length;\n            size++;\n            return true;\n        }\n\n        public Integer dequeue() {\n            if (size == 0) return null;\n            int val = buffer[head];\n            head = (head + 1) % buffer.length;\n            size--;\n            return val;\n        }\n\n        public int size() { return size; }\n    }\n\n    public static void main(String[] args) {\n        CircularBuffer queue = new CircularBuffer(3);\n        queue.enqueue(10);\n        queue.enqueue(20);\n        queue.enqueue(30);\n\n        System.out.println(\"Dequeued: \" + queue.dequeue());\n        queue.enqueue(40); // Circular wrap\n        System.out.println(\"Dequeued: \" + queue.dequeue());\n        System.out.println(\"Queue size: \" + queue.size());\n    }\n}",
+      "expectedOutput": "Dequeued: 10\nDequeued: 20\nQueue size: 2"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Deep Copy Encapsulation with Nested Mutability",
+      "question": "Implement an immutable `Person` class that encapsulates a mutable `Address` member, using deep copying in constructors and getters to prevent external modification[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-11",
+      "id": "encapsulation-021",
+      "explanation": "When an immutable class contains references to mutable custom objects, shallow copying is insufficient to protect its state[cite: 5, 23]. If `Person` holds an `Address` instance and returns that reference directly, callers can mutate `address.setCity(...)`, corrupting the person's internal state[cite: 5, 23]. Deep copy encapsulation isolates the object graph: 1) The constructor allocates a new `Address` copy from the input argument, and 2) The getter allocates a new `Address` copy when returning the value[cite: 5, 23]. This ensures the internal `Address` instance cannot be accessed or modified by external references[cite: 23].",
+      "hints": [
+        "In the `Person` constructor, clone or copy: `this.address = new Address(address.getCity());`[cite: 5, 23].",
+        "In `getAddress()`, return a new copy: `return new Address(this.address.getCity());`[cite: 5, 23].",
+        "Verify that mutating an external Address object does not alter the Person instance[cite: 5, 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Address {\n        private String city;\n        public Address(String city) { this.city = city; }\n        public String getCity() { return city; }\n        public void setCity(String city) { this.city = city; }\n    }\n\n    static final class Person {\n        private final String name;\n        private final Address address;\n\n        public Person(String name, Address address) {\n            this.name = name;\n            this.address = new Address(address.getCity()); // Deep copy on input\n        }\n\n        public String getName() { return name; }\n        public Address getAddress() {\n            return new Address(address.getCity()); // Deep copy on output\n        }\n    }\n\n    public static void main(String[] args) {\n        Address mutableAddr = new Address(\"Mumbai\");\n        Person p = new Person(\"Akshat\", mutableAddr);\n\n        mutableAddr.setCity(\"Delhi\");\n        p.getAddress().setCity(\"Bangalore\");\n\n        System.out.println(\"Person Name: \" + p.getName());\n        System.out.println(\"Address preserved: \" + p.getAddress().getCity());\n    }\n}",
+      "expectedOutput": "Person Name: Akshat\nAddress preserved: Mumbai"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Write-Only Credential with Hash Verification",
+      "question": "Implement an encapsulated `User` class with a write-only password that stores only a salted hash and exposes a boolean `verify(String candidate)` method[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-12",
+      "id": "encapsulation-022",
+      "explanation": "Security-focused encapsulation ensures sensitive credentials cannot be read back after initialization[cite: 23]. By storing only a salted hash of the password and omitting a `getPassword()` getter, the class makes the password write-only[cite: 23]. Credential checks are performed using `verify(String candidate)`: the method hashes the candidate string using the same salt and algorithm, comparing the result against the stored hash[cite: 23]. This encapsulation pattern ensures plaintext credentials are never stored or exposed in application memory[cite: 23].",
+      "hints": [
+        "Store the password as a private salted hash string[cite: 23].",
+        "Do not implement a `getPassword()` getter method[cite: 23].",
+        "Implement `public boolean verify(String attempt)` to compare hashes[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class User {\n        private final String username;\n        private String passwordHash;\n\n        public User(String username, String rawPassword) {\n            this.username = username;\n            setPassword(rawPassword);\n        }\n\n        public void setPassword(String newPassword) {\n            this.passwordHash = Integer.toHexString((newPassword + \"_SALT\").hashCode());\n        }\n\n        public boolean verify(String candidate) {\n            String candidateHash = Integer.toHexString((candidate + \"_SALT\").hashCode());\n            return this.passwordHash.equals(candidateHash);\n        }\n\n        public String getUsername() { return username; }\n    }\n\n    public static void main(String[] args) {\n        User user = new User(\"akshat\", \"Secret123\");\n        System.out.println(\"User registered: \" + user.getUsername());\n        System.out.println(\"Verify incorrect: \" + user.verify(\"WrongPass\"));\n        System.out.println(\"Verify correct:   \" + user.verify(\"Secret123\"));\n    }\n}",
+      "expectedOutput": "User registered: akshat\nVerify incorrect: false\nVerify correct:   true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Continuous Range Invariant Enforcement",
+      "question": "Implement an encapsulated `Range` class where the invariant `start <= end` is enforced across constructors and setters, throwing exceptions on invalid updates[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-13",
+      "id": "encapsulation-023",
+      "explanation": "Multi-variable invariants require setters to validate updates against related fields[cite: 23]. In a numeric `Range` object, the condition `start <= end` must hold at all times[cite: 23]. Setting `start` must verify that the new value does not exceed the existing `end`, and setting `end` must verify that it is not less than the existing `start`[cite: 23]. If an update would violate the invariant, the setter rejects it by throwing an `IllegalArgumentException`[cite: 23]. Enforcing invariants across all mutators guarantees that the range remains valid throughout the object's life[cite: 23].",
+      "hints": [
+        "In `setStart(int start)`, throw `IllegalArgumentException` if `start > this.end`[cite: 23].",
+        "In `setEnd(int end)`, throw `IllegalArgumentException` if `end < this.start`[cite: 23].",
+        "Validate the same invariant in the constructor[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Range {\n        private int start;\n        private int end;\n\n        public Range(int start, int end) {\n            if (start > end) throw new IllegalArgumentException(\"start must be <= end\");\n            this.start = start;\n            this.end = end;\n        }\n\n        public int getStart() { return start; }\n        public int getEnd() { return end; }\n\n        public void setStart(int start) {\n            if (start > this.end) throw new IllegalArgumentException(\"start cannot exceed end (\" + this.end + \")\");\n            this.start = start;\n        }\n\n        public void setEnd(int end) {\n            if (end < this.start) throw new IllegalArgumentException(\"end cannot be less than start (\" + this.start + \")\");\n            this.end = end;\n        }\n    }\n\n    public static void main(String[] args) {\n        Range r = new Range(5, 15);\n        r.setStart(8);\n        try {\n            r.setStart(20); // Illegal: 20 > 15\n        } catch (IllegalArgumentException e) {\n            System.out.println(\"Caught error: \" + e.getMessage());\n        }\n        System.out.println(\"Valid Range: [\" + r.getStart() + \" to \" + r.getEnd() + \"]\");\n    }\n}",
+      "expectedOutput": "Caught error: start cannot exceed end (15)\nValid Range: [8 to 15]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Observable Encapsulated State with Listeners",
+      "question": "Implement an encapsulated `ObservableCounter` that notifies registered functional listeners (`Consumer<Integer>`) whenever its internal value changes[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-14",
+      "id": "encapsulation-024",
+      "explanation": "The Observer pattern uses encapsulation to trigger state notifications while keeping internal fields private[cite: 23]. The `ObservableCounter` class encapsulates an integer `value` and a private list of listener callbacks (`Consumer<Integer>`)[cite: 23]. External code registers listeners via `addListener()`[cite: 23]. When `increment()` or `setValue()` updates the internal count, the class iterates through its registered listeners and invokes each callback with the updated value[cite: 23]. This decouples state management from UI updates or event logging, enabling reactive architectures[cite: 23].",
+      "hints": [
+        "Store observers in `private final List<Consumer<Integer>> listeners = new ArrayList<>();`[cite: 23].",
+        "Notify listeners inside mutators: `listeners.forEach(l -> l.accept(this.value));`[cite: 23].",
+        "Keep the `value` field strictly private to ensure all modifications notify listeners[cite: 23]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.function.Consumer;\n\npublic class Solution {\n    static class ObservableCounter {\n        private int value = 0;\n        private final List<Consumer<Integer>> listeners = new ArrayList<>();\n\n        public void addListener(Consumer<Integer> listener) {\n            if (listener != null) listeners.add(listener);\n        }\n\n        public void increment() {\n            this.value++;\n            notifyListeners();\n        }\n\n        private void notifyListeners() {\n            for (Consumer<Integer> listener : listeners) {\n                listener.accept(this.value);\n            }\n        }\n\n        public int getValue() { return value; }\n    }\n\n    public static void main(String[] args) {\n        ObservableCounter counter = new ObservableCounter();\n        counter.addListener(val -> System.out.println(\"Listener notified: Count changed to \" + val));\n        counter.increment();\n        counter.increment();\n    }\n}",
+      "expectedOutput": "Listener notified: Count changed to 1\nListener notified: Count changed to 2"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Library Domain Rules and Multi-Entity Invariants",
+      "question": "Implement a library system with encapsulated `Book` and `Member` classes enforcing lending rules: members can borrow at most 3 books and cannot borrow duplicate copies[cite: 23].",
+      "source": "java_coding_practice.json",
+      "source_id": "encapsulation-15",
+      "id": "encapsulation-025",
+      "explanation": "Multi-entity systems use encapsulation to maintain domain rules across related classes[cite: 23]. In this library model, `Book` encapsulates availability state (`isBorrowed`), while `Member` encapsulates borrowed book references[cite: 23]. When a member borrows a book via `member.borrowBook(book)`, the method enforces several business rules: 1) the member has borrowed fewer than 3 books, 2) the member does not already hold a copy of the book, and 3) the book is currently available[cite: 23]. If all checks pass, the book is marked as borrowed and added to the member's list[cite: 23]. This keeps borrowing rules consistent across entities[cite: 23].",
+      "hints": [
+        "Manage book availability state using private fields inside `Book`[cite: 23].",
+        "Enforce borrowing rules in `Member.borrowBook(Book b)`: max 3 books and no duplicate borrows[cite: 23].",
+        "Update the book's availability state only after all member checks pass[cite: 23]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    static class Book {\n        private final String title;\n        private boolean borrowed = false;\n\n        public Book(String title) { this.title = title; }\n        public String getTitle() { return title; }\n        public boolean isBorrowed() { return borrowed; }\n        public void setBorrowed(boolean b) { this.borrowed = b; }\n    }\n\n    static class Member {\n        private final String name;\n        private final List<Book> borrowedBooks = new ArrayList<>();\n\n        public Member(String name) { this.name = name; }\n\n        public boolean borrowBook(Book book) {\n            if (borrowedBooks.size() >= 3 || book.isBorrowed() || borrowedBooks.contains(book)) {\n                return false; // Rules violated\n            }\n            borrowedBooks.add(book);\n            book.setBorrowed(true);\n            return true;\n        }\n\n        public int getBorrowedCount() { return borrowedBooks.size(); }\n        public String getName() { return name; }\n    }\n\n    public static void main(String[] args) {\n        Member member = new Member(\"Akshat\");\n        Book b1 = new Book(\"Java Core\");\n        Book b2 = new Book(\"Design Patterns\");\n\n        System.out.println(\"Borrow B1: \" + member.borrowBook(b1));\n        System.out.println(\"Borrow B1 again: \" + member.borrowBook(b1)); // Rejected: duplicate\n        System.out.println(\"Borrow B2: \" + member.borrowBook(b2));\n        System.out.println(\"Total books borrowed: \" + member.getBorrowedCount());\n    }\n}",
+      "expectedOutput": "Borrow B1: true\nBorrow B1 again: false\nBorrow B2: true\nTotal books borrowed: 2"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Domain-Driven Money Value Object Design",
+      "question": "Implement an encapsulated, immutable `Money` value object backed by a primitive `long` for cents, validating currency pairing during addition and subtraction[cite: 5, 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-11",
+      "id": "encapsulation-026",
+      "explanation": "The Money pattern represents monetary values using encapsulated, immutable value objects[cite: 5, 23]. Storing amounts as floating-point values risks rounding errors due to binary floating-point representation[cite: 5]. The `Money` class avoids this by storing amounts as a 64-bit integer (`long cents`) along with a `Currency` unit[cite: 5, 23]. Mathematical operations like `plus()` and `minus()` validate currency compatibility before computing: if currencies differ, an `IllegalArgumentException` is thrown[cite: 5, 23]. This keeps monetary calculations precise and type-safe across the domain model[cite: 5, 23].",
+      "hints": [
+        "Store the monetary amount internally as a primitive `long cents` to prevent rounding errors[cite: 5].",
+        "Make the class `final` and all fields `private final` to enforce immutability[cite: 5, 23].",
+        "Validate currency compatibility: `if (!this.currency.equals(other.currency))` before adding[cite: 5, 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static final class Money {\n        private final long cents;\n        private final String currency;\n\n        public Money(long cents, String currency) {\n            if (currency == null || currency.isBlank()) throw new IllegalArgumentException(\"Invalid currency\");\n            this.cents = cents;\n            this.currency = currency;\n        }\n\n        public Money plus(Money other) {\n            if (!this.currency.equals(other.currency)) {\n                throw new IllegalArgumentException(\"Currency mismatch: \" + this.currency + \" vs \" + other.currency);\n            }\n            return new Money(Math.addExact(this.cents, other.cents), this.currency);\n        }\n\n        @Override\n        public String toString() {\n            return String.format(\"%s %.2f\", currency, cents / 100.0);\n        }\n    }\n\n    public static void main(String[] args) {\n        Money m1 = new Money(2500, \"USD\"); // $25.00\n        Money m2 = new Money(1450, \"USD\"); // $14.50\n        Money total = m1.plus(m2);\n        System.out.println(\"Total: \" + total);\n    }\n}",
+      "expectedOutput": "Total: USD 39.50"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Encapsulated State Machine",
+      "question": "Implement an encapsulated `OrderWorkflow` state machine where valid state transitions are enforced, and invalid transition attempts throw business exceptions[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-12",
+      "id": "encapsulation-027",
+      "explanation": "State machines use encapsulation to enforce valid entity status transitions and protect domain workflows[cite: 13, 23]. In this order lifecycle, valid transitions are: 1) `PENDING` can transition to `PAID` or `CANCELLED`; 2) `PAID` can transition to `SHIPPED`; 3) `SHIPPED` can transition to `DELIVERED`[cite: 13]. If an invalid transition is attempted (such as trying to ship an unpaid order or modify a delivered package), the class rejects the operation by throwing an `IllegalStateException`[cite: 13, 23]. Keeping the transition rules inside the class ensures orders move through the lifecycle correctly[cite: 13, 23].",
+      "hints": [
+        "Define an enum `State { PENDING, PAID, SHIPPED, DELIVERED, CANCELLED }`[cite: 13, 16].",
+        "Validate transitions using a `switch` statement on the current state[cite: 13, 16].",
+        "Throw `IllegalStateException` on invalid transition attempts[cite: 23]."
+      ],
+      "sampleCode": "public class Solution {\n    enum State { PENDING, PAID, SHIPPED, DELIVERED, CANCELLED }\n\n    static class OrderWorkflow {\n        private State currentState = State.PENDING;\n\n        public State getState() { return currentState; }\n\n        public void pay() {\n            if (currentState != State.PENDING) {\n                throw new IllegalStateException(\"Cannot pay for order in state: \" + currentState);\n            }\n            currentState = State.PAID;\n        }\n\n        public void ship() {\n            if (currentState != State.PAID) {\n                throw new IllegalStateException(\"Cannot ship order in state: \" + currentState);\n            }\n            currentState = State.SHIPPED;\n        }\n    }\n\n    public static void main(String[] args) {\n        OrderWorkflow order = new OrderWorkflow();\n        order.pay();\n        System.out.println(\"Order transitioned to: \" + order.getState());\n        try {\n            order.pay(); // Invalid: already paid\n        } catch (IllegalStateException e) {\n            System.out.println(\"Caught error: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Order transitioned to: PAID\nCaught error: Cannot pay for order in state: PAID"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Secure In-Memory Token Vault",
+      "question": "Design an encapsulated in-memory token vault that stores sensitive credentials as byte arrays and scrubs memory upon explicit disposal[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-13",
+      "id": "encapsulation-028",
+      "explanation": "Storing sensitive credentials as `java.lang.String` instances creates security risks because immutable strings remain in heap memory until garbage collected[cite: 8, 18, 23]. An encapsulated security vault addresses this by storing credentials as private mutable byte arrays (`byte[]`)[cite: 8, 23]. Access to the secret requires passing a validation lambda or consumer[cite: 23]. When the vault is closed or destroyed, `Arrays.fill(secretBytes, (byte) 0)` overwrites the internal byte array with zeros[cite: 8, 23]. This scrubs the credentials from heap memory immediately rather than waiting for garbage collection[cite: 2, 8, 23].",
+      "hints": [
+        "Store the secret in a `private byte[] secretBytes;`[cite: 23].",
+        "Make defensive copies of incoming byte arrays in the constructor[cite: 10, 23].",
+        "Implement a `destroy()` or `close()` method that scrubs memory using `Arrays.fill(secretBytes, (byte) 0)`[cite: 8, 23]."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    static class SecureVault implements AutoCloseable {\n        private byte[] secretKey;\n        private boolean destroyed = false;\n\n        public SecureVault(byte[] key) {\n            this.secretKey = Arrays.copyOf(key, key.length);\n        }\n\n        public boolean isDestroyed() { return destroyed; }\n\n        @Override\n        public void close() {\n            if (!destroyed && secretKey != null) {\n                Arrays.fill(secretKey, (byte) 0); // Scrub sensitive memory\n                destroyed = true;\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        byte[] key = {10, 20, 30, 40};\n        SecureVault vault = new SecureVault(key);\n        System.out.println(\"Vault active, destroyed: \" + vault.isDestroyed());\n        vault.close();\n        System.out.println(\"Vault closed, destroyed: \" + vault.isDestroyed());\n    }\n}",
+      "expectedOutput": "Vault active, destroyed: false\nVault closed, destroyed: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Defensive Architecture Auditor",
+      "question": "Implement an architectural reflection auditor that inspects a domain model class and verifies that no getters leak mutable collection or array references[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-14",
+      "id": "encapsulation-029",
+      "explanation": "Enterprise test frameworks use reflection to verify encapsulation and prevent reference leaks across domain models[cite: 10, 23]. An architectural auditor scans a class's methods using `Class.getDeclaredMethods()`[cite: 10, 23]. For every getter returning a collection or array type, the auditor verifies that the returned reference is not identical to the class's internal field[cite: 10, 23]. If a getter returns the same reference as the private field, the auditor flags an encapsulation violation[cite: 10, 23]. This automates encapsulation testing across data access models[cite: 23].",
+      "hints": [
+        "Find getter methods starting with \"get\" using `Class.getDeclaredMethods()`[cite: 4, 10, 23].",
+        "Check if the return type is an array or collection interface[cite: 23].",
+        "Verify that calling the getter returns a different reference than the internal field (`field.get(obj) != getter.invoke(obj)`)[cite: 10, 23]."
+      ],
+      "sampleCode": "import java.lang.reflect.Field;\nimport java.lang.reflect.Method;\nimport java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    static class TargetModel {\n        private final List<String> tags = new ArrayList<>();\n        public TargetModel() { tags.add(\"java\"); }\n        // Leaks reference directly\n        public List<String> getTags() { return tags; }\n    }\n\n    public static boolean auditReferenceLeak(Object instance) throws Exception {\n        Class<?> clazz = instance.getClass();\n        for (Method m : clazz.getDeclaredMethods()) {\n            if (m.getName().startsWith(\"get\") && m.getParameterCount() == 0) {\n                Object returned = m.invoke(instance);\n                for (Field f : clazz.getDeclaredFields()) {\n                    f.setAccessible(true);\n                    Object actual = f.get(instance);\n                    if (returned != null && returned == actual) {\n                        return true; // Leak detected: exact same reference returned\n                    }\n                }\n            }\n        }\n        return false;\n    }\n\n    public static void main(String[] args) throws Exception {\n        TargetModel model = new TargetModel();\n        boolean leaked = auditReferenceLeak(model);\n        System.out.println(\"Auditor detected encapsulation leak: \" + leaked);\n    }\n}",
+      "expectedOutput": "Auditor detected encapsulation leak: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Thread-Safe Encapsulated Metric Counter",
+      "question": "Build an encapsulated statistics collector class that safely aggregates metrics across concurrent threads using atomic variables[cite: 23].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "ENC-15",
+      "id": "encapsulation-030",
+      "explanation": "Encapsulation simplifies concurrency by managing thread-safety internally[cite: 23]. The `MetricsCollector` class encapsulates request metrics using `AtomicLong` counters[cite: 23]. If these counters were exposed directly, external code might perform non-atomic updates or reset values concurrently, causing lost updates[cite: 6, 21]. By encapsulating the fields and exposing thread-safe methods (`recordSuccess()`, `recordFailure()`), the class uses atomic Compare-And-Swap (CAS) instructions internally[cite: 6, 23]. Callers record events safely without managing synchronization locks[cite: 6, 23].",
+      "hints": [
+        "Encapsulate metrics using `private final AtomicLong successCount = new AtomicLong();`[cite: 23].",
+        "Increment counters atomically using `.incrementAndGet()`[cite: 6, 12].",
+        "Provide read-only getter methods returning `.get()`[cite: 6, 23]."
+      ],
+      "sampleCode": "import java.util.concurrent.atomic.AtomicLong;\n\npublic class Solution {\n    static class MetricsCollector {\n        private final AtomicLong successCount = new AtomicLong(0);\n        private final AtomicLong failureCount = new AtomicLong(0);\n\n        public void recordSuccess() {\n            successCount.incrementAndGet();\n        }\n\n        public void recordFailure() {\n            failureCount.incrementAndGet();\n        }\n\n        public long getSuccessCount() { return successCount.get(); }\n        public long getFailureCount() { return failureCount.get(); }\n    }\n\n    public static void main(String[] args) throws InterruptedException {\n        MetricsCollector collector = new MetricsCollector();\n        Thread t1 = new Thread(() -> { for (int i = 0; i < 500; i++) collector.recordSuccess(); });\n        Thread t2 = new Thread(() -> { for (int i = 0; i < 500; i++) collector.recordSuccess(); });\n        t1.start(); t2.start();\n        t1.join(); t2.join();\n\n        System.out.println(\"Total Successful Invocations: \" + collector.getSuccessCount());\n    }\n}",
+      "expectedOutput": "Total Successful Invocations: 1000"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

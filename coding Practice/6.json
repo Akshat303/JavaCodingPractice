@@ -1,0 +1,493 @@
+{
+  "section": "Basics",
+  "slug": "variables-scope",
+  "topic": "Variables, initialization, and scope",
+  "page": 23,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Variable Types and Memory Placement",
+      "question": "Declare a static variable, an instance variable, and a local variable within a single Java class, instantiate the class, and print all three values to illustrate their distinct scopes.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-01",
+      "id": "variables-scope-001",
+      "explanation": "Java defines three primary categories of variables based on their declaration context: static variables, instance variables, and local variables. Static (class) variables are declared with the static modifier within a class body; they are created when the class is loaded into the JVM Metaspace and shared among all instances. Instance variables are declared in a class without static; they are allocated on the Java heap whenever a new object is created and exist as long as the object is reachable. Local variables are declared inside methods, constructors, or blocks; they reside in the thread's call stack frame and exist only for the duration of that block. This exercise demonstrates how to access static variables via class or instance qualification, instance variables through an instantiated object reference, and local variables directly within their enclosing method scope.",
+      "hints": [
+        "Declare 'static int staticVar' directly inside the class body.",
+        "Declare 'int instanceVar' directly inside the class body without the static keyword.",
+        "Declare 'int localVar' inside the main method body and instantiate the class to access 'instanceVar'."
+      ],
+      "sampleCode": "public class Solution {\n    static int staticCount = 100;\n    int instanceCount = 50;\n\n    public static void main(String[] args) {\n        int localCount = 10;\n        Solution obj = new Solution();\n\n        System.out.println(\"Static variable: \" + staticCount);\n        System.out.println(\"Instance variable: \" + obj.instanceCount);\n        System.out.println(\"Local variable: \" + localCount);\n    }\n}",
+      "expectedOutput": "Static variable: 100\nInstance variable: 50\nLocal variable: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Default Field Value Initialization",
+      "question": "Print the automatic default initialization values assigned by the JVM to uninitialized instance fields for all eight primitive types and an object reference type (`String`).",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-02",
+      "id": "variables-scope-002",
+      "explanation": "In Java, instance and static member fields are guaranteed to be initialized with default values by the JVM during object allocation and class initialization (JLS §4.12.5). When memory is allocated on the heap for an object, the runtime zeroes out the memory block prior to running constructors. Consequently, byte, short, int, and long fields default to 0; float and double default to +0.0f and +0.0d; char defaults to the null character '\\u0000' (numeric value 0); boolean fields default to false; and all reference types (including String, arrays, and custom classes) default to null. Local variables, by contrast, reside on the thread stack and do not receive automatic default values; attempting to read an uninitialized local variable results in a compile-time error.",
+      "hints": [
+        "Declare uninitialized member fields for byte, short, int, long, float, double, char, boolean, and String.",
+        "Instantiate the class in the main entry method to access these instance fields.",
+        "Print the char field alongside its integer cast ((int) defaultChar) to clearly display '\\u0000' as numerical 0."
+      ],
+      "sampleCode": "public class Solution {\n    byte defaultByte;\n    short defaultShort;\n    int defaultInt;\n    long defaultLong;\n    float defaultFloat;\n    double defaultDouble;\n    char defaultChar;\n    boolean defaultBoolean;\n    String defaultString;\n\n    public static void main(String[] args) {\n        Solution obj = new Solution();\n        System.out.println(\"byte: \" + obj.defaultByte);\n        System.out.println(\"short: \" + obj.defaultShort);\n        System.out.println(\"int: \" + obj.defaultInt);\n        System.out.println(\"long: \" + obj.defaultLong);\n        System.out.println(\"float: \" + obj.defaultFloat);\n        System.out.println(\"double: \" + obj.defaultDouble);\n        System.out.println(\"char: [\" + obj.defaultChar + \"] (code: \" + (int) obj.defaultChar + \")\");\n        System.out.println(\"boolean: \" + obj.defaultBoolean);\n        System.out.println(\"reference: \" + obj.defaultString);\n    }\n}",
+      "expectedOutput": "byte: 0\nshort: 0\nint: 0\nlong: 0\nfloat: 0.0\ndouble: 0.0\nchar: [] (code: 0)\nboolean: false\nreference: null"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Block and Iteration Scope Boundaries",
+      "question": "Demonstrate lexical block scope by declaring a variable inside an `if` block and another inside a `for` loop, then contrast this with accumulating results into an outer scoped variable that outlives the loop.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-03",
+      "id": "variables-scope-003",
+      "explanation": "Java enforces strict lexical block scoping delimited by curly braces ({ ... }). Any variable declared inside a block—such as an if-statement body or the initialization header of a for-loop—has a lifetime and visibility confined strictly to that block. Once the instruction pointer exits the closing brace, the variable's stack slot is deallocated or invalidated, and any attempt to reference it from outer code causes a compile-time symbol resolution error. To persist values computed inside conditional branches or loops across iterations or beyond the loop's conclusion, the accumulator variable must be declared in an outer enclosing scope before the block is entered.",
+      "hints": [
+        "Declare a variable inside 'if (true) { ... }' and print it strictly within that block.",
+        "Use a loop 'for (int i = 1; i <= 3; i++)' and observe that 'i' is unreachable after the loop.",
+        "Declare an outer accumulator 'int sum = 0;' before the loop and print it after the loop finishes."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        boolean condition = true;\n        if (condition) {\n            int blockScoped = 42;\n            System.out.println(\"Inside if-block: blockScoped = \" + blockScoped);\n        }\n\n        int outerAccumulator = 0;\n        for (int i = 1; i <= 3; i++) {\n            int loopIterationScoped = i * 10;\n            outerAccumulator += loopIterationScoped;\n            System.out.println(\"Iteration \" + i + \": iterationScoped = \" + loopIterationScoped);\n        }\n\n        System.out.println(\"After loop: outerAccumulator = \" + outerAccumulator);\n    }\n}",
+      "expectedOutput": "Inside if-block: blockScoped = 42\nIteration 1: iterationScoped = 10\nIteration 2: iterationScoped = 20\nIteration 3: iterationScoped = 30\nAfter loop: outerAccumulator = 60"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Compile-Time Constants with Final Modifier",
+      "question": "Use a `final` local variable `PI` to calculate the area of a circle with radius `5.0`, and explain how the `final` modifier prevents reassignment.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-04",
+      "id": "variables-scope-004",
+      "explanation": "The final keyword in Java establishes an immutability constraint on a variable's binding. When applied to a local variable or field, final mandates that the variable can be assigned a value exactly once. Once assigned, any subsequent assignment attempt causes javac to throw a compilation error: 'cannot assign a value to final variable'. When a final primitive variable is initialized with a constant expression (e.g., final double PI = 3.141592653589793), the Java compiler treats it as a compile-time constant, inlining the raw literal directly into the generated bytecode instructions. This exercise shows how final ensures mathematical invariants remain untouched during algorithmic calculations.",
+      "hints": [
+        "Declare 'final double PI = 3.141592653589793;' to create an unchangeable local constant.",
+        "Compute the area using 'PI * radius * radius'.",
+        "Observe that attempting 'PI = 3.14;' after initialization triggers a compile-time error."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        final double PI = 3.141592653589793;\n        double radius = 5.0;\n        double area = PI * radius * radius;\n\n        System.out.println(\"Radius: \" + radius);\n        System.out.println(\"Constant PI: \" + PI);\n        System.out.println(\"Circle Area: \" + area);\n    }\n}",
+      "expectedOutput": "Radius: 5.0\nConstant PI: 3.141592653589793\nCircle Area: 78.53981633974483"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multiple Declarations and Expression Evaluation",
+      "question": "Declare multiple variables of the same type within a single statement (`int a = 5, b = 10, c;`), compute `c = a + b`, and print the resulting values.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-05",
+      "id": "variables-scope-005",
+      "explanation": "Java allows multiple variables of the same data type to be declared in a single comma-separated statement (JLS §14.4). In the declaration int a = 5, b = 10, c;, variables a and b are both declared and immediately initialized with integer literals, whereas c is declared without an initial value. Because c is a local variable residing on the thread stack frame, it does not receive a default value. However, before c is read in any subsequent expression, it is assigned the result of a + b, satisfying the compiler's strict definite assignment rules. While convenient for concise examples, declaring one variable per line is generally preferred in enterprise development for clearer code reviews and Git diff tracking.",
+      "hints": [
+        "Combine declarations using commas: 'int a = 5, b = 10, c;'.",
+        "Assign 'c = a + b;' before reading or printing 'c'.",
+        "Print all three variables to confirm successful assignment and calculation."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int a = 5, b = 10, c;\n        c = a + b;\n\n        System.out.println(\"a = \" + a);\n        System.out.println(\"b = \" + b);\n        System.out.println(\"c = \" + c);\n    }\n}",
+      "expectedOutput": "a = 5\nb = 10\nc = 15"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Default Field Value Display",
+      "question": "Create a class declaring uninitialized instance variables of types `boolean`, `byte`, `int`, `double`, `char`, and `Object`. Print their automatic default values.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-01",
+      "id": "variables-scope-006",
+      "explanation": "This exercise reinforces the zero-initialization semantics of Java instance fields across different type families. Whenever a new instance of a class is allocated on the heap, the Java Virtual Machine guarantees that all instance fields are initialized to default values before constructors or initialization blocks execute. Integral types (byte, short, int, long) default to 0; floating-point types (float, double) default to 0.0; char defaults to the null code point '\\u0000'; boolean fields default to false; and reference types (like Object) default to null. This automatic zeroing prevents unpredictable values from uninitialized memory, guaranteeing deterministic state across JVM implementations.",
+      "hints": [
+        "Declare uninitialized member fields: 'boolean flag;', 'byte b;', 'int i;', 'double d;', 'char c;', 'Object obj;'.",
+        "Instantiate the class inside main: 'Solution instance = new Solution();'.",
+        "Cast the char field to an integer ((int) c) so the null character '\\u0000' prints as numerical 0."
+      ],
+      "sampleCode": "public class Solution {\n    boolean uninitBool;\n    byte uninitByte;\n    int uninitInt;\n    double uninitDouble;\n    char uninitChar;\n    Object uninitObj;\n\n    public static void main(String[] args) {\n        Solution s = new Solution();\n        System.out.println(\"boolean: \" + s.uninitBool);\n        System.out.println(\"byte: \" + s.uninitByte);\n        System.out.println(\"int: \" + s.uninitInt);\n        System.out.println(\"double: \" + s.uninitDouble);\n        System.out.println(\"char: [\" + s.uninitChar + \"] (code: \" + (int) s.uninitChar + \")\");\n        System.out.println(\"Object: \" + s.uninitObj);\n    }\n}",
+      "expectedOutput": "boolean: false\nbyte: 0\nint: 0\ndouble: 0.0\nchar: [] (code: 0)\nObject: null"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Shadowing Demonstration and Fix",
+      "question": "Write a class with an instance variable `value`. In a setter method, declare a parameter also named `value`. Show how to resolve the collision using `this`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-02",
+      "id": "variables-scope-007",
+      "explanation": "Variable shadowing occurs when a variable declared within an inner scope (such as a method parameter or local variable) shares the exact same identifier as a variable in an outer enclosing scope (such as an instance field). In Java, local identifiers take precedence over field identifiers. Writing value = value inside a setter merely assigns the parameter to itself, leaving the instance field unchanged. To bypass this shadowing and explicitly reference the instance field on the current object heap memory, the code must qualify the identifier with the this keyword (this.value = value). This is the universal idiom in Java constructors, setters, and builder patterns.",
+      "hints": [
+        "Declare a private instance field: 'private int value;'.",
+        "In setValue(int value), write 'this.value = value;' to assign the parameter to the instance field.",
+        "Print the field before and after invoking the setter to verify that the value was updated."
+      ],
+      "sampleCode": "public class Solution {\n    private int value = 10;\n\n    public void setValue(int value) {\n        // 'value' refers to parameter; 'this.value' refers to the instance field\n        this.value = value;\n    }\n\n    public int getValue() {\n        return this.value;\n    }\n\n    public static void main(String[] args) {\n        Solution obj = new Solution();\n        System.out.println(\"Initial value: \" + obj.getValue());\n        obj.setValue(42);\n        System.out.println(\"Updated value: \" + obj.getValue());\n    }\n}",
+      "expectedOutput": "Initial value: 10\nUpdated value: 42"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Local Variable Definite Assignment",
+      "question": "Write a method demonstrating that local variables do not receive default values and must be explicitly initialized before reading, handling conditional branching assignment.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-03",
+      "id": "variables-scope-008",
+      "explanation": "Under the Java Language Specification (JLS §16), the compiler enforces strict 'definite assignment' rules for all local variables. Unlike instance and static fields, which receive automatic zero-initialization, a local variable allocated on a thread stack frame contains arbitrary uninitialized data. The compiler performs static data-flow analysis to ensure that every possible execution path assigns a value to a local variable before that variable is read. If an if-statement initializes a variable inside the if branch but omits the else branch, the compiler marks the variable as potentially unassigned and halts with a compile-time error. Providing exhaustive initialization across all branches satisfies definite assignment.",
+      "hints": [
+        "Declare 'int result;' without initializing it immediately.",
+        "Use an if-else structure ensuring that BOTH branches assign a concrete value to 'result'.",
+        "Observe that omitting the 'else' branch causes javac to fail with 'variable result might not have been initialized'."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int score = 85;\n        int bonusPoints;\n\n        if (score >= 80) {\n            bonusPoints = 15;\n        } else {\n            bonusPoints = 5;\n        }\n\n        // Complies because definite assignment is satisfied along all execution paths\n        System.out.println(\"Score: \" + score);\n        System.out.println(\"Bonus awarded: \" + bonusPoints);\n        System.out.println(\"Total: \" + (score + bonusPoints));\n    }\n}",
+      "expectedOutput": "Score: 85\nBonus awarded: 15\nTotal: 100"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Block Scope Isolation",
+      "question": "Write nested code blocks `{}` inside a method showing that a variable declared in an inner block cannot be accessed once that block exits.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-04",
+      "id": "variables-scope-009",
+      "explanation": "Java supports standalone block statements delimited by curly braces ({ ... }) inside method bodies. Each block defines an isolated lexical scope and introduces a nested scope frame in the compiler's symbol table. Variables declared within an inner block are visible to that block and any child blocks nested inside it. However, once the closing curly brace of that block is reached, those variables go out of scope and become inaccessible to subsequent code in the outer block. Furthermore, Java prohibits variable shadowing between nested local scopes: declaring a local variable with the same name as an active variable in an enclosing local block triggers a compile-time error.",
+      "hints": [
+        "Declare 'int outerVar = 10;' in the method.",
+        "Open a standalone block '{ int innerVar = 20; ... }' and print both variables inside it.",
+        "Print 'outerVar' after the block closes, noting that 'innerVar' cannot be accessed outside."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int outerVar = 10;\n        System.out.println(\"Outer scope: outerVar = \" + outerVar);\n\n        {\n            int innerVar = 20;\n            System.out.println(\"Inner block: outerVar = \" + outerVar + \", innerVar = \" + innerVar);\n        }\n\n        // innerVar is no longer accessible here\n        System.out.println(\"Back in outer scope: outerVar = \" + outerVar);\n    }\n}",
+      "expectedOutput": "Outer scope: outerVar = 10\nInner block: outerVar = 10, innerVar = 20\nBack in outer scope: outerVar = 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Type Inference with var",
+      "question": "Refactor verbose declarations (such as generic collections and maps) using the `var` keyword for local variable type inference, and document contexts where `var` cannot be used.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-05",
+      "id": "variables-scope-010",
+      "explanation": "Introduced in Java 10 (JEP 286), the var keyword provides local variable type inference, allowing developers to omit explicit type declarations when the type can be unambiguously inferred from the initializer expression. Unlike dynamic languages (e.g., Python or JavaScript), var does not make Java dynamically typed; the compiler infers the exact static type at compile time and encodes it directly into the generated bytecode. var is restricted to local variables with initializers, enhanced for-loop headers, and index loop headers. It cannot be used for member fields, method return types, method parameters, uninitialized variables, null assignments, or lambda expressions lacking explicit target types.",
+      "hints": [
+        "Use 'var list = new ArrayList<String>();' to replace verbose collection declarations.",
+        "Use 'var map = new HashMap<String, Integer>();' and populate it with sample entries.",
+        "Add comments explaining that 'var' is illegal for class fields, method parameters, and uninitialized locals."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.HashMap;\n\npublic class Solution {\n    // Note: var cannot be used for member fields (e.g., private var count = 0; is illegal)\n\n    public static void main(String[] args) {\n        // Inferred as ArrayList<String>\n        var userList = new ArrayList<String>();\n        userList.add(\"Alice\");\n        userList.add(\"Bob\");\n\n        // Inferred as HashMap<String, Integer>\n        var userScores = new HashMap<String, Integer>();\n        userScores.put(\"Alice\", 95);\n        userScores.put(\"Bob\", 88);\n\n        // Inferred as int and String\n        var totalUsers = userList.size();\n        var topUser = userList.get(0);\n\n        System.out.println(\"Total users (inferred int): \" + totalUsers);\n        System.out.println(\"Top user (inferred String): \" + topUser);\n        System.out.println(\"Score (inferred Map): \" + userScores.get(topUser));\n    }\n}",
+      "expectedOutput": "Total users (inferred int): 2\nTop user (inferred String): Alice\nScore (inferred Map): 95"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static Instance Tracking Across Instantiations",
+      "question": "Implement an object tracking mechanism in a class that increments a `static` counter inside its constructor, and verify that the count updates consistently as new objects are instantiated.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-06",
+      "id": "variables-scope-011",
+      "explanation": "Because static variables belong to the class rather than any single instance, all instantiated objects share the exact same memory location for that field in the JVM Metaspace/Heap. By placing an increment operation (instanceCount++) inside a class constructor, every invocation of new increments this shared counter. Each individual instance can also store its own unique sequential ID by capturing the counter value during construction. This demonstrates the distinction between class-level shared state and individual instance state, a fundamental design pattern for object pooling, factory tracking, and unique ID generation.",
+      "hints": [
+        "Declare a 'private static int instanceCount = 0;' class variable.",
+        "In the constructor, assign 'this.id = ++instanceCount;' to give each instance a unique ID.",
+        "Instantiate three objects and print their individual IDs alongside the final static count."
+      ],
+      "sampleCode": "public class Solution {\n    static class ItemTracker {\n        private static int instanceCount = 0;\n        private final int id;\n\n        public ItemTracker() {\n            this.id = ++instanceCount;\n        }\n\n        public int getId() {\n            return id;\n        }\n\n        public static int getInstanceCount() {\n            return instanceCount;\n        }\n    }\n\n    public static void main(String[] args) {\n        ItemTracker a = new ItemTracker();\n        ItemTracker b = new ItemTracker();\n        ItemTracker c = new ItemTracker();\n\n        System.out.println(\"Item A ID: \" + a.getId());\n        System.out.println(\"Item B ID: \" + b.getId());\n        System.out.println(\"Item C ID: \" + c.getId());\n        System.out.println(\"Total objects created: \" + ItemTracker.getInstanceCount());\n    }\n}",
+      "expectedOutput": "Item A ID: 1\nItem B ID: 2\nItem C ID: 3\nTotal objects created: 3"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Parameter Shadowing and Field Disambiguation",
+      "question": "Create a class where a method's local variable and parameter shadow an instance field, and use the `this` reference to inspect both the shadowed field and local variables within the same method.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-07",
+      "id": "variables-scope-012",
+      "explanation": "This exercise explores lexical scope resolution and name hiding in Java. When a local variable or method parameter shares an identifier with an instance field, the compiler resolves unqualified references to the innermost declaration (the parameter or local variable). This hides (shadows) the instance field from simple name resolution. To access the shadowed instance field, the code must explicitly qualify the reference using this.fieldName. Understanding this disambiguation is crucial for avoiding silent logic bugs where a parameter is inadvertently assigned to itself instead of updating instance state.",
+      "hints": [
+        "Declare an instance field: 'int data = 100;'.",
+        "In a method updateData(int data), declare a local variable or parameter that shares the identifier 'data'.",
+        "Print 'data' to display the local value and 'this.data' to display the instance field value."
+      ],
+      "sampleCode": "public class Solution {\n    int data = 100;\n\n    public void processData(int data) {\n        System.out.println(\"Parameter 'data': \" + data);\n        System.out.println(\"Instance field 'this.data': \" + this.data);\n        \n        this.data = data;\n        System.out.println(\"Updated instance field 'this.data': \" + this.data);\n    }\n\n    public static void main(String[] args) {\n        Solution solution = new Solution();\n        solution.processData(500);\n    }\n}",
+      "expectedOutput": "Parameter 'data': 500\nInstance field 'this.data': 100\nUpdated instance field 'this.data': 500"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "State Isolation: Static versus Instance Variables",
+      "question": "Instantiate two independent objects of a class and demonstrate that mutating an instance variable affects only that specific object, whereas mutating a static variable modifies shared state across both objects.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-08",
+      "id": "variables-scope-013",
+      "explanation": "The core architectural distinction between instance and static fields lies in memory allocation and state isolation. Every instance of a class allocated on the heap receives its own distinct memory block for its instance fields; modifying an instance field on object A has no effect on object B. In contrast, a static variable exists as a single memory slot associated with the Class object in the JVM. Both object A and object B reference this same shared location. Modifying the static variable through either reference (or directly via the class name) updates the value seen across all instances.",
+      "hints": [
+        "Declare 'int instanceCount = 0;' and 'static int sharedCount = 0;' inside a Counter class.",
+        "Create two instances: 'Counter c1 = new Counter();' and 'Counter c2 = new Counter();'.",
+        "Increment c1's instance variable and increment the shared static variable, then print values from both instances."
+      ],
+      "sampleCode": "public class Solution {\n    static class Counter {\n        int instanceVal = 0;\n        static int staticVal = 0;\n\n        public void increment() {\n            instanceVal++;\n            staticVal++;\n        }\n    }\n\n    public static void main(String[] args) {\n        Counter c1 = new Counter();\n        Counter c2 = new Counter();\n\n        c1.increment();\n        c1.increment();\n\n        System.out.println(\"After c1 increments twice:\");\n        System.out.println(\"c1.instanceVal: \" + c1.instanceVal + \", c1.staticVal: \" + Counter.staticVal);\n        System.out.println(\"c2.instanceVal: \" + c2.instanceVal + \", c2.staticVal: \" + Counter.staticVal);\n    }\n}",
+      "expectedOutput": "After c1 increments twice:\nc1.instanceVal: 2, c1.staticVal: 2\nc2.instanceVal: 0, c2.staticVal: 2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Blank Final Field Initialization Across Constructors",
+      "question": "Implement a class with a blank final instance field and demonstrate that every constructor must initialize it exactly once, supporting different constructor parameter paths.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-09",
+      "id": "variables-scope-014",
+      "explanation": "A blank final field is a final instance variable that is declared without an immediate inline initializer. According to JLS §8.3.1.2, a blank final instance field must be definitely assigned by the end of every constructor in the class; otherwise, a compile-time error occurs. Once assigned during object construction, the field's value cannot be altered for the remaining lifetime of that object. This pattern is essential for creating immutable value objects and domain entities whose final configuration parameters vary based on which constructor overload is invoked.",
+      "hints": [
+        "Declare 'private final int threshold;' without an inline value.",
+        "Provide a default constructor that sets 'this.threshold = 100;' and a parameterized constructor that sets 'this.threshold = customValue;'.",
+        "Instantiate objects using both constructors and print their configured thresholds."
+      ],
+      "sampleCode": "public class Solution {\n    static class ThresholdLimiter {\n        private final int maxLimit;\n        private final String policyName;\n\n        // Constructor 1: Default configuration\n        public ThresholdLimiter() {\n            this.maxLimit = 100;\n            this.policyName = \"DEFAULT\";\n        }\n\n        // Constructor 2: Custom configuration\n        public ThresholdLimiter(int customLimit, String customPolicy) {\n            this.maxLimit = customLimit;\n            this.policyName = customPolicy;\n        }\n\n        public void displayConfig() {\n            System.out.println(\"Policy: \" + policyName + \" | Limit: \" + maxLimit);\n        }\n    }\n\n    public static void main(String[] args) {\n        ThresholdLimiter defaultPolicy = new ThresholdLimiter();\n        ThresholdLimiter customPolicy = new ThresholdLimiter(500, \"ENTERPRISE\");\n\n        defaultPolicy.displayConfig();\n        customPolicy.displayConfig();\n    }\n}",
+      "expectedOutput": "Policy: DEFAULT | Limit: 100\nPolicy: ENTERPRISE | Limit: 500"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static and Instance Initialization Block Execution Order",
+      "question": "Write a class containing both static and instance initialization blocks alongside a constructor, and print diagnostic messages to demonstrate the exact execution order across multiple object instantiations.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-10",
+      "id": "variables-scope-015",
+      "explanation": "The Java Virtual Machine follows a strict initialization sequence when classes are loaded and instantiated. Static initialization blocks (static { ... }) execute exactly once when the class is first loaded by the ClassLoader, prior to any object creation or static method invocation. In contrast, instance initialization blocks ({ ... }) execute every time a new instance is created via new. The instance block runs immediately after the superclass constructor completes and right before the body of the class's own constructor executes. Creating a second instance runs the instance block and constructor again, but skips the static block entirely.",
+      "hints": [
+        "Declare a 'static { ... }' block that prints a static init message.",
+        "Declare an instance initializer block '{ ... }' that prints an instance init message.",
+        "Instantiate two objects in main and observe that the static block runs only once."
+      ],
+      "sampleCode": "public class Solution {\n    static class Component {\n        static {\n            System.out.println(\"[1] Static initializer block executed (class loaded)\");\n        }\n\n        {\n            System.out.println(\"[2] Instance initializer block executed\");\n        }\n\n        public Component() {\n            System.out.println(\"[3] Constructor executed\");\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Creating first instance:\");\n        new Component();\n        System.out.println(\"Creating second instance:\");\n        new Component();\n    }\n}",
+      "expectedOutput": "Creating first instance:\n[1] Static initializer block executed (class loaded)\n[2] Instance initializer block executed\n[3] Constructor executed\nCreating second instance:\n[2] Instance initializer block executed\n[3] Constructor executed"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Order of Initialization Tracker",
+      "question": "Write a class combining static blocks, instance initialization blocks, static variables, instance variables, and constructors. Print output from each to prove the exact execution order.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-06",
+      "id": "variables-scope-016",
+      "explanation": "This exercise traces the complete initialization order of a Java class. Static variable initializers and static blocks execute first in their textual order of appearance when the class is loaded. When an object is instantiated, instance variable initializers and instance initializer blocks execute next, also in their textual order of appearance. Finally, the constructor body executes. Tracking this lifecycle is essential for understanding when dependent resources (such as database connection pools or configured logger instances) become safely available for use.",
+      "hints": [
+        "Initialize a static variable using a helper method that logs its execution.",
+        "Initialize an instance variable using a helper method that logs its execution.",
+        "Place print statements in the static block, instance block, and constructor to observe the full sequence."
+      ],
+      "sampleCode": "public class Solution {\n    static int staticVar = initStaticVar();\n\n    static int initStaticVar() {\n        System.out.println(\"Step 1: Static variable initialized\");\n        return 1;\n    }\n\n    static {\n        System.out.println(\"Step 2: Static block executed\");\n    }\n\n    int instanceVar = initInstanceVar();\n\n    int initInstanceVar() {\n        System.out.println(\"Step 3: Instance variable initialized\");\n        return 2;\n    }\n\n    {\n        System.out.println(\"Step 4: Instance block executed\");\n    }\n\n    public Solution() {\n        System.out.println(\"Step 5: Constructor executed\");\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Main method started\");\n        new Solution();\n    }\n}",
+      "expectedOutput": "Step 1: Static variable initialized\nStep 2: Static block executed\nMain method started\nStep 3: Instance variable initialized\nStep 4: Instance block executed\nStep 5: Constructor executed"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Final Variable Reassignment Trap",
+      "question": "Demonstrate the behavior of `final` applied to primitive types versus reference types. Show that a `final` object reference cannot be reassigned, but its internal fields can be mutated.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-07",
+      "id": "variables-scope-017",
+      "explanation": "A common point of confusion in Java is the distinction between a constant reference and an immutable object. When a primitive variable is declared final, its actual numeric value cannot be changed. However, when an object reference is declared final, the immutability constraint applies strictly to the reference address stored in the variable; the variable cannot be reassigned to point to a different object on the heap (ref = new Object() causes a compile-time error). Crucially, the final modifier does not make the referenced object's internal fields immutable. Unless the object's class is designed to be immutable, its internal fields can be freely modified through the final reference.",
+      "hints": [
+        "Declare a final StringBuilder: 'final StringBuilder sb = new StringBuilder(\"Initial\");'.",
+        "Mutate it via 'sb.append(\" Mutated\");' and show that mutation succeeds.",
+        "Observe that attempting 'sb = new StringBuilder();' triggers a compile-time reassignment error."
+      ],
+      "sampleCode": "public class Solution {\n    static class MutableBox {\n        int content;\n        public MutableBox(int content) {\n            this.content = content;\n        }\n    }\n\n    public static void main(String[] args) {\n        final int primitiveConstant = 100;\n        // primitiveConstant = 200; // Compile-time error: cannot reassign final primitive\n\n        final MutableBox box = new MutableBox(50);\n        System.out.println(\"Initial box content: \" + box.content);\n\n        // Mutation of internal field is completely legal\n        box.content = 99;\n        System.out.println(\"Mutated box content: \" + box.content);\n\n        // box = new MutableBox(100); // Compile-time error: cannot reassign final reference\n        System.out.println(\"Primitive constant: \" + primitiveConstant);\n    }\n}",
+      "expectedOutput": "Initial box content: 50\nMutated box content: 99\nPrimitive constant: 100"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Variable Lifetime in Loops",
+      "question": "Write a loop creating objects. Track whether a reference inside the loop body persists across iterations or goes out of scope on each loop cycle.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-08",
+      "id": "variables-scope-018",
+      "explanation": "Variables declared inside a loop body have a scope and lifetime confined to a single iteration. On each iteration of the loop, a new local variable is allocated in the thread's stack frame. When the loop body completes that iteration, the local reference goes out of scope. If the object created during that iteration was not assigned to an external collection or outer reference, it becomes unreachable and eligible for garbage collection. This exercise demonstrates how declaring temporary objects inside loop bodies avoids leaking state between iterations.",
+      "hints": [
+        "Declare a local object reference inside the loop body: 'for (int i = 0; i < 3; i++) { Sample obj = new Sample(i); ... }'.",
+        "Print the object's state inside the loop to confirm it is newly instantiated on each iteration.",
+        "Observe that 'obj' is not accessible outside the loop block."
+      ],
+      "sampleCode": "public class Solution {\n    static class TaskPayload {\n        int iterationId;\n        public TaskPayload(int id) {\n            this.iterationId = id;\n        }\n    }\n\n    public static void main(String[] args) {\n        for (int i = 1; i <= 3; i++) {\n            // payload is created fresh in this iteration's scope\n            TaskPayload payload = new TaskPayload(i);\n            System.out.println(\"Iteration \" + i + \": Payload object ID = \" + payload.iterationId);\n            // At the end of each iteration, payload goes out of scope and becomes eligible for GC\n        }\n        System.out.println(\"Loop finished. Loop-scoped variables successfully deallocated.\");\n    }\n}",
+      "expectedOutput": "Iteration 1: Payload object ID = 1\nIteration 2: Payload object ID = 2\nIteration 3: Payload object ID = 3\nLoop finished. Loop-scoped variables successfully deallocated."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static vs Instance Isolation",
+      "question": "Create a `Counter` class where multiple instances modify both an instance variable `count` and a static variable `globalCount`. Verify data isolation and sharing.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-09",
+      "id": "variables-scope-019",
+      "explanation": "This exercise contrasts per-instance state isolation with shared class-level state. When an instance method increments both an instance field and a static field, the instance field increment updates only that specific object's memory on the heap. The static field increment, however, updates the shared counter in the Class object. By creating two distinct Counter instances and invoking operations on them independently, students observe that instance counts remain isolated while the static global count accumulates changes from all instances.",
+      "hints": [
+        "Define an instance field 'int count = 0;' and a static field 'static int globalCount = 0;'.",
+        "Implement an increment() method that updates both fields.",
+        "Call increment() on instance A twice and on instance B once, then inspect both objects' states."
+      ],
+      "sampleCode": "public class Solution {\n    static class Counter {\n        int count = 0;\n        static int globalCount = 0;\n\n        public void increment() {\n            count++;\n            globalCount++;\n        }\n    }\n\n    public static void main(String[] args) {\n        Counter counterA = new Counter();\n        Counter counterB = new Counter();\n\n        counterA.increment();\n        counterA.increment();\n        counterB.increment();\n\n        System.out.println(\"Counter A instance count: \" + counterA.count);\n        System.out.println(\"Counter B instance count: \" + counterB.count);\n        System.out.println(\"Shared global count: \" + Counter.globalCount);\n    }\n}",
+      "expectedOutput": "Counter A instance count: 2\nCounter B instance count: 1\nShared global count: 3"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Blank Final Field Initialization",
+      "question": "Create a class with blank final instance fields. Ensure all constructors initialize them under different parameter paths, preventing compilation errors.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-10",
+      "id": "variables-scope-020",
+      "explanation": "Blank final instance fields must be explicitly initialized in every constructor of a class (unless one constructor delegates to another using this(...)). The Java compiler performs static analysis to verify that every path through every constructor assigns a value to each blank final field exactly once. If a constructor contains an execution branch (e.g., an if-else statement) where a blank final field might not be assigned, the compiler raises a 'variable might not have been initialized' error. Once assigned in the constructor, the field becomes permanently read-only for that instance.",
+      "hints": [
+        "Declare 'private final String serviceUrl;' and 'private final int timeoutMs;' without inline values.",
+        "Create constructor 1 taking no arguments and setting default values.",
+        "Create constructor 2 taking custom parameters and assigning both blank final fields."
+      ],
+      "sampleCode": "public class Solution {\n    static class ServiceClient {\n        private final String serviceUrl;\n        private final int timeoutMs;\n\n        public ServiceClient() {\n            this.serviceUrl = \"https://api.default.com\";\n            this.timeoutMs = 3000;\n        }\n\n        public ServiceClient(String serviceUrl, int timeoutMs) {\n            this.serviceUrl = serviceUrl;\n            this.timeoutMs = timeoutMs;\n        }\n\n        public void printConfig() {\n            System.out.println(\"URL: \" + serviceUrl + \", Timeout: \" + timeoutMs + \"ms\");\n        }\n    }\n\n    public static void main(String[] args) {\n        ServiceClient client1 = new ServiceClient();\n        ServiceClient client2 = new ServiceClient(\"https://api.custom.com\", 5000);\n\n        client1.printConfig();\n        client2.printConfig();\n    }\n}",
+      "expectedOutput": "URL: https://api.default.com, Timeout: 3000ms\nURL: https://api.custom.com, Timeout: 5000ms"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Lambda Scope and Effectively Final Variables",
+      "question": "Demonstrate the 'effectively final' rule for local variables captured by a lambda expression, and show how to mutate shared state from inside a lambda using a single-element array or an `AtomicInteger`.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-11",
+      "id": "variables-scope-021",
+      "explanation": "When a lambda expression or anonymous inner class references a local variable from an enclosing method, Java requires that variable to be final or effectively final (JLS §6.5.6.1). A variable is effectively final if its value is never modified after initialization. This restriction exists because the lambda captures a copy of the variable's value on the heap; allowing local primitives to be modified inside the lambda would lead to inconsistencies between the thread's stack and the lambda's captured copy. To safely mutate state from within a lambda, developers use a wrapper object whose reference remains effectively final while its contents change, such as a single-element array (int[] count = {0}) or an AtomicInteger.",
+      "hints": [
+        "Declare an effectively final primitive 'int factor = 2;' used read-only inside the lambda.",
+        "Use 'AtomicInteger counter = new AtomicInteger(0);' to allow mutation from inside the lambda.",
+        "Alternatively, use a single-element array 'int[] holder = {0};' and mutate holder[0]++."
+      ],
+      "sampleCode": "import java.util.concurrent.atomic.AtomicInteger;\n\npublic class Solution {\n    public static void main(String[] args) {\n        int factor = 5; // Effectively final\n        AtomicInteger counter = new AtomicInteger(0);\n        int[] arrayBox = new int[1];\n\n        Runnable task = () -> {\n            // factor cannot be modified here, but counter and arrayBox references are final\n            counter.addAndGet(factor);\n            arrayBox[0] += factor;\n        };\n\n        task.run();\n        task.run();\n\n        System.out.println(\"AtomicInteger value: \" + counter.get());\n        System.out.println(\"Array box value: \" + arrayBox[0]);\n    }\n}",
+      "expectedOutput": "AtomicInteger value: 10\nArray box value: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Two-Class Inheritance Initialization Chain",
+      "question": "Create parent and child classes each containing static initialization blocks, instance initialization blocks, and constructors, and print the exact sequence of initialization events when calling `new Child()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-12",
+      "id": "variables-scope-022",
+      "explanation": "In an inheritance hierarchy, class initialization and object construction follow a strict multi-phase sequence across parent and child classes. First, all static blocks execute from top to bottom down the inheritance chain: the superclass static block runs before the subclass static block. Second, when an instance of the subclass is created, object construction proceeds hierarchically: the superclass instance initializer blocks execute, followed by the superclass constructor body. Once the superclass constructor completes, the subclass instance initializer blocks execute, and finally the subclass constructor body runs. Understanding this hierarchy prevents subtle initialization order bugs where subclass state is accessed before it has been initialized.",
+      "hints": [
+        "Define Parent with a static block, an instance block, and a constructor.",
+        "Define Child extending Parent with its own static block, instance block, and constructor.",
+        "Instantiate new Child() in main and observe the interleaved execution order."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        static {\n            System.out.println(\"[1] Parent static block\");\n        }\n        {\n            System.out.println(\"[3] Parent instance block\");\n        }\n        public Parent() {\n            System.out.println(\"[4] Parent constructor\");\n        }\n    }\n\n    static class Child extends Parent {\n        static {\n            System.out.println(\"[2] Child static block\");\n        }\n        {\n            System.out.println(\"[5] Child instance block\");\n        }\n        public Child() {\n            System.out.println(\"[6] Child constructor\");\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Calling new Child():\");\n        new Child();\n    }\n}",
+      "expectedOutput": "Calling new Child():\n[1] Parent static block\n[2] Child static block\n[3] Parent instance block\n[4] Parent constructor\n[5] Child instance block\n[6] Child constructor"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Stack Frame Variable Isolation in Recursion",
+      "question": "Write a recursive factorial method that prints the memory identity or call depth of its local parameter on each invocation to demonstrate that each recursive call operates on an independent stack frame.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-13",
+      "id": "variables-scope-023",
+      "explanation": "Every method invocation in Java allocates a new stack frame on the calling thread's call stack. A stack frame contains the method's local variable table, operand stack, and frame data. When a method invokes itself recursively, each nested invocation receives its own independent stack frame with its own copies of parameters and local variables. Modifying a parameter or local variable in a deeper recursive frame has no effect on the local variables of earlier frames higher up the stack. When a frame finishes executing, it is popped off the stack, and execution resumes in the caller's frame with its local variables preserved.",
+      "hints": [
+        "In factorial(int n), declare a local variable 'int currentVal = n;'.",
+        "Print 'currentVal' on the way down into the recursion and on the way back up.",
+        "Return 1 when n <= 1 to terminate the recursion cleanly."
+      ],
+      "sampleCode": "public class Solution {\n    public static int factorial(int n) {\n        int currentN = n; // Local to this invocation's stack frame\n        System.out.println(\"Entering frame: n = \" + currentN);\n        if (n <= 1) {\n            System.out.println(\"Base case reached: returning 1\");\n            return 1;\n        }\n        int result = n * factorial(n - 1);\n        System.out.println(\"Exiting frame: n = \" + currentN + \", returned = \" + result);\n        return result;\n    }\n\n    public static void main(String[] args) {\n        int finalResult = factorial(3);\n        System.out.println(\"Final Factorial(3): \" + finalResult);\n    }\n}",
+      "expectedOutput": "Entering frame: n = 3\nEntering frame: n = 2\nEntering frame: n = 1\nBase case reached: returning 1\nExiting frame: n = 2, returned = 2\nExiting frame: n = 3, returned = 6\nFinal Factorial(3): 6"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Shared Static State Race Conditions and Synchronization",
+      "question": "Demonstrate a race condition where multiple concurrent threads modify an unsynchronized shared static variable, then resolve the issue using `AtomicInteger`.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-14",
+      "id": "variables-scope-024",
+      "explanation": "Because static variables reside in shared memory accessible by all threads, concurrently modifying a plain static variable (such as counter++) introduces a race condition. The increment operation is not atomic; it consists of three distinct bytecode steps: reading the variable from main memory, incrementing it in a thread-local CPU register, and writing the result back to main memory. When two threads interleave these steps, increments are lost. Using java.util.concurrent.atomic.AtomicInteger solves this without explicit lock synchronization by using hardware-level Compare-And-Swap (CAS) instructions to guarantee thread-safe atomic updates.",
+      "hints": [
+        "Spawn two threads that each loop 10,000 times incrementing an AtomicInteger.",
+        "Call thread.join() on both threads to ensure they finish before reading the result.",
+        "Compare the deterministic AtomicInteger result against the theoretical total."
+      ],
+      "sampleCode": "import java.util.concurrent.atomic.AtomicInteger;\n\npublic class Solution {\n    static AtomicInteger safeCounter = new AtomicInteger(0);\n\n    public static void main(String[] args) throws InterruptedException {\n        Thread t1 = new Thread(() -> {\n            for (int i = 0; i < 1000; i++) {\n                safeCounter.incrementAndGet();\n            }\n        });\n\n        Thread t2 = new Thread(() -> {\n            for (int i = 0; i < 1000; i++) {\n                safeCounter.incrementAndGet();\n            }\n        });\n\n        t1.start();\n        t2.start();\n        t1.join();\n        t2.join();\n\n        System.out.println(\"Final synchronized count: \" + safeCounter.get());\n    }\n}",
+      "expectedOutput": "Final synchronized count: 2000"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Thread-Safe Lazy Singleton Implementation",
+      "question": "Implement a thread-safe lazy Singleton using double-checked locking with a `volatile` static reference, and verify that multiple calls return the exact same instance.",
+      "source": "java_coding_practice.json",
+      "source_id": "variables-scope-025",
+      "id": "variables-scope-025",
+      "explanation": "Lazy initialization delays creating an object until it is first requested. In multithreaded environments, a naive lazy singleton implementation (if (instance == null) instance = new Singleton()) can lead to race conditions where multiple threads create separate instances. Double-checked locking solves this efficiently by checking if the instance is null before acquiring a synchronized lock, avoiding synchronization overhead on subsequent calls. The static instance variable must be marked volatile to prevent CPU and compiler instruction reordering, ensuring other threads do not observe a partially constructed object.",
+      "hints": [
+        "Declare 'private static volatile Singleton instance;' to prevent instruction reordering.",
+        "Check 'if (instance == null)' before entering the synchronized block, then check again inside.",
+        "Verify that two calls to getInstance() return identical references using the '==' operator."
+      ],
+      "sampleCode": "public class Solution {\n    static class Singleton {\n        private static volatile Singleton instance;\n\n        private Singleton() {\n            System.out.println(\"Singleton constructor invoked\");\n        }\n\n        public static Singleton getInstance() {\n            if (instance == null) {\n                synchronized (Singleton.class) {\n                    if (instance == null) {\n                        instance = new Singleton();\n                    }\n                }\n            }\n            return instance;\n        }\n    }\n\n    public static void main(String[] args) {\n        Singleton s1 = Singleton.getInstance();\n        Singleton s2 = Singleton.getInstance();\n\n        System.out.println(\"s1 == s2: \" + (s1 == s2));\n    }\n}",
+      "expectedOutput": "Singleton constructor invoked\ns1 == s2: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Lazy Initializer Pattern",
+      "question": "Implement a thread-safe lazy-initialization holder idiom for a costly resource object without using synchronization blocks.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-11",
+      "id": "variables-scope-026",
+      "explanation": "The Initialization-on-Demand Holder idiom (also known as the Bill Pugh Singleton) provides thread-safe lazy initialization without the performance overhead or complexity of synchronized blocks or double-checked locking. It relies on the JVM's class initialization phase guaranteed by the Java Language Specification (JLS §12.4.2). The outer class can be loaded without initializing the costly resource. The nested static holder class is loaded only when its static member is explicitly referenced by getInstance(). The JVM guarantees that static class initialization is completely thread-safe, providing clean, zero-overhead lazy loading.",
+      "hints": [
+        "Create a private static class 'Holder' containing 'static final ExpensiveResource INSTANCE = new ExpensiveResource();'.",
+        "Make the outer class constructor private.",
+        "Implement 'getInstance()' returning 'Holder.INSTANCE'."
+      ],
+      "sampleCode": "public class Solution {\n    static class CostlyResource {\n        private CostlyResource() {\n            System.out.println(\"CostlyResource allocated\");\n        }\n\n        private static class ResourceHolder {\n            static final CostlyResource INSTANCE = new CostlyResource();\n        }\n\n        public static CostlyResource getInstance() {\n            return ResourceHolder.INSTANCE;\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Application bootstrapped\");\n        CostlyResource r1 = CostlyResource.getInstance();\n        CostlyResource r2 = CostlyResource.getInstance();\n        System.out.println(\"r1 == r2: \" + (r1 == r2));\n    }\n}",
+      "expectedOutput": "Application bootstrapped\nCostlyResource allocated\nr1 == r2: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Inheritance Initialization Hierarchy",
+      "question": "Create a 3-level inheritance hierarchy (GrandParent, Parent, Child) each containing static blocks, init blocks, and constructors. Trace and log the initialization chain.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-12",
+      "id": "variables-scope-027",
+      "explanation": "Extending inheritance across three generations reveals the full initialization order enforced by the JVM. When new Child() is called, class loading triggers the execution of all static blocks in descending order from the top of the inheritance chain: GrandParent static, Parent static, and finally Child static. After class loading completes, object instantiation proceeds generation by generation: GrandParent instance blocks and constructor execute first, followed by Parent instance blocks and constructor, and finally Child instance blocks and constructor. Understanding this hierarchy is essential for designing robust object frameworks and preventing initialization errors in subclassed components.",
+      "hints": [
+        "Create GrandParent, Parent extends GrandParent, and Child extends Parent.",
+        "Include a static block, an instance initialization block, and a constructor in each class.",
+        "Print clear diagnostic labels from each block and instantiate new Child() in main."
+      ],
+      "sampleCode": "public class Solution {\n    static class GrandParent {\n        static { System.out.println(\"[1] GrandParent static\"); }\n        { System.out.println(\"[4] GrandParent instance block\"); }\n        public GrandParent() { System.out.println(\"[5] GrandParent constructor\"); }\n    }\n\n    static class Parent extends GrandParent {\n        static { System.out.println(\"[2] Parent static\"); }\n        { System.out.println(\"[6] Parent instance block\"); }\n        public Parent() { System.out.println(\"[7] Parent constructor\"); }\n    }\n\n    static class Child extends Parent {\n        static { System.out.println(\"[3] Child static\"); }\n        { System.out.println(\"[8] Child instance block\"); }\n        public Child() { System.out.println(\"[9] Child constructor\"); }\n    }\n\n    public static void main(String[] args) {\n        new Child();\n    }\n}",
+      "expectedOutput": "[1] GrandParent static\n[2] Parent static\n[3] Child static\n[4] GrandParent instance block\n[5] GrandParent constructor\n[6] Parent instance block\n[7] Parent constructor\n[8] Child instance block\n[9] Child constructor"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Forward Reference Detection",
+      "question": "Write a sample showing illegal forward references in class variable initializers and implement the necessary code reorganization to resolve the dependencies.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-13",
+      "id": "variables-scope-028",
+      "explanation": "Under JLS §8.3.3, a member variable initialization cannot make a simple forward reference to a variable declared later in the class text. For example, declaring static int a = b + 1; followed by static int b = 10; causes javac to fail with 'illegal forward reference'. This restriction prevents reading uninitialized memory during the linear execution of class initializers. Reordering the declarations so that dependencies appear before their consumers resolves the issue. Interestingly, qualifying the forward reference (e.g., Solution.b) bypasses the compiler error but reads the default value 0 instead of the unassigned value 10, highlighting why textual ordering is critical.",
+      "hints": [
+        "Demonstrate the resolved order where dependent variables are declared after their inputs.",
+        "Explain that reading an uninitialized static variable via class qualification returns default 0.",
+        "Print the properly initialized dependent variables."
+      ],
+      "sampleCode": "public class Solution {\n    // Correct textual ordering resolves illegal forward references\n    static int baseValue = 10;\n    static int derivedValue = baseValue * 2;\n\n    public static void main(String[] args) {\n        System.out.println(\"baseValue: \" + baseValue);\n        System.out.println(\"derivedValue: \" + derivedValue);\n    }\n}",
+      "expectedOutput": "baseValue: 10\nderivedValue: 20"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Scope-Aware Symbol Table",
+      "question": "Write a simple program that simulates a compiler's symbol table: push new scopes on `{`, register variable names, search current and parent scopes, and pop on `}`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-14",
+      "id": "variables-scope-029",
+      "explanation": "Compilers manage variable scope using a data structure called a Symbol Table. A classic implementation uses a stack of maps (or a cactus stack). When the compiler encounters an opening curly brace ({), it pushes a new scope (Map<String, String>) onto the scope stack. Variable declarations inside that block are registered in the active scope map. When looking up an identifier, the compiler searches from the current scope upward through parent scopes to the global scope. When the closing curly brace (}) is encountered, the current scope is popped off the stack, removing its local variables from scope.",
+      "hints": [
+        "Use a 'Deque<Map<String, String>>' to represent the scope stack.",
+        "In enterScope(), push a new HashMap onto the deque; in exitScope(), pop the top map.",
+        "In lookup(name), iterate from the top of the stack down to find the closest visible definition."
+      ],
+      "sampleCode": "import java.util.ArrayDeque;\nimport java.util.Deque;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    static class SymbolTable {\n        private final Deque<Map<String, String>> scopes = new ArrayDeque<>();\n\n        public SymbolTable() {\n            enterScope(); // Global scope\n        }\n\n        public void enterScope() {\n            scopes.push(new HashMap<>());\n        }\n\n        public void exitScope() {\n            if (scopes.size() > 1) {\n                scopes.pop();\n            }\n        }\n\n        public void declare(String name, String type) {\n            scopes.peek().put(name, type);\n        }\n\n        public String lookup(String name) {\n            for (Map<String, String> scope : scopes) {\n                if (scope.containsKey(name)) {\n                    return scope.get(name);\n                }\n            }\n            return null;\n        }\n    }\n\n    public static void main(String[] args) {\n        SymbolTable table = new SymbolTable();\n        table.declare(\"globalVar\", \"int\");\n\n        table.enterScope(); // Enter block\n        table.declare(\"localVar\", \"String\");\n        System.out.println(\"Inside block - localVar: \" + table.lookup(\"localVar\"));\n        System.out.println(\"Inside block - globalVar: \" + table.lookup(\"globalVar\"));\n\n        table.exitScope(); // Exit block\n        System.out.println(\"After block - localVar: \" + table.lookup(\"localVar\"));\n        System.out.println(\"After block - globalVar: \" + table.lookup(\"globalVar\"));\n    }\n}",
+      "expectedOutput": "Inside block - localVar: String\nInside block - globalVar: int\nAfter block - localVar: null\nAfter block - globalVar: int"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Thread-Local Scoped Storage",
+      "question": "Implement a transaction manager using `ThreadLocal<T>` that provides isolated execution context variables across different threads without leakage.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "VAR-15",
+      "id": "variables-scope-030",
+      "explanation": "Java's java.lang.ThreadLocal provides thread-scoped variable storage. Each thread accessing a ThreadLocal instance maintains an independent, isolated copy of the variable inside its own Thread.threadLocals map. This eliminates the need for synchronization when managing per-thread state, such as transaction IDs, security tokens, or database sessions. Because thread pools (e.g., ExecutorService) reuse threads across requests, failing to call threadLocal.remove() can cause data leakage between unrelated requests and prevent objects from being garbage collected. Proper design requires wrapping ThreadLocal usage in try-finally blocks to guarantee cleanup.",
+      "hints": [
+        "Declare a 'private static final ThreadLocal<String> transactionId = new ThreadLocal<>();'.",
+        "Set the transaction ID in worker threads and verify that each thread reads only its own value.",
+        "Always call 'transactionId.remove()' in a finally block to prevent memory leaks in thread pools."
+      ],
+      "sampleCode": "public class Solution {\n    static class TransactionContext {\n        private static final ThreadLocal<String> currentTransaction = new ThreadLocal<>();\n\n        public static void setTransaction(String id) {\n            currentTransaction.set(id);\n        }\n\n        public static String getTransaction() {\n            return currentTransaction.get();\n        }\n\n        public static void clear() {\n            currentTransaction.remove();\n        }\n    }\n\n    public static void main(String[] args) throws InterruptedException {\n        Thread t1 = new Thread(() -> {\n            try {\n                TransactionContext.setTransaction(\"TXN-1001\");\n                System.out.println(\"Thread 1 context: \" + TransactionContext.getTransaction());\n            } finally {\n                TransactionContext.clear();\n            }\n        });\n\n        Thread t2 = new Thread(() -> {\n            try {\n                TransactionContext.setTransaction(\"TXN-2002\");\n                System.out.println(\"Thread 2 context: \" + TransactionContext.getTransaction());\n            } finally {\n                TransactionContext.clear();\n            }\n        });\n\n        t1.start();\n        t1.join();\n        t2.start();\n        t2.join();\n\n        System.out.println(\"Main thread context: \" + TransactionContext.getTransaction());\n    }\n}",
+      "expectedOutput": "Thread 1 context: TXN-1001\nThread 2 context: TXN-2002\nMain thread context: null"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

@@ -1,0 +1,477 @@
+{
+  "section": "Object-oriented Java",
+  "slug": "inheritance",
+  "topic": "Inheritance",
+  "page": 116,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic Method Overriding",
+      "question": "Create a base class Animal with a method speak(), and derive a subclass Dog that overrides speak() to output 'Woof'.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-01",
+      "id": "inheritance-001",
+      "explanation": "Inheritance establishes an 'is-a' relationship between a superclass and a subclass using the extends keyword. When a subclass defines an instance method with the exact same name, return type, and parameter signature as a method in its superclass, it overrides that method. At runtime, the JVM uses dynamic method dispatch (invokevirtual): it inspects the actual object type on the heap rather than the reference variable's compile-time type. When speak() is invoked on a Dog instance, the JVM executes Dog's implementation, printing 'Woof'.",
+      "hints": [
+        "Declare class Animal containing public void speak().",
+        "Declare class Dog extends Animal and override speak().",
+        "Instantiate Dog and invoke speak() to verify polymorphic dispatch."
+      ],
+      "sampleCode": "public class Solution {\n    static class Animal {\n        public void speak() {\n            System.out.println(\"Animal sound\");\n        }\n    }\n\n    static class Dog extends Animal {\n        @Override\n        public void speak() {\n            System.out.println(\"Woof\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Animal myDog = new Dog();\n        myDog.speak();\n    }\n}",
+      "expectedOutput": "Woof"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Subclass State and Behavior Extension",
+      "question": "Implement a Vehicle base class and a Car subclass that extends it by adding an additional field doors and a specialized method drive().",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-02",
+      "id": "inheritance-002",
+      "explanation": "Inheritance enables code reuse and structural specialization. When Car extends Vehicle, it inherits all non-private fields and methods from Vehicle while adding child-specific state and behavior. The subclass constructor uses super(brand) to initialize the inherited base fields before initializing its own doors field. In heap memory, a Car object contains storage for both the inherited brand field and the new doors field. Callers can invoke both inherited methods (start()) and subclass-specific methods (drive()) on the Car instance.",
+      "hints": [
+        "Create Vehicle with protected String brand; and a start() method.",
+        "Extend it with class Car extends Vehicle adding private int doors;.",
+        "Add a drive() method in Car and demonstrate calling both start() and drive()."
+      ],
+      "sampleCode": "public class Solution {\n    static class Vehicle {\n        protected String brand;\n        public Vehicle(String brand) { this.brand = brand; }\n        public void start() {\n            System.out.println(\"Vehicle started: \" + brand);\n        }\n    }\n\n    static class Car extends Vehicle {\n        private int doors;\n        public Car(String brand, int doors) {\n            super(brand);\n            this.doors = doors;\n        }\n        public void drive() {\n            System.out.println(\"Driving \" + brand + \" with \" + doors + \" doors\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Car car = new Car(\"Toyota\", 4);\n        car.start();\n        car.drive();\n    }\n}",
+      "expectedOutput": "Vehicle started: Toyota\nDriving Toyota with 4 doors"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Super Method Invocation",
+      "question": "Call a parent class method from an overriding subclass method using super.methodName() to augment rather than completely replace base behavior.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-03",
+      "id": "inheritance-003",
+      "explanation": "When a subclass overrides a parent method, the parent's original implementation is shadowed within the subclass instance. To extend the parent's logic rather than completely replacing it, the subclass uses super.methodName(). The super keyword tells the compiler to emit an invokespecial instruction that bypasses dynamic virtual dispatch and directly invokes the superclass implementation. This pattern is commonly used in lifecycle hooks, GUI rendering pipelines, and event listeners where child classes add custom logic while preserving necessary base processing.",
+      "hints": [
+        "In Parent, write public void display() { System.out.println(\"Parent display\"); }.",
+        "In Child extends Parent, override display() and invoke super.display(); first.",
+        "Add child-specific print statements immediately following the super invocation."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public void display() {\n            System.out.println(\"Base system configured\");\n        }\n    }\n\n    static class Child extends Parent {\n        @Override\n        public void display() {\n            super.display();\n            System.out.println(\"Subsystem extensions active\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Child child = new Child();\n        child.display();\n    }\n}",
+      "expectedOutput": "Base system configured\nSubsystem extensions active"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Compile-Time Override Verification",
+      "question": "Demonstrate the safety provided by the @Override annotation by overriding a method, and document in comments how typos in method names cause compilation failures.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-04",
+      "id": "inheritance-004",
+      "explanation": "The @Override annotation is an optional but critical compile-time check in Java. When applied to a method, it instructs the compiler to verify that a method with the exact same signature exists in an accessible superclass or super-interface. If a developer introduces a typographical error (such as spek() instead of speak()) or alters a parameter type, the compiler raises an error: 'method does not override or implement a method from a supertype'. Without @Override, the compiler would treat the misspelled method as an entirely new overloaded method, causing subtle bugs at runtime when dynamic dispatch fails to invoke it.",
+      "hints": [
+        "Annotate the subclass method with @Override.",
+        "Show a working override of process().",
+        "Add a comment explaining that misspelling the name as proces() triggers a compile error when @Override is present."
+      ],
+      "sampleCode": "public class Solution {\n    static class BaseService {\n        public void process() {\n            System.out.println(\"Base processing executed\");\n        }\n    }\n\n    static class CustomService extends BaseService {\n        @Override\n        public void process() {\n            System.out.println(\"Customized processing executed\");\n        }\n        // @Override\n        // public void proces() {} // Compile error: method does not override or implement a method from a supertype\n    }\n\n    public static void main(String[] args) {\n        BaseService service = new CustomService();\n        service.process();\n    }\n}",
+      "expectedOutput": "Customized processing executed"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Hierarchical ToString Extension",
+      "question": "Create a Person superclass and a Student subclass that adds a studentId field, overriding toString() in Student to incorporate super.toString().",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-05",
+      "id": "inheritance-005",
+      "explanation": "Extending string representations across an inheritance chain demonstrates cumulative state formatting. The Person superclass encapsulates base attributes (name, age) and formats them in its toString() method. The Student subclass adds studentId. When overriding toString() in Student, writing super.toString() + \", StudentID: \" + studentId reuses the parent class's formatting logic instead of re-accessing private parent fields. This maintains encapsulation while producing a complete string representation of the combined object state.",
+      "hints": [
+        "Implement toString() in Person returning \"Name: \" + name + \", Age: \" + age.",
+        "In Student, call super.toString() inside its overridden toString().",
+        "Append \", StudentID: \" + studentId to the superclass string result."
+      ],
+      "sampleCode": "public class Solution {\n    static class Person {\n        private String name;\n        private int age;\n        public Person(String name, int age) {\n            this.name = name;\n            this.age = age;\n        }\n        @Override\n        public String toString() {\n            return \"Name: \" + name + \", Age: \" + age;\n        }\n    }\n\n    static class Student extends Person {\n        private String studentId;\n        public Student(String name, int age, String studentId) {\n            super(name, age);\n            this.studentId = studentId;\n        }\n        @Override\n        public String toString() {\n            return super.toString() + \", StudentID: \" + studentId;\n        }\n    }\n\n    public static void main(String[] args) {\n        Student s = new Student(\"Akshat\", 26, \"STU-9921\");\n        System.out.println(s.toString());\n    }\n}",
+      "expectedOutput": "Name: Akshat, Age: 26, StudentID: STU-9921"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Single Inheritance Extension",
+      "question": "Demonstrate single class inheritance by extending an Animal class with a Cat subclass that overrides makeSound().",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-01",
+      "id": "inheritance-006",
+      "explanation": "Java supports single class inheritance: a class can directly extend exactly one superclass (class Sub extends Super). This design avoids the multiple inheritance diamond problem found in languages like C++. When Cat extends Animal, it forms a direct parent-child lineage. Calling cat.makeSound() uses virtual dispatch to invoke the overridden method in Cat. Single inheritance establishes clear, linear class hierarchies where responsibilities and state flow down a single chain.",
+      "hints": [
+        "Define class Animal with a default makeSound() method.",
+        "Extend it with class Cat extends Animal and override makeSound() to print 'Meow'.",
+        "Instantiate Cat and execute makeSound()."
+      ],
+      "sampleCode": "public class Solution {\n    static class Animal {\n        public void makeSound() {\n            System.out.println(\"Generic sound\");\n        }\n    }\n\n    static class Cat extends Animal {\n        @Override\n        public void makeSound() {\n            System.out.println(\"Meow\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Animal pet = new Cat();\n        pet.makeSound();\n    }\n}",
+      "expectedOutput": "Meow"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Dynamic Method Dispatch (Polymorphism)",
+      "question": "Store instances of Circle, Square, and Triangle in a Shape[] array. Iterate over the array and call draw() to observe dynamic method dispatch.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-03",
+      "id": "inheritance-007",
+      "explanation": "Polymorphism enables treating objects of different subclasses uniformly through a shared superclass reference. When Circle, Square, and Triangle are stored in an array of type Shape[], their concrete types are upcast to Shape. In the iteration loop for (Shape s : shapes), calling s.draw() emits an invokevirtual bytecode instruction. At runtime, the JVM looks up the target object's virtual method table (vtable) and dispatches to the overridden method of the concrete subclass (Circle.draw(), Square.draw(), etc.). This allows client code to process collections of related objects without knowing their concrete types upfront.",
+      "hints": [
+        "Create an array Shape[] shapes = { new Circle(), new Square(), new Triangle() };.",
+        "Ensure Circle, Square, and Triangle each override public void draw().",
+        "Use an enhanced for-each loop to invoke draw() on each element."
+      ],
+      "sampleCode": "public class Solution {\n    static class Shape {\n        public void draw() { System.out.println(\"Drawing Shape\"); }\n    }\n    static class Circle extends Shape {\n        @Override public void draw() { System.out.println(\"Drawing Circle\"); }\n    }\n    static class Square extends Shape {\n        @Override public void draw() { System.out.println(\"Drawing Square\"); }\n    }\n    static class Triangle extends Shape {\n        @Override public void draw() { System.out.println(\"Drawing Triangle\"); }\n    }\n\n    public static void main(String[] args) {\n        Shape[] shapes = { new Circle(), new Square(), new Triangle() };\n        for (Shape s : shapes) {\n            s.draw();\n        }\n    }\n}",
+      "expectedOutput": "Drawing Circle\nDrawing Square\nDrawing Triangle"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Instanceof Type Verification",
+      "question": "Iterate through an array of Shape references holding mixed subclasses, use instanceof to identify specific subtypes, and downcast safely to call subclass-specific methods.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-04",
+      "id": "inheritance-008",
+      "explanation": "When working with polymorphic collections, elements are often upcast to their common supertype. Calling subclass-specific methods that are not declared in the superclass requires downcasting. Because downcasting an incompatible type throws a ClassCastException at runtime, the code must check the object's type first using the instanceof operator. If s instanceof Circle evaluates to true, the reference can be safely cast via (Circle) s to invoke subclass-specific methods like roll().",
+      "hints": [
+        "Iterate over the array using a for-each loop.",
+        "Check types using if (shape instanceof Circle).",
+        "Explicitly cast Circle c = (Circle) shape; and call its specialized method."
+      ],
+      "sampleCode": "public class Solution {\n    static class Shape {}\n    static class Circle extends Shape {\n        public void roll() { System.out.println(\"Circle rolling\"); }\n    }\n    static class Square extends Shape {\n        public void slide() { System.out.println(\"Square sliding\"); }\n    }\n\n    public static void main(String[] args) {\n        Shape[] shapes = { new Circle(), new Square() };\n        for (Shape s : shapes) {\n            if (s instanceof Circle) {\n                Circle c = (Circle) s;\n                c.roll();\n            } else if (s instanceof Square) {\n                Square sq = (Square) s;\n                sq.slide();\n            }\n        }\n    }\n}",
+      "expectedOutput": "Circle rolling\nSquare sliding"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Final Class and Final Method Protection",
+      "question": "Demonstrate that declaring a class final prevents inheritance, and declaring a method final prevents subclasses from overriding it, documenting compiler restrictions in comments.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-05",
+      "id": "inheritance-009",
+      "explanation": "The final keyword allows developers to restrict extension in object-oriented hierarchies. When a class is declared final, it cannot be extended by any subclass (cannot inherit from final class). This is standard for immutable classes like java.lang.String and java.lang.Integer to preserve immutability guarantees. When an individual method is marked final, subclasses can inherit and call it, but cannot override it (overridden method is final). This ensures critical algorithms and security validations cannot be modified or bypassed by subclasses.",
+      "hints": [
+        "Mark a base class method public final void verifyToken().",
+        "Demonstrate that subclasses can invoke verifyToken() directly.",
+        "Explain in comments that attempting to extend a final class or override a final method fails compilation."
+      ],
+      "sampleCode": "public class Solution {\n    static class CoreProcessor {\n        public final void verifyToken() {\n            System.out.println(\"Security token verified cryptographically\");\n        }\n    }\n\n    static class ExtensionProcessor extends CoreProcessor {\n        // Attempting to override verifyToken() causes a compile-time error:\n        // public void verifyToken() {} // Cannot override final method\n        public void performWork() {\n            verifyToken();\n            System.out.println(\"Task execution completed\");\n        }\n    }\n\n    public static void main(String[] args) {\n        ExtensionProcessor proc = new ExtensionProcessor();\n        proc.performWork();\n    }\n}",
+      "expectedOutput": "Security token verified cryptographically\nTask execution completed"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Multilevel Inheritance Method Aggregation",
+      "question": "Implement a 3-level inheritance hierarchy (A -> B -> C) where each level adds a distinct method, and demonstrate invoking all three methods on an instance of class C.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-06",
+      "id": "inheritance-010",
+      "explanation": "Multilevel inheritance forms an extended chain of class derivation (C extends B, and B extends A). In this structure, the most derived subclass inherits the cumulative methods and accessible state from all ancestors above it. When an instance of C is allocated on the heap, its memory layout includes storage for all inherited non-private fields across the chain. Calling methods declared in A, B, and C on the C instance executes smoothly because the compiler resolves all inherited public and protected methods down the derivation path.",
+      "hints": [
+        "Define class A { void methodA() ... }.",
+        "Define class B extends A { void methodB() ... }.",
+        "Define class C extends B { void methodC() ... } and call all three methods from an instance of C."
+      ],
+      "sampleCode": "public class Solution {\n    static class A {\n        public void methodA() { System.out.println(\"Method A executed\"); }\n    }\n    static class B extends A {\n        public void methodB() { System.out.println(\"Method B executed\"); }\n    }\n    static class C extends B {\n        public void methodC() { System.out.println(\"Method C executed\"); }\n    }\n\n    public static void main(String[] args) {\n        C obj = new C();\n        obj.methodA();\n        obj.methodB();\n        obj.methodC();\n    }\n}",
+      "expectedOutput": "Method A executed\nMethod B executed\nMethod C executed"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Polymorphic Area Calculator",
+      "question": "Create an abstract or base Shape class with an area() method, implement subclasses Circle and Rectangle, store them in a Shape[] array, and compute total combined area.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-07",
+      "id": "inheritance-011",
+      "explanation": "Polymorphic method execution allows processing collections of related objects through a shared base type. The base Shape class defines double area(), which subclasses Circle (using PI * r * r) and Rectangle (using w * h) override with their specific formulas. When iterating over a Shape[] array, calling shape.area() uses virtual dispatch to invoke each object's concrete implementation. This allows calculating aggregate totals across mixed geometries without checking specific types or casting.",
+      "hints": [
+        "Declare double area() in base class Shape.",
+        "In Circle, calculate Math.PI * radius * radius.",
+        "In Rectangle, calculate length * width."
+      ],
+      "sampleCode": "public class Solution {\n    static class Shape {\n        public double area() { return 0.0; }\n    }\n    static class Circle extends Shape {\n        private double radius;\n        public Circle(double radius) { this.radius = radius; }\n        @Override public double area() { return Math.PI * radius * radius; }\n    }\n    static class Rectangle extends Shape {\n        private double width, height;\n        public Rectangle(double w, double h) { this.width = w; this.height = h; }\n        @Override public double area() { return width * height; }\n    }\n\n    public static void main(String[] args) {\n        Shape[] shapes = { new Circle(2.0), new Rectangle(3.0, 4.0) };\n        double totalArea = 0;\n        for (Shape s : shapes) {\n            totalArea += s.area();\n        }\n        System.out.printf(\"Total Area: %.2f%n\", totalArea);\n    }\n}",
+      "expectedOutput": "Total Area: 24.57"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Polymorphic Payroll Processing",
+      "question": "Implement an Employee base class with Manager and Developer subclasses that override calculateSalary(), and compute payroll by iterating over an Employee[] array.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-08",
+      "id": "inheritance-012",
+      "explanation": "Polymorphism simplifies business domain processing across organizational hierarchies. The Employee base class defines a baseline compensation calculation. The Manager subclass overrides it to add an executive bonus, while Developer overrides it to include project allowances. Storing diverse workers in an Employee[] array allows a payroll loop to invoke e.calculateSalary() uniformly. Dynamic dispatch routes each call to the appropriate calculation based on the employee's role, illustrating clean object-oriented architecture without procedural type checking.",
+      "hints": [
+        "Base class Employee defines public double calculateSalary().",
+        "Subclasses Manager and Developer override calculateSalary() to apply role-specific bonuses.",
+        "Iterate over an Employee[] array to calculate and print the total payroll amount."
+      ],
+      "sampleCode": "public class Solution {\n    static class Employee {\n        protected double baseSalary;\n        public Employee(double base) { this.baseSalary = base; }\n        public double calculateSalary() { return baseSalary; }\n    }\n    static class Manager extends Employee {\n        private double bonus;\n        public Manager(double base, double bonus) { super(base); this.bonus = bonus; }\n        @Override public double calculateSalary() { return baseSalary + bonus; }\n    }\n    static class Developer extends Employee {\n        private double stipend;\n        public Developer(double base, double stipend) { super(base); this.stipend = stipend; }\n        @Override public double calculateSalary() { return baseSalary + stipend; }\n    }\n\n    public static void main(String[] args) {\n        Employee[] team = { new Manager(8000, 2000), new Developer(6000, 500) };\n        double totalPayroll = 0;\n        for (Employee e : team) {\n            totalPayroll += e.calculateSalary();\n        }\n        System.out.println(\"Total Payroll: $\" + (int) totalPayroll);\n    }\n}",
+      "expectedOutput": "Total Payroll: $16500"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Field Hiding vs Method Overriding Disparity",
+      "question": "Declare a field with the same name in both parent and child classes, and demonstrate that field access resolves at compile time by reference type while method calls resolve at runtime by object type.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-09",
+      "id": "inheritance-013",
+      "explanation": "In Java, fields do not participate in polymorphism; only non-private, non-static instance methods are overridden dynamically. When a child class declares a field with the exact same name as an accessible field in its parent class, it hides the parent field rather than overriding it. When accessing ref.title on a Parent ref = new Child() reference, the compiler resolves the field based on the declared compile-time reference type (Parent), reading the parent's field. Calling an overridden method ref.getTitle(), however, uses runtime virtual dispatch to execute the child's method.",
+      "hints": [
+        "Declare public String title = \"ParentTitle\"; in Parent and public String title = \"ChildTitle\"; in Child.",
+        "Override a getTitle() method in both classes.",
+        "Access both ref.title and ref.getTitle() through a Parent ref = new Child() reference to observe the difference."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public String title = \"ParentTitle\";\n        public String getTitle() { return title; }\n    }\n\n    static class Child extends Parent {\n        public String title = \"ChildTitle\"; // Hides Parent.title\n        @Override public String getTitle() { return title; }\n    }\n\n    public static void main(String[] args) {\n        Parent ref = new Child();\n        System.out.println(\"Field access via reference (static binding):  \" + ref.title);\n        System.out.println(\"Method call via reference (dynamic dispatch): \" + ref.getTitle());\n    }\n}",
+      "expectedOutput": "Field access via reference (static binding):  ParentTitle\nMethod call via reference (dynamic dispatch): ChildTitle"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Protected State Access and ToString Chaining",
+      "question": "Implement a Vehicle class with protected fields make and speed, extend it with Car, and demonstrate direct protected access and super.toString() chaining.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-10",
+      "id": "inheritance-014",
+      "explanation": "Protected member access allows subclasses to access internal state directly without going through public accessors. When Vehicle declares protected String make; and protected int speed;, subclass Car can read and modify those fields directly using this.make or make. In Car's toString() method, calling super.toString() reuses the parent class's base formatting, appending its own attributes (doors) to construct a complete description. This pattern maintains clean class boundaries while avoiding code duplication across inheritance tiers.",
+      "hints": [
+        "Declare fields as protected in Vehicle.",
+        "Directly read those protected fields inside methods in Car extends Vehicle.",
+        "Chain string representations: return super.toString() + \", Doors: \" + doors;."
+      ],
+      "sampleCode": "public class Solution {\n    static class Vehicle {\n        protected String make;\n        protected int speed;\n        public Vehicle(String make, int speed) { this.make = make; this.speed = speed; }\n        @Override public String toString() {\n            return \"Make: \" + make + \", Speed: \" + speed + \" km/h\";\n        }\n    }\n\n    static class Car extends Vehicle {\n        private int doors;\n        public Car(String make, int speed, int doors) {\n            super(make, speed);\n            this.doors = doors;\n        }\n        @Override public String toString() {\n            return super.toString() + \", Doors: \" + doors;\n        }\n    }\n\n    public static void main(String[] args) {\n        Car car = new Car(\"Honda\", 120, 4);\n        System.out.println(car.toString());\n    }\n}",
+      "expectedOutput": "Make: Honda, Speed: 120 km/h, Doors: 4"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Covariant Return Types",
+      "question": "Implement parent and child producer classes where the subclass overrides a factory method and narrows the return type to a more specific subtype (covariant return).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-06",
+      "id": "inheritance-015",
+      "explanation": "Introduced in Java 5, covariant return types allow an overriding subclass method to declare a return type that is a subtype of the return type declared in the parent method. For example, if Producer.create() returns Item, subclass SpecializedProducer.create() can return SpecializedItem. This satisfies the Liskov Substitution Principle because SpecializedItem is an Item. Callers using the specific subclass reference receive the narrower type directly without needing an explicit cast, improving type safety and API usability.",
+      "hints": [
+        "Create an Item class and a SpecializedItem extends Item subclass.",
+        "In Factory, declare public Item create().",
+        "In TechFactory extends Factory, override with public SpecializedItem create()."
+      ],
+      "sampleCode": "public class Solution {\n    static class Item {\n        public String getCategory() { return \"General Item\"; }\n    }\n    static class SpecializedItem extends Item {\n        @Override public String getCategory() { return \"Specialized Tech Item\"; }\n        public void configure() { System.out.println(\"Tech item configured\"); }\n    }\n\n    static class Factory {\n        public Item create() { return new Item(); }\n    }\n    static class TechFactory extends Factory {\n        @Override public SpecializedItem create() { return new SpecializedItem(); }\n    }\n\n    public static void main(String[] args) {\n        TechFactory tf = new TechFactory();\n        SpecializedItem item = tf.create(); // No explicit downcast needed!\n        System.out.println(item.getCategory());\n        item.configure();\n    }\n}",
+      "expectedOutput": "Specialized Tech Item\nTech item configured"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Equals and HashCode Symmetry in Inheritance",
+      "question": "Demonstrate the symmetry violation that occurs when overriding equals() in subclasses using instanceof, and fix it using getClass() or composition.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-07",
+      "id": "inheritance-016",
+      "explanation": "The equals() contract mandates symmetry: x.equals(y) must return true if and only if y.equals(x) returns true (Joshua Bloch, Effective Java). When extending a concrete class with new state fields (such as ColoredPoint adding a color to Point), implementing equals() using instanceof breaks symmetry. When evaluating point.equals(coloredPoint), point checks coordinates and returns true. However, evaluating coloredPoint.equals(point) checks color, finds it missing, and returns false. Using getClass() ensures that objects are equal only if they share the exact same runtime class, preserving symmetry across the hierarchy.",
+      "hints": [
+        "Define Point with x, y and ColoredPoint extends Point adding color.",
+        "Show how instanceof causes p.equals(cp) to return true while cp.equals(p) returns false.",
+        "Fix the comparison in equals() using if (obj == null || getClass() != obj.getClass()) return false;."
+      ],
+      "sampleCode": "public class Solution {\n    static class Point {\n        protected int x, y;\n        public Point(int x, int y) { this.x = x; this.y = y; }\n        @Override public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false; // Symmetry guard\n            Point p = (Point) o;\n            return x == p.x && y == p.y;\n        }\n    }\n\n    static class ColoredPoint extends Point {\n        private String color;\n        public ColoredPoint(int x, int y, String color) {\n            super(x, y);\n            this.color = color;\n        }\n        @Override public boolean equals(Object o) {\n            if (!super.equals(o)) return false;\n            ColoredPoint cp = (ColoredPoint) o;\n            return color.equals(cp.color);\n        }\n    }\n\n    public static void main(String[] args) {\n        Point p = new Point(1, 2);\n        ColoredPoint cp = new ColoredPoint(1, 2, \"Red\");\n        System.out.println(\"p.equals(cp):  \" + p.equals(cp));\n        System.out.println(\"cp.equals(p):  \" + cp.equals(p));\n        System.out.println(\"Symmetry preserved: \" + (p.equals(cp) == cp.equals(p)));\n    }\n}",
+      "expectedOutput": "p.equals(cp):  false\ncp.equals(p):  false\nSymmetry preserved: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Pattern Matching for Instanceof",
+      "question": "Refactor a legacy block of if (obj instanceof Employee) { Employee e = (Employee) obj; ... } using modern pattern matching for instanceof (Java 16+).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-08",
+      "id": "inheritance-017",
+      "explanation": "Introduced in Java 16 (JEP 394), pattern matching for instanceof simplifies type testing and downcasting into a single step. In legacy Java, developers had to check the type with instanceof and then write a separate explicit cast statement (Employee e = (Employee) obj;). Pattern matching combines these operations: if (obj instanceof Employee e) checks the type, and if true, automatically casts and binds the value to the scoped pattern variable e. This eliminates redundant casting code and reduces the risk of casting errors.",
+      "hints": [
+        "Replace explicit casts with pattern syntax: if (emp instanceof Manager m).",
+        "Use the bound pattern variable m directly inside the conditional block.",
+        "Combine pattern variables with logical conditions, such as if (obj instanceof Manager m && m.hasBonus())."
+      ],
+      "sampleCode": "public class Solution {\n    static class Employee {\n        public String getName() { return \"Employee\"; }\n    }\n    static class Manager extends Employee {\n        public int getTeamSize() { return 8; }\n    }\n\n    public static void process(Employee emp) {\n        if (emp instanceof Manager m) {\n            System.out.println(\"Manager of team size: \" + m.getTeamSize());\n        } else {\n            System.out.println(\"Standard: \" + emp.getName());\n        }\n    }\n\n    public static void main(String[] args) {\n        process(new Manager());\n        process(new Employee());\n    }\n}",
+      "expectedOutput": "Manager of team size: 8\nStandard: Employee"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Variable Shadowing vs Method Overriding",
+      "question": "Create parent and child classes with the same field name int value. Access the field through parent and child references to demonstrate that fields are not polymorphic.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-09",
+      "id": "inheritance-018",
+      "explanation": "Polymorphic method dispatch does not apply to member fields in Java. When a child class declares an instance variable with the same identifier as a field in its superclass, the child field shadows the parent field. Both fields exist independently within the object on the heap. The field that gets accessed is resolved at compile time based strictly on the declared type of the reference variable (ref.value). In contrast, instance methods resolve dynamically at runtime based on the actual object instance on the heap.",
+      "hints": [
+        "Declare public int value = 10; in Parent and public int value = 20; in Child.",
+        "Declare public int getValue() in both classes, returning their respective fields.",
+        "Compare ref.value with ref.getValue() on a Parent ref = new Child() reference."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public int value = 10;\n        public int getValue() { return value; }\n    }\n    static class Child extends Parent {\n        public int value = 20; // Shadows Parent.value\n        @Override public int getValue() { return value; }\n    }\n\n    public static void main(String[] args) {\n        Parent poly = new Child();\n        System.out.println(\"Field access (compile-time type Parent): \" + poly.value);\n        System.out.println(\"Method access (runtime dynamic dispatch): \" + poly.getValue());\n    }\n}",
+      "expectedOutput": "Field access (compile-time type Parent): 10\nMethod access (runtime dynamic dispatch): 20"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Composition over Inheritance Refactoring",
+      "question": "Refactor a design where Stack incorrectly inherits from ArrayList to use composition (delegation) instead, explaining the architectural benefits.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-10",
+      "id": "inheritance-019",
+      "explanation": "The principle of 'Composition over Inheritance' states that classes should achieve polymorphic behavior and code reuse by wrapping component objects rather than inheriting implementation. When a class like Stack extends ArrayList, it exposes unintended list operations (add(index, elem), remove(index)) that break LIFO (Last-In-First-Out) stack invariants. Refactoring to composition wraps a private ArrayList inside Stack. The stack exposes only proper LIFO methods (push, pop, peek), delegating internally to the list while preventing arbitrary index access.",
+      "hints": [
+        "Replace class Stack extends ArrayList with a private field: private List<Integer> list = new ArrayList<>();.",
+        "Implement push(item) by calling list.add(item).",
+        "Implement pop() by calling list.remove(list.size() - 1) to enforce LIFO semantics."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    // Composition encapsulates the internal list and enforces LIFO rules\n    static class SafeStack {\n        private final List<Integer> storage = new ArrayList<>();\n        public void push(int item) { storage.add(item); }\n        public int pop() {\n            if (storage.isEmpty()) throw new IllegalStateException(\"Stack empty\");\n            return storage.remove(storage.size() - 1);\n        }\n        public int peek() {\n            if (storage.isEmpty()) throw new IllegalStateException(\"Stack empty\");\n            return storage.get(storage.size() - 1);\n        }\n    }\n\n    public static void main(String[] args) {\n        SafeStack stack = new SafeStack();\n        stack.push(10);\n        stack.push(20);\n        System.out.println(\"Popped top element: \" + stack.pop());\n        System.out.println(\"Peeked current top: \" + stack.peek());\n    }\n}",
+      "expectedOutput": "Popped top element: 20\nPeeked current top: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Instanceof Pattern Matching in Polymorphic Hierarchies",
+      "question": "Use Java 16+ pattern matching for instanceof with guarded logic to process a heterogeneous Shape array, invoking specialized subclass methods cleanly.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-11",
+      "id": "inheritance-020",
+      "explanation": "Pattern matching for instanceof simplifies processing heterogeneous object hierarchies by combining type verification, casting, and conditional checking into a single expression. In an expression like if (shape instanceof Circle c && c.getRadius() > 5.0), the compiler checks the type, binds the pattern variable c, and evaluates the second condition in one step. This eliminates boilerplate casting code and makes complex downcasting logic safer and more concise.",
+      "hints": [
+        "Combine type binding with conditions: if (shape instanceof Circle c && c.getRadius() > 5).",
+        "Process Square with else if (shape instanceof Square sq).",
+        "Print specific diagnostic output from each matched branch."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Shape {}\n    static class Circle extends Shape {\n        private double r;\n        public Circle(double r) { this.r = r; }\n        public double getRadius() { return r; }\n    }\n    static class Square extends Shape {\n        private double side;\n        public Square(double s) { this.side = s; }\n        public double getSide() { return side; }\n    }\n\n    public static void main(String[] args) {\n        Shape[] shapes = { new Circle(10.0), new Circle(3.0), new Square(4.0) };\n        for (Shape s : shapes) {\n            if (s instanceof Circle c && c.getRadius() > 5.0) {\n                System.out.println(\"Large Circle detected, radius: \" + c.getRadius());\n            } else if (s instanceof Circle c) {\n                System.out.println(\"Small Circle detected, radius: \" + c.getRadius());\n            } else if (s instanceof Square sq) {\n                System.out.println(\"Square detected, side: \" + sq.getSide());\n            }\n        }\n    }\n}",
+      "expectedOutput": "Large Circle detected, radius: 10.0\nSmall Circle detected, radius: 3.0\nSquare detected, side: 4.0"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Subclassing and Override Prohibition Guards",
+      "question": "Implement a security framework showing that declaring a class final prevents extension and declaring a method final prevents overriding, demonstrating how this protects sensitive code.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-12",
+      "id": "inheritance-021",
+      "explanation": "Security-sensitive architectures use final modifiers to protect core invariants from being compromised via subclassing or method overriding. If a security class were extensible, a malicious or buggy subclass could override verification methods to bypass authentication checks or leak credentials. Marking the critical validation method final ensures that even if the class is extended, the validation logic cannot be replaced. Marking the entire class final prevents any subclassing whatsoever, ensuring that instances cannot be substituted by unauthorized subclasses.",
+      "hints": [
+        "Declare a base AuthModule with public final boolean authenticate(String token).",
+        "Declare public final class SecureSession that cannot be extended.",
+        "Document in comments the compiler errors generated when attempting to extend or override these components."
+      ],
+      "sampleCode": "public class Solution {\n    static class AuthModule {\n        // Subclasses cannot override this security check\n        public final boolean authenticate(String token) {\n            return \"SECURE_KEY\".equals(token);\n        }\n    }\n\n    static final class SecureSession {\n        private final String sessionId;\n        public SecureSession(String id) { this.sessionId = id; }\n        public String getSessionId() { return sessionId; }\n    }\n\n    // class HackSession extends SecureSession {} // Compile error: cannot inherit from final SecureSession\n\n    public static void main(String[] args) {\n        AuthModule auth = new AuthModule();\n        SecureSession session = new SecureSession(\"SES-9921\");\n        System.out.println(\"Authentication passed: \" + auth.authenticate(\"SECURE_KEY\"));\n        System.out.println(\"Session created: \" + session.getSessionId());\n    }\n}",
+      "expectedOutput": "Authentication passed: true\nSession created: SES-9921"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Subclass Equals Symmetry Breakdown and Fix",
+      "question": "Demonstrate the classic symmetry violation when overriding equals() in subclasses using instanceof, and resolve it using exact getClass() checks.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-13",
+      "id": "inheritance-022",
+      "explanation": "The equals() contract requires symmetry: x.equals(y) must return true if and only if y.equals(x) returns true (Joshua Bloch, Effective Java). When extending a concrete class with new state fields, implementing equals() using instanceof breaks symmetry. For example, a Point(x, y) compared against a ColorPoint(x, y, color) will return true (since ColorPoint instanceof Point is true), but the reverse comparison returns false because Point lacks the color field. Using getClass() ensures that objects are considered equal only if they share the exact same concrete runtime class, preserving symmetry across the inheritance hierarchy.",
+      "hints": [
+        "Show how instanceof causes p.equals(cp) to evaluate to true while cp.equals(p) evaluates to false.",
+        "Fix equals() in Point using if (o == null || getClass() != o.getClass()) return false;.",
+        "Verify in main that symmetry holds (p.equals(cp) == cp.equals(p))."
+      ],
+      "sampleCode": "public class Solution {\n    static class Point {\n        protected int x, y;\n        public Point(int x, int y) { this.x = x; this.y = y; }\n        @Override public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false;\n            Point point = (Point) o;\n            return x == point.x && y == point.y;\n        }\n    }\n    static class ColorPoint extends Point {\n        private String color;\n        public ColorPoint(int x, int y, String color) {\n            super(x, y);\n            this.color = color;\n        }\n        @Override public boolean equals(Object o) {\n            if (!super.equals(o)) return false;\n            ColorPoint that = (ColorPoint) o;\n            return color.equals(that.color);\n        }\n    }\n\n    public static void main(String[] args) {\n        Point p = new Point(1, 2);\n        ColorPoint cp = new ColorPoint(1, 2, \"Blue\");\n        System.out.println(\"p.equals(cp): \" + p.equals(cp));\n        System.out.println(\"cp.equals(p): \" + cp.equals(p));\n    }\n}",
+      "expectedOutput": "p.equals(cp): false\ncp.equals(p): false"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Stack API: Inheritance vs Composition",
+      "question": "Implement a Stack by extending ArrayList to show how unwanted methods leak into the public API, then refactor it using composition to provide a clean, encapsulated stack interface.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-14",
+      "id": "inheritance-023",
+      "explanation": "Extending a collection class like ArrayList to implement a Stack violates proper interface segregation. Because inheritance exposes all public methods of the superclass, a Stack extends ArrayList inherits methods like add(index, element), remove(index), and set(index, element). These methods allow callers to insert or delete elements in the middle of the stack, breaking the LIFO (Last-In-First-Out) stack invariant. Using composition wraps an ArrayList as a private internal field instead. The class exposes only proper stack operations (push, pop, peek), delegating to the internal list while preventing arbitrary index access.",
+      "hints": [
+        "Show that inheriting from ArrayList allows invalid calls like stack.add(0, 999) that bypass LIFO rules.",
+        "Refactor to composition with a private field: private List<Integer> list = new ArrayList<>();.",
+        "Expose only push(), pop(), and peek() methods in the refactored class."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    // Composition encapsulates the internal list and enforces LIFO rules\n    static class CleanStack {\n        private final List<Integer> storage = new ArrayList<>();\n        public void push(int item) { storage.add(item); }\n        public int pop() {\n            if (storage.isEmpty()) throw new IllegalStateException(\"Stack empty\");\n            return storage.remove(storage.size() - 1);\n        }\n        public int peek() {\n            if (storage.isEmpty()) throw new IllegalStateException(\"Stack empty\");\n            return storage.get(storage.size() - 1);\n        }\n    }\n\n    public static void main(String[] args) {\n        CleanStack stack = new CleanStack();\n        stack.push(10);\n        stack.push(20);\n        System.out.println(\"Popped top element: \" + stack.pop());\n        System.out.println(\"Peeked current top: \" + stack.peek());\n    }\n}",
+      "expectedOutput": "Popped top element: 20\nPeeked current top: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Covariant Return Types with Deep Cloning",
+      "question": "Implement a cloning hierarchy where Parent.copy() returns Parent and Child.copy() narrows its return type to Child, demonstrating covariant return types without downcasting.",
+      "source": "java_coding_practice.json",
+      "source_id": "inheritance-15",
+      "id": "inheritance-024",
+      "explanation": "Covariant return types allow an overriding method in a subclass to return a more specific subtype than the method it overrides in the parent class. At the bytecode level, the compiler generates a synthetic bridge method to satisfy the parent class's signature while allowing callers using the subclass reference to receive the narrower type directly. When Child.copy() declares public Child copy(), callers can write Child cloned = c.copy() without needing an explicit cast (Child) c.copy(). This improves code readability and compile-time type safety.",
+      "hints": [
+        "In Parent, define public Parent copy().",
+        "In Child extends Parent, override with public Child copy().",
+        "Demonstrate in main that invoking copy() on a Child reference requires no cast."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        protected int id;\n        public Parent(int id) { this.id = id; }\n        public Parent copy() { return new Parent(this.id); }\n    }\n\n    static class Child extends Parent {\n        private String name;\n        public Child(int id, String name) { super(id); this.name = name; }\n        @Override\n        public Child copy() { // Covariant return type\n            return new Child(this.id, this.name);\n        }\n    }\n\n    public static void main(String[] args) {\n        Child original = new Child(101, \"Akshat\");\n        Child duplicated = original.copy(); // No explicit downcasting needed\n        System.out.println(\"Cloned Child ID: \" + duplicated.id + \" | Name: \" + duplicated.name);\n    }\n}",
+      "expectedOutput": "Cloned Child ID: 101 | Name: Akshat"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Liskov Substitution Principle Checker",
+      "question": "Demonstrate the classic Rectangle-Square LSP violation where Square extends Rectangle breaks resizing behavior, and refactor the class structure to ensure all subclasses can substitute their base types safely.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-11",
+      "id": "inheritance-025",
+      "explanation": "The Liskov Substitution Principle (LSP) states that objects of a superclass should be replaceable with objects of a subclass without breaking application correctness. In mathematics, a square is a rectangle, but modeling this with class Square extends Rectangle violates LSP in software. A rectangle allows setting width and height independently. In a Square subclass, setting width must also set height to maintain equal sides. If a method expects a Rectangle and resizes width and height independently to calculate area, passing a Square breaks the method's assumptions and produces incorrect results. The fix is to make Rectangle and Square separate classes implementing a common Shape interface.",
+      "hints": [
+        "Demonstrate how setting width on a Square also mutates height, breaking rectangle expectations.",
+        "Refactor so both classes implement a common interface Shape with a getArea() method.",
+        "Verify that both shapes calculate area correctly without violating substitution expectations."
+      ],
+      "sampleCode": "public class Solution {\n    interface Shape {\n        int getArea();\n    }\n\n    static class Rectangle implements Shape {\n        protected int width, height;\n        public Rectangle(int w, int h) { this.width = w; this.height = h; }\n        public void setWidth(int w) { this.width = w; }\n        public void setHeight(int h) { this.height = h; }\n        public int getArea() { return width * height; }\n    }\n\n    static class Square implements Shape {\n        private int side;\n        public Square(int side) { this.side = side; }\n        public void setSide(int s) { this.side = s; }\n        public int getArea() { return side * side; }\n    }\n\n    public static void main(String[] args) {\n        Shape rect = new Rectangle(5, 10);\n        Shape sq = new Square(5);\n        System.out.println(\"Rectangle Area: \" + rect.getArea());\n        System.out.println(\"Square Area:    \" + sq.getArea());\n    }\n}",
+      "expectedOutput": "Rectangle Area: 50\nSquare Area:    25"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Double Dispatch via Visitor Pattern",
+      "question": "Implement double dispatch using the Visitor pattern across an element hierarchy (TextElement, ImageElement) and a DocumentVisitor.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-12",
+      "id": "inheritance-026",
+      "explanation": "Java supports single dispatch: method execution is determined dynamically by the runtime type of the target object (this), while method parameters are resolved at compile time based on their declared types. Double dispatch determines execution based on the runtime types of two objects: the receiver and the parameter. The Visitor pattern achieves this using two calls: 1) The client invokes element.accept(visitor) on an element hierarchy, which dynamically dispatches to the concrete element. 2) Inside that element, visitor.visit(this) is called, passing this as the concrete type to dispatch to the corresponding overloaded visitor method. This allows adding new operations across object hierarchies without modifying existing element classes.",
+      "hints": [
+        "Define Element with void accept(Visitor v).",
+        "In TextElement, implement accept by calling v.visit(this).",
+        "Define Visitor with overloaded visit(TextElement) and visit(ImageElement) methods."
+      ],
+      "sampleCode": "public class Solution {\n    interface Visitor {\n        void visit(TextElement t);\n        void visit(ImageElement i);\n    }\n\n    interface Element {\n        void accept(Visitor v);\n    }\n\n    static class TextElement implements Element {\n        public void accept(Visitor v) { v.visit(this); }\n    }\n\n    static class ImageElement implements Element {\n        public void accept(Visitor v) { v.visit(this); }\n    }\n\n    static class ExportVisitor implements Visitor {\n        public void visit(TextElement t) { System.out.println(\"Exporting text element\"); }\n        public void visit(ImageElement i) { System.out.println(\"Exporting image element\"); }\n    }\n\n    public static void main(String[] args) {\n        Element[] elements = { new TextElement(), new ImageElement() };\n        Visitor visitor = new ExportVisitor();\n        for (Element e : elements) {\n            e.accept(visitor); // Double dispatch executed\n        }\n    }\n}",
+      "expectedOutput": "Exporting text element\nExporting image element"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Virtual Table Dispatch Emulation",
+      "question": "Simulate the JVM vtable (virtual method table) mechanism in plain Java using function pointers/lambdas in a class hierarchy lookup map.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-13",
+      "id": "inheritance-027",
+      "explanation": "To execute virtual method calls efficiently, the JVM uses an internal lookup structure called a virtual method table (vtable). Every class with virtual methods has a vtable containing pointers to the executable bytecode for each method. When a subclass overrides a method, its vtable entry points to the subclass implementation; inherited methods that are not overridden point to the superclass implementation. When invokevirtual executes, the JVM reads the method offset in the object's vtable and jumps to that address in O(1) time. Emulating this in Java using a Map<String, Runnable> illustrates how dynamic dispatch works under the hood.",
+      "hints": [
+        "Create a base class that initializes a Map<String, Runnable> vtable.",
+        "Subclasses inherit the vtable and overwrite map entries for methods they override.",
+        "Simulate dispatch by looking up and executing methods by name from the map."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    static class EmulatedObject {\n        protected Map<String, Runnable> vtable = new HashMap<>();\n        public EmulatedObject() {\n            vtable.put(\"sayHello\", () -> System.out.println(\"Parent vtable implementation\"));\n        }\n        public void invoke(String method) {\n            Runnable target = vtable.get(method);\n            if (target != null) target.run();\n        }\n    }\n\n    static class EmulatedChild extends EmulatedObject {\n        public EmulatedChild() {\n            super();\n            // Overwrite vtable slot for overridden method\n            vtable.put(\"sayHello\", () -> System.out.println(\"Child overridden vtable implementation\"));\n        }\n    }\n\n    public static void main(String[] args) {\n        EmulatedObject obj = new EmulatedChild();\n        obj.invoke(\"sayHello\");\n    }\n}",
+      "expectedOutput": "Child overridden vtable implementation"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Multiple Interface Default Method Collision",
+      "question": "Implement two interfaces with identical default methods in a single class. Write the overriding code to resolve the diamond collision using InterfaceName.super.method().",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-14",
+      "id": "inheritance-028",
+      "explanation": "With the introduction of default methods in Java 8, classes implementing multiple interfaces can encounter default method signature collisions (the diamond problem). If interface A and interface B both define a default method default void log(), a class implementing both interfaces fails to compile: 'class inherits unrelated defaults for log()'. The compiler cannot infer which default implementation to prefer. To resolve this ambiguity, the implementing class must explicitly override the conflicting method and specify which interface implementation to invoke using InterfaceName.super.method() (e.g., A.super.log()).",
+      "hints": [
+        "Define interface Alpha { default void ping() { ... } } and interface Beta { default void ping() { ... } }.",
+        "In class ServiceNode implements Alpha, Beta, override ping() explicitly.",
+        "Choose an implementation using Alpha.super.ping(); or provide custom logic."
+      ],
+      "sampleCode": "public class Solution {\n    interface Alpha {\n        default void ping() {\n            System.out.println(\"Alpha default ping\");\n        }\n    }\n\n    interface Beta {\n        default void ping() {\n            System.out.println(\"Beta default ping\");\n        }\n    }\n\n    static class ServiceNode implements Alpha, Beta {\n        @Override\n        public void ping() {\n            // Explicitly resolve collision by selecting Alpha's default implementation\n            Alpha.super.ping();\n            System.out.println(\"ServiceNode custom ping\");\n        }\n    }\n\n    public static void main(String[] args) {\n        ServiceNode node = new ServiceNode();\n        node.ping();\n    }\n}",
+      "expectedOutput": "Alpha default ping\nServiceNode custom ping"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Plugin Extension Framework",
+      "question": "Build an extensible plugin base class hierarchy where child plugins inherit lifecycle methods (init, execute, teardown) with polymorphic execution control.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INH-15",
+      "id": "inheritance-029",
+      "explanation": "The Template Method pattern uses inheritance to define the overarching skeleton of an algorithm in a base class while letting subclasses override specific steps without changing the overall structure. The abstract base class Plugin declares a public final void run() template method that orchestrates the lifecycle sequence: init(), executeTask(), and teardown(). Marking run() as final ensures that subclasses cannot alter the execution sequence. Subclasses override the individual protected step methods to implement their custom behavior, demonstrating controlled inheritance in plugin framework architectures.",
+      "hints": [
+        "Declare public final void run() in the abstract base class to enforce the execution sequence.",
+        "Define protected step methods: init(), executeTask(), and teardown().",
+        "Extend the base class in DatabasePlugin and demonstrate running the complete lifecycle."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class Plugin {\n        // Template method enforcing execution sequence\n        public final void run() {\n            init();\n            executeTask();\n            teardown();\n        }\n\n        protected void init() {\n            System.out.println(\"Plugin initialized\");\n        }\n\n        protected abstract void executeTask();\n\n        protected void teardown() {\n            System.out.println(\"Plugin cleaned up\");\n        }\n    }\n\n    static class DatabasePlugin extends Plugin {\n        @Override\n        protected void executeTask() {\n            System.out.println(\"Executing database synchronization task\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Plugin plugin = new DatabasePlugin();\n        plugin.run();\n    }\n}",
+      "expectedOutput": "Plugin initialized\nExecuting database synchronization task\nPlugin cleaned up"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 29
+}

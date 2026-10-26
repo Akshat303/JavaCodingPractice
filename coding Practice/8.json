@@ -1,0 +1,493 @@
+{
+  "section": "Basics",
+  "slug": "user-input",
+  "topic": "Interactive user input",
+  "page": 34,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Basic Console Greeting with Scanner",
+      "question": "Read a user's name from standard input using `java.util.Scanner` and print a personalized greeting to the console.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-01",
+      "id": "user-input-001",
+      "explanation": "Interactive console applications in Java typically obtain input via `java.util.Scanner` wrapping the standard input stream `System.in`. At runtime, `System.in` represents an open `InputStream` connected to the keyboard or parent terminal buffer. Initializing `new Scanner(System.in)` allows the application to parse tokens and lines using regular expressions. Calling `scanner.nextLine()` reads character bytes from the buffer until encountering a line feed (`\\n`) or carriage return (`\\r\\n`), consuming the delimiter and returning the accumulated string. This introduces the input/output lifecycle, stream parsing, and string formatting in terminal programs.",
+      "hints": [
+        "Instantiate `Scanner` with `System.in` as its constructor source.",
+        "Use `scanner.nextLine()` to read the entire user input string including spaces.",
+        "Print the prompt without a newline (`System.out.print`) to keep the cursor adjacent to the input prompt."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"Akshat\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter your name: \");\n        String name = scanner.nextLine();\n        System.out.println(name);\n        System.out.println(\"Hello, \" + name + \"!\");\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter your name: Akshat\nHello, Akshat!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Interactive Two-Integer Summation",
+      "question": "Prompt the user for two integers sequentially using `Scanner.nextInt()`, compute their arithmetic sum, and display the result.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-02",
+      "id": "user-input-002",
+      "explanation": "Parsing numeric primitives directly from terminal input is supported by `Scanner.nextInt()`. Under the hood, `Scanner` skips leading whitespace delimiters, matches digits against signed integer regular expressions according to the default locale, and converts the character stream into a 32-bit two's-complement integer primitive via `Integer.parseInt()`. If the user inputs non-numeric characters or a number that overflows the bounds of `Integer.MIN_VALUE` to `Integer.MAX_VALUE`, `Scanner` throws an `InputMismatchException`. This exercise highlights typed input consumption, operand accumulation, and stream pointer advancement.",
+      "hints": [
+        "Call `scanner.nextInt()` sequentially for both the first and second integer operands.",
+        "Store the values in primitive `int` variables before computing their sum.",
+        "Remember that `nextInt()` only scans numeric tokens and leaves any subsequent newline delimiter in the stream."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"4\\n6\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter first integer: \");\n        int first = scanner.nextInt();\n        System.out.println(first);\n\n        System.out.print(\"Enter second integer: \");\n        int second = scanner.nextInt();\n        System.out.println(second);\n\n        int sum = first + second;\n        System.out.println(\"Sum: \" + sum);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter first integer: 4\nEnter second integer: 6\nSum: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Circle Area Calculation from User Radius",
+      "question": "Read a floating-point radius value from console input using `Scanner.nextDouble()` and calculate the circle's area using `Math.PI` formatted to 2 decimal places.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-03",
+      "id": "user-input-003",
+      "explanation": "Reading floating-point numbers requires `Scanner.nextDouble()`, which parses standard IEEE 754 64-bit precision values. The mathematical area of a circle is defined by $A = \\pi r^2$. In Java, `Math.PI` provides the closest double-precision approximation of $\\pi$. Because floating-point multiplication can introduce trailing binary precision artifacts, production applications format numerical output with `System.out.printf` using format specifiers like `%.2f` to round the display to two decimal places without altering the underlying numerical state.",
+      "hints": [
+        "Use `scanner.nextDouble()` to read the radius into a primitive `double` variable.",
+        "Calculate the area using `Math.PI * radius * radius`.",
+        "Use `System.out.printf(\"Area: %.2f%n\", area)` or `String.format()` to round the output to two decimal places."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"7\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter radius: \");\n        double radius = scanner.nextDouble();\n        System.out.println((int) radius);\n\n        double area = Math.PI * radius * radius;\n        System.out.printf(\"Area: %.2f%n\", area);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter radius: 7\nArea: 153.94"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Full-Line Text Reader and Length Calculator",
+      "question": "Read an entire line of text including whitespace using `Scanner.nextLine()` and output the total number of characters in the entered string.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-04",
+      "id": "user-input-004",
+      "explanation": "Standard token-based methods in `Scanner` (`next()`, `nextInt()`) delimit input by whitespace, making them unsuitable for reading sentences or free-form strings. `Scanner.nextLine()` scans all characters until it reaches a newline boundary, returning the entire sequence without the trailing newline character. Calling `.length()` on the resulting `String` object returns the total count of 16-bit UTF-16 code units. This exercise helps students understand line-buffered input versus whitespace-delimited tokenization.",
+      "hints": [
+        "Use `scanner.nextLine()` to capture spaces and punctuation within a single line.",
+        "Call `.length()` on the retrieved `String` reference to compute character length.",
+        "Handle empty lines gracefully, noting that an empty line returns a string of length 0."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"Java Backend Developer\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter a line of text: \");\n        String line = scanner.nextLine();\n        System.out.println(line);\n        System.out.println(\"Line: \\\"\" + line + \"\\\"\");\n        System.out.println(\"Character count: \" + line.length());\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter a line of text: Java Backend Developer\nLine: \"Java Backend Developer\"\nCharacter count: 22"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Vowel Classification from Character Input",
+      "question": "Read a single character from the console using `scanner.next().charAt(0)` and determine whether it is an English vowel (A, E, I, O, U, case-insensitive).",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-05",
+      "id": "user-input-005",
+      "explanation": "`Scanner` does not provide a native `nextChar()` method. Instead, character input is achieved by reading a single-word token using `scanner.next()` and extracting its initial character using `charAt(0)`. To perform case-insensitive classification, the character is converted to lowercase with `Character.toLowerCase(ch)`. A switch statement or condition checking against `'a'`, `'e'`, `'i'`, `'o'`, and `'u'` then classifies the letter. This pattern is standard for handling interactive menu choices, confirmation flags (Y/N), and character-based commands.",
+      "hints": [
+        "Read the token via `scanner.next()` and extract index 0 with `.charAt(0)`.",
+        "Convert the character using `Character.toLowerCase(ch)` to eliminate casing branches.",
+        "Check whether the character matches 'a', 'e', 'i', 'o', or 'u'."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"e\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter a character: \");\n        char ch = scanner.next().charAt(0);\n        System.out.println(ch);\n\n        char lower = Character.toLowerCase(ch);\n        boolean isVowel = (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u');\n\n        System.out.println(\"Character: '\" + ch + \"'\");\n        System.out.println(\"Is Vowel: \" + isVowel);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter a character: e\nCharacter: 'e'\nIs Vowel: true"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Composite Profile Prompter",
+      "question": "Write a console program using `Scanner` that prompts for a user's name and age, then formats and displays: 'Hello [name], you are [age] years old!'.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-01",
+      "id": "user-input-006",
+      "explanation": "Interactive command-line wizards often collect multiple profile attributes in sequence. When prompting for a string followed by a numeric primitive, using `scanner.next()` or `scanner.nextLine()` reads the text token, and `scanner.nextInt()` parses the age. Because the string is read before the integer, no unconsumed newline issues occur. The values are then concatenated into a template message, demonstrating sequential input prompts and mixed-type data extraction from `System.in`.",
+      "hints": [
+        "Read the name first using `scanner.nextLine()` or `scanner.next()`.",
+        "Read the integer age using `scanner.nextInt()`.",
+        "Interpolate the extracted variables into the final formatted output message."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"Akshat\\n26\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter your name: \");\n        String name = scanner.nextLine();\n        System.out.println(name);\n\n        System.out.print(\"Enter your age: \");\n        int age = scanner.nextInt();\n        System.out.println(age);\n\n        System.out.println(\"Hello \" + name + \", you are \" + age + \" years old!\");\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter your name: Akshat\nEnter your age: 26\nHello Akshat, you are 26 years old!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Scanner NextLine Trap Fix",
+      "question": "Demonstrate the `scanner.nextInt()` newline trap where trailing newline characters cause a subsequent `scanner.nextLine()` call to return empty, and implement the standard fix.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-02",
+      "id": "user-input-007",
+      "explanation": "A common pitfall with `java.util.Scanner` is the interaction between token-based methods (`nextInt()`, `nextDouble()`, `next()`) and line-based methods (`nextLine()`). Token methods scan and parse digits but do not consume the trailing newline (`\\n`) generated when the user presses Enter. When `scanner.nextLine()` is subsequently called, it reads the remaining newline character from the buffer and returns an empty string immediately, skipping actual user input. The solution is to place a clearing call to `scanner.nextLine()` immediately after `nextInt()` to consume the leftover newline before reading the next line of text.",
+      "hints": [
+        "Read the integer using `int age = scanner.nextInt();`.",
+        "Insert an extra `scanner.nextLine();` to consume the leftover newline delimiter from the buffer.",
+        "Read the full subsequent string using `String address = scanner.nextLine();`."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"26\\n742 Evergreen Terrace\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter age: \");\n        int age = scanner.nextInt();\n        System.out.println(age);\n\n        // Fix: consume trailing newline left by nextInt()\n        scanner.nextLine();\n\n        System.out.print(\"Enter address: \");\n        String address = scanner.nextLine();\n        System.out.println(address);\n\n        System.out.println(\"Profile captured -> Age: \" + age + \" | Address: \" + address);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter age: 26\nEnter address: 742 Evergreen Terrace\nProfile captured -> Age: 26 | Address: 742 Evergreen Terrace"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Running Total and Average Sentinel Loop",
+      "question": "Repeatedly prompt the user to enter integers until they enter the sentinel value `0`, then display the total sum and calculated average of all entered values.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-03",
+      "id": "user-input-008",
+      "explanation": "Sentinel-controlled loops process streams of arbitrary length when the total number of inputs is unknown in advance. The program maintains an accumulator (`sum`) and a counter (`count`) inside a `while (true)` loop. On each iteration, an integer is parsed. If the input matches the sentinel value (`0`), the loop terminates via `break`. If no values were entered before `0`, the program avoids division by zero; otherwise, it computes the average by casting `sum` to a `double`. This pattern is fundamental to command-line accumulators, batch transaction entry, and streaming calculations.",
+      "hints": [
+        "Maintain running totals: `int sum = 0;` and `int count = 0;`.",
+        "Inspect the input: if `val == 0`, break out of the input loop.",
+        "Cast `sum` to `double` before dividing by `count` to preserve decimal precision in the average."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"10\\n20\\n30\\n0\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        int sum = 0;\n        int count = 0;\n\n        while (true) {\n            System.out.print(\"Enter number (0 to finish): \");\n            int val = scanner.nextInt();\n            System.out.println(val);\n            if (val == 0) break;\n            sum += val;\n            count++;\n        }\n\n        double average = (count > 0) ? ((double) sum / count) : 0.0;\n        System.out.println(\"Total count: \" + count);\n        System.out.println(\"Total sum: \" + sum);\n        System.out.printf(\"Average: %.2f%n\", average);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter number (0 to finish): 10\nEnter number (0 to finish): 20\nEnter number (0 to finish): 30\nEnter number (0 to finish): 0\nTotal count: 3\nTotal sum: 60\nAverage: 20.00"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character Input and Boolean Confirmation Flag",
+      "question": "Prompt the user for a single confirmation character (Y/N) using `scanner.next().charAt(0)`, validate the character, and display the corresponding boolean decision.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-04",
+      "id": "user-input-009",
+      "explanation": "Interactive confirmation prompts require validating user input against acceptable command choices. By extracting `charAt(0)` from `scanner.next()`, the application isolates the first character entered, ignoring any extra characters typed before pressing Enter. Normalizing the character with `Character.toUpperCase(ch)` allows the validator to accept both `'y'` and `'Y'` as true, and `'n'` and `'N'` as false. Any other character can be rejected as invalid input, illustrating robust character-based decision handling.",
+      "hints": [
+        "Read the choice with `char response = scanner.next().charAt(0);`.",
+        "Convert to uppercase using `char upper = Character.toUpperCase(response);`.",
+        "Check for `'Y'` or `'N'` and print whether the confirmation succeeded."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"y\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Do you wish to proceed (Y/N)? \");\n        char choice = scanner.next().charAt(0);\n        System.out.println(choice);\n\n        char normalized = Character.toUpperCase(choice);\n        if (normalized == 'Y') {\n            System.out.println(\"Decision: Operation confirmed.\");\n        } else if (normalized == 'N') {\n            System.out.println(\"Decision: Operation aborted.\");\n        } else {\n            System.out.println(\"Decision: Invalid input option.\");\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Do you wish to proceed (Y/N)? y\nDecision: Operation confirmed."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "BufferedReader Console Reader",
+      "question": "Implement user input collection using `BufferedReader` and `InputStreamReader` instead of `Scanner`, reading two text lines and handling `IOException`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-05",
+      "id": "user-input-010",
+      "explanation": "`BufferedReader` paired with `InputStreamReader` is Java's traditional, high-throughput mechanism for reading character streams. While `Scanner` performs regex parsing and type conversions on an 8 KB buffer, `BufferedReader` uses a 16 KB default buffer and reads raw strings directly via `readLine()`, making it significantly faster for competitive programming and high-volume I/O. However, `BufferedReader.readLine()` throws checked `IOException`s that must be caught or declared, does not parse numeric tokens automatically, and returns `null` when the end of stream is reached.",
+      "hints": [
+        "Wrap `System.in` in `new InputStreamReader(...)` and wrap that in `new BufferedReader(...)`.",
+        "Call `reader.readLine()` inside a try-catch block catching `java.io.IOException`.",
+        "Remember that `readLine()` returns `null` upon reaching end-of-stream."
+      ],
+      "sampleCode": "import java.io.BufferedReader;\nimport java.io.IOException;\nimport java.io.StringReader;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"First Line of Text\\nSecond Line of Text\\n\";\n        try (BufferedReader reader = new BufferedReader(new StringReader(simulatedInput))) {\n            System.out.print(\"Enter line 1: \");\n            String line1 = reader.readLine();\n            System.out.println(line1);\n\n            System.out.print(\"Enter line 2: \");\n            String line2 = reader.readLine();\n            System.out.println(line2);\n\n            System.out.println(\"Line 1: \" + line1);\n            System.out.println(\"Line 2: \" + line2);\n        } catch (IOException e) {\n            System.err.println(\"I/O error encountered: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Enter line 1: First Line of Text\nEnter line 2: Second Line of Text\nLine 1: First Line of Text\nLine 2: Second Line of Text"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Batch Integer Summary Statistics",
+      "question": "Read an integer `N`, followed by `N` integers. Compute and display the maximum value, minimum value, and calculated average of the sequence.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-06",
+      "id": "user-input-011",
+      "explanation": "Processing a fixed-size batch of numbers requires reading a count `N` followed by a bounded loop. To track extremes accurately without arbitrary boundaries, the first integer is read outside the loop (or on the first iteration) to initialize both `max` and `min`. On subsequent iterations, `Math.max()` and `Math.min()` update the extrema while an accumulator computes the running sum. When all `N` values are processed, the average is calculated as `(double) sum / n`. This avoids integer truncation and teaches robust extrema tracking.",
+      "hints": [
+        "Read `int n = scanner.nextInt();` to determine iteration count.",
+        "Read the first value to initialize both `min` and `max`.",
+        "Loop `n - 1` times to read remaining values, updating `min`, `max`, and `sum`."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"4\\n15\\n2\\n88\\n-5\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter count N: \");\n        int n = scanner.nextInt();\n        System.out.println(n);\n\n        int first = scanner.nextInt();\n        int min = first;\n        int max = first;\n        long sum = first;\n\n        for (int i = 1; i < n; i++) {\n            int val = scanner.nextInt();\n            if (val < min) min = val;\n            if (val > max) max = val;\n            sum += val;\n        }\n\n        double avg = (double) sum / n;\n        System.out.println(\"Max: \" + max);\n        System.out.println(\"Min: \" + min);\n        System.out.printf(\"Average: %.2f%n\", avg);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter count N: 4\nMax: 88\nMin: -5\nAverage: 25.00"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Mixed-Mode Age and Full Name Parser",
+      "question": "Read an integer age using `nextInt()`, followed by a multi-word full name using `nextLine()`, consuming the leftover newline delimiter to capture both values correctly.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-07",
+      "id": "user-input-012",
+      "explanation": "Mixed-mode scanning combines token-based numeric reading with whitespace-sensitive line reading. When `scanner.nextInt()` processes numeric characters, it stops at the first trailing delimiter (usually `\\n`), leaving it in the stream buffer. A subsequent call to `scanner.nextLine()` reads that remaining newline and returns an empty string immediately. Inserting an empty `scanner.nextLine()` call discards the leftover delimiter, allowing the second `scanner.nextLine()` to wait for and read the actual full name entered by the user.",
+      "hints": [
+        "Parse the numeric age with `scanner.nextInt()`.",
+        "Call `scanner.nextLine()` once to discard the leftover newline character.",
+        "Read the multi-word name using `String fullName = scanner.nextLine()`."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"26\\nAkshat Sharma\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        System.out.print(\"Enter age: \");\n        int age = scanner.nextInt();\n        System.out.println(age);\n\n        // Clear buffer\n        scanner.nextLine();\n\n        System.out.print(\"Enter full name: \");\n        String fullName = scanner.nextLine();\n        System.out.println(fullName);\n\n        System.out.println(\"User: \" + fullName + \" | Age: \" + age);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter age: 26\nEnter full name: Akshat Sharma\nUser: Akshat Sharma | Age: 26"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Sentinel Value Accumulator",
+      "question": "Continuously read integers from the console until the user inputs `0`, then output the count of non-zero entries and their aggregate sum.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-08",
+      "id": "user-input-013",
+      "explanation": "A sentinel loop terminates execution when a designated stopping value (the sentinel) is encountered. In this problem, `0` serves as the sentinel marker. The application loops while reading input, checking each value against `0`. If non-zero, the value is added to an accumulator and a counter is incremented; if `0`, the loop terminates. Sentinel loops are useful when processing streaming input of unknown length without requiring a separate pre-count parameter.",
+      "hints": [
+        "Use a `while (true)` loop with an interior `break` condition when the input equals 0.",
+        "Accumulate running totals using `sum += val;` and increment `count++`.",
+        "Print both total sum and count after exiting the loop."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"4\\n6\\n0\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        int sum = 0;\n        int count = 0;\n\n        while (true) {\n            int val = scanner.nextInt();\n            if (val == 0) break;\n            sum += val;\n            count++;\n        }\n\n        System.out.println(\"Sample values: 4, 6\");\n        System.out.println(\"Count: \" + count);\n        System.out.println(\"Sum: \" + sum);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Sample values: 4, 6\nCount: 2\nSum: 10"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Guarded Range Integer Validator",
+      "question": "Repeatedly prompt the user for an integer between 1 and 100, using `scanner.hasNextInt()` to reject non-numeric input and discarding invalid tokens until a valid number is supplied.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-09",
+      "id": "user-input-014",
+      "explanation": "Robust CLI applications validate user input defensively to prevent crashes from invalid types or out-of-range values. `scanner.hasNextInt()` inspects the next token without consuming it, returning `false` if the token cannot be parsed as an integer. When non-numeric input is detected, `scanner.next()` consumes and discards the invalid token. When a valid integer is found, the program checks whether it falls within the required range `[1, 100]`. The prompt repeats until an acceptable value is entered, making the input loop resilient against malformed data.",
+      "hints": [
+        "Use `if (!scanner.hasNextInt())` to detect non-integer input.",
+        "Discard invalid tokens by calling `scanner.next()` before re-prompting.",
+        "Validate the range `num >= 1 && num <= 100` before accepting the input."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"invalid\\n-5\\n42\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        int validNumber;\n        while (true) {\n            System.out.print(\"Enter an integer (1-100): \");\n            if (!scanner.hasNextInt()) {\n                String badToken = scanner.next();\n                System.out.println(badToken);\n                System.out.println(\"Invalid input: '\" + badToken + \"' is not an integer.\");\n                continue;\n            }\n            int candidate = scanner.nextInt();\n            System.out.println(candidate);\n            if (candidate >= 1 && candidate <= 100) {\n                validNumber = candidate;\n                break;\n            } else {\n                System.out.println(\"Out of bounds: \" + candidate + \" is not between 1 and 100.\");\n            }\n        }\n\n        System.out.println(\"Accepted valid integer: \" + validNumber);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter an integer (1-100): invalid\nInvalid input: 'invalid' is not an integer.\nEnter an integer (1-100): -5\nOut of bounds: -5 is not between 1 and 100.\nEnter an integer (1-100): 42\nAccepted valid integer: 42"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Interactive Menu-Driven Arithmetic Calculator",
+      "question": "Build an interactive menu-driven calculator that presents options (1: Add, 2: Subtract, 3: Exit) and processes arithmetic operations in a loop until the user chooses to exit.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-10",
+      "id": "user-input-015",
+      "explanation": "A menu-driven interface combines a control loop, input dispatching, and branch handling. The application presents an option menu inside a loop, reads the user's choice, and executes the selected operation using a `switch` statement. If an arithmetic option is selected, the program prompts for the required operands and calculates the result. If the exit option is chosen, a boolean control flag terminates the loop. Invalid menu choices trigger a helpful error message before redisplaying the menu.",
+      "hints": [
+        "Wrap the menu display and input processing in a `do-while` or `while (running)` loop.",
+        "Use a `switch` statement on the menu choice integer.",
+        "Set an exit flag or break from the loop when the exit option is selected."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"1\\n10\\n5\\n3\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n        boolean running = true;\n\n        while (running) {\n            System.out.println(\"1. Add\\n2. Subtract\\n3. Exit\");\n            System.out.print(\"Choose option: \");\n            int choice = scanner.nextInt();\n            System.out.println(choice);\n\n            switch (choice) {\n                case 1:\n                    int a = scanner.nextInt();\n                    int b = scanner.nextInt();\n                    System.out.println(\"Result: \" + (a + b));\n                    break;\n                case 2:\n                    int x = scanner.nextInt();\n                    int y = scanner.nextInt();\n                    System.out.println(\"Result: \" + (x - y));\n                    break;\n                case 3:\n                    System.out.println(\"Exiting calculator.\");\n                    running = false;\n                    break;\n                default:\n                    System.out.println(\"Invalid option.\");\n            }\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "1. Add\n2. Subtract\n3. Exit\nChoose option: 1\nResult: 15\n1. Add\n2. Subtract\n3. Exit\nChoose option: 3\nExiting calculator."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Input Type Guardian",
+      "question": "Implement an input validation method using `scanner.hasNextInt()` in a loop to discard non-numeric tokens and re-prompt until a valid integer is supplied.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-06",
+      "id": "user-input-016",
+      "explanation": "Type validation ensures that console input matches the expected data type before parsing. Instead of catching `InputMismatchException` using try-catch blocks (which can carry performance overhead in tight loops), `scanner.hasNextInt()` checks the token type beforehand. When `hasNextInt()` returns `false`, calling `scanner.next()` consumes the invalid token, preventing an infinite loop. Once `hasNextInt()` returns `true`, calling `scanner.nextInt()` safely retrieves the integer without throwing an exception.",
+      "hints": [
+        "Check `scanner.hasNextInt()` in a `while` loop condition.",
+        "Call `scanner.next()` inside the loop body to discard invalid tokens.",
+        "Retrieve the valid integer with `scanner.nextInt()` once the check passes."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static int readIntegerSafely(Scanner scanner) {\n        System.out.print(\"Enter integer: \");\n        while (!scanner.hasNextInt()) {\n            String invalid = scanner.next();\n            System.out.println(invalid);\n            System.out.println(\"Rejected non-integer: \" + invalid);\n            System.out.print(\"Enter integer: \");\n        }\n        int result = scanner.nextInt();\n        System.out.println(result);\n        return result;\n    }\n\n    public static void main(String[] args) {\n        String simulatedInput = \"abc\\nxyz\\n42\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n        int validated = readIntegerSafely(scanner);\n        System.out.println(\"Validated output: \" + validated);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter integer: abc\nRejected non-integer: abc\nEnter integer: xyz\nRejected non-integer: xyz\nEnter integer: 42\nValidated output: 42"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Secure Password Prompt with Console Fallback",
+      "question": "Implement password collection using `System.console().readPassword()` to mask input characters, providing a fallback to `Scanner` when running inside an IDE where `System.console()` is null.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-07",
+      "id": "user-input-017",
+      "explanation": "Reading sensitive credentials with standard `Scanner` or `System.in` echoes plain-text characters directly to the terminal display, exposing them in console logs and over-the-shoulder viewing. `System.console().readPassword()` disables terminal echo and returns a `char[]` rather than an immutable `java.lang.String`. Using a `char[]` allows the application to overwrite password characters with zeros (`Arrays.fill(pwd, '0')`) immediately after use, preventing secrets from lingering in heap dumps. In IDE execution environments, `System.console()` often returns `null`, so robust applications include a fallback to `Scanner`.",
+      "hints": [
+        "Check if `System.console() != null` before invoking `readPassword()`.",
+        "Fall back to `new Scanner(System.in).nextLine().toCharArray()` if console is null.",
+        "Clear password buffers after use using `Arrays.fill(pwd, ' ')` to avoid leaving credentials in memory."
+      ],
+      "sampleCode": "import java.io.Console;\nimport java.util.Arrays;\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Console console = System.console();\n        char[] passwordChars;\n\n        if (console != null) {\n            passwordChars = console.readPassword(\"Enter secure password: \");\n        } else {\n            // Fallback for IDE execution environments\n            String simulatedInput = \"SecretPassword123\\n\";\n            Scanner scanner = new Scanner(simulatedInput);\n            System.out.print(\"Enter secure password (console fallback): \");\n            passwordChars = scanner.nextLine().toCharArray();\n            System.out.println(\"********\");\n            scanner.close();\n        }\n\n        System.out.println(\"Password securely captured. Buffer length: \" + passwordChars.length);\n        Arrays.fill(passwordChars, '0');\n        System.out.println(\"Password memory scrubbed successfully.\");\n    }\n}",
+      "expectedOutput": "Enter secure password (console fallback): ********\nPassword securely captured. Buffer length: 17\nPassword memory scrubbed successfully."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Delimiter-Based CSV Line Parsing",
+      "question": "Configure a `Scanner` instance with a custom delimiter `scanner.useDelimiter(\",|\\\\n\")` to parse an interactive comma-separated line of tokens into individual elements.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-08",
+      "id": "user-input-018",
+      "explanation": "By default, `Scanner` uses whitespace (`\\s+`) to separate tokens. Calling `scanner.useDelimiter(regex)` overrides this behavior, allowing custom patterns like commas or newlines (`\",|\\r?\\n\"`) to serve as delimiters. When iterating with `scanner.next()`, the scanner splits input on those custom boundaries, enabling streamlined CSV token parsing without requiring manual calls to `String.split()`. This approach is useful for processing structured records, CSV fields, and configuration data directly from standard input.",
+      "hints": [
+        "Set the delimiter using `scanner.useDelimiter(\",|\\\\r?\\\\n\");`.",
+        "Loop while `scanner.hasNext()` to read comma-separated tokens.",
+        "Trim tokens with `.trim()` to remove any surrounding whitespace."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String csvData = \"Apple, Banana, Cherry, Mango\\n\";\n        Scanner scanner = new Scanner(csvData);\n        scanner.useDelimiter(\",\\\\s*|\\\\r?\\\\n\");\n\n        System.out.println(\"Parsing CSV tokens:\");\n        int index = 1;\n        while (scanner.hasNext()) {\n            String token = scanner.next().trim();\n            if (!token.isEmpty()) {\n                System.out.println(\"Item \" + index++ + \": \" + token);\n            }\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Parsing CSV tokens:\nItem 1: Apple\nItem 2: Banana\nItem 3: Cherry\nItem 4: Mango"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Terminal CRUD Menu Loop",
+      "question": "Build a console menu system (1: Add, 2: View, 3: Delete, 4: Exit) that validates user choices and keeps the menu active until option 4 is selected.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-09",
+      "id": "user-input-019",
+      "explanation": "Terminal CRUD interfaces use a central dispatch loop to handle user actions. The menu presents available commands, reads the chosen option, and validates it against the supported range. Invalid inputs are rejected with a helpful message, and the menu is redisplayed. Choosing option 4 sets a termination flag to cleanly exit the loop. Managing state inside the control loop ensures user commands are processed sequentially without crashing on unexpected inputs.",
+      "hints": [
+        "Use a `do-while` loop controlled by a boolean flag (e.g., `keepRunning`).",
+        "Dispatch actions using a `switch` statement on the menu choice.",
+        "Handle invalid choices with a `default` case and provide clear feedback."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"1\\nTask A\\n2\\n4\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n        List<String> items = new ArrayList<>();\n        boolean active = true;\n\n        while (active) {\n            System.out.println(\"--- MENU ---\\n1. Add\\n2. View\\n3. Delete\\n4. Exit\");\n            System.out.print(\"Selection: \");\n            int choice = scanner.nextInt();\n            System.out.println(choice);\n            scanner.nextLine(); // Clear buffer\n\n            switch (choice) {\n                case 1:\n                    String item = scanner.nextLine();\n                    items.add(item);\n                    System.out.println(\"Added item: \" + item);\n                    break;\n                case 2:\n                    System.out.println(\"Current Items: \" + items);\n                    break;\n                case 3:\n                    if (!items.isEmpty()) items.remove(0);\n                    System.out.println(\"Deleted first item.\");\n                    break;\n                case 4:\n                    System.out.println(\"Exiting application.\");\n                    active = false;\n                    break;\n                default:\n                    System.out.println(\"Invalid option.\");\n            }\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "--- MENU ---\n1. Add\n2. View\n3. Delete\n4. Exit\nSelection: 1\nAdded item: Task A\n--- MENU ---\n1. Add\n2. View\n3. Delete\n4. Exit\nSelection: 2\nCurrent Items: [Task A]\n--- MENU ---\n1. Add\n2. View\n3. Delete\n4. Exit\nSelection: 4\nExiting application."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Multi-Line Input Collector with Sentinel Termination",
+      "question": "Read multiple lines of text from standard input until the user enters an empty line or types `END`, store each line in a list, and display the collected lines and count.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-10",
+      "id": "user-input-020",
+      "explanation": "Multi-line text collection is common when receiving free-form user notes, multi-line configurations, or log excerpts from the console. The program reads input line by line using `scanner.nextLine()` inside a `while (scanner.hasNextLine())` loop. Before storing each line, it evaluates two termination conditions: `line.isEmpty()` and `line.equalsIgnoreCase(\"END\")`. If either condition is met, the loop breaks. The accumulated lines are stored in a `List<String>`, preserving insertion order for subsequent processing.",
+      "hints": [
+        "Loop while `scanner.hasNextLine()` returns `true`.",
+        "Check `if (line.isEmpty() || line.equalsIgnoreCase(\"END\")) break;`.",
+        "Collect matching lines into a `List<String>` and report the final count."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"Header Info\\nConfiguration Setting\\nPayload Data\\nEND\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n        List<String> buffer = new ArrayList<>();\n\n        System.out.println(\"Enter text lines (type 'END' or blank line to stop):\");\n        while (scanner.hasNextLine()) {\n            String line = scanner.nextLine();\n            if (line.isEmpty() || line.equalsIgnoreCase(\"END\")) {\n                break;\n            }\n            buffer.add(line);\n        }\n\n        System.out.println(\"Collected lines count: \" + buffer.size());\n        for (int i = 0; i < buffer.size(); i++) {\n            System.out.println((i + 1) + \": \" + buffer.get(i));\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter text lines (type 'END' or blank line to stop):\nCollected lines count: 3\n1: Header Info\n2: Configuration Setting\n3: Payload Data"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Fast Space-Separated Integer Stream Summation",
+      "question": "Read a single line of space-separated integers using `BufferedReader` and `InputStreamReader`, parse the values using `StringTokenizer`, and compute their sum.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-11",
+      "id": "user-input-021",
+      "explanation": "In competitive programming and high-throughput data processing, reading space-separated integers using `Scanner` can be a performance bottleneck due to its regex overhead. Combining `BufferedReader.readLine()` with `java.util.StringTokenizer` provides a much faster alternative. `BufferedReader` loads raw character blocks efficiently, and `StringTokenizer` extracts space-delimited tokens without allocating regex state machines. Each token is then parsed to an integer using `Integer.parseInt()` and summed, maximizing throughput when parsing large streams of numbers.",
+      "hints": [
+        "Read the full line using `reader.readLine()`.",
+        "Tokenize the line using `new StringTokenizer(line)`.",
+        "Iterate with `tokenizer.hasMoreTokens()` and accumulate values using `Integer.parseInt(tokenizer.nextToken())`."
+      ],
+      "sampleCode": "import java.io.BufferedReader;\nimport java.io.IOException;\nimport java.io.StringReader;\nimport java.util.StringTokenizer;\n\npublic class Solution {\n    public static void main(String[] args) throws IOException {\n        String simulatedInput = \"10 20 30 40 50\\n\";\n        BufferedReader reader = new BufferedReader(new StringReader(simulatedInput));\n\n        System.out.print(\"Enter space-separated integers: \");\n        String line = reader.readLine();\n        System.out.println(line);\n\n        StringTokenizer tokenizer = new StringTokenizer(line);\n        int sum = 0;\n        int count = 0;\n\n        while (tokenizer.hasMoreTokens()) {\n            sum += Integer.parseInt(tokenizer.nextToken());\n            count++;\n        }\n\n        System.out.println(\"Numbers parsed: \" + count);\n        System.out.println(\"Total sum: \" + sum);\n    }\n}",
+      "expectedOutput": "Enter space-separated integers: 10 20 30 40 50\nNumbers parsed: 5\nTotal sum: 150"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Alphabetical Word Frequency Counter",
+      "question": "Read a sequence of words from standard input until end-of-stream (`hasNext()`), and display each unique word alongside its occurrence frequency sorted alphabetically.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-12",
+      "id": "user-input-022",
+      "explanation": "Counting word frequencies from an open input stream requires combining token scanning with associative data structures. A `java.util.TreeMap<String, Integer>` automatically maintains its keys in natural alphabetical order using a Red-Black tree. The program iterates using `scanner.hasNext()`, normalizes words to lowercase, strips surrounding punctuation, and updates frequencies using `frequencyMap.merge(word, 1, Integer::sum)`. When input ends (signaled by EOF or Ctrl+D/Ctrl+Z), iterating through the `TreeMap` prints the unique words and their counts in alphabetical order.",
+      "hints": [
+        "Store word frequencies in a `TreeMap<String, Integer>` to keep keys sorted alphabetically.",
+        "Normalize tokens with `.toLowerCase()` and strip punctuation using regex `[^a-zA-Z]`.",
+        "Update counts using `map.put(word, map.getOrDefault(word, 0) + 1)` or `map.merge()`."
+      ],
+      "sampleCode": "import java.util.Map;\nimport java.util.Scanner;\nimport java.util.TreeMap;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"banana apple orange apple banana apple\";\n        Scanner scanner = new Scanner(simulatedInput);\n        Map<String, Integer> freqMap = new TreeMap<>();\n\n        while (scanner.hasNext()) {\n            String word = scanner.next().toLowerCase().replaceAll(\"[^a-z]\", \"\");\n            if (!word.isEmpty()) {\n                freqMap.put(word, freqMap.getOrDefault(word, 0) + 1);\n            }\n        }\n\n        System.out.println(\"Word frequencies (alphabetical):\");\n        for (Map.Entry<String, Integer> entry : freqMap.entrySet()) {\n            System.out.println(entry.getKey() + \": \" + entry.getValue());\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Word frequencies (alphabetical):\napple: 3\nbanana: 2\norange: 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Interactive ATM Console Simulator",
+      "question": "Build an interactive ATM simulator that tracks account balance and supports Check Balance, Deposit, and Withdraw operations, with input validation to prevent overdrafts and negative amounts.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-13",
+      "id": "user-input-023",
+      "explanation": "An ATM console simulator models financial transactions using input validation and state management. The program maintains account balance as a `double` (or long cents in production) and processes user requests through a menu loop. Validation checks must reject deposits less than or equal to zero and prevent withdrawals that exceed the current balance. Structuring transaction logic into distinct operations inside a control loop ensures that account balance remains consistent throughout the session.",
+      "hints": [
+        "Validate deposit amounts with `if (amount <= 0)` before adding to the balance.",
+        "Check withdrawal amounts with `if (amount > balance)` to prevent overdrafts.",
+        "Display formatted currency values using `System.out.printf(\"Balance: $%.2f%n\", balance)`."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"1\\n2\\n50.00\\n3\\n20.00\\n4\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n        double balance = 100.00;\n        boolean active = true;\n\n        while (active) {\n            System.out.println(\"1. Balance | 2. Deposit | 3. Withdraw | 4. Exit\");\n            int action = scanner.nextInt();\n            System.out.println(\"Action chosen: \" + action);\n            switch (action) {\n                case 1:\n                    System.out.printf(\"Current Balance: $%.2f%n\", balance);\n                    break;\n                case 2:\n                    double dep = scanner.nextDouble();\n                    if (dep > 0) {\n                        balance += dep;\n                        System.out.printf(\"Deposited: $%.2f | New Balance: $%.2f%n\", dep, balance);\n                    }\n                    break;\n                case 3:\n                    double with = scanner.nextDouble();\n                    if (with > 0 && with <= balance) {\n                        balance -= with;\n                        System.out.printf(\"Withdrew: $%.2f | New Balance: $%.2f%n\", with, balance);\n                    } else {\n                        System.out.println(\"Withdrawal rejected: Insufficient funds or invalid amount.\");\n                    }\n                    break;\n                case 4:\n                    System.out.println(\"Session closed. Thank you.\");\n                    active = false;\n                    break;\n            }\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "1. Balance | 2. Deposit | 3. Withdraw | 4. Exit\nAction chosen: 1\nCurrent Balance: $100.00\n1. Balance | 2. Deposit | 3. Withdraw | 4. Exit\nAction chosen: 2\nDeposited: $50.00 | New Balance: $150.00\n1. Balance | 2. Deposit | 3. Withdraw | 4. Exit\nAction chosen: 3\nWithdrew: $20.00 | New Balance: $130.00\n1. Balance | 2. Deposit | 3. Withdraw | 4. Exit\nAction chosen: 4\nSession closed. Thank you."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String-Backed Scanner Parsing with Custom Delimiters",
+      "question": "Use `Scanner` to parse a delimited string source (`\"10,20,30\"`) using `useDelimiter(\",\")`, compute the sum of the extracted integers, and print the result.",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-14",
+      "id": "user-input-024",
+      "explanation": "`Scanner` can read from any character source, including in-memory `String` objects, files, and network channels. Passing a `String` to `new Scanner(String)` creates an in-memory token parser. Configuring `scanner.useDelimiter(\",\")` tells the scanner to tokenize the string along commas instead of whitespace. Calling `scanner.nextInt()` repeatedly then parses each integer directly from the text. This technique provides a convenient way to parse comma-separated configuration values or tabular inputs without manual array slicing.",
+      "hints": [
+        "Pass the string directly to the constructor: `new Scanner(\"10,20,30\")`.",
+        "Set the delimiter using `scanner.useDelimiter(\",\");`.",
+        "Iterate with `while (scanner.hasNextInt())` and accumulate the values."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String data = \"10,20,30\";\n        Scanner scanner = new Scanner(data).useDelimiter(\",\");\n\n        int sum = 0;\n        int count = 0;\n        while (scanner.hasNextInt()) {\n            sum += scanner.nextInt();\n            count++;\n        }\n\n        System.out.println(\"Source: \" + data);\n        System.out.println(\"Parsed elements: \" + count);\n        System.out.println(\"Total sum: \" + sum);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Source: 10,20,30\nParsed elements: 3\nTotal sum: 60"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Matrix Input Reader and Transposition Engine",
+      "question": "Prompt the user for matrix dimensions $R$ and $C$, read $R \\times C$ integer values into a 2D array, and display the transposed matrix ($C \\times R$).",
+      "source": "java_coding_practice.json",
+      "source_id": "user-input-15",
+      "id": "user-input-025",
+      "explanation": "Reading a 2D matrix from standard input involves nested loop traversal: the outer loop runs over rows ($R$), and the inner loop reads column entries ($C$) into a multidimensional array `int[R][C]`. Transposing a matrix swaps rows and columns, mapping element `matrix[r][c]` to `transposed[c][r]`. The transposed matrix has dimensions `int[C][R]`. Implementing this transposition reinforces multidimensional array indexing, coordinate swapping, and formatted matrix output.",
+      "hints": [
+        "Read rows $R$ and columns $C$, then allocate `int[][] matrix = new int[r][c];`.",
+        "Read values row-by-row using nested loops.",
+        "Create `int[][] transpose = new int[c][r];` and assign `transpose[j][i] = matrix[i][j];`."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"2 3\\n1 2 3\\n4 5 6\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        int r = scanner.nextInt();\n        int c = scanner.nextInt();\n        int[][] matrix = new int[r][c];\n\n        for (int i = 0; i < r; i++) {\n            for (int j = 0; j < c; j++) {\n                matrix[i][j] = scanner.nextInt();\n            }\n        }\n\n        System.out.println(\"Transposed Matrix (\" + c + \"x\" + r + \"): \");\n        for (int j = 0; j < c; j++) {\n            for (int i = 0; i < r; i++) {\n                System.out.print(matrix[i][j] + (i == r - 1 ? \"\" : \" \"));\n            }\n            System.out.println();\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Transposed Matrix (3x2): \n1 4\n2 5\n3 6"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Interactive Form Validator with Retry Throttling",
+      "question": "Build an interactive CLI wizard that collects User Profile data (Email, Phone, Date of Birth). Enforce strict regex validation, retrying invalid fields up to 3 times before terminating.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-11",
+      "id": "user-input-026",
+      "explanation": "Form validation engines in terminal applications must validate input formats and handle entry errors gracefully. This problem implements a retry-bounded wizard for email addresses, international phone numbers, and ISO-8601 dates (`YYYY-MM-DD`). Each field validates user input against precompiled regular expressions (`java.util.regex.Pattern`). If validation fails, an attempt counter increments and the user is prompted to try again. If three consecutive attempts fail, the wizard terminates with a descriptive security exception, preventing infinite input loops.",
+      "hints": [
+        "Compile regex patterns for email (`^[\\w.-]+@[\\w.-]+\\.[a-z]{2,}$`), phone (`^\\+?\\d{10,14}$`), and date (`^\\d{4}-\\d{2}-\\d{2}$`).",
+        "Encapsulate prompt logic inside a retry loop bounded to 3 iterations.",
+        "Throw an exception or return an error status if the attempt limit is reached."
+      ],
+      "sampleCode": "import java.util.Scanner;\nimport java.util.regex.Pattern;\n\npublic class Solution {\n    private static final Pattern EMAIL_PAT = Pattern.compile(\"^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$\");\n    private static final Pattern PHONE_PAT = Pattern.compile(\"^\\\\+?[0-9]{10,13}$\");\n\n    public static String promptWithRetry(Scanner sc, String fieldName, Pattern pattern) {\n        for (int attempt = 1; attempt <= 3; attempt++) {\n            System.out.print(\"Enter \" + fieldName + \" (Attempt \" + attempt + \"/3): \");\n            String input = sc.nextLine().trim();\n            System.out.println(input);\n            if (pattern.matcher(input).matches()) {\n                return input;\n            }\n            System.out.println(\"Invalid format for \" + fieldName + \".\");\n        }\n        throw new IllegalArgumentException(\"Max attempts reached for \" + fieldName);\n    }\n\n    public static void main(String[] args) {\n        String simulatedInput = \"bad_email\\nuser@example.com\\n9876543210\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        String email = promptWithRetry(scanner, \"Email\", EMAIL_PAT);\n        String phone = promptWithRetry(scanner, \"Phone\", PHONE_PAT);\n\n        System.out.println(\"Profile Validated Successfully!\");\n        System.out.println(\"Email: \" + email + \" | Phone: \" + phone);\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Enter Email (Attempt 1/3): bad_email\nInvalid format for Email.\nEnter Email (Attempt 2/3): user@example.com\nEnter Phone (Attempt 1/3): 9876543210\nProfile Validated Successfully!\nEmail: user@example.com | Phone: 9876543210"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Non-Blocking Console Listener",
+      "question": "Implement an event loop that performs background work once per second while checking `System.in.available()` to detect keyboard input without blocking the main thread.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-12",
+      "id": "user-input-027",
+      "explanation": "Standard console read operations (`Scanner.nextLine()` or `InputStream.read()`) block the calling thread until input bytes arrive or an end-of-stream signal is received. To build responsive command-line applications, games, or monitoring loops, programs check `System.in.available()` before reading. The `available()` method returns an estimate of unread bytes currently waiting in the OS input buffer without blocking. If `available() > 0`, input is present and can be read immediately; if it returns `0`, the thread can continue executing background tasks and sleep periodically without freezing the application.",
+      "hints": [
+        "Check for pending bytes using `if (System.in.available() > 0)`.",
+        "Read ready bytes using `System.in.read()` only when bytes are available.",
+        "Use `Thread.sleep(100)` to throttle the loop and prevent high CPU utilization."
+      ],
+      "sampleCode": "import java.io.ByteArrayInputStream;\nimport java.io.IOException;\nimport java.io.InputStream;\n\npublic class Solution {\n    public static void main(String[] args) throws IOException, InterruptedException {\n        // Simulate stream with initial pause then user pressing 'q'\n        byte[] inputData = \"q\\n\".getBytes();\n        InputStream stream = new ByteArrayInputStream(inputData);\n\n        System.out.println(\"Background monitoring started. Checking for exit key...\");\n        boolean running = true;\n        int tick = 1;\n\n        while (running && tick <= 3) {\n            System.out.println(\"Worker heartbeat tick #\" + tick++);\n            if (stream.available() > 0) {\n                int key = stream.read();\n                if (key == 'q' || key == 'Q') {\n                    System.out.println(\"Non-blocking keypress detected: '\" + (char) key + \"'. Terminating.\");\n                    running = false;\n                }\n            }\n            Thread.sleep(50);\n        }\n    }\n}",
+      "expectedOutput": "Background monitoring started. Checking for exit key...\nWorker heartbeat tick #1\nNon-blocking keypress detected: 'q'. Terminating."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Interactive Command Shell with Quoted Arguments",
+      "question": "Implement an interactive command shell that reads commands with arguments (e.g., `echo \"Hello World\"`, `set key val`), parses quoted substrings into single tokens, and executes registered handlers.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-13",
+      "id": "user-input-028",
+      "explanation": "Standard string splitting using `split(\" \")` breaks quoted strings containing spaces, corrupting arguments like `echo \"Hello World\"`. Building a shell tokenizer requires parsing the input character by character using state machine logic: tracking whether the current character is inside double quotes, handling escape sequences (`\\\\`), and appending characters to an active token buffer. When an unquoted space is encountered, the current token is emitted and a new one begins. The command verb (token 0) is then dispatched to registered command handlers, mirroring the behavior of command-line shells like Bash.",
+      "hints": [
+        "Iterate character by character, tracking an `inQuotes` boolean flag.",
+        "Only treat spaces as token delimiters when `inQuotes` is `false`.",
+        "Dispatch token 0 as the command name and pass remaining tokens as arguments."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static List<String> tokenize(String commandLine) {\n        List<String> tokens = new ArrayList<>();\n        StringBuilder current = new StringBuilder();\n        boolean inQuotes = false;\n\n        for (char ch : commandLine.toCharArray()) {\n            if (ch == '\"') {\n                inQuotes = !inQuotes;\n            } else if (Character.isWhitespace(ch) && !inQuotes) {\n                if (current.length() > 0) {\n                    tokens.add(current.toString());\n                    current.setLength(0);\n                }\n            } else {\n                current.append(ch);\n            }\n        }\n        if (current.length() > 0) {\n            tokens.add(current.toString());\n        }\n        return tokens;\n    }\n\n    public static void main(String[] args) {\n        String cliInput = \"echo \\\"Welcome to Java Shell\\\" --verbose\";\n        System.out.println(\"Command: \" + cliInput);\n\n        List<String> tokens = tokenize(cliInput);\n        System.out.println(\"Parsed Tokens: \" + tokens);\n        if (!tokens.isEmpty() && tokens.get(0).equals(\"echo\")) {\n            System.out.println(\"Echo Output: \" + tokens.get(1));\n        }\n    }\n}",
+      "expectedOutput": "Command: echo \"Welcome to Java Shell\" --verbose\nParsed Tokens: [echo, Welcome to Java Shell, --verbose]\nEcho Output: Welcome to Java Shell"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Automated Input Stream Testing Harness",
+      "question": "Implement an automated unit testing harness that mocks interactive user input using `System.setIn()` with a `ByteArrayInputStream`, captures `System.out` via `ByteArrayOutputStream`, and validates program behavior.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-14",
+      "id": "user-input-029",
+      "explanation": "Testing interactive CLI applications in automated build pipelines requires redirecting standard I/O streams programmatically. By calling `System.setIn(new ByteArrayInputStream(simulatedBytes))`, test harnesses feed predetermined input to components that read from `System.in`. Similarly, `System.setOut(new PrintStream(outputCaptureStream))` intercepts console output, allowing assertions against the displayed text. Crucially, original stream references (`System.in` and `System.out`) must be restored in a `finally` block to prevent test pollution in shared JVM test environments.",
+      "hints": [
+        "Save original streams: `InputStream origIn = System.in;` and `PrintStream origOut = System.out;`.",
+        "Redirect input using `System.setIn(new ByteArrayInputStream(...))`.",
+        "Always restore original streams in a `finally` block after running assertions."
+      ],
+      "sampleCode": "import java.io.ByteArrayInputStream;\nimport java.io.ByteArrayOutputStream;\nimport java.io.InputStream;\nimport java.io.PrintStream;\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void runTargetProgram() {\n        Scanner scanner = new Scanner(System.in);\n        System.out.print(\"Enter code: \");\n        int code = scanner.nextInt();\n        System.out.println(\"PROCESSED_\" + code);\n    }\n\n    public static void main(String[] args) {\n        InputStream originalIn = System.in;\n        PrintStream originalOut = System.out;\n\n        ByteArrayOutputStream outCapture = new ByteArrayOutputStream();\n        ByteArrayInputStream mockIn = new ByteArrayInputStream(\"789\\n\".getBytes());\n\n        try {\n            System.setIn(mockIn);\n            System.setOut(new PrintStream(outCapture));\n\n            runTargetProgram();\n        } finally {\n            System.setIn(originalIn);\n            System.setOut(originalOut);\n        }\n\n        String captured = outCapture.toString().trim();\n        System.out.println(\"Harness captured output: \" + captured);\n        System.out.println(\"Assertion passed: \" + captured.contains(\"PROCESSED_789\"));\n    }\n}",
+      "expectedOutput": "Harness captured output: Enter code: PROCESSED_789\nAssertion passed: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Interactive Matrix Input Engine with Line-by-Line Token Validation",
+      "question": "Prompt the user for matrix dimensions $R$ and $C$, then validate each row of space-separated tokens, handling irregular row lengths and parsing errors with line re-prompts.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "INP-15",
+      "id": "user-input-030",
+      "explanation": "Validating multidimensional matrix input requires handling irregular row lengths, missing elements, and malformed numeric tokens. This problem reads dimensions $R$ and $C$, then uses a line-oriented validation loop for each row. The program reads entire lines using `scanner.nextLine()`, splits tokens by whitespace, and checks that the count matches $C$ exactly. Each token is then parsed to an integer inside a `try-catch` block. If a row has too few tokens or contains non-numeric characters, the entire row is rejected, and the user is prompted to re-enter that specific row without discarding previously validated rows.",
+      "hints": [
+        "Read each row as a full line using `scanner.nextLine()` to avoid buffer alignment issues.",
+        "Verify `tokens.length == c` before parsing numeric values.",
+        "Wrap `Integer.parseInt()` in a `try-catch` block and retry the current row index if parsing fails."
+      ],
+      "sampleCode": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String simulatedInput = \"2 3\\n1 2 bad\\n10 20 30\\n40 50 60\\n\";\n        Scanner scanner = new Scanner(simulatedInput);\n\n        int r = scanner.nextInt();\n        int c = scanner.nextInt();\n        scanner.nextLine(); // Clear newline\n\n        int[][] matrix = new int[r][c];\n        System.out.println(\"Reading \" + r + \"x\" + c + \" matrix.\");\n\n        for (int i = 0; i < r; i++) {\n            boolean rowValid = false;\n            while (!rowValid) {\n                System.out.print(\"Enter row \" + (i + 1) + \" (\" + c + \" integers): \");\n                String line = scanner.nextLine().trim();\n                System.out.println(line);\n                String[] tokens = line.split(\"\\\\s+\");\n\n                if (tokens.length != c) {\n                    System.out.println(\"Error: Expected \" + c + \" items, got \" + tokens.length);\n                    continue;\n                }\n                try {\n                    for (int j = 0; j < c; j++) {\n                        matrix[i][j] = Integer.parseInt(tokens[j]);\n                    }\n                    rowValid = true;\n                } catch (NumberFormatException e) {\n                    System.out.println(\"Error: Row contains non-numeric tokens. Re-enter row.\");\n                }\n            }\n        }\n\n        System.out.println(\"Matrix successfully captured:\");\n        for (int[] row : matrix) {\n            for (int val : row) {\n                System.out.print(val + \" \");\n            }\n            System.out.println();\n        }\n        scanner.close();\n    }\n}",
+      "expectedOutput": "Reading 2x3 matrix.\nEnter row 1 (3 integers): 1 2 bad\nError: Row contains non-numeric tokens. Re-enter row.\nEnter row 1 (3 integers): 10 20 30\nEnter row 2 (3 integers): 40 50 60\nMatrix successfully captured:\n10 20 30 \n40 50 60 "
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

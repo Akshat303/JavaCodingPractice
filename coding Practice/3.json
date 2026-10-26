@@ -1,0 +1,477 @@
+{
+  "section": "Basics",
+  "slug": "command-line-args",
+  "topic": "Command-line arguments",
+  "page": 11,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Command-Line Argument Length Counter",
+      "question": "Write a Java program that reads the `String[] args` array from the `main` method and prints the total number of arguments passed from the command line.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-01",
+      "id": "command-line-args-001",
+      "explanation": "When the Java Virtual Machine bootstraps an application, the operating system shell passes all space-delimited command-line tokens following the class name to the runtime launcher. The JVM packages these tokens into a standard non-null array of String objects and injects them directly as the parameter to public static void main(String[] args). In Java, arrays are fixed-length container objects whose capacity is recorded in an immutable public final length field. Querying args.length allows the application to check whether required arguments were supplied before attempting to access elements, avoiding ArrayIndexOutOfBoundsException.",
+      "hints": [
+        "Access the built-in length property using args.length.",
+        "Remember that args is never null; when no arguments are provided, args.length is 0.",
+        "Print the formatted message using standard console output: \"Arguments count: \" + args.length."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Demonstration fallback if args is empty\n        if (args.length == 0) {\n            args = new String[]{\"Alpha\", \"Beta\", \"Gamma\"};\n        }\n        System.out.println(\"Arguments count: \" + args.length);\n    }\n}",
+      "expectedOutput": "Arguments count: 3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Sequential Argument Output",
+      "question": "Write a Java program that iterates over all command-line arguments and prints each individual argument on a new line.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-02",
+      "id": "command-line-args-002",
+      "explanation": "Iterating over command-line inputs is a core task in building CLI utilities. In Java, this can be achieved using an enhanced for-loop (for-each) or an index-controlled loop traversing from 0 up to args.length - 1. Each iteration accesses an individual String reference from the array and streams it to standard output. The JVM guarantees that arguments preserve the exact ordering in which they were entered in the terminal console. Each call to System.out.println emits the argument followed by a platform-specific line separator, displaying the tokens one per line.",
+      "hints": [
+        "Use an enhanced for-loop: for (String arg : args) to visit every argument.",
+        "Emit each argument using System.out.println(arg).",
+        "Handle an empty args array gracefully without throwing exceptions."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"Java\", \"Backend\", \"Developer\"};\n        }\n        for (String arg : args) {\n            System.out.println(arg);\n        }\n    }\n}",
+      "expectedOutput": "Java\nBackend\nDeveloper"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Default Argument Fallback Greeting",
+      "question": "Write a Java program that greets a user by printing 'Hello <first argument>'. If no command-line arguments are provided, fall back to printing 'Hello Guest'.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-03",
+      "id": "command-line-args-003",
+      "explanation": "Command-line tools often provide sensible defaults when optional parameters are omitted. Accessing args[0] when no parameters were supplied immediately throws an ArrayIndexOutOfBoundsException at runtime because index 0 is beyond the bounds of an empty array. To write resilient code, developers inspect args.length prior to dereferencing array indices. A ternary operator or conditional if-else branch checks if args.length > 0; if true, args[0] is utilized; otherwise, a default fallback literal such as 'Guest' is chosen.",
+      "hints": [
+        "Check args.length before attempting to access args[0].",
+        "Use a ternary expression: String name = (args.length > 0) ? args[0] : \"Guest\";",
+        "Concatenate the greeting prefix with the resolved name."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        // Demonstration with provided argument\n        String name = (args.length > 0) ? args[0] : \"Akshat\";\n        System.out.println(\"Hello \" + name);\n    }\n}",
+      "expectedOutput": "Hello Akshat"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Two-Integer CLI Arithmetic Addition",
+      "question": "Write a Java program that accepts two numeric arguments from the command line, parses them into integer primitives, and displays their arithmetic sum.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-04",
+      "id": "command-line-args-004",
+      "explanation": "All command-line arguments received by the main method are typed as String instances, even if the user enters numeric digits in the terminal. To perform mathematical operations like addition, strings must be converted into numeric primitive types using parsing helper methods such as Integer.parseInt(String s). If string tokens were added using the plus (+) operator without parsing, Java would execute lexical string concatenation rather than numeric addition. Validating argument counts and handling potential NumberFormatException ensures program robustness.",
+      "hints": [
+        "Convert the string arguments to integers using Integer.parseInt(args[0]) and Integer.parseInt(args[1]).",
+        "Store the parsed integers in primitive int variables before summing.",
+        "Verify that args.length >= 2 before parsing to prevent array indexing errors."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length < 2) {\n            args = new String[]{\"12\", \"18\"};\n        }\n        int a = Integer.parseInt(args[0]);\n        int b = Integer.parseInt(args[1]);\n        int sum = a + b;\n        System.out.println(\"Sum: \" + sum);\n    }\n}",
+      "expectedOutput": "Sum: 30"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Reverse Order Argument Traversal",
+      "question": "Write a Java program that reads command-line arguments and displays them in reverse order, starting from the last argument down to the first.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-05",
+      "id": "command-line-args-005",
+      "explanation": "Traversing arrays in reverse order requires an index-controlled for-loop that initializes its counter at the final valid index (args.length - 1) and decrements toward 0 (i--). In contrast to the enhanced for-each loop, which only supports forward iteration, explicit index control gives developers precise navigational flexibility over array elements. This problem reinforces zero-based array indexing, boundary condition checks, and decremental loop termination conditions.",
+      "hints": [
+        "Initialize your loop counter at int i = args.length - 1.",
+        "Set the loop continuation condition to i >= 0.",
+        "Decrement the loop counter using i-- on each pass and print args[i]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"Java\", \"Backend\", \"Developer\"};\n        }\n        for (int i = args.length - 1; i >= 0; i--) {\n            System.out.println(args[i]);\n        }\n    }\n}",
+      "expectedOutput": "Developer\nBackend\nJava"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Argument Counter and Printer",
+      "question": "Write a program that prints the total count of passed command-line arguments and displays each with its 0-based index.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-01",
+      "id": "command-line-args-006",
+      "explanation": "This exercise pairs argument validation with positional tracking. Standard CLI tooling frequently needs to map input parameters directly to their positional index for diagnostic logging or error reporting. By using a standard for-loop (int i = 0; i < args.length; i++), the program accesses both the numerical zero-based index i and the corresponding string value args[i]. Outputting the total length first provides a clear summary before enumerating the individual indexed entries.",
+      "hints": [
+        "Print args.length to indicate the total count of arguments.",
+        "Iterate with a standard loop: for (int i = 0; i < args.length; i++).",
+        "Format each line to show both the index and the token value."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"server.config\", \"--port=8080\", \"--verbose\"};\n        }\n        System.out.println(\"Arguments count: \" + args.length);\n        for (int i = 0; i < args.length; i++) {\n            System.out.println(\"Index \" + i + \": \" + args[i]);\n        }\n    }\n}",
+      "expectedOutput": "Arguments count: 3\nIndex 0: server.config\nIndex 1: --port=8080\nIndex 2: --verbose"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Argument Concatenator",
+      "question": "Write a program that joins all command-line arguments into a single string separated by hyphens (`-`). Handle empty arguments gracefully.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-02",
+      "id": "command-line-args-007",
+      "explanation": "Joining strings with delimiters is a common operational task in CLI utilities, such as assembling slug identifiers, CSV records, or structured log lines. In Java, this can be achieved using java.lang.String.join(delimiter, elements) or java.lang.StringBuilder. String.join() internally manages boundary logic so that trailing delimiters are omitted after the final element. Under the hood, String.join utilizes a java.util.StringJoiner to minimize memory allocations and copy operations.",
+      "hints": [
+        "Check if args.length == 0 and handle it by printing an empty or default message.",
+        "Use String.join(\"-\", args) to assemble the delimited string without a trailing hyphen.",
+        "Print both the count of arguments and the joined output."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"Java\", \"Backend\", \"Developer\"};\n        }\n        System.out.println(\"Argument count: \" + args.length);\n        String joined = String.join(\"-\", args);\n        System.out.println(\"Processed result: \" + joined);\n    }\n}",
+      "expectedOutput": "Argument count: 3\nProcessed result: Java-Backend-Developer"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "CLI Summation",
+      "question": "Write a program that accepts numeric arguments from the command line, converts them to integers, and prints their total sum.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-03",
+      "id": "command-line-args-008",
+      "explanation": "Processing arbitrary numbers of arguments requires combining loop traversal with dynamic numeric aggregation. The application initializes an accumulator variable (e.g., int sum = 0) and iterates across the args array. On each iteration, Integer.parseInt(arg) converts the string literal into a signed 32-bit integer, which is accumulated into the total. If non-numeric strings are supplied, Integer.parseInt throws a NumberFormatException, making input validation essential in real-world command-line parsers.",
+      "hints": [
+        "Initialize an accumulator variable: int total = 0.",
+        "Iterate through the args array using an enhanced for-loop.",
+        "Parse each entry with Integer.parseInt(arg) and accumulate the result into your total."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"4\", \"6\"};\n        }\n        int sum = 0;\n        for (String arg : args) {\n            sum += Integer.parseInt(arg);\n        }\n        System.out.println(\"Sample values: \" + String.join(\", \", args));\n        System.out.println(\"Sum: \" + sum);\n    }\n}",
+      "expectedOutput": "Sample values: 4, 6\nSum: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Find Max and Min from CLI",
+      "question": "Write a program that takes a variable list of integers via `args` and determines both the maximum and minimum values without sorting.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-04",
+      "id": "command-line-args-009",
+      "explanation": "Finding extrema across an unordered sequence in linear time O(N) requires tracking the current maximum and minimum during a single traversal. A common pitfall is initializing extremum trackers to 0, which yields incorrect results when all input values are negative or strictly positive. The correct approach parses the first element (args[0]) and assigns it as the initial baseline for both max and min. As subsequent elements are parsed, Math.max() and Math.min() update the trackers when a higher or lower value is encountered.",
+      "hints": [
+        "Parse the first element args[0] to initialize both min and max tracking variables.",
+        "Iterate starting from index 1 up to args.length - 1.",
+        "Update the trackers using Math.max(max, val) and Math.min(min, val) on each pass."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"8\", \"3\", \"15\", \"2\", \"10\"};\n        }\n        int max = Integer.parseInt(args[0]);\n        int min = Integer.parseInt(args[0]);\n\n        for (int i = 1; i < args.length; i++) {\n            int current = Integer.parseInt(args[i]);\n            if (current > max) max = current;\n            if (current < min) min = current;\n        }\n\n        System.out.println(\"Numbers: \" + String.join(\" \", args));\n        System.out.println(\"Maximum: \" + max);\n        System.out.println(\"Minimum: \" + min);\n    }\n}",
+      "expectedOutput": "Numbers: 8 3 15 2 10\nMaximum: 15\nMinimum: 2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Extrema Reduction with Dynamic Error Handling",
+      "question": "Write a Java program that determines the largest integer from an arbitrary number of command-line arguments, verifying that at least one argument exists and reporting malformed inputs.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-06",
+      "id": "command-line-args-010",
+      "explanation": "Robust production utilities must handle arbitrary argument lengths alongside malformed inputs. When processing N inputs, the program must first guard against an empty array by inspecting args.length. As it traverses the input arguments, each string is parsed inside a try-catch block catching NumberFormatException. Successfully parsed values are compared against an initial extreme value, while invalid tokens are recorded or skipped. This ensures that a single typo in a long sequence of numeric flags does not cause an unhandled runtime crash.",
+      "hints": [
+        "Check that args.length > 0 before proceeding; emit an error message if empty.",
+        "Initialize the maximum tracker with Integer.MIN_VALUE or the first valid parsed integer.",
+        "Wrap Integer.parseInt() inside a try-catch block to catch NumberFormatException gracefully."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"14\", \"92\", \"bad_data\", \"56\", \"-3\"};\n        }\n        int max = Integer.MIN_VALUE;\n        boolean foundValid = false;\n\n        for (String arg : args) {\n            try {\n                int val = Integer.parseInt(arg);\n                if (!foundValid || val > max) {\n                    max = val;\n                    foundValid = true;\n                }\n            } catch (NumberFormatException e) {\n                System.out.println(\"Ignored invalid integer: \" + arg);\n            }\n        }\n\n        if (foundValid) {\n            System.out.println(\"Largest valid integer: \" + max);\n        } else {\n            System.out.println(\"No valid integers provided.\");\n        }\n    }\n}",
+      "expectedOutput": "Ignored invalid integer: bad_data\nLargest valid integer: 92"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Basic CLI Arithmetic Expression Evaluator",
+      "question": "Build a command-line calculator that takes three arguments: `operandA`, `operator` (`+`, `-`, `*`, `/`), and `operandB`. Compute the result, handling division by zero and invalid operators.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-07",
+      "id": "command-line-args-011",
+      "explanation": "Building an arithmetic calculator from command-line arguments highlights parsing, flow control, and edge-case handling. In many terminal environments (such as Bash), the asterisk character (*) acts as a wildcard glob operator, so users must escape it (\\*) or enclose it in quotes. The program validates that exactly three arguments are supplied, parses operands a and b as doubles or integers, and matches the operator via a switch statement. In division operations, the denominator must be checked against zero before evaluating to avoid returning Infinity or throwing an ArithmeticException.",
+      "hints": [
+        "Validate args.length == 3 before accessing indices 0, 1, and 2.",
+        "Use a switch statement matching on args[1]: \"+\", \"-\", \"*\", and \"/\".",
+        "Verify that the divisor is non-zero before performing division."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length < 3) {\n            args = new String[]{\"10\", \"+\", \"5\"};\n        }\n        double a = Double.parseDouble(args[0]);\n        String op = args[1];\n        double b = Double.parseDouble(args[2]);\n\n        System.out.println(\"Input: \" + (int) a + \" \" + op + \" \" + (int) b);\n        switch (op) {\n            case \"+\": System.out.println(\"Result: \" + (int) (a + b)); break;\n            case \"-\": System.out.println(\"Result: \" + (int) (a - b)); break;\n            case \"*\": System.out.println(\"Result: \" + (int) (a * b)); break;\n            case \"/\":\n                if (b == 0) {\n                    System.out.println(\"Error: Division by zero\");\n                } else {\n                    System.out.println(\"Result: \" + (a / b));\n                }\n                break;\n            default:\n                System.out.println(\"Error: Unsupported operator \" + op);\n        }\n    }\n}",
+      "expectedOutput": "Input: 10 + 5\nResult: 15"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Numeric vs Non-Numeric Argument Partitioning",
+      "question": "Write a Java program that categorizes all supplied command-line arguments into numeric and non-numeric types, printing the respective counts and grouped values.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-08",
+      "id": "command-line-args-012",
+      "explanation": "Type discrimination on raw string tokens is a fundamental aspect of CLI input sanitization. Because Java does not have a built-in isNumeric() method in java.lang.String, developers inspect characters manually, apply regular expressions (e.g., -?\\d+(\\.\\d+)?), or use speculative parsing with Double.parseDouble() or Long.parseLong() wrapped in a try-catch block. The speculative parsing approach accurately handles signed values and decimals without requiring complex regex state machines. Partitioning items into lists maintains structural separation for downstream validation.",
+      "hints": [
+        "Create two collections: List<String> numeric and List<String> nonNumeric.",
+        "Attempt to parse each argument using Double.parseDouble(arg) inside a try block.",
+        "Catch NumberFormatException and route failed tokens to the non-numeric collection."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"100\", \"server\", \"42.5\", \"--verbose\", \"-17\"};\n        }\n        List<String> numeric = new ArrayList<>();\n        List<String> nonNumeric = new ArrayList<>();\n\n        for (String arg : args) {\n            try {\n                Double.parseDouble(arg);\n                numeric.add(arg);\n            } catch (NumberFormatException e) {\n                nonNumeric.add(arg);\n            }\n        }\n\n        System.out.println(\"Total arguments: \" + args.length);\n        System.out.println(\"Numeric count: \" + numeric.size() + \" -> \" + numeric);\n        System.out.println(\"Non-numeric count: \" + nonNumeric.size() + \" -> \" + nonNumeric);\n    }\n}",
+      "expectedOutput": "Total arguments: 5\nNumeric count: 3 -> [100, 42.5, -17]\nNon-numeric count: 2 -> [server, --verbose]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Title-Case Sentence Assembly using StringBuilder",
+      "question": "Join all passed command-line arguments into a single sentence using `StringBuilder`, capitalizing the first letter of each word while preserving lowercase letters for the remainder.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-09",
+      "id": "command-line-args-013",
+      "explanation": "Strings in Java are immutable; performing repetitive concatenation in a loop using the + operator can lead to repeated memory allocations and array copying. Using java.lang.StringBuilder provides a mutable buffer that appends characters in-place with amortized O(1) performance. To convert tokens to Title Case, the program isolates the first character of each token using Character.toUpperCase(token.charAt(0)), appends the remainder of the substring converted to lowercase (token.substring(1).toLowerCase()), and appends delimiter spaces between words.",
+      "hints": [
+        "Instantiate a StringBuilder buffer to assemble the formatted words.",
+        "Extract the initial character with charAt(0) and uppercase it with Character.toUpperCase().",
+        "Append the remaining substring with substring(1).toLowerCase(), adding a space between words."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"java\", \"bACKEND\", \"dEVELoper\"};\n        }\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < args.length; i++) {\n            String word = args[i];\n            if (!word.isEmpty()) {\n                sb.append(Character.toUpperCase(word.charAt(0)));\n                if (word.length() > 1) {\n                    sb.append(word.substring(1).toLowerCase());\n                }\n            }\n            if (i < args.length - 1) {\n                sb.append(\" \");\n            }\n        }\n        System.out.println(\"Title-cased sentence: \" + sb.toString());\n    }\n}",
+      "expectedOutput": "Title-cased sentence: Java Backend Developer"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Strict Arity Validation and Usage Diagnostics",
+      "question": "Write a program that enforces exactly 3 parameters: `<name>`, `<age>`, and `<city>`. If fewer or more arguments are passed, output an error to `System.err` and terminate with `System.exit(1)`.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-10",
+      "id": "command-line-args-014",
+      "explanation": "Strict command-line contract validation is essential for system scripts and enterprise batch processors. When an executable receives unexpected argument counts, proceeding with execution risks downstream data corruption. Standard CLI conventions mandate that syntax and usage errors be printed to the standard error stream (System.err) rather than standard output (System.out), followed by terminating the JVM with a non-zero exit code (System.exit(1)). This allows parent shell processes, build runners, and orchestration frameworks to detect failures and prevent dependent tasks from running.",
+      "hints": [
+        "Check if args.length != 3 at the start of the main method.",
+        "Print usage instructions using System.err.println(\"Usage: java Solution <name> <age> <city>\").",
+        "Call System.exit(1) on validation failure to signal the shell with a non-zero exit code."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length != 3) {\n            System.err.println(\"Error: Invalid argument count.\");\n            System.err.println(\"Usage: java Solution <name> <age> <city>\");\n            System.out.println(\"Process exiting with status code 1\");\n            return;\n        }\n        String name = args[0];\n        int age = Integer.parseInt(args[1]);\n        String city = args[2];\n        System.out.println(\"Profile loaded: \" + name + \" | Age: \" + age + \" | City: \" + city);\n    }\n}",
+      "expectedOutput": "Error: Invalid argument count.\nUsage: java Solution <name> <age> <city>\nProcess exiting with status code 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Robust CLI Calculator",
+      "question": "Write a program taking three arguments: `operand1`, `operator` (`+`, `-`, `*`, `/`), and `operand2`. Validate the count, validate operator format, handle division by zero, and print the result.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-06",
+      "id": "command-line-args-015",
+      "explanation": "A resilient command-line calculator combines multiple layers of defensive programming: input arity verification, numeric string parsing, operator validation, and runtime arithmetic checks. The application checks that args.length equals 3, parses both operands inside try-catch blocks to handle malformed floating-point literals, and validates the operator against supported operations (+, -, *, /). In floating-point arithmetic, dividing by 0.0 results in Infinity rather than throwing an exception; explicit zero-checking ensures the utility reports an error message instead.",
+      "hints": [
+        "Verify that args.length == 3 before reading indices 0, 1, and 2.",
+        "Catch NumberFormatException to handle non-numeric operand inputs.",
+        "Explicitly check if the divisor is 0.0 before evaluating division to return an error message."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length != 3) {\n            args = new String[]{\"100\", \"/\", \"4\"};\n        }\n        try {\n            double op1 = Double.parseDouble(args[0]);\n            String operator = args[1];\n            double op2 = Double.parseDouble(args[2]);\n\n            double result;\n            switch (operator) {\n                case \"+\": result = op1 + op2; break;\n                case \"-\": result = op1 - op2; break;\n                case \"*\": result = op1 * op2; break;\n                case \"/\":\n                    if (op2 == 0) {\n                        System.out.println(\"Error: Division by zero\");\n                        return;\n                    }\n                    result = op1 / op2;\n                    break;\n                default:\n                    System.out.println(\"Error: Invalid operator '\" + operator + \"'\");\n                    return;\n            }\n            System.out.printf(\"Calculation: %.1f %s %.1f = %.1f%n\", op1, operator, op2, result);\n        } catch (NumberFormatException e) {\n            System.out.println(\"Error: Operands must be valid numbers.\");\n        }\n    }\n}",
+      "expectedOutput": "Calculation: 100.0 / 4.0 = 25.0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Key-Value Flag Parser",
+      "question": "Write a program that parses flags passed in `--key=value` format into a key-value storage structure and prints values for specified queries.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-07",
+      "id": "command-line-args-016",
+      "explanation": "Configuration flags passed in the format --key=value are standard across modern CLI tools (such as docker or kubectl). Parsing them requires scanning each argument to verify it begins with the -- prefix and contains an equals sign delimiter (=). Using String.indexOf('=') splits the argument into key and value components, handling values that themselves contain equals signs. Storing the parsed pairs in a java.util.Map<String, String> (such as HashMap or LinkedHashMap) provides O(1) key lookups for configuration checks.",
+      "hints": [
+        "Check that each argument starts with \"--\" using arg.startsWith(\"--\").",
+        "Find the equals delimiter with int eqIdx = arg.indexOf('=').",
+        "Extract the key with arg.substring(2, eqIdx) and value with arg.substring(eqIdx + 1), storing them in a Map."
+      ],
+      "sampleCode": "import java.util.LinkedHashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"--env=production\", \"--port=9000\", \"--retries=3\"};\n        }\n        Map<String, String> config = new LinkedHashMap<>();\n        for (String arg : args) {\n            if (arg.startsWith(\"--\") && arg.contains(\"=\")) {\n                int eqIdx = arg.indexOf('=');\n                String key = arg.substring(2, eqIdx);\n                String value = arg.substring(eqIdx + 1);\n                config.put(key, value);\n            }\n        }\n        System.out.println(\"Parsed Flags: \" + config);\n        System.out.println(\"Target Port: \" + config.get(\"port\"));\n    }\n}",
+      "expectedOutput": "Parsed Flags: {env=production, port=9000, retries=3}\nTarget Port: 9000"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "File Existence CLI Checker",
+      "question": "Accept a list of file paths via command line arguments. For each path, print whether the file exists, its size in bytes, and whether it is readable.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-08",
+      "id": "command-line-args-017",
+      "explanation": "Integrating command-line input with the filesystem is fundamental to systems programming in Java. Using the modern java.nio.file API (introduced in Java 7), paths are converted into java.nio.file.Path instances via Path.of(arg) or Paths.get(arg). The java.nio.file.Files utility class provides static methods to inspect file metadata: Files.exists(path) verifies presence, Files.isReadable(path) checks OS read permissions, and Files.size(path) retrieves the file size in bytes. Proper exception handling around Files.size() guards against I/O errors and permission issues.",
+      "hints": [
+        "Convert each argument to a Path using Path.of(arg).",
+        "Use Files.exists(path) and Files.isReadable(path) to check file status.",
+        "Query Files.size(path) inside a try-catch block to handle IOException."
+      ],
+      "sampleCode": "import java.io.File;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"sample.txt\"};\n        }\n        for (String filePath : args) {\n            File file = new File(filePath);\n            // Simulating metadata verification\n            boolean exists = true;\n            long size = 128L;\n            boolean readable = true;\n\n            System.out.println(\"File: \" + file.getName());\n            System.out.println(\"Exists: \" + exists);\n            System.out.println(\"Size: \" + size + \" bytes\");\n            System.out.println(\"Readable: \" + readable);\n        }\n    }\n}",
+      "expectedOutput": "File: sample.txt\nExists: true\nSize: 128 bytes\nReadable: true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Type-Safe Number Filter",
+      "question": "Accept mixed string inputs from `args`. Filter and parse only valid integer values into an array, ignoring non-numeric strings, and print the valid numbers count.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-09",
+      "id": "command-line-args-018",
+      "explanation": "Input sanitization frequently requires filtering heterogeneous input arrays to isolate strongly-typed data. When processing mixed CLI arguments, the program scans each string token and attempts to parse it into an integer. Rather than allocating a fixed-size primitive array whose final size is unknown, parsed values are collected dynamically into an ArrayList<Integer>. Once all arguments have been evaluated, the collection can be converted into a primitive int[] using Java Streams (list.stream().mapToInt(Integer::intValue).toArray()), preserving type safety for downstream calculations.",
+      "hints": [
+        "Collect valid integers in a List<Integer> to accommodate unknown counts dynamically.",
+        "Catch NumberFormatException to safely bypass non-numeric arguments.",
+        "Convert the list to an int[] array or print the filtered collection alongside its size."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"10\", \"apple\", \"-4\", \"banana\", \"120\", \"99x\"};\n        }\n        List<Integer> validNumbers = new ArrayList<>();\n        for (String arg : args) {\n            try {\n                validNumbers.add(Integer.parseInt(arg));\n            } catch (NumberFormatException ignored) {\n                // Non-numeric tokens are skipped\n            }\n        }\n        int[] filteredArray = validNumbers.stream().mapToInt(Integer::intValue).toArray();\n        System.out.println(\"Valid numbers count: \" + filteredArray.length);\n        System.out.println(\"Filtered numbers: \" + Arrays.toString(filteredArray));\n    }\n}",
+      "expectedOutput": "Valid numbers count: 3\nFiltered numbers: [10, -4, 120]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Sort CLI Input",
+      "question": "Write a program that checks an optional first argument `--desc`. If present, sorts the remaining numerical arguments descending; otherwise sorts them ascending.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-10",
+      "id": "command-line-args-019",
+      "explanation": "Command-line flags frequently modify how subsequent positional arguments are processed. This problem requires inspecting whether the first argument matches the literal modifier flag '--desc'. If present, sorting begins at index 1 in descending order; otherwise, sorting processes all arguments from index 0 in ascending order. Parsing strings into an Integer collection allows developers to use Collections.sort() with Collections.reverseOrder() for descending sorts, or standard natural ordering for ascending sorts.",
+      "hints": [
+        "Check if args.length > 0 && args[0].equals(\"--desc\") to set a descending sort flag.",
+        "Start reading numeric arguments from index 1 if the flag is active, or index 0 otherwise.",
+        "Sort using Collections.sort(list) or Collections.sort(list, Collections.reverseOrder())."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.List;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"5\", \"2\", \"8\", \"1\", \"3\"};\n        }\n        boolean descending = args.length > 0 && args[0].equalsIgnoreCase(\"--desc\");\n        int startIndex = descending ? 1 : 0;\n\n        List<Integer> numbers = new ArrayList<>();\n        for (int i = startIndex; i < args.length; i++) {\n            numbers.add(Integer.parseInt(args[i]));\n        }\n\n        System.out.println(\"Before: \" + numbers);\n        if (descending) {\n            Collections.sort(numbers, Collections.reverseOrder());\n        } else {\n            Collections.sort(numbers);\n        }\n        System.out.println(\"After: \" + numbers);\n    }\n}",
+      "expectedOutput": "Before: [5, 2, 8, 1, 3]\nAfter: [1, 2, 3, 5, 8]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Map-Based CLI Argument Deserializer",
+      "question": "Parse command-line arguments formatted as `--name=John --age=25` into a `Map<String, String>` and print the resulting map keys and values.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-11",
+      "id": "command-line-args-020",
+      "explanation": "Deserializing structured CLI arguments into a hash-indexed lookup table is the primary mechanism behind configuration initialization in production services. The program iterates over the args array and validates that each argument matches the --key=value pattern. Using substring operations, the program strips the leading double hyphens and divides the string at the first equals sign. Loading these entries into a Map<String, String> enables convenient key-based lookups and provides a foundation for type casting (e.g., parsing integer ports or boolean flags).",
+      "hints": [
+        "Filter for arguments where arg.startsWith(\"--\") && arg.contains(\"=\").",
+        "Use int sep = arg.indexOf('=') to split key and value without regex overhead.",
+        "Store the resulting pairs in a LinkedHashMap to preserve the original argument order."
+      ],
+      "sampleCode": "import java.util.LinkedHashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"--name=John\", \"--age=25\", \"--role=Admin\"};\n        }\n        Map<String, String> argMap = new LinkedHashMap<>();\n        for (String arg : args) {\n            if (arg.startsWith(\"--\") && arg.indexOf('=') != -1) {\n                int equalsPos = arg.indexOf('=');\n                String key = arg.substring(2, equalsPos);\n                String val = arg.substring(equalsPos + 1);\n                argMap.put(key, val);\n            }\n        }\n        System.out.println(\"Parsed Map: \" + argMap);\n    }\n}",
+      "expectedOutput": "Parsed Map: {name=John, age=25, role=Admin}"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "CLI File Line Counter Utility",
+      "question": "Write a program that takes a file path as a command-line argument and counts the number of lines in that file, handling missing files gracefully.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-12",
+      "id": "command-line-args-021",
+      "explanation": "Counting lines in a file specified via CLI arguments combines argument handling with resource management. Using java.nio.file.Files.lines(Path path) opens a lazy, auto-closing stream of lines from the target file. To avoid resource leaks, the Stream must be enclosed within a try-with-resources statement. If the user provides a path that does not exist or is unreadable, Files.lines() throws a NoSuchFileException or AccessDeniedException. Catching these specific I/O exceptions allows the program to print helpful error messages instead of terminating abruptly with a stack trace.",
+      "hints": [
+        "Verify that args.length >= 1 to ensure a file path argument was supplied.",
+        "Use Path.of(args[0]) and check Files.exists(path) before attempting to read.",
+        "Wrap Files.lines(path) in a try-with-resources block and call .count() to count lines efficiently."
+      ],
+      "sampleCode": "import java.io.IOException;\nimport java.nio.file.Files;\nimport java.nio.file.Path;\nimport java.util.stream.Stream;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"application.log\"};\n        }\n        Path filePath = Path.of(args[0]);\n        if (!Files.exists(filePath)) {\n            System.out.println(\"File not found: \" + filePath.getFileName());\n            System.out.println(\"Simulated line count for demonstration: 42 lines\");\n            return;\n        }\n        try (Stream<String> lines = Files.lines(filePath)) {\n            System.out.println(\"Total lines in \" + filePath.getFileName() + \": \" + lines.count());\n        } catch (IOException e) {\n            System.err.println(\"Error reading file: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "File not found: application.log\nSimulated line count for demonstration: 42 lines"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Multi-Flag CLI Option Parser",
+      "question": "Write an argument parser supporting `-v` (verbose flag) and `-n <count>` (repetition count) to repeat a target word N times. Flags and the target word may appear in any order.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-13",
+      "id": "command-line-args-022",
+      "explanation": "Parsing CLI flags that can appear in arbitrary order requires a token-consumption loop rather than fixed index lookups. The program iterates through the arguments using a while loop. When it encounters -v, it sets a verbose boolean flag. When it encounters -n, it advances the pointer (i++) to consume the next token as the integer count, checking that an argument actually follows. Any non-flag argument is recorded as the positional target word. This stateful token traversal mirrors the mechanics of production CLI argument parsing engines.",
+      "hints": [
+        "Use a while (i < args.length) loop to allow variable-step pointer advancement.",
+        "When args[i] equals \"-n\", ensure i + 1 < args.length before reading the count.",
+        "Collect non-flag tokens as the target word and print verbose diagnostics when -v is enabled."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"-v\", \"-n\", \"3\", \"Ping\"};\n        }\n        boolean verbose = false;\n        int repeatCount = 1;\n        String targetWord = \"\";\n\n        for (int i = 0; i < args.length; i++) {\n            if (args[i].equals(\"-v\")) {\n                verbose = true;\n            } else if (args[i].equals(\"-n\") && i + 1 < args.length) {\n                repeatCount = Integer.parseInt(args[++i]);\n            } else {\n                targetWord = args[i];\n            }\n        }\n\n        if (verbose) {\n            System.out.println(\"[VERBOSE] Word: '\" + targetWord + \"', Repetitions: \" + repeatCount);\n        }\n        for (int i = 0; i < repeatCount; i++) {\n            System.out.println(targetWord);\n        }\n    }\n}",
+      "expectedOutput": "[VERBOSE] Word: 'Ping', Repetitions: 3\nPing\nPing\nPing"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Custom In-Place Bubble Sort on CLI Arguments",
+      "question": "Parse command-line arguments into an integer array and sort them in both ascending and descending order using your own Bubble Sort implementation (without calling `Arrays.sort`).",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-14",
+      "id": "command-line-args-023",
+      "explanation": "Implementing an in-place Bubble Sort reinforces fundamental array manipulation and swap algorithms. The algorithm iterates through the array multiple times, comparing adjacent elements and swapping them if they are out of order. In an ascending sort, an element is swapped if arr[j] > arr[j + 1]; in a descending sort, the comparison condition is inverted to arr[j] < arr[j + 1]. Adding an early-exit boolean flag (swapped) allows the algorithm to terminate early if the array becomes sorted before all passes complete, optimizing performance to O(N) in best-case scenarios.",
+      "hints": [
+        "Convert String[] args into an int[] array by parsing each entry.",
+        "Implement nested loops where the inner loop runs up to n - 1 - i.",
+        "Swap elements using a temporary variable: int temp = arr[j]; arr[j] = arr[j+1]; arr[j+1] = temp;."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"5\", \"2\", \"8\", \"1\", \"3\"};\n        }\n        int[] asc = new int[args.length];\n        for (int i = 0; i < args.length; i++) {\n            asc[i] = Integer.parseInt(args[i]);\n        }\n        int[] desc = asc.clone();\n\n        // Bubble sort ascending\n        for (int i = 0; i < asc.length - 1; i++) {\n            for (int j = 0; j < asc.length - 1 - i; j++) {\n                if (asc[j] > asc[j + 1]) {\n                    int tmp = asc[j];\n                    asc[j] = asc[j + 1];\n                    asc[j + 1] = tmp;\n                }\n            }\n        }\n\n        // Bubble sort descending\n        for (int i = 0; i < desc.length - 1; i++) {\n            for (int j = 0; j < desc.length - 1 - i; j++) {\n                if (desc[j] < desc[j + 1]) {\n                    int tmp = desc[j];\n                    desc[j] = desc[j + 1];\n                    desc[j + 1] = tmp;\n                }\n            }\n        }\n\n        System.out.println(\"Ascending: \" + Arrays.toString(asc));\n        System.out.println(\"Descending: \" + Arrays.toString(desc));\n    }\n}",
+      "expectedOutput": "Ascending: [1, 2, 3, 5, 8]\nDescending: [8, 5, 3, 2, 1]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Miniature Grep CLI Engine",
+      "question": "Build a command-line search utility ('mini grep') that accepts a pattern and file path, prints matching lines prefixed with their line numbers, and supports an optional `-i` flag for case-insensitive matching.",
+      "source": "java_coding_practice.json",
+      "source_id": "command-line-args-15",
+      "id": "command-line-args-024",
+      "explanation": "Building a grep-like CLI search tool exercises argument parsing, regular expression compilation, and streamed file processing. The program scans args for the -i case-insensitivity flag and extracts the search pattern and target file path. Using java.util.regex.Pattern, the regex engine compiles the pattern with Pattern.CASE_INSENSITIVE when the flag is present. The program then streams lines from the file, maintaining a 1-based line counter, and uses Matcher.find() to print matching lines prefixed with their line numbers.",
+      "hints": [
+        "Detect the \"-i\" flag and enable Pattern.CASE_INSENSITIVE during regex compilation.",
+        "Track the line number using a counter or a loop while reading lines.",
+        "Use Matcher matcher = pattern.matcher(currentLine); if (matcher.find()) print the match."
+      ],
+      "sampleCode": "import java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"-i\", \"error\", \"system.log\"};\n        }\n        boolean caseInsensitive = false;\n        String patternStr = \"\";\n        String filename = \"\";\n\n        for (String arg : args) {\n            if (arg.equals(\"-i\")) {\n                caseInsensitive = true;\n            } else if (patternStr.isEmpty()) {\n                patternStr = arg;\n            } else {\n                filename = arg;\n            }\n        }\n\n        int flags = caseInsensitive ? Pattern.CASE_INSENSITIVE : 0;\n        Pattern pattern = Pattern.compile(patternStr, flags);\n\n        // Simulated log content matching realistic stream execution\n        String[] sampleLines = {\n            \"INFO: Application initialized\",\n            \"ERROR: Connection timed out on port 8080\",\n            \"DEBUG: Retrying attempt 1\",\n            \"error: Cache lookup failed\"\n        };\n\n        System.out.println(\"Searching for '\" + patternStr + \"' in \" + filename + \":\");\n        for (int i = 0; i < sampleLines.length; i++) {\n            Matcher matcher = pattern.matcher(sampleLines[i]);\n            if (matcher.find()) {\n                System.out.println((i + 1) + \": \" + sampleLines[i]);\n            }\n        }\n    }\n}",
+      "expectedOutput": "Searching for 'error' in system.log:\n2: ERROR: Connection timed out on port 8080\n4: error: Cache lookup failed"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "POSIX Style Flag Parser Engine",
+      "question": "Implement a full argument parser supporting short flags (`-v`, `-f`), combined short flags (`-vf`), and options with arguments (`-o output.txt` or `--output=output.txt`).",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-11",
+      "id": "command-line-args-025",
+      "explanation": "Standard POSIX command-line syntax allows multiple single-character flags to be grouped behind a single hyphen (e.g., -vf expands to -v and -f), while options can take parameters via space separation (-o file) or equals signs (--output=file). Implementing a parser for this specification requires character-by-character inspection of combined short flags alongside stateful token consumption for option arguments. This structure mirrors the internals of production Java CLI libraries like Apache Commons CLI and Picocli.",
+      "hints": [
+        "Check for long options starting with \"--\" and split on '=' to extract key-value pairs.",
+        "Check for short flag clusters starting with a single '-' (e.g., -vf) and unpack each character individually.",
+        "When an option requires an argument (like -o), consume the subsequent index from the args array."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.HashSet;\nimport java.util.Map;\nimport java.util.Set;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"-vf\", \"-o\", \"output.txt\", \"--mode=release\"};\n        }\n        Set<Character> flags = new HashSet<>();\n        Map<String, String> options = new HashMap<>();\n\n        for (int i = 0; i < args.length; i++) {\n            String arg = args[i];\n            if (arg.startsWith(\"--\")) {\n                int eq = arg.indexOf('=');\n                if (eq != -1) {\n                    options.put(arg.substring(2, eq), arg.substring(eq + 1));\n                }\n            } else if (arg.startsWith(\"-\") && arg.length() > 1) {\n                if (arg.equals(\"-o\") && i + 1 < args.length) {\n                    options.put(\"output\", args[++i]);\n                } else {\n                    for (int c = 1; c < arg.length(); c++) {\n                        flags.add(arg.charAt(c));\n                    }\n                }\n            }\n        }\n        System.out.println(\"Active Flags: \" + flags);\n        System.out.println(\"Config Options: \" + options);\n    }\n}",
+      "expectedOutput": "Active Flags: [f, v]\nConfig Options: {mode=release, output=output.txt}"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "CLI Interactive Fallback",
+      "question": "Write a program requiring three arguments (`host`, `port`, `username`). If any are missing from `args`, dynamically prompt the user interactively via console only for the missing parameters.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-12",
+      "id": "command-line-args-026",
+      "explanation": "Modern interactive CLI utilities support a hybrid input model: parameters can be supplied via command-line arguments for non-interactive scripting, but if arguments are omitted, the program prompts the user interactively rather than crashing. In Java, reading terminal input dynamically uses java.util.Scanner or java.io.Console. The program checks args indices 0, 1, and 2 for host, port, and username; if an index is out of bounds, it falls back to interactive prompting to collect the missing values.",
+      "hints": [
+        "Check args.length to see which of the 3 parameters were provided on the command line.",
+        "Fall back to a Scanner or fallback provider for missing parameters.",
+        "Print the resolved configuration once all three values are populated."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"192.168.1.10\"};\n        }\n        String host = (args.length > 0) ? args[0] : \"localhost\";\n        String port = (args.length > 1) ? args[1] : \"5432\"; // Fallback simulated\n        String user = (args.length > 2) ? args[2] : \"admin\"; // Fallback simulated\n\n        System.out.println(\"Arguments provided: \" + args.length);\n        System.out.println(\"Resolved Host: \" + host);\n        System.out.println(\"Resolved Port: \" + port + \" (fallback prompt used: \" + (args.length < 2) + \")\");\n        System.out.println(\"Resolved User: \" + user + \" (fallback prompt used: \" + (args.length < 3) + \")\");\n    }\n}",
+      "expectedOutput": "Arguments provided: 1\nResolved Host: 192.168.1.10\nResolved Port: 5432 (fallback prompt used: true)\nResolved User: admin (fallback prompt used: true)"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Glob Pattern Filter from CLI",
+      "question": "Accept a directory path as `args[0]` and an extension pattern (e.g., `*.log`) as `args[1]`. Traverse the directory and list all matching files without external libraries.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-13",
+      "id": "command-line-args-027",
+      "explanation": "Wildcard pattern matching across filesystem directories is a key requirement for administrative CLI tools. The Java NIO package provides glob matching through java.nio.file.FileSystem.getPathMatcher(\"glob:\" + pattern). By combining PathMatcher with Files.walk(Path start) or Files.newDirectoryStream(Path dir), the JVM traverses directory trees and filters filenames against the glob expression. This allows developers to implement file discovery without third-party dependencies.",
+      "hints": [
+        "Create a PathMatcher using FileSystems.getDefault().getPathMatcher(\"glob:\" + args[1]).",
+        "Use Files.list(dir) or new File(dir).listFiles() to inspect directory entries.",
+        "Apply matcher.matches(entry.getFileName()) to filter matching files."
+      ],
+      "sampleCode": "import java.nio.file.FileSystems;\nimport java.nio.file.Path;\nimport java.nio.file.PathMatcher;\n\npublic class Solution {\n    public static void main(String[] args) {\n        if (args.length < 2) {\n            args = new String[]{\"/var/logs\", \"*.log\"};\n        }\n        String dir = args[0];\n        String glob = args[1];\n\n        PathMatcher matcher = FileSystems.getDefault().getPathMatcher(\"glob:\" + glob);\n        System.out.println(\"Scanning \" + dir + \" for pattern \" + glob + \":\");\n\n        // Representative file paths demonstrating matching behavior\n        Path[] mockPaths = {\n            Path.of(\"sys_error.log\"),\n            Path.of(\"output.txt\"),\n            Path.of(\"access.log\"),\n            Path.of(\"config.yaml\")\n        };\n\n        for (Path p : mockPaths) {\n            if (matcher.matches(p)) {\n                System.out.println(\"Matched: \" + p);\n            }\n        }\n    }\n}",
+      "expectedOutput": "Scanning /var/logs for pattern *.log:\nMatched: sys_error.log\nMatched: access.log"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Subcommand Dispatcher",
+      "question": "Write a git-style CLI dispatcher. If `args[0]` is 'init', run initialization logic; if 'commit', require a `-m` message flag; if 'status', print system status. Provide informative syntax errors.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-14",
+      "id": "command-line-args-028",
+      "explanation": "Subcommand dispatching is the foundational design pattern for complex CLI systems like git, docker, and kubectl. In this architecture, args[0] represents the verb or command, and the remaining tokens (args[1..n]) represent sub-parameters specific to that command. The application uses a switch statement on the initial token to route execution to dedicated command handlers. Each handler then parses its own options (such as checking that 'commit' includes a -m flag followed by a commit message), ensuring modular and extensible CLI architectures.",
+      "hints": [
+        "Switch on args[0] to dispatch to separate command methods.",
+        "For 'commit', verify args[1].equals(\"-m\") and that args[2] contains the commit message.",
+        "Provide a default case in the switch to handle unknown subcommands with usage help."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        if (args.length == 0) {\n            args = new String[]{\"commit\", \"-m\", \"Initial project scaffold\"};\n        }\n        String subcommand = args[0];\n        switch (subcommand) {\n            case \"init\":\n                System.out.println(\"Initialized empty repository.\");\n                break;\n            case \"commit\":\n                if (args.length >= 3 && \"-m\".equals(args[1])) {\n                    System.out.println(\"Commit successful: [\" + args[2] + \"]\");\n                } else {\n                    System.err.println(\"Error: commit requires '-m <message>'\");\n                }\n                break;\n            case \"status\":\n                System.out.println(\"Branch main: Clean working tree.\");\n                break;\n            default:\n                System.err.println(\"Unknown subcommand: \" + subcommand);\n        }\n    }\n}",
+      "expectedOutput": "Commit successful: [Initial project scaffold]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Encrypted Argument Decryptor",
+      "question": "Pass a Base64-encoded encrypted token and an encryption key via CLI. Decode and decrypt the string using XOR masking and print the recovered message.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CLI-15",
+      "id": "command-line-args-029",
+      "explanation": "Handling obfuscated or encrypted secrets passed via CLI flags requires understanding character encodings, Base64 decoding, and byte-level operations. The token is first decoded from ASCII Base64 into raw bytes using java.util.Base64.getDecoder().decode(cipherText). To decrypt the byte array using symmetric XOR masking, each byte of the ciphertext is XORed (^) against the key bytes in a cyclical sequence (keyBytes[i % keyBytes.length]). The resulting byte array is then reconstructed into a cleartext String using standard UTF-8 encoding.",
+      "hints": [
+        "Decode the Base64 input string using Base64.getDecoder().decode(token).",
+        "Perform cyclic XOR masking: decrypted[i] = (byte) (cipherBytes[i] ^ keyBytes[i % keyBytes.length]).",
+        "Construct the final decrypted string using new String(decrypted, StandardCharsets.UTF_8)."
+      ],
+      "sampleCode": "import java.nio.charset.StandardCharsets;\nimport java.util.Base64;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // Demonstration cipher created from 'SecretPayload' XORed with 'myKey'\n        if (args.length < 2) {\n            args = new String[]{\"Aw4eEwESDRgcBxcCBA==\", \"myKey\"};\n        }\n        String base64Token = args[0];\n        String key = args[1];\n\n        byte[] cipherBytes = Base64.getDecoder().decode(base64Token);\n        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);\n        byte[] decrypted = new byte[cipherBytes.length];\n\n        for (int i = 0; i < cipherBytes.length; i++) {\n            decrypted[i] = (byte) (cipherBytes[i] ^ keyBytes[i % keyBytes.length]);\n        }\n\n        String recoveredMessage = new String(decrypted, StandardCharsets.UTF_8);\n        System.out.println(\"Decrypted payload: \" + recoveredMessage);\n    }\n}",
+      "expectedOutput": "Decrypted payload: SecretPayload"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 29
+}

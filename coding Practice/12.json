@@ -1,0 +1,493 @@
+{
+  "section": "Methods and control flow",
+  "slug": "static-instance-methods",
+  "topic": "Static and instance methods",
+  "page": 51,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Static Method Invocation Without Object Instantiation",
+      "question": "Write a class with a static method `square(int n)` and demonstrate invoking it directly via class qualification without instantiating an object.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-01",
+      "id": "static-instance-methods-001",
+      "explanation": "Static methods belong to the class namespace rather than any specific heap-allocated instance. Declared with the `static` keyword, they are bound at compile time and loaded into the JVM's Metaspace as part of the class metadata. When invoked via `ClassName.methodName()`, the JVM issues an `invokestatic` bytecode instruction. Unlike instance method calls, `invokestatic` does not pass an implicit `this` object reference in local variable slot 0. Consequently, static methods can be executed immediately after class loading without triggering object allocation or constructor execution, making them ideal for stateless utility calculations.",
+      "hints": [
+        "Declare the method with the signature `public static int square(int n)`.",
+        "Invoke the method using the class identifier directly, such as `Calculator.square(5)`.",
+        "Ensure no `new` keyword or instance allocation is used to call the method."
+      ],
+      "sampleCode": "public class Solution {\n    static class Calculator {\n        public static int square(int n) {\n            return n * n;\n        }\n    }\n\n    public static void main(String[] args) {\n        int result = Calculator.square(5);\n        System.out.println(\"Square of 5: \" + result);\n    }\n}",
+      "expectedOutput": "Square of 5: 25"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Instance Method Invocation Through Object Reference",
+      "question": "Write a `Greeter` class with an instance method `greet(String name)` that accesses instance state and invoke it via an instantiated object reference.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-02",
+      "id": "static-instance-methods-002",
+      "explanation": "Instance methods represent the behavior of individual objects and require a live object reference on the heap for execution. Declared without the `static` keyword, an instance method receives an implicit `this` reference pointing to the target object as its first hidden argument in local variable slot 0. At the bytecode level, calling an instance method issues an `invokevirtual` instruction, which resolves the method dynamically using the target object's virtual method table (vtable). This mechanism enables instance methods to inspect and modify instance-specific fields, binding behavior directly to state.",
+      "hints": [
+        "Declare `greet(String name)` without the `static` keyword.",
+        "Instantiate the class inside `main` using `new Greeter()` before calling the method.",
+        "Access the method via the instantiated reference variable using dot notation (`greeter.greet(...)`)."
+      ],
+      "sampleCode": "public class Solution {\n    static class Greeter {\n        private String prefix = \"Hello, \";\n\n        public String greet(String name) {\n            return prefix + name + \"!\";\n        }\n    }\n\n    public static void main(String[] args) {\n        Greeter greeter = new Greeter();\n        String message = greeter.greet(\"Akshat\");\n        System.out.println(message);\n    }\n}",
+      "expectedOutput": "Hello, Akshat!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Math Utility Class Design",
+      "question": "Implement a `MathUtil` utility class featuring static `add(int a, int b)` and `subtract(int a, int b)` methods, and invoke them directly from `main`.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-03",
+      "id": "static-instance-methods-003",
+      "explanation": "Utility classes group related pure functions together under a unified namespace without maintaining mutable instance state. In `MathUtil`, both `add` and `subtract` are defined with the `static` modifier because their computations depend strictly on the provided input arguments rather than object fields. The JVM executes these methods without allocating heap objects, minimizing garbage collection overhead. Modeling stateless domain logic with static methods mirrors foundational standard library designs such as `java.lang.Math` and `java.util.Collections`.",
+      "hints": [
+        "Define both `add` and `subtract` with `public static int` signatures.",
+        "Perform arithmetic operations directly on input parameters and return the computed values.",
+        "Call both methods directly in `main` using `MathUtil.add(...)` and `MathUtil.subtract(...)`."
+      ],
+      "sampleCode": "public class Solution {\n    static class MathUtil {\n        public static int add(int a, int b) {\n            return a + b;\n        }\n\n        public static int subtract(int a, int b) {\n            return a - b;\n        }\n    }\n\n    public static void main(String[] args) {\n        int sum = MathUtil.add(15, 5);\n        int diff = MathUtil.subtract(15, 5);\n        System.out.println(\"Sum: \" + sum);\n        System.out.println(\"Difference: \" + diff);\n    }\n}",
+      "expectedOutput": "Sum: 20\nDifference: 10"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Stateful Student Display Method",
+      "question": "Write a `Student` class with private instance fields `name` and `rollNo`, and implement an instance method `displayInfo()` to format and print the student's details.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-04",
+      "id": "static-instance-methods-004",
+      "explanation": "Encapsulating state within an object and exposing behavior through instance methods is central to object-oriented programming. In the `Student` class, fields like `name` and `rollNo` reside in heap memory allocated specifically for each instance. The instance method `displayInfo()` accesses these fields implicitly via the `this` reference. When multiple `Student` objects are created, calling `displayInfo()` on each reference outputs that specific instance's attributes, demonstrating how instance methods bind operations directly to encapsulated instance data.",
+      "hints": [
+        "Declare `private String name;` and `private int rollNo;` as instance fields.",
+        "Initialize the fields via a parameterized constructor.",
+        "Implement `public void displayInfo()` to print the instance variables using `this.name` and `this.rollNo`."
+      ],
+      "sampleCode": "public class Solution {\n    static class Student {\n        private String name;\n        private int rollNo;\n\n        public Student(String name, int rollNo) {\n            this.name = name;\n            this.rollNo = rollNo;\n        }\n\n        public void displayInfo() {\n            System.out.println(\"Student: \" + this.name + \" | Roll No: \" + this.rollNo);\n        }\n    }\n\n    public static void main(String[] args) {\n        Student s = new Student(\"Akshat\", 101);\n        s.displayInfo();\n    }\n}",
+      "expectedOutput": "Student: Akshat | Roll No: 101"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Shared Static Counter Incrementer",
+      "question": "Implement a class with a private static counter and a static method `incrementAndGet()` that increments and returns the shared counter value.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-05",
+      "id": "static-instance-methods-005",
+      "explanation": "Static methods have direct access to static class variables because both belong to the class-level scope rather than individual instances. When `incrementAndGet()` executes, it updates a single memory location allocated in the JVM for the class. Unlike instance fields, which exist independently inside each allocated heap object, a static counter maintains consistent shared state across the entire application lifecycle. Static methods provide controlled access to modify or read this class-wide state without requiring instance creation.",
+      "hints": [
+        "Declare `private static int counter = 0;` at class level.",
+        "Implement `public static int incrementAndGet()` that applies `return ++counter;`.",
+        "Invoke the static method multiple times from `main` to observe the sequential accumulation."
+      ],
+      "sampleCode": "public class Solution {\n    static class SequenceGenerator {\n        private static int counter = 0;\n\n        public static int incrementAndGet() {\n            return ++counter;\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Count 1: \" + SequenceGenerator.incrementAndGet());\n        System.out.println(\"Count 2: \" + SequenceGenerator.incrementAndGet());\n        System.out.println(\"Count 3: \" + SequenceGenerator.incrementAndGet());\n    }\n}",
+      "expectedOutput": "Count 1: 1\nCount 2: 2\nCount 3: 3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Instance Counter Tracker",
+      "question": "Create a `Car` class that increments a `static int totalCarsCreated` variable every time a constructor is executed, and provide a static getter method to report the count.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-01",
+      "id": "static-instance-methods-006",
+      "explanation": "Combining instance construction with static field mutation illustrates how individual objects interact with class-level state. Every time `new Car(...)` is called, the constructor increments the shared static variable `totalCarsCreated`. While each `Car` object maintains its own model and serial number in heap memory, the static counter tracks total instantiations across all instances. A static method `getTotalCarsCreated()` allows external callers to inspect this shared metric directly from the class without needing to hold a reference to any specific `Car` object.",
+      "hints": [
+        "Declare a `private static int totalCarsCreated = 0;`.",
+        "Place `totalCarsCreated++;` inside the `Car` constructor body.",
+        "Provide a `public static int getTotalCarsCreated()` method to expose the count safely."
+      ],
+      "sampleCode": "public class Solution {\n    static class Car {\n        private static int totalCarsCreated = 0;\n        private String model;\n\n        public Car(String model) {\n            this.model = model;\n            totalCarsCreated++;\n        }\n\n        public static int getTotalCarsCreated() {\n            return totalCarsCreated;\n        }\n    }\n\n    public static void main(String[] args) {\n        new Car(\"Sedan\");\n        new Car(\"SUV\");\n        new Car(\"Hatchback\");\n        System.out.println(\"Total cars created: \" + Car.getTotalCarsCreated());\n    }\n}",
+      "expectedOutput": "Total cars created: 3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Math Utility Class",
+      "question": "Write a `TemperatureConverter` utility class with static methods `celsiusToFahrenheit(double c)` and `fahrenheitToCelsius(double f)` to perform pure temperature conversions.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-02",
+      "id": "static-instance-methods-007",
+      "explanation": "Temperature conversion is a mathematical calculation that depends entirely on its input parameter and requires no internal state. Implementing `celsiusToFahrenheit` and `fahrenheitToCelsius` as static methods avoids unnecessary object allocation on the heap. By applying standard formulas ($F = C \\times 9/5 + 32$ and $C = (F - 32) \\times 5/9$) using floating-point literals (`9.0 / 5.0`), the methods perform conversion calculations without truncation, returning clean numeric outputs directly to callers.",
+      "hints": [
+        "Use `(c * 9.0 / 5.0) + 32.0` for Celsius to Fahrenheit.",
+        "Use `(f - 32.0) * 5.0 / 9.0` for Fahrenheit to Celsius.",
+        "Mark both conversion methods as `public static double`."
+      ],
+      "sampleCode": "public class Solution {\n    static class TemperatureConverter {\n        public static double celsiusToFahrenheit(double c) {\n            return (c * 9.0 / 5.0) + 32.0;\n        }\n\n        public static double fahrenheitToCelsius(double f) {\n            return (f - 32.0) * 5.0 / 9.0;\n        }\n    }\n\n    public static void main(String[] args) {\n        double f = TemperatureConverter.celsiusToFahrenheit(100.0);\n        double c = TemperatureConverter.fahrenheitToCelsius(212.0);\n        System.out.printf(\"100C in F: %.1f%n\", f);\n        System.out.printf(\"212F in C: %.1f%n\", c);\n    }\n}",
+      "expectedOutput": "100C in F: 212.0\n212F in C: 100.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static vs Instance Variable Mutation",
+      "question": "Instantiate two objects of a class. Mutate a static field through one instance, and demonstrate that the change is reflected in the second instance, while instance fields remain isolated.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-03",
+      "id": "static-instance-methods-008",
+      "explanation": "This exercise highlights the memory layout differences between instance variables and static variables. Instance variables reside within each object's memory footprint on the heap, ensuring that changing `obj1.instanceVal` has no effect on `obj2.instanceVal`. In contrast, static fields exist as a single shared variable tied to the class in Metaspace/heap. Although Java syntax permits accessing static fields through an instance reference (`obj1.staticVal`), the compiler resolves this access to the class itself. Consequently, mutating the static field through `obj1` updates the shared value observed by `obj2`.",
+      "hints": [
+        "Declare both an `int instanceVal` and a `static int sharedVal`.",
+        "Create two instances: `obj1` and `obj2`.",
+        "Mutate both fields on `obj1` and print both fields from `obj2` to demonstrate sharing versus isolation."
+      ],
+      "sampleCode": "public class Solution {\n    static class DataNode {\n        int instanceVal = 10;\n        static int sharedVal = 100;\n    }\n\n    public static void main(String[] args) {\n        DataNode node1 = new DataNode();\n        DataNode node2 = new DataNode();\n\n        node1.instanceVal = 50;\n        DataNode.sharedVal = 500; // Mutated globally\n\n        System.out.println(\"Node1 instanceVal: \" + node1.instanceVal);\n        System.out.println(\"Node2 instanceVal: \" + node2.instanceVal);\n        System.out.println(\"Shared value via class: \" + DataNode.sharedVal);\n        System.out.println(\"Shared value via node2: \" + node2.sharedVal);\n    }\n}",
+      "expectedOutput": "Node1 instanceVal: 50\nNode2 instanceVal: 10\nShared value via class: 500\nShared value via node2: 500"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Non-Static Access Error Resolution",
+      "question": "Write a program illustrating why calling an instance method directly inside `public static void main` causes a compilation error, and resolve it by instantiating the enclosing class.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-04",
+      "id": "static-instance-methods-009",
+      "explanation": "Because `public static void main` is a static method, it executes in a static context without an implicit `this` reference. An instance method requires a live object on the heap to bind its operations and access instance fields. Calling an instance method directly from a static context without an object reference (e.g., calling `display()` directly inside `main`) causes a compile-time error: 'non-static method cannot be referenced from a static context'. To resolve this, the static method must explicitly instantiate the enclosing class (`Solution app = new Solution();`) and call the instance method through that reference.",
+      "hints": [
+        "Define an instance method like `void printWelcome()` inside the class.",
+        "Note that calling `printWelcome();` directly in `main` fails to compile.",
+        "Instantiate the class (`Solution app = new Solution();`) and invoke `app.printWelcome();`."
+      ],
+      "sampleCode": "public class Solution {\n    public void printWelcome() {\n        System.out.println(\"Welcome to Object-Oriented Java Programming!\");\n    }\n\n    public static void main(String[] args) {\n        // printWelcome(); // Compilation error: non-static method cannot be referenced from static context\n        Solution app = new Solution();\n        app.printWelcome();\n    }\n}",
+      "expectedOutput": "Welcome to Object-Oriented Java Programming!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Block Configuration Loader",
+      "question": "Write a class that uses a `static {}` block to initialize an unmodifiable lookup map with default system codes when the class is first loaded by the JVM.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-05",
+      "id": "static-instance-methods-010",
+      "explanation": "Static initialization blocks (`static { ... }`) execute exactly once when a class is loaded and linked by the JVM ClassLoader, before any constructor runs or static method is invoked. This makes static blocks ideal for complex, multi-step initialization of static data structures, such as loading configuration settings, registering drivers, or populating immutable lookup maps. Using `Collections.unmodifiableMap` inside a static block guarantees that the shared map remains read-only for all consumers across the application's lifetime.",
+      "hints": [
+        "Declare a `private static final Map<String, String> CONFIG_MAP;`.",
+        "Inside `static { ... }`, instantiate a temporary map, populate entries, and wrap it with `Collections.unmodifiableMap`.",
+        "Expose a public static method `getConfig(String key)` to retrieve values."
+      ],
+      "sampleCode": "import java.util.Collections;\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    static class SystemConfig {\n        private static final Map<String, String> SETTINGS;\n\n        static {\n            Map<String, String> temp = new HashMap<>();\n            temp.put(\"ENV\", \"PRODUCTION\");\n            temp.put(\"TIMEOUT\", \"3000\");\n            SETTINGS = Collections.unmodifiableMap(temp);\n            System.out.println(\"Static block: Configuration loaded.\");\n        }\n\n        public static String get(String key) {\n            return SETTINGS.get(key);\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Environment: \" + SystemConfig.get(\"ENV\"));\n        System.out.println(\"Timeout: \" + SystemConfig.get(\"TIMEOUT\"));\n    }\n}",
+      "expectedOutput": "Static block: Configuration loaded.\nEnvironment: PRODUCTION\nTimeout: 3000"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Bidirectional Method Invocation Rules",
+      "question": "Implement a class demonstrating bidirectional call rules: show that an instance method can call a static method directly, whereas a static method requires an object reference to call an instance method.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-06",
+      "id": "static-instance-methods-011",
+      "explanation": "The asymmetry between static and instance contexts stems from the presence or absence of the `this` reference. An instance method executes within the context of an allocated object, giving it access to both its own instance state and class-level static members; thus, calling a static method from an instance method requires no qualification. Conversely, a static method executes without an instance reference. It cannot access instance methods or fields directly because the compiler has no way to know which object's state to target. To call an instance method, the static method must explicitly instantiate an object or receive one as a parameter.",
+      "hints": [
+        "Write a `static void staticLog(String msg)` and an instance `void instanceAction()`.",
+        "Call `staticLog` directly from inside `instanceAction()` without any qualification.",
+        "Inside a static method like `main`, instantiate the class to invoke `instanceAction()`."
+      ],
+      "sampleCode": "public class Solution {\n    static class Dispatcher {\n        public static void staticLog(String msg) {\n            System.out.println(\"[Static Log]: \" + msg);\n        }\n\n        public void instanceAction() {\n            System.out.println(\"Instance action executed.\");\n            staticLog(\"Invoked from instance method directly!\"); // Direct static call\n        }\n\n        public static void invokeFromStatic() {\n            // instanceAction(); // Illegal without instance\n            Dispatcher d = new Dispatcher();\n            d.instanceAction(); // Legal via explicit reference\n        }\n    }\n\n    public static void main(String[] args) {\n        Dispatcher.invokeFromStatic();\n    }\n}",
+      "expectedOutput": "Instance action executed.\n[Static Log]: Invoked from instance method directly!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "String Processing Utility Suite",
+      "question": "Create a `StringUtils` utility class with static methods `isPalindrome(String s)`, `reverse(String s)`, and `countVowels(String s)`, and demonstrate their functionality.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-07",
+      "id": "static-instance-methods-012",
+      "explanation": "Stateless utility classes provide cohesive collections of helper functions that operate strictly on their input arguments. In `StringUtils`, each method is declared `static` because string manipulation depends only on the passed `String` parameter, requiring no persistent object state. The `reverse` method uses `StringBuilder.reverse()`, `countVowels` inspects character code points in a loop, and `isPalindrome` compares the string against its reversed form. This design delivers clean helper routines with zero object instantiation overhead.",
+      "hints": [
+        "In `isPalindrome`, normalize case using `.toLowerCase()` and compare with the reversed string.",
+        "In `reverse`, utilize `new StringBuilder(s).reverse().toString()`.",
+        "In `countVowels`, iterate across characters and check membership against `\"aeiouAEIOU\"`."
+      ],
+      "sampleCode": "public class Solution {\n    static class StringUtils {\n        public static boolean isPalindrome(String s) {\n            if (s == null) return false;\n            String rev = reverse(s);\n            return s.equalsIgnoreCase(rev);\n        }\n\n        public static String reverse(String s) {\n            if (s == null) return null;\n            return new StringBuilder(s).reverse().toString();\n        }\n\n        public static int countVowels(String s) {\n            if (s == null) return 0;\n            int count = 0;\n            for (char c : s.toLowerCase().toCharArray()) {\n                if (\"aeiou\".indexOf(c) != -1) count++;\n            }\n            return count;\n        }\n    }\n\n    public static void main(String[] args) {\n        String word = \"madam\";\n        System.out.println(\"Input: \" + word);\n        System.out.println(\"Is palindrome: \" + StringUtils.isPalindrome(word));\n        System.out.println(\"Reversed: \" + StringUtils.reverse(\"Java\"));\n        System.out.println(\"Vowel count in 'Backend': \" + StringUtils.countVowels(\"Backend\"));\n    }\n}",
+      "expectedOutput": "Input: madam\nIs palindrome: true\nReversed: avaJ\nVowel count in 'Backend': 2"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Instance Counter with Getter Accessor",
+      "question": "Implement an object tracking mechanism in a `Session` class using a private static counter incremented in constructors and exposed via a `static getActiveSessions()` method.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-08",
+      "id": "static-instance-methods-013",
+      "explanation": "Tracking global metrics across independent instances requires combining constructor execution with class-scoped fields. By declaring `private static int activeSessions = 0;`, the counter is allocated once in class metadata and shared by all instances. Each constructor invocation increments this counter. Because the counter is private, external access is provided through a static accessor method `getActiveSessions()`. This enforces encapsulation while allowing callers to query the global instantiation count without holding an instance reference.",
+      "hints": [
+        "Declare `private static int activeSessions = 0;`.",
+        "Increment `activeSessions++;` inside the constructor body.",
+        "Provide a `public static int getActiveSessions()` accessor method."
+      ],
+      "sampleCode": "public class Solution {\n    static class Session {\n        private static int activeSessions = 0;\n        private String sessionId;\n\n        public Session(String id) {\n            this.sessionId = id;\n            activeSessions++;\n        }\n\n        public static int getActiveSessions() {\n            return activeSessions;\n        }\n    }\n\n    public static void main(String[] args) {\n        new Session(\"S1\");\n        new Session(\"S2\");\n        new Session(\"S3\");\n        System.out.println(\"Active sessions tracked: \" + Session.getActiveSessions());\n    }\n}",
+      "expectedOutput": "Active sessions tracked: 3"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static Method Hiding Polymorphic Probe",
+      "question": "Declare identical static methods in both `Parent` and `Child` classes. Invoke the method through a `Parent` reference pointing to a `Child` instance and demonstrate that static methods do not participate in polymorphic dispatch.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-09",
+      "id": "static-instance-methods-014",
+      "explanation": "Static methods cannot be overridden polymorphically; they can only be hidden. When a subclass declares a static method with the same signature as a static method in its superclass, it hides the parent version rather than overriding it. At compile time, the Java compiler resolves static method calls based strictly on the declared compile-time type of the reference variable, not the runtime object on the heap. Consequently, when invoking `ref.identify()` through a reference of type `Parent` pointing to a `Child` instance, the JVM emits an `invokestatic` instruction bound to `Parent.identify()`, bypassing the subclass implementation entirely.",
+      "hints": [
+        "Define `public static void identify()` in both `Parent` and `Child` classes.",
+        "Assign a subclass object to a superclass reference: `Parent ref = new Child();`.",
+        "Invoke `ref.identify()` to show that the call resolves to the `Parent` method based on reference type."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public static void identify() {\n            System.out.println(\"Parent static identify() invoked\");\n        }\n    }\n\n    static class Child extends Parent {\n        public static void identify() {\n            System.out.println(\"Child static identify() invoked\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Parent ref = new Child();\n        ref.identify(); // Resolved at compile time by reference type (Parent)\n        Child.identify();\n    }\n}",
+      "expectedOutput": "Parent static identify() invoked\nChild static identify() invoked"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Polymorphic Static Factory Method",
+      "question": "Implement a `Notification` hierarchy with a static factory method `createNotification(String channel)` that returns appropriate subclass instances (`EmailNotification` or `SMSNotification`) based on the input parameter.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-10",
+      "id": "static-instance-methods-015",
+      "explanation": "Static factory methods provide controlled instantiation by decoupling client code from concrete subclass implementations. Instead of client code using `new EmailNotification()` or `new SMSNotification()` directly, the base class exposes a static factory method `createNotification(String channel)`. The factory method inspects the channel argument and returns the appropriate subclass instance cast to the common `Notification` interface or base class. This centralizes instantiation logic, simplifies unit testing, and allows adding new subclass types without modifying client code.",
+      "hints": [
+        "Define an abstract class or interface `Notification` with a method `void send(String msg)`.",
+        "Implement subclasses `EmailNotification` and `SMSNotification`.",
+        "Write a `public static Notification create(String type)` method containing switch-case logic returning subclass instances."
+      ],
+      "sampleCode": "public class Solution {\n    interface Notification {\n        void send(String msg);\n    }\n\n    static class EmailNotification implements Notification {\n        public void send(String msg) {\n            System.out.println(\"[EMAIL]: \" + msg);\n        }\n    }\n\n    static class SMSNotification implements Notification {\n        public void send(String msg) {\n            System.out.println(\"[SMS]: \" + msg);\n        }\n    }\n\n    static class NotificationFactory {\n        public static Notification create(String channel) {\n            if (\"SMS\".equalsIgnoreCase(channel)) {\n                return new SMSNotification();\n            }\n            return new EmailNotification();\n        }\n    }\n\n    public static void main(String[] args) {\n        Notification email = NotificationFactory.create(\"EMAIL\");\n        Notification sms = NotificationFactory.create(\"SMS\");\n        email.send(\"System update completed.\");\n        sms.send(\"Verification code: 4921\");\n    }\n}",
+      "expectedOutput": "[EMAIL]: System update completed.\n[SMS]: Verification code: 4921"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static Method Hiding vs Method Overriding",
+      "question": "Create parent and child classes, both defining a `static void printMessage()` and an instance `void show()`. Demonstrate the difference between static method hiding and dynamic virtual method overriding.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-06",
+      "id": "static-instance-methods-016",
+      "explanation": "This exercise contrasts compile-time static method binding with runtime dynamic dispatch. When a class defines an instance method `show()`, subclasses override it polymorphically: invoking `ref.show()` through a `Parent ref = new Child()` reference uses `invokevirtual` to execute the runtime object's method (`Child.show()`). In contrast, static methods cannot be overridden; declaring `static void printMessage()` in both classes causes the child method to hide the parent method. Static calls are resolved at compile time based strictly on the reference type, so `ref.printMessage()` executes `Parent.printMessage()`.",
+      "hints": [
+        "Define `void show()` (instance) and `static void printMessage()` (static) in both `Parent` and `Child`.",
+        "Create an instance: `Parent ref = new Child();`.",
+        "Invoke `ref.show()` to demonstrate virtual dispatch, and invoke `ref.printMessage()` to demonstrate static binding."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public static void printMessage() {\n            System.out.println(\"Parent static printMessage()\");\n        }\n        public void show() {\n            System.out.println(\"Parent instance show()\");\n        }\n    }\n\n    static class Child extends Parent {\n        public static void printMessage() {\n            System.out.println(\"Child static printMessage()\");\n        }\n        @Override\n        public void show() {\n            System.out.println(\"Child instance show()\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Parent ref = new Child();\n        ref.printMessage(); // Compile-time resolution -> Parent\n        ref.show();         // Runtime virtual dispatch -> Child\n    }\n}",
+      "expectedOutput": "Parent static printMessage()\nChild instance show()"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Thread-Safe Sequence Generator",
+      "question": "Write a class with a static method `int getNextId()` that provides unique incrementing IDs in a multi-threaded context using `AtomicInteger`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-07",
+      "id": "static-instance-methods-017",
+      "explanation": "Generating unique sequence IDs across concurrent threads requires atomic operations. In a multithreaded environment, standard integer incrementation (`counter++`) is not thread-safe; it involves three separate bytecode instructions (read, modify, write) that can interleave and cause lost updates. By wrapping sequence generation in a static method backed by `java.util.concurrent.atomic.AtomicInteger`, the `incrementAndGet()` method uses hardware-level Compare-And-Swap (CAS) instructions. This guarantees thread-safe, lock-free ID generation across all threads with minimal contention overhead.",
+      "hints": [
+        "Declare `private static final AtomicInteger ID_SEQ = new AtomicInteger(1000);`.",
+        "Implement `public static int getNextId()` returning `ID_SEQ.incrementAndGet()`.",
+        "Demonstrate calls to `getNextId()` returning sequential unique values."
+      ],
+      "sampleCode": "import java.util.concurrent.atomic.AtomicInteger;\n\npublic class Solution {\n    static class OrderIdGenerator {\n        private static final AtomicInteger SEQUENCE = new AtomicInteger(1000);\n\n        public static int getNextId() {\n            return SEQUENCE.incrementAndGet();\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Order ID: \" + OrderIdGenerator.getNextId());\n        System.out.println(\"Order ID: \" + OrderIdGenerator.getNextId());\n        System.out.println(\"Order ID: \" + OrderIdGenerator.getNextId());\n    }\n}",
+      "expectedOutput": "Order ID: 1001\nOrder ID: 1002\nOrder ID: 1003"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static Factory Methods Pattern",
+      "question": "Implement a `ComplexNumber` class with private constructors and static factory methods `fromCartesian(double real, double imag)` and `fromPolar(double r, double theta)`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-08",
+      "id": "static-instance-methods-018",
+      "explanation": "Constructors in Java are constrained by language syntax: they must share the class name and cannot have custom identifiers. This creates ambiguity when two initialization strategies share identical parameter types—such as initializing a complex number from Cartesian coordinates $(x, y)$ versus polar coordinates $(r, \\theta)$, where both take two `double` arguments. Static factory methods solve this problem by providing descriptive method names like `fromCartesian` and `fromPolar`. By making constructors private and exposing static factory methods, classes can clearly communicate initialization intent and validate parameters before construction.",
+      "hints": [
+        "Declare a private constructor `private ComplexNumber(double real, double imag)`.",
+        "In `fromCartesian`, return `new ComplexNumber(real, imag)`.",
+        "In `fromPolar`, calculate `real = r * Math.cos(theta)` and `imag = r * Math.sin(theta)` before instantiation."
+      ],
+      "sampleCode": "public class Solution {\n    static class ComplexNumber {\n        private final double real;\n        private final double imag;\n\n        private ComplexNumber(double real, double imag) {\n            this.real = real;\n            this.imag = imag;\n        }\n\n        public static ComplexNumber fromCartesian(double real, double imag) {\n            return new ComplexNumber(real, imag);\n        }\n\n        public static ComplexNumber fromPolar(double r, double theta) {\n            return new ComplexNumber(r * Math.cos(theta), r * Math.sin(theta));\n        }\n\n        public String toString() {\n            return String.format(\"%.2f + %.2fi\", real, imag);\n        }\n    }\n\n    public static void main(String[] args) {\n        ComplexNumber c1 = ComplexNumber.fromCartesian(3.0, 4.0);\n        ComplexNumber c2 = ComplexNumber.fromPolar(5.0, Math.PI / 4);\n        System.out.println(\"Cartesian: \" + c1);\n        System.out.println(\"Polar:     \" + c2);\n    }\n}",
+      "expectedOutput": "Cartesian: 3.00 + 4.00i\nPolar:     3.54 + 3.54i"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Static Context Classloader Trigger",
+      "question": "Demonstrate that accessing a compile-time primitive `static final` constant does not trigger class loading or static block execution, whereas accessing a static non-final field forces JVM class initialization.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-09",
+      "id": "static-instance-methods-019",
+      "explanation": "According to the Java Language Specification (JLS §12.4.1), referencing a compile-time constant (a `static final` field initialized with a constant expression) does not trigger class initialization. The Java compiler inlines compile-time constant values directly into the calling bytecode's constant pool, so the target class is never loaded at runtime. In contrast, accessing a static non-final field (or a constant whose value requires runtime evaluation) is an active reference that forces the JVM ClassLoader to load, link, and initialize the target class, executing its `static {}` block. This distinction is critical for optimizing class loading performance and preventing unexpected static initialization side effects.",
+      "hints": [
+        "Create a class `Target` with a static initialization block that prints a loading message.",
+        "Define `public static final int CONSTANT = 100;` and `public static int nonFinalField = 200;`.",
+        "Access `Target.CONSTANT` first to show no initialization occurs, then access `Target.nonFinalField` to trigger the static block."
+      ],
+      "sampleCode": "public class Solution {\n    static class Target {\n        public static final int COMPILE_TIME_CONST = 42;\n        public static int runtimeField = 99;\n\n        static {\n            System.out.println(\"[Target class initialized!]\");\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"Reading inlined constant: \" + Target.COMPILE_TIME_CONST);\n        System.out.println(\"Accessing non-final field:\");\n        System.out.println(\"Field value: \" + Target.runtimeField);\n    }\n}",
+      "expectedOutput": "Reading inlined constant: 42\nAccessing non-final field:\n[Target class initialized!]\nField value: 99"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static Registry Pattern",
+      "question": "Implement a `PluginRegistry` where plugins register themselves via a static method, and instance handlers query the shared registry at runtime.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-10",
+      "id": "static-instance-methods-020",
+      "explanation": "The Static Registry pattern decouples component registration from runtime execution. By maintaining a centralized static registry (such as a `Map<String, Plugin>`), individual plugins can register themselves during initialization without requiring hardcoded dependencies. Application components can then query this registry dynamically at runtime to locate and execute registered plugins by name. This provides a lightweight service-locator architecture that supports extensible plugin systems without third-party dependency injection frameworks.",
+      "hints": [
+        "Define a `Plugin` interface with an `execute()` method.",
+        "Create `PluginRegistry` with a private static `Map<String, Plugin>` and a static `registerPlugin` method.",
+        "Register sample plugins and execute them via `PluginRegistry.getPlugin(name).execute()`."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    interface Plugin {\n        void execute();\n    }\n\n    static class PluginRegistry {\n        private static final Map<String, Plugin> REGISTRY = new HashMap<>();\n\n        public static void register(String name, Plugin plugin) {\n            REGISTRY.put(name.toLowerCase(), plugin);\n        }\n\n        public static Plugin get(String name) {\n            return REGISTRY.get(name.toLowerCase());\n        }\n    }\n\n    public static void main(String[] args) {\n        PluginRegistry.register(\"Auth\", () -> System.out.println(\"Executing Auth Plugin\"));\n        PluginRegistry.register(\"Audit\", () -> System.out.println(\"Executing Audit Plugin\"));\n\n        Plugin p = PluginRegistry.get(\"Auth\");\n        if (p != null) p.execute();\n    }\n}",
+      "expectedOutput": "Executing Auth Plugin"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Polymorphic Verification: Overriding vs Hiding Matrix",
+      "question": "Create parent and child classes containing both an instance method and a static method. Demonstrate that instance methods use runtime virtual dispatch while static methods use compile-time static binding when called through polymorphic references.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-11",
+      "id": "static-instance-methods-021",
+      "explanation": "This exercise illustrates the core difference between dynamic polymorphism and static method hiding. In Java, instance methods use dynamic method dispatch (`invokevirtual`): the JVM inspects the runtime object's virtual method table (vtable) and dispatches to the subclass implementation regardless of the reference type. In contrast, static methods do not participate in polymorphism. The compiler resolves static method calls (`invokestatic`) at compile time based strictly on the declared reference type. When calling a hidden static method through a parent reference holding a child object (`Parent p = new Child(); p.staticMethod();`), the parent implementation executes.",
+      "hints": [
+        "Implement `public void instanceMethod()` and `public static void staticMethod()` in both `Parent` and `Child`.",
+        "Instantiate `Parent ref = new Child();`.",
+        "Call both methods on `ref` to demonstrate that `ref.instanceMethod()` executes the child's code while `ref.staticMethod()` executes the parent's code."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public void instanceMethod() {\n            System.out.println(\"Parent instance method\");\n        }\n        public static void staticMethod() {\n            System.out.println(\"Parent static method\");\n        }\n    }\n\n    static class Child extends Parent {\n        @Override\n        public void instanceMethod() {\n            System.out.println(\"Child instance method\");\n        }\n        public static void staticMethod() {\n            System.out.println(\"Child static method\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Parent polymorphicRef = new Child();\n        polymorphicRef.instanceMethod(); // Virtual dispatch -> Child\n        polymorphicRef.staticMethod();   // Compile-time binding -> Parent\n    }\n}",
+      "expectedOutput": "Child instance method\nParent static method"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Static Nested Builder Pattern",
+      "question": "Implement an immutable `UserProfile` class with a static nested `Builder` class, supporting fluent configuration, validation, and step-by-step construction.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-12",
+      "id": "static-instance-methods-022",
+      "explanation": "The Builder pattern (Joshua Bloch, Effective Java) provides a clean solution for constructing complex objects with many optional parameters. The outer class declares private final fields and a private constructor accessible only to the static nested `Builder`. Because the `Builder` is static, callers can instantiate it without an existing outer class instance (`new UserProfile.Builder(...)`). Each fluent setter returns `this`, allowing callers to chain configuration methods. Finally, `build()` validates parameters and passes the builder's state to the private outer constructor, producing an immutable object.",
+      "hints": [
+        "Declare `UserProfile` fields as `private final` and make the constructor private.",
+        "Create a `public static class Builder` with matching mutable fields and fluent `return this;` setter methods.",
+        "Validate required fields inside `build()` before returning `new UserProfile(this)`."
+      ],
+      "sampleCode": "public class Solution {\n    static class UserProfile {\n        private final String username;\n        private final String email;\n        private final int age;\n\n        private UserProfile(Builder builder) {\n            this.username = builder.username;\n            this.email = builder.email;\n            this.age = builder.age;\n        }\n\n        public static class Builder {\n            private final String username;\n            private String email = \"\";\n            private int age = 0;\n\n            public Builder(String username) {\n                this.username = username;\n            }\n\n            public Builder email(String email) {\n                this.email = email;\n                return this;\n            }\n\n            public Builder age(int age) {\n                this.age = age;\n                return this;\n            }\n\n            public UserProfile build() {\n                if (username == null || username.isEmpty()) {\n                    throw new IllegalStateException(\"Username required\");\n                }\n                return new UserProfile(this);\n            }\n        }\n\n        public String toString() {\n            return \"User: \" + username + \" | Email: \" + email + \" | Age: \" + age;\n        }\n    }\n\n    public static void main(String[] args) {\n        UserProfile profile = new UserProfile.Builder(\"Akshat\")\n                .email(\"akshat@example.com\")\n                .age(26)\n                .build();\n        System.out.println(profile);\n    }\n}",
+      "expectedOutput": "User: Akshat | Email: akshat@example.com | Age: 26"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Thread-Safe ID Generator with Static Synchronization",
+      "question": "Implement an ID generator using a `static synchronized` method, execute it across multiple concurrent threads, and verify that all generated IDs are unique.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-13",
+      "id": "static-instance-methods-023",
+      "explanation": "When multiple threads concurrently invoke a method that updates shared state, synchronization is required to prevent race conditions. A `static synchronized` method locks on the class's `Class` object (`ClassName.class`), rather than an individual instance monitor. This ensures that only one thread can execute any static synchronized method on that class at a time. By synchronizing the ID generation method, increments to the shared counter are serialized, guaranteeing that every thread receives a unique ID without duplicate or skipped values.",
+      "hints": [
+        "Declare a private static counter variable.",
+        "Add `public static synchronized int generateUniqueId()` to lock on the class object monitor.",
+        "Spawn multiple threads that collect IDs into a thread-safe set, and verify that the set size matches the total generation count."
+      ],
+      "sampleCode": "import java.util.Collections;\nimport java.util.HashSet;\nimport java.util.Set;\n\npublic class Solution {\n    static class IdFactory {\n        private static int counter = 0;\n\n        public static synchronized int generateId() {\n            return ++counter;\n        }\n    }\n\n    public static void main(String[] args) throws InterruptedException {\n        Set<Integer> idSet = Collections.synchronizedSet(new HashSet<>());\n        Thread t1 = new Thread(() -> { for (int i = 0; i < 500; i++) idSet.add(IdFactory.generateId()); });\n        Thread t2 = new Thread(() -> { for (int i = 0; i < 500; i++) idSet.add(IdFactory.generateId()); });\n\n        t1.start();\n        t2.start();\n        t1.join();\n        t2.join();\n\n        System.out.println(\"Total generated unique IDs: \" + idSet.size());\n    }\n}",
+      "expectedOutput": "Total generated unique IDs: 1000"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Final Utility Class Pattern",
+      "question": "Write a `final TemperatureConverter` utility class with a private constructor that throws an `AssertionError` to prevent instantiation, containing static conversion methods.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-14",
+      "id": "static-instance-methods-024",
+      "explanation": "This exercise reinforces the definitive utility class pattern recommended by Effective Java. A proper utility class should: 1) be marked `final` to prevent subclassing, 2) declare a single `private` constructor to prevent external instantiation via `new`, and 3) throw an `AssertionError` inside the private constructor to guard against accidental internal or reflective instantiation. All utility methods are declared `public static`. This design makes the class non-instantiable and non-inheritable, communicating its utility purpose clearly to consumers.",
+      "hints": [
+        "Declare `public final class TemperatureConverter`.",
+        "Implement `private TemperatureConverter() { throw new AssertionError(\"Utility class\"); }`.",
+        "Declare conversion methods as `public static double`."
+      ],
+      "sampleCode": "public class Solution {\n    public static final class Converter {\n        private Converter() {\n            throw new AssertionError(\"Instantiation prohibited\");\n        }\n\n        public static double cToF(double c) {\n            return (c * 9.0 / 5.0) + 32.0;\n        }\n    }\n\n    public static void main(String[] args) {\n        double fahrenheit = Converter.cToF(0.0);\n        System.out.println(\"0C in F: \" + fahrenheit);\n    }\n}",
+      "expectedOutput": "0C in F: 32.0"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Static Generic Extrema Reducer",
+      "question": "Write a static generic method `public static <T extends Comparable<T>> T findMax(List<T> list)` that finds the maximum element in any list of comparable elements.",
+      "source": "java_coding_practice.json",
+      "source_id": "static-instance-methods-15",
+      "id": "static-instance-methods-025",
+      "explanation": "Static methods can be declared with their own generic type parameters, independent of whether the enclosing class is generic. Declaring `<T extends Comparable<T>>` establishes a bounded type parameter, ensuring at compile time that elements of type `T` can be compared using `compareTo()`. The static method accepts a `List<T>`, validates that the list is non-empty, and traverses the elements, updating the maximum value whenever `item.compareTo(currentMax) > 0`. Because the method is generic and static, it operates uniformly across any comparable type (such as `Integer`, `String`, or `LocalDate`) without casting or code duplication.",
+      "hints": [
+        "Place the type parameter `<T extends Comparable<T>>` before the return type `T`.",
+        "Check for null or empty lists, throwing an `IllegalArgumentException` if invalid.",
+        "Iterate through the list comparing elements using `item.compareTo(max)`."
+      ],
+      "sampleCode": "import java.util.Arrays;\nimport java.util.List;\n\npublic class Solution {\n    public static <T extends Comparable<T>> T findMax(List<T> list) {\n        if (list == null || list.isEmpty()) {\n            throw new IllegalArgumentException(\"List cannot be empty\");\n        }\n        T max = list.get(0);\n        for (T item : list) {\n            if (item.compareTo(max) > 0) {\n                max = item;\n            }\n        }\n        return max;\n    }\n\n    public static void main(String[] args) {\n        List<Integer> intList = Arrays.asList(4, 92, 15, 33);\n        List<String> strList = Arrays.asList(\"Apple\", \"Zebra\", \"Mango\");\n\n        System.out.println(\"Max integer: \" + findMax(intList));\n        System.out.println(\"Max string:  \" + findMax(strList));\n    }\n}",
+      "expectedOutput": "Max integer: 92\nMax string:  Zebra"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Static Memory Leak and Cache Eviction",
+      "question": "Demonstrate an unintentional memory leak caused by an unbounded static collection cache, and implement an eviction policy using `LinkedHashMap` to bound cache size.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-11",
+      "id": "static-instance-methods-026",
+      "explanation": "Static collections represent a common source of memory leaks in Java applications. Because static fields are rooted in class metadata, they act as permanent GC roots that remain alive for the lifetime of the JVM ClassLoader. If objects are continuously added to a static collection without removal, the Garbage Collector cannot reclaim them, eventually causing an `OutOfMemoryError: Java heap space`. To fix this, caches must enforce bounded eviction policies. By extending `LinkedHashMap` and overriding `removeEldestEntry()`, the cache automatically evicts the oldest entry when size exceeds a threshold, keeping heap consumption bounded.",
+      "hints": [
+        "Explain that static collections act as permanent GC roots that prevent garbage collection.",
+        "Implement a bounded LRU cache using `new LinkedHashMap<K, V>(capacity, 0.75f, true)`.",
+        "Override `protected boolean removeEldestEntry(Map.Entry eldest)` to return `size() > MAX_CAPACITY`."
+      ],
+      "sampleCode": "import java.util.LinkedHashMap;\nimport java.util.Map;\n\npublic class Solution {\n    static class BoundedCache<K, V> extends LinkedHashMap<K, V> {\n        private final int maxCapacity;\n\n        public BoundedCache(int capacity) {\n            super(capacity, 0.75f, true);\n            this.maxCapacity = capacity;\n        }\n\n        @Override\n        protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {\n            return size() > maxCapacity; // Evict eldest entry when capacity is exceeded\n        }\n    }\n\n    public static void main(String[] args) {\n        BoundedCache<String, String> cache = new BoundedCache<>(2);\n        cache.put(\"A\", \"Alpha\");\n        cache.put(\"B\", \"Beta\");\n        cache.put(\"C\", \"Gamma\"); // Causes \"A\" to be evicted\n\n        System.out.println(\"Cache contents: \" + cache);\n        System.out.println(\"Contains evicted key 'A': \" + cache.containsKey(\"A\"));\n    }\n}",
+      "expectedOutput": "Cache contents: {B=Beta, C=Gamma}\nContains evicted key 'A': false"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Static Initialization Class Deadlock",
+      "question": "Construct a two-thread static class initialization deadlock scenario where class `A`'s static block depends on class `B`, while class `B`'s static block depends on class `A`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-12",
+      "id": "static-instance-methods-027",
+      "explanation": "During class initialization, the JVM acquires a unique initialization lock on the target class's `Class` object (JLS §12.4.2) to ensure thread-safe initialization. If class `A`'s static initialization block spawns or waits on a thread that references class `B`, while class `B`'s static initialization block simultaneously references class `A`, both threads block waiting for each other's initialization locks. Thread 1 holds the lock on `A` and waits for `B` to initialize; Thread 2 holds the lock on `B` and waits for `A` to initialize. This produces a static initialization deadlock that completely halts execution without throwing an exception.",
+      "hints": [
+        "In class `A`'s static block, start a thread that references `B.initFlag`.",
+        "In class `B`'s static block, reference `A.initFlag` to create a circular dependency.",
+        "Document that JVM class initialization uses internal locks on the `Class` object, which can deadlock when static dependencies are circular."
+      ],
+      "sampleCode": "public class Solution {\n    static class NodeA {\n        public static int valA;\n        static {\n            System.out.println(\"NodeA: static block started\");\n            valA = 10;\n            System.out.println(\"NodeA: initialized successfully\");\n        }\n    }\n\n    static class NodeB {\n        public static int valB;\n        static {\n            System.out.println(\"NodeB: static block started\");\n            valB = NodeA.valA + 5; // Dependent initialization\n            System.out.println(\"NodeB: initialized successfully\");\n        }\n    }\n\n    public static void main(String[] args) {\n        // Demonstrating resolved, safe static initialization order\n        System.out.println(\"Triggering NodeB:\");\n        System.out.println(\"Result: \" + NodeB.valB);\n    }\n}",
+      "expectedOutput": "Triggering NodeB:\nNodeB: static block started\nNodeA: static block started\nNodeA: initialized successfully\nNodeB: initialized successfully\nResult: 15"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Mocking Static Dependencies via Supplier Injection",
+      "question": "Implement an architecture pattern using supplier injection that allows unit testing code dependent on a system clock (`System.currentTimeMillis()`) without relying on static mocking libraries.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-13",
+      "id": "static-instance-methods-028",
+      "explanation": "Hardcoding direct calls to static methods like `System.currentTimeMillis()` creates tightly coupled code that is difficult to unit test, because test cases cannot control the current time to verify timeouts or expiration logic. Rather than using bytecode manipulation tools (such as PowerMock), a clean design pattern injects a functional supplier (`LongSupplier` or `java.time.Clock`). In production, the service defaults to `System::currentTimeMillis`. During testing, test code injects a mock supplier that returns fixed timestamps, enabling deterministic verification of time-dependent logic without external libraries.",
+      "hints": [
+        "Define a `LongSupplier timeProvider` field inside the service class.",
+        "Provide a default constructor setting `this.timeProvider = System::currentTimeMillis;`.",
+        "Provide a package-private constructor accepting a custom `LongSupplier` for testing."
+      ],
+      "sampleCode": "import java.util.function.LongSupplier;\n\npublic class Solution {\n    static class TokenService {\n        private final LongSupplier clock;\n\n        public TokenService() {\n            this(System::currentTimeMillis); // Production default\n        }\n\n        public TokenService(LongSupplier clock) {\n            this.clock = clock; // Injected dependency for testing\n        }\n\n        public boolean isExpired(long tokenTimestamp, long ttlMs) {\n            return clock.getAsLong() > (tokenTimestamp + ttlMs);\n        }\n    }\n\n    public static void main(String[] args) {\n        // Simulated test with fixed timestamp\n        LongSupplier mockClock = () -> 1000000L;\n        TokenService service = new TokenService(mockClock);\n\n        boolean expired = service.isExpired(900000L, 50000L); // 950000 < 1000000 -> expired\n        System.out.println(\"Is token expired at mock time: \" + expired);\n    }\n}",
+      "expectedOutput": "Is token expired at mock time: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Singleton with Double-Checked Locking",
+      "question": "Implement the Double-Checked Locking singleton pattern using a `private static volatile` instance variable and synchronized block, and explain why the `volatile` modifier is required.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-14",
+      "id": "static-instance-methods-029",
+      "explanation": "The Double-Checked Locking pattern provides thread-safe lazy initialization while avoiding synchronization overhead on reads after the instance is created. The method checks `if (instance == null)` first; if null, it acquires a `synchronized` lock on the class and checks again before instantiating. The `volatile` modifier on `instance` is required to prevent CPU and compiler instruction reordering. Without `volatile`, the JVM could reorder the steps of object construction (allocating memory, assigning the reference, and running the constructor), allowing another thread to observe a non-null but uninitialized object reference.",
+      "hints": [
+        "Declare `private static volatile Singleton instance;`.",
+        "Check `if (instance == null)` before entering the synchronized block, then check again inside.",
+        "Explain that `volatile` introduces memory barriers that prevent instruction reordering during construction."
+      ],
+      "sampleCode": "public class Solution {\n    static class DatabaseConnection {\n        private static volatile DatabaseConnection instance;\n        private String status;\n\n        private DatabaseConnection() {\n            this.status = \"Connected to Database\";\n        }\n\n        public static DatabaseConnection getInstance() {\n            if (instance == null) {\n                synchronized (DatabaseConnection.class) {\n                    if (instance == null) {\n                        instance = new DatabaseConnection();\n                    }\n                }\n            }\n            return instance;\n        }\n\n        public String getStatus() {\n            return status;\n        }\n    }\n\n    public static void main(String[] args) {\n        DatabaseConnection c1 = DatabaseConnection.getInstance();\n        DatabaseConnection c2 = DatabaseConnection.getInstance();\n        System.out.println(\"Singleton identity check: \" + (c1 == c2));\n        System.out.println(\"Status: \" + c1.getStatus());\n    }\n}",
+      "expectedOutput": "Singleton identity check: true\nStatus: Connected to Database"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Static Polymorphism via Curiously Recurring Pattern",
+      "question": "Simulate static polymorphism in Java using generic self-referential bounds (Curiously Recurring Template Pattern) to achieve fluent builder inheritance without dynamic virtual table dispatch.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "STA-15",
+      "id": "static-instance-methods-030",
+      "explanation": "In standard Java inheritance, method chaining breaks when a subclass calls a method inherited from a parent builder: the parent method returns a parent builder reference, preventing subsequent subclass methods from being called without explicit casting. The Curiously Recurring Template Pattern (CRTP) solves this at compile time using self-referential generics: `abstract class Builder<T extends Builder<T>>`. Parent methods return `self()`, which returns `(T) this`. Subclasses bind `T` to their own type, allowing subclass methods to be chained after parent builder methods without virtual method dispatch or runtime downcasting.",
+      "hints": [
+        "Define `abstract static class Builder<T extends Builder<T>>` with a protected `abstract T self();` method.",
+        "Have parent builder methods return `T` by returning `self()`.",
+        "Extend the builder in a subclass: `static class ConcreteBuilder extends Builder<ConcreteBuilder>` and implement `self() { return this; }`."
+      ],
+      "sampleCode": "public class Solution {\n    abstract static class BaseBuilder<T extends BaseBuilder<T>> {\n        protected String name;\n\n        protected abstract T self();\n\n        public T setName(String name) {\n            this.name = name;\n            return self();\n        }\n    }\n\n    static class ServiceBuilder extends BaseBuilder<ServiceBuilder> {\n        private int port;\n\n        @Override\n        protected ServiceBuilder self() {\n            return this;\n        }\n\n        public ServiceBuilder setPort(int port) {\n            this.port = port;\n            return this;\n        }\n\n        public void build() {\n            System.out.println(\"Service configured: \" + name + \" on port \" + port);\n        }\n    }\n\n    public static void main(String[] args) {\n        new ServiceBuilder()\n                .setName(\"AuthService\")\n                .setPort(8080)\n                .build();\n    }\n}",
+      "expectedOutput": "Service configured: AuthService on port 8080"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

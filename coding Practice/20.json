@@ -1,0 +1,493 @@
+{
+  "section": "Arrays and strings",
+  "slug": "string-methods",
+  "topic": "Common String methods",
+  "page": 91,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "String Case Transformation",
+      "question": "Demonstrate character casing transformation by converting a mixed-case string into uppercase with `toUpperCase()` and lowercase with `toLowerCase()`, displaying both results.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-01",
+      "id": "string-methods-001",
+      "explanation": "Java's `String.toUpperCase()` and `String.toLowerCase()` methods create and return newly allocated `String` objects containing case-adjusted characters, leaving the original string unchanged due to immutability[cite: 18, 20]. Internally, these methods use character mapping tables defined by the Unicode standard[cite: 4, 20]. When no `Locale` argument is passed, Java uses the host environment's default locale[cite: 8]. In production environments—especially when formatting language-neutral identifiers or protocol headers—specifying `Locale.ROOT` prevents unintended locale-dependent transformations (such as the Turkish dotted/dotless 'i' rule).",
+      "hints": [
+        "Call `.toUpperCase()` on the original string to transform all alphabetic characters to uppercase[cite: 20].",
+        "Call `.toLowerCase()` to convert all alphabetic characters to lowercase[cite: 20].",
+        "Remember that the original string remains unmodified; store or print the returned values[cite: 18, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String original = \"Hello Java\";\n        String upper = original.toUpperCase();\n        String lower = original.toLowerCase();\n\n        System.out.println(\"Original: \" + original);\n        System.out.println(\"Uppercase: \" + upper);\n        System.out.println(\"Lowercase: \" + lower);\n    }\n}",
+      "expectedOutput": "Original: Hello Java\nUppercase: HELLO JAVA\nLowercase: hello java"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multi-Strategy Substring Extraction",
+      "question": "Extract and display substrings from a sample string in three distinct ways: starting from a specific index, between two bounding indices, and extracting the trailing $N$ characters.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-02",
+      "id": "string-methods-002",
+      "explanation": "The `String.substring()` method provides slice operations across character sequences[cite: 20]. Java provides two overloaded variants: `substring(int beginIndex)` extracts from `beginIndex` through the end of the string, while `substring(int beginIndex, int endIndex)` extracts characters in the half-open interval `[beginIndex, endIndex)` (inclusive of `beginIndex`, exclusive of `endIndex`)[cite: 20]. To extract the last $N$ characters safely, developers compute `str.substring(str.length() - n)`[cite: 8, 20]. If any index is negative, exceeds `length()`, or if `beginIndex > endIndex`, the runtime throws an `IndexOutOfBoundsException`[cite: 18]. Prior to Java 7u6, `substring` shared the parent backing array; modern JVMs allocate a fresh, compacted byte array for the slice[cite: 18].",
+      "hints": [
+        "Use single-argument `str.substring(beginIndex)` to extract through the end of the text[cite: 20].",
+        "Use two-argument `str.substring(start, end)` where the character at index `end` is excluded[cite: 20].",
+        "Calculate the offset for the trailing $N$ characters using `str.length() - n`[cite: 8, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"OpenAI-ChatGPT-Java\";\n        \n        // 1. From index\n        String fromIndex = text.substring(7);\n        // 2. Between indices [7, 14)\n        String between = text.substring(7, 14);\n        // 3. Last 4 characters\n        String lastN = text.substring(text.length() - 4);\n\n        System.out.println(\"From index 7: \" + fromIndex);\n        System.out.println(\"Between [7, 14): \" + between);\n        System.out.println(\"Last 4 chars: \" + lastN);\n    }\n}",
+      "expectedOutput": "From index 7: ChatGPT-Java\nBetween [7, 14): ChatGPT\nLast 4 chars: Java"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character and Substring Index Searching",
+      "question": "Locate and print the first and last occurrence indices of both a specific character and a target substring within a text string using `indexOf()` and `lastIndexOf()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-03",
+      "id": "string-methods-003",
+      "explanation": "Searching for characters and substrings within text is provided by `indexOf()` and `lastIndexOf()`[cite: 20]. The `indexOf` family scans forward from the beginning of the string (or a specified starting offset) and returns the zero-based index of the first occurrence[cite: 1, 20]. Conversely, `lastIndexOf` scans backward from the end of the string (or a specified offset) and returns the index of the final occurrence[cite: 20]. If the target character or substring is not present, both methods return `-1`[cite: 9, 20]. Both methods accept single character code points as well as `String` sequences[cite: 20].",
+      "hints": [
+        "Use `indexOf('a')` and `lastIndexOf('a')` to locate character occurrences[cite: 20].",
+        "Use `indexOf(\"Java\")` and `lastIndexOf(\"Java\")` to search for multi-character sequences[cite: 20].",
+        "Verify that a search for a non-existent substring returns `-1`[cite: 9, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String sentence = \"Java is great and Java is robust\";\n\n        int firstChar = sentence.indexOf('a');\n        int lastChar = sentence.lastIndexOf('a');\n        int firstSub = sentence.indexOf(\"Java\");\n        int lastSub = sentence.lastIndexOf(\"Java\");\n\n        System.out.println(\"First 'a' index: \" + firstChar);\n        System.out.println(\"Last 'a' index: \" + lastChar);\n        System.out.println(\"First \\\"Java\\\" index: \" + firstSub);\n        System.out.println(\"Last \\\"Java\\\" index: \" + lastSub);\n    }\n}",
+      "expectedOutput": "First 'a' index: 1\nLast 'a' index: 20\nFirst \"Java\" index: 0\nLast \"Java\" index: 19"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Whitespace Sanitation: trim, strip, and isBlank",
+      "question": "Demonstrate the differences between legacy `trim()`, modern `strip()`, and `isBlank()` on strings containing leading, trailing, and Unicode whitespace characters.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-04",
+      "id": "string-methods-004",
+      "explanation": "Prior to Java 11, developers relied on `String.trim()` to remove leading and trailing whitespace[cite: 20]. However, `trim()` uses an ASCII-bound definition: it strips any character whose codepoint is less than or equal to `\\u0020` (ASCII space), failing to remove non-breaking Unicode whitespace like `\\u2005` or `\\u3000`[cite: 20]. Java 11 introduced `String.strip()`, which checks whitespace using `Character.isWhitespace(codepoint)` to strip both ASCII and Unicode spaces[cite: 20]. Java 11 also added `String.isBlank()`, which returns `true` if a string is empty or contains only whitespace codepoints[cite: 20], replacing the older check `str.trim().isEmpty()`[cite: 20].",
+      "hints": [
+        "Test `trim()` against standard ASCII spaces[cite: 20].",
+        "Use Java 11's `.strip()` to demonstrate Unicode-aware whitespace removal[cite: 20].",
+        "Call `.isBlank()` to check if a whitespace-only string evaluates to `true` without manual length checks[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String padded = \"   Clean Architecture   \";\n        String onlySpaces = \"   \\t\\n   \";\n\n        System.out.println(\"Trimmed: '\" + padded.trim() + \"'\");\n        System.out.println(\"Stripped: '\" + padded.strip() + \"'\");\n        System.out.println(\"Is blank: \" + onlySpaces.isBlank());\n        System.out.println(\"Is empty: \" + onlySpaces.isEmpty());\n    }\n}",
+      "expectedOutput": "Trimmed: 'Clean Architecture'\nStripped: 'Clean Architecture'\nIs blank: true\nIs empty: false"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Literal Replacement for Characters and Substrings",
+      "question": "Demonstrate string character and word replacement by substituting all occurrences of a character using `replace(char, char)` and a target word using `replace(CharSequence, CharSequence)`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-05",
+      "id": "string-methods-005",
+      "explanation": "The `String.replace()` method replaces character sequences without using regular expressions[cite: 20]. When invoked with primitive characters (`replace(char oldChar, char newChar)`), the JVM traverses the string and replaces matching character bytes[cite: 20]. When invoked with `CharSequence` arguments (`replace(CharSequence target, CharSequence replacement)`), it searches for literal text matches and substitutes them throughout the string[cite: 20]. Unlike `replaceAll()`, `replace()` treats regex symbols (like `.` or `*`) as literal characters, avoiding regex compilation overhead and syntax errors[cite: 20].",
+      "hints": [
+        "Use single quotes for character replacement: `str.replace('-', '/')`[cite: 20].",
+        "Use double quotes for string replacement: `str.replace(\"old\", \"new\")`[cite: 1, 20].",
+        "Print the newly returned strings, keeping in mind that the original string remains unmodified[cite: 18, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String rawPath = \"2026-10-21\";\n        String updatedPath = rawPath.replace('-', '/');\n\n        String statement = \"Cats are great. I love Cats.\";\n        String updatedStatement = statement.replace(\"Cats\", \"Dogs\");\n\n        System.out.println(\"Replaced Chars: \" + updatedPath);\n        System.out.println(\"Replaced Words: \" + updatedStatement);\n    }\n}",
+      "expectedOutput": "Replaced Chars: 2026/10/21\nReplaced Words: Dogs are great. I love Dogs."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Substring and Slicing Operations",
+      "question": "Given a full email address (e.g., `user@domain.com`), extract and print the username and domain components using `indexOf()` and `substring()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-01",
+      "id": "string-methods-006",
+      "explanation": "Extracting tokens from structured strings using delimiter search is a common text processing task[cite: 20]. To split an email address around the `@` separator, `email.indexOf('@')` locates the delimiter index[cite: 20]. If found, `email.substring(0, atIndex)` extracts the username prefix up to (but excluding) the `@` character[cite: 20]. Calling `email.substring(atIndex + 1)` then extracts the domain suffix from the character immediately following the `@` through the end of the string[cite: 20]. Checking that `atIndex != -1` beforehand prevents `StringIndexOutOfBoundsException` on malformed inputs[cite: 18].",
+      "hints": [
+        "Find the delimiter position using `int atIndex = email.indexOf('@');`[cite: 20].",
+        "Extract username: `email.substring(0, atIndex);`[cite: 20].",
+        "Extract domain: `email.substring(atIndex + 1);`[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String email = \"developer@oracle.com\";\n        int atIndex = email.indexOf('@');\n\n        if (atIndex != -1) {\n            String username = email.substring(0, atIndex);\n            String domain = email.substring(atIndex + 1);\n\n            System.out.println(\"Email: \" + email);\n            System.out.println(\"Username: \" + username);\n            System.out.println(\"Domain: \" + domain);\n        }\n    }\n}",
+      "expectedOutput": "Email: developer@oracle.com\nUsername: developer\nDomain: oracle.com"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Whitespace Trimming and Stripping",
+      "question": "Compare legacy `trim()` with Java 11's `strip()`, `stripLeading()`, and `stripTrailing()`, demonstrating how directional stripping and Unicode spaces are handled.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-02",
+      "id": "string-methods-007",
+      "explanation": "Java 11 introduced directional stripping methods to provide finer control over whitespace removal[cite: 20]. `stripLeading()` removes whitespace codepoints only from the beginning of the string, leaving trailing whitespace intact[cite: 20]. Conversely, `stripTrailing()` trims whitespace only from the end of the string[cite: 20]. Standard `strip()` trims both ends using Unicode whitespace definitions (`Character.isWhitespace`)[cite: 20]. Legacy `trim()` only checks for characters with codepoints $\\le$ `\\u0020`, making `strip()` the preferred method in modern Java for internationalized text processing[cite: 20].",
+      "hints": [
+        "Call `.stripLeading()` to trim whitespace only from the start of the string[cite: 20].",
+        "Call `.stripTrailing()` to trim whitespace only from the end[cite: 20].",
+        "Wrap outputs in quotes or delimiters to visually verify where whitespace was removed[cite: 8]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"   [Data Center]   \";\n\n        System.out.println(\"Raw:            '\" + text + \"'\");\n        System.out.println(\"stripLeading():  '\" + text.stripLeading() + \"'\");\n        System.out.println(\"stripTrailing(): '\" + text.stripTrailing() + \"'\");\n        System.out.println(\"strip():         '\" + text.strip() + \"'\");\n    }\n}",
+      "expectedOutput": "Raw:            '   [Data Center]   '\nstripLeading():  '[Data Center]   '\nstripTrailing(): '   [Data Center]'\nstrip():         '[Data Center]'"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Prefix and Suffix Validator",
+      "question": "Write a file classifier method that validates whether a file name starts with the prefix `temp_` using `startsWith()` and ends with `.pdf` or `.docx` using `endsWith()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-03",
+      "id": "string-methods-008",
+      "explanation": "The `startsWith(String prefix)` and `endsWith(String suffix)` methods test whether a string begins or ends with a specified sequence of characters[cite: 20]. Both return a primitive boolean[cite: 7]. Under the hood, `startsWith` checks character equality starting at offset 0 up to `prefix.length()`, avoiding full string scans[cite: 20]. Similarly, `endsWith` checks characters starting at `this.length() - suffix.length()`[cite: 8, 20]. Combining these checks allows file processors to validate file naming conventions and extensions before reading files from disk[cite: 20].",
+      "hints": [
+        "Check prefix: `fileName.startsWith(\"temp_\")`[cite: 20].",
+        "Check suffixes using logical OR: `fileName.endsWith(\".pdf\") || fileName.endsWith(\".docx\")`[cite: 7, 20].",
+        "Combine both validation checks into a single boolean result[cite: 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean isValidTempDocument(String fileName) {\n        boolean hasValidPrefix = fileName.startsWith(\"temp_\");\n        boolean hasValidSuffix = fileName.endsWith(\".pdf\") || fileName.endsWith(\".docx\");\n        return hasValidPrefix && hasValidSuffix;\n    }\n\n    public static void main(String[] args) {\n        String file1 = \"temp_report.pdf\";\n        String file2 = \"final_summary.docx\";\n        String file3 = \"temp_archive.zip\";\n\n        System.out.println(file1 + \" valid: \" + isValidTempDocument(file1));\n        System.out.println(file2 + \" valid: \" + isValidTempDocument(file2));\n        System.out.println(file3 + \" valid: \" + isValidTempDocument(file3));\n    }\n}",
+      "expectedOutput": "temp_report.pdf valid: true\nfinal_summary.docx valid: false\ntemp_archive.zip valid: false"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Character Replacement Variations",
+      "question": "Demonstrate the operational differences between `replace(char, char)`, `replace(CharSequence, CharSequence)`, and `replaceAll(regex, String)` using sample strings.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-04",
+      "id": "string-methods-009",
+      "explanation": "Java provides three distinct string replacement methods[cite: 20]. `replace(char oldChar, char newChar)` replaces single character primitives directly[cite: 20]. `replace(CharSequence target, CharSequence replacement)` performs literal string replacement without interpreting regular expressions[cite: 20]. In contrast, `replaceAll(String regex, String replacement)` compiles the first argument as a regular expression[cite: 20]. For example, `replace(\".\", \"/\")` replaces literal period characters, whereas `replaceAll(\".\", \"/\")` matches any character (since `.` is a regex wildcard), replacing every character in the string[cite: 20]. Understanding this distinction avoids unexpected bugs when processing strings with special characters[cite: 20].",
+      "hints": [
+        "Observe that `replace(\".\", \"-\")` treats `.` as a literal dot[cite: 20].",
+        "Observe that `replaceAll(\".\", \"-\")` treats `.` as a regex wildcard matching any character[cite: 20].",
+        "Use `replace()` for literal strings to avoid regex compilation overhead[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String version = \"v.1.0.8\";\n\n        String literalChar = version.replace('.', '-');\n        String literalString = version.replace(\"1.0\", \"2.5\");\n        String regexReplaced = version.replaceAll(\"\\\\d+\", \"X\");\n\n        System.out.println(\"replace(char):           \" + literalChar);\n        System.out.println(\"replace(CharSequence):   \" + literalString);\n        System.out.println(\"replaceAll(regex digits): \" + regexReplaced);\n    }\n}",
+      "expectedOutput": "replace(char):           v-1-0-8\nreplace(CharSequence):   v.2.5.8\nreplaceAll(regex digits): v.X.X.X"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Joiner Demonstration",
+      "question": "Join a sequence of items using `String.join(delimiter, elements)` and contrast it with `java.util.StringJoiner` configured with prefix and suffix delimiters.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-05",
+      "id": "string-methods-010",
+      "explanation": "Java 8 added `String.join()` and `java.util.StringJoiner` to simplify concatenating collections with delimiters[cite: 3, 20]. `String.join(\", \", elements)` is a static convenience method that joins elements separated by a delimiter without a trailing separator[cite: 3, 20]. For formatted output requiring enclosing delimiters (such as JSON arrays or CSV records), `StringJoiner(delimiter, prefix, suffix)` adds a prefix at the start and a suffix at the end[cite: 20]. Internally, `String.join()` delegates to `StringJoiner`, which manages buffer resizing efficiently[cite: 3, 20].",
+      "hints": [
+        "Call `String.join(\" - \", \"A\", \"B\", \"C\")` for simple delimited joining[cite: 3, 20].",
+        "Instantiate `new StringJoiner(\", \", \"[\", \"]\")` to add enclosing prefix and suffix boundaries[cite: 20].",
+        "Append elements using `.add()` and extract the string with `.toString()`[cite: 1, 20]."
+      ],
+      "sampleCode": "import java.util.StringJoiner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        // Static String.join\n        String simpleJoin = String.join(\", \", \"Alpha\", \"Beta\", \"Gamma\");\n\n        // Configured StringJoiner with prefix and suffix\n        StringJoiner joiner = new StringJoiner(\", \", \"[\", \"]\");\n        joiner.add(\"Red\").add(\"Green\").add(\"Blue\");\n\n        System.out.println(\"String.join:   \" + simpleJoin);\n        System.out.println(\"StringJoiner:  \" + joiner.toString());\n    }\n}",
+      "expectedOutput": "String.join:   Alpha, Beta, Gamma\nStringJoiner:  [Red, Green, Blue]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Delimited Token Splitting and Sanitization",
+      "question": "Split a comma-separated string of user tags, sanitize each token using `trim()`, and display each processed tag on a separate line.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-06",
+      "id": "string-methods-011",
+      "explanation": "Parsing delimited strings (like CSV records or tag lists) requires splitting and trimming tokens[cite: 3, 20]. `String.split(\",\")` divides the string around comma boundaries, returning an array of string tokens[cite: 20]. However, tokens often contain leading or trailing spaces from user entry (e.g., `\" java , spring \"`)[cite: 20]. Iterating over the array and calling `.trim()` removes this surrounding whitespace[cite: 20]. Alternatively, splitting with a regex pattern like `split(\"\\\\s*,\\\\s*\")` strips surrounding whitespace during the split operation itself[cite: 8, 20].",
+      "hints": [
+        "Split the raw string with `raw.split(\",\")`[cite: 20].",
+        "Iterate over the resulting array using an enhanced `for-each` loop[cite: 9, 14].",
+        "Apply `.trim()` to each token before printing[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String rawTags = \" java ,  spring-boot , microservices , docker \";\n        String[] tokens = rawTags.split(\",\");\n\n        System.out.println(\"Processed Tags:\");\n        for (String tag : tokens) {\n            System.out.println(\"- \" + tag.trim());\n        }\n    }\n}",
+      "expectedOutput": "Processed Tags:\n- java\n- spring-boot\n- microservices\n- docker"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Vowel and Consonant Frequency Counter",
+      "question": "Count and print the total number of vowels and consonants in a text string, ignoring spaces, numbers, and punctuation.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-07",
+      "id": "string-methods-012",
+      "explanation": "Character frequency classification iterates through a string using `charAt(i)` and checks character properties[cite: 14, 18]. The loop checks each character with `Character.isLetter(ch)` to skip digits, spaces, and punctuation[cite: 4, 16]. For letters, `\"aeiouAEIOU\".indexOf(ch) != -1` checks whether the character is a vowel[cite: 8, 12, 17]. If true, the vowel counter increments; otherwise, the consonant counter increments[cite: 7]. This separates letters into parity groups while ignoring non-alphabetic characters[cite: 7].",
+      "hints": [
+        "Check if a character is an alphabetic letter using `Character.isLetter(ch)`[cite: 4, 16].",
+        "Check for vowels using `\"aeiouAEIOU\".indexOf(ch) != -1`[cite: 8, 12, 17].",
+        "Increment separate counters for vowels and consonants[cite: 7]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"Java 21 Core\";\n        int vowels = 0, consonants = 0;\n\n        for (int i = 0; i < text.length(); i++) {\n            char ch = text.charAt(i);\n            if (Character.isLetter(ch)) {\n                if (\"aeiouAEIOU\".indexOf(ch) != -1) {\n                    vowels++;\n                } else {\n                    consonants++;\n                }\n            }\n        }\n\n        System.out.println(\"Text: \" + text);\n        System.out.println(\"Vowels: \" + vowels);\n        System.out.println(\"Consonants: \" + consonants);\n    }\n}",
+      "expectedOutput": "Text: Java 21 Core\nVowels: 4\nConsonants: 4"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Alphabetical Frequency Array Mapping",
+      "question": "Count the frequency of each lowercase English letter in a string using an `int[26]` frequency array, and print non-zero occurrences.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-08",
+      "id": "string-methods-013",
+      "explanation": "Counting lowercase letter frequencies can be optimized using a direct-addressing array `int[26]`[cite: 19]. In ASCII and Unicode, lowercase letters ('a' through 'z') are laid out in contiguous numerical order from 97 to 122[cite: 5, 8]. Subtracting `'a'` from a lowercase character (`ch - 'a'`) maps `'a'` to index 0, `'b'` to index 1, and `'z'` to index 25[cite: 8]. The loop iterates through the string, incrementing `counts[ch - 'a']++` for each lowercase letter[cite: 14]. A second loop prints letters that appeared at least once, running in $O(N)$ time with minimal memory overhead[cite: 19].",
+      "hints": [
+        "Allocate `int[] counts = new int[26];`[cite: 18].",
+        "Map characters to indices using `ch - 'a'`[cite: 8].",
+        "Cast array indices back to characters using `(char)('a' + i)` when displaying results[cite: 8]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String text = \"java backend developer\";\n        int[] freqs = new int[26];\n\n        for (int i = 0; i < text.length(); i++) {\n            char ch = text.charAt(i);\n            if (ch >= 'a' && ch <= 'z') {\n                freqs[ch - 'a']++;\n            }\n        }\n\n        System.out.println(\"Letter frequencies in '\" + text + \"':\");\n        for (int i = 0; i < freqs.length; i++) {\n            if (freqs[i] > 0) {\n                System.out.println((char) ('a' + i) + \": \" + freqs[i]);\n            }\n        }\n    }\n}",
+      "expectedOutput": "Letter frequencies in 'java backend developer':\na: 3\nb: 1\nc: 1\nd: 3\ne: 5\nj: 1\nk: 1\nl: 1\nn: 1\no: 1\np: 1\nr: 2\nv: 2"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Join and Template Formatting",
+      "question": "Join an array of strings with a hyphen delimiter using `String.join()`, then format the result into a status report line using `String.format()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-09",
+      "id": "string-methods-014",
+      "explanation": "Combining string joining with template formatting produces structured console output[cite: 1, 20]. `String.join(\"-\", modules)` connects array tokens with hyphens without adding a trailing delimiter[cite: 3, 20]. The joined string is then passed to `String.format(\"Pattern %s\", ...)`[cite: 1]. Under the hood, `String.format()` uses `java.util.Formatter` to substitute specifiers like `%s` (strings) and `%d` (integers), ensuring clean, readable output formatting[cite: 1].",
+      "hints": [
+        "Join tokens using `String.join(\"-\", array)`[cite: 3, 20].",
+        "Use `String.format()` with `%s` and `%d` format specifiers[cite: 1].",
+        "Print the assembled template output string[cite: 1]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String[] modules = {\"Auth\", \"Billing\", \"Notification\"};\n        String joined = String.join(\"-\", modules);\n        String report = String.format(\"System Modules [%s] | Total Count: %d\", joined, modules.length);\n\n        System.out.println(report);\n    }\n}",
+      "expectedOutput": "System Modules [Auth-Billing-Notification] | Total Count: 3"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Filename Parsing via LastIndexOf",
+      "question": "Verify a file extension using `endsWith()`, then extract the base filename and extension separately using `lastIndexOf('.')` and `substring()`.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-10",
+      "id": "string-methods-015",
+      "explanation": "Parsing filenames requires locating the last dot character, because filenames can contain multiple periods (e.g., `archive.backup.tar.gz`)[cite: 20]. `fileName.lastIndexOf('.')` finds the final period delimiter[cite: 20]. If the period index is greater than 0, `fileName.substring(0, dotIndex)` extracts the base filename, and `fileName.substring(dotIndex + 1)` extracts the extension[cite: 20]. Calling `endsWith(\".gz\")` checks the extension format, providing a safe parsing workflow for file management[cite: 20].",
+      "hints": [
+        "Locate the final dot with `int dotIndex = fileName.lastIndexOf('.');`[cite: 20].",
+        "Extract base name: `fileName.substring(0, dotIndex);`[cite: 20].",
+        "Extract extension: `fileName.substring(dotIndex + 1);`[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String fileName = \"application.production.log\";\n        boolean isLog = fileName.endsWith(\".log\");\n\n        int dotIndex = fileName.lastIndexOf('.');\n        String baseName = dotIndex != -1 ? fileName.substring(0, dotIndex) : fileName;\n        String extension = dotIndex != -1 ? fileName.substring(dotIndex + 1) : \"\";\n\n        System.out.println(\"Filename: \" + fileName);\n        System.out.println(\"Is .log file: \" + isLog);\n        System.out.println(\"Base Name: \" + baseName);\n        System.out.println(\"Extension: \" + extension);\n    }\n}",
+      "expectedOutput": "Filename: application.production.log\nIs .log file: true\nBase Name: application.production\nExtension: log"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Custom String Token Splitter",
+      "question": "Implement a custom `customSplit(String text, char delimiter)` method that splits a string into an array of tokens without using `String.split()` or regular expressions.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-06",
+      "id": "string-methods-016",
+      "explanation": "`String.split()` uses regular expressions, which can add overhead for simple single-character delimiter splitting[cite: 20]. Implementing a manual splitter with `charAt()` and an accumulator list avoids regex compilation[cite: 18, 20]. The method iterates through the characters, appending to a `StringBuilder` token buffer[cite: 3, 14]. When the delimiter character is encountered, the current token is added to a `List<String>` and the buffer resets[cite: 3, 16]. The final token is appended after the loop terminates[cite: 3, 18]. The list is then converted to an array (`list.toArray(new String[0])`), providing fast, regex-free splitting[cite: 20].",
+      "hints": [
+        "Use an `ArrayList<String>` to collect tokens dynamically[cite: 20].",
+        "Traverse characters with `for (int i = 0; i < text.length(); i++)`[cite: 14, 18].",
+        "Append characters to a `StringBuilder`, flushing to the list on matching the delimiter[cite: 3, 20]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\n\npublic class Solution {\n    public static String[] customSplit(String text, char delimiter) {\n        List<String> tokens = new ArrayList<>();\n        StringBuilder sb = new StringBuilder();\n\n        for (int i = 0; i < text.length(); i++) {\n            char ch = text.charAt(i);\n            if (ch == delimiter) {\n                tokens.add(sb.toString());\n                sb.setLength(0);\n            } else {\n                sb.append(ch);\n            }\n        }\n        tokens.add(sb.toString());\n        return tokens.toArray(new String[0]);\n    }\n\n    public static void main(String[] args) {\n        String data = \"apple:banana:cherry:date\";\n        String[] parts = customSplit(data, ':');\n        System.out.println(\"Custom split tokens: \" + Arrays.toString(parts));\n    }\n}",
+      "expectedOutput": "Custom split tokens: [apple, banana, cherry, date]"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Case-Insensitive Substring Search",
+      "question": "Implement `containsIgnoreCase(String source, String target)` to find substrings without allocating new uppercase or lowercase strings using `regionMatches()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-07",
+      "id": "string-methods-017",
+      "explanation": "Checking substring presence with `source.toLowerCase().contains(target.toLowerCase())` allocates two new `String` objects on the heap, creating unnecessary memory churn[cite: 18, 20]. A more memory-efficient approach uses `String.regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len)`[cite: 20]. Passing `true` as the first argument enables case-insensitive comparison directly across character bytes without allocating new strings[cite: 20]. The method slides a window from index 0 to `source.length() - target.length()`, checking each position with `regionMatches()` in $O(N \\times M)$ time and $O(1)$ space[cite: 14, 20].",
+      "hints": [
+        "Return false immediately if `source == null || target == null` or if target is longer than source[cite: 9, 18].",
+        "Slide an offset: `for (int i = 0; i <= source.length() - target.length(); i++)`[cite: 14, 18].",
+        "Test matches with `source.regionMatches(true, i, target, 0, target.length())`[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean containsIgnoreCase(String source, String target) {\n        if (source == null || target == null || target.length() > source.length()) {\n            return false;\n        }\n        int max = source.length() - target.length();\n        for (int i = 0; i <= max; i++) {\n            if (source.regionMatches(true, i, target, 0, target.length())) {\n                return true;\n            }\n        }\n        return false;\n    }\n\n    public static void main(String[] args) {\n        String text = \"Enterprise JAVA Architecture\";\n        String query = \"java\";\n        System.out.println(\"Contains '\" + query + \"' (case-insensitive): \" + containsIgnoreCase(text, query));\n    }\n}",
+      "expectedOutput": "Contains 'java' (case-insensitive): true"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Substring Occurrence Frequency Counter",
+      "question": "Count occurrences of a substring inside a target string using `indexOf()`, supporting both overlapping and non-overlapping count modes.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-08",
+      "id": "string-methods-018",
+      "explanation": "Counting substring occurrences highlights the difference between overlapping and non-overlapping searches[cite: 20]. For example, in string `\"AAAA\"` searching for `\"AA\"`, non-overlapping mode finds 2 occurrences (indices 0 and 2), while overlapping mode finds 3 occurrences (indices 0, 1, and 2)[cite: 20]. The search loop uses `source.indexOf(sub, startIndex)`[cite: 20]. In non-overlapping mode, the index advances by the pattern's length: `startIndex = found + sub.length()`[cite: 8, 20]. In overlapping mode, the index advances by one character: `startIndex = found + 1`[cite: 20]. The loop repeats until `indexOf()` returns `-1`[cite: 9, 20].",
+      "hints": [
+        "Call `source.indexOf(target, startIndex)` inside a `while` loop[cite: 15, 20].",
+        "For non-overlapping: `startIndex = foundIndex + target.length()`[cite: 8, 20].",
+        "For overlapping: `startIndex = foundIndex + 1`[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int countOccurrences(String text, String sub, boolean allowOverlap) {\n        if (text == null || sub == null || sub.isEmpty()) return 0;\n        int count = 0;\n        int idx = 0;\n        while ((idx = text.indexOf(sub, idx)) != -1) {\n            count++;\n            idx += allowOverlap ? 1 : sub.length();\n        }\n        return count;\n    }\n\n    public static void main(String[] args) {\n        String data = \"banana\";\n        System.out.println(\"Non-overlapping 'an' in 'banana': \" + countOccurrences(data, \"an\", false));\n        System.out.println(\"Overlapping 'ana' in 'banana':     \" + countOccurrences(data, \"ana\", true));\n    }\n}",
+      "expectedOutput": "Non-overlapping 'an' in 'banana': 2\nOverlapping 'ana' in 'banana':     2"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Title Case Sentence Formatter",
+      "question": "Convert a sentence string to Title Case (capitalizing the first letter of each word and lowercasing the rest) using string methods.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-09",
+      "id": "string-methods-019",
+      "explanation": "Title Case formatting normalizes mixed-case strings into standard title presentation[cite: 3, 20]. The input string is split into words using `split(\"\\\\s+\")`[cite: 4, 8]. For each word, the first character is capitalized with `Character.toUpperCase(word.charAt(0))`[cite: 3, 8]. The rest of the word is lowercased with `word.substring(1).toLowerCase()`[cite: 3, 20]. A `StringBuilder` joins the formatted words with spaces[cite: 3, 18], producing normalized title text in $O(N)$ linear time[cite: 18].",
+      "hints": [
+        "Split the sentence on whitespace: `sentence.trim().split(\"\\\\s+\")`[cite: 4, 8].",
+        "Capitalize first character: `Character.toUpperCase(w.charAt(0))`[cite: 3, 8].",
+        "Append remainder: `w.substring(1).toLowerCase()` and join with spaces[cite: 3, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String toTitleCase(String input) {\n        if (input == null || input.isEmpty()) return input;\n        String[] words = input.trim().split(\"\\\\s+\");\n        StringBuilder sb = new StringBuilder();\n\n        for (int i = 0; i < words.length; i++) {\n            String w = words[i];\n            if (!w.isEmpty()) {\n                sb.append(Character.toUpperCase(w.charAt(0)));\n                if (w.length() > 1) {\n                    sb.append(w.substring(1).toLowerCase());\n                }\n                if (i < words.length - 1) sb.append(\" \");\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String raw = \"jAvA bAcKeNd dEvElOpEr\";\n        System.out.println(\"Input:  \" + raw);\n        System.out.println(\"Output: \" + toTitleCase(raw));\n    }\n}",
+      "expectedOutput": "Input:  jAvA bAcKeNd dEvElOpEr\nOutput: Java Backend Developer"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Masking Sensitive Information",
+      "question": "Given a 16-digit credit card number string, mask all but the final 4 digits with asterisks (`*`) using `repeat()` and `substring()`.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-10",
+      "id": "string-methods-020",
+      "explanation": "Masking sensitive numbers (like credit card numbers or identification identifiers) protects private data in logs and UI displays[cite: 20]. Java 11 added `String.repeat(int count)`, which simplifies generating repeated character sequences[cite: 20]. For a 16-digit number, `card.substring(card.length() - 4)` extracts the trailing 4 digits[cite: 8, 20]. The masking prefix is generated with `\"*\".repeat(card.length() - 4)`[cite: 8, 20]. Combining the mask prefix with the trailing digits masks the sensitive characters while preserving the expected string length[cite: 8, 20].",
+      "hints": [
+        "Extract trailing digits: `card.substring(card.length() - 4)`[cite: 8, 20].",
+        "Generate mask with Java 11: `\"*\".repeat(card.length() - 4)`[cite: 8, 20].",
+        "Handle short strings (less than or equal to 4 characters) defensively[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String maskCardNumber(String card) {\n        if (card == null || card.length() <= 4) {\n            return card;\n        }\n        int maskLength = card.length() - 4;\n        String mask = \"*\".repeat(maskLength);\n        String suffix = card.substring(maskLength);\n        return mask + suffix;\n    }\n\n    public static void main(String[] args) {\n        String creditCard = \"4532789012345678\";\n        String masked = maskCardNumber(creditCard);\n        System.out.println(\"Card:   \" + creditCard);\n        System.out.println(\"Masked: \" + masked);\n    }\n}",
+      "expectedOutput": "Card:   4532789012345678\nMasked: ************5678"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "First Letter Capitalization across Words",
+      "question": "Write a method that capitalizes the first letter of each word in a string while preserving existing casing for the remaining characters.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-11",
+      "id": "string-methods-021",
+      "explanation": "Capitalizing the initial letter of each word while preserving subsequent casing is a common formatting requirement[cite: 20]. The method splits the sentence on whitespace (`split(\"\\\\s+\")`)[cite: 4, 8]. For each word, `Character.toUpperCase(word.charAt(0))` capitalizes the first character[cite: 3, 8]. Appending `word.substring(1)` preserves any existing capitalization (such as acronyms or camelCase names)[cite: 3, 20]. A `StringBuilder` joins the processed words with spaces[cite: 3, 18], completing the transformation in $O(N)$ time[cite: 18].",
+      "hints": [
+        "Split into word tokens: `text.split(\"\\\\s+\")`[cite: 4, 8].",
+        "Capitalize first character: `Character.toUpperCase(word.charAt(0))`[cite: 3, 8].",
+        "Append `word.substring(1)` without lowercasing to preserve internal capitalization[cite: 3, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String capitalizeWords(String text) {\n        if (text == null || text.isEmpty()) return text;\n        String[] tokens = text.split(\"\\\\s+\");\n        StringBuilder result = new StringBuilder();\n\n        for (int i = 0; i < tokens.length; i++) {\n            String word = tokens[i];\n            if (!word.isEmpty()) {\n                result.append(Character.toUpperCase(word.charAt(0)));\n                if (word.length() > 1) {\n                    result.append(word.substring(1));\n                }\n                if (i < tokens.length - 1) result.append(\" \");\n            }\n        }\n        return result.toString();\n    }\n\n    public static void main(String[] args) {\n        String sentence = \"welcome to NASA and AWS cloud\";\n        System.out.println(\"Capitalized: \" + capitalizeWords(sentence));\n    }\n}",
+      "expectedOutput": "Capitalized: Welcome To NASA And AWS Cloud"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Insertion-Order Duplicate Character Removal",
+      "question": "Remove duplicate characters from a string while preserving the initial insertion order using `indexOf()` character lookup.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-12",
+      "id": "string-methods-022",
+      "explanation": "Removing duplicate characters while preserving insertion order requires tracking whether each character has been seen before[cite: 17, 18]. As each character is visited in a loop, `sb.indexOf(String.valueOf(ch)) == -1` checks whether the character already exists in the output `StringBuilder`[cite: 3, 20]. If not present, the character is appended; if already present, it is skipped[cite: 3]. This filters duplicate characters while preserving their initial appearance order[cite: 17, 20].",
+      "hints": [
+        "Initialize `StringBuilder sb = new StringBuilder();` to collect unique characters[cite: 3, 18].",
+        "Check presence with `sb.indexOf(String.valueOf(ch)) == -1`[cite: 3, 20].",
+        "Append unseen characters and return `sb.toString()`[cite: 1, 3]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String removeDuplicates(String s) {\n        if (s == null) return null;\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < s.length(); i++) {\n            char ch = s.charAt(i);\n            if (sb.indexOf(String.valueOf(ch)) == -1) {\n                sb.append(ch);\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String input = \"programming\";\n        System.out.println(\"Original: \" + input);\n        System.out.println(\"Deduplicated: \" + removeDuplicates(input));\n    }\n}",
+      "expectedOutput": "Original: programming\nDeduplicated: progami"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Longest and Most Frequent Word Finder",
+      "question": "Analyze a text sentence to identify both the longest word and the most frequently occurring word using string methods and a map.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-13",
+      "id": "string-methods-023",
+      "explanation": "Analyzing text characteristics combines tokenization with map counting[cite: 8]. After cleaning punctuation and lowercasing the sentence, `split(\"\\\\s+\")` extracts individual words[cite: 4, 8]. A single traversal updates two metrics: 1) the longest word is tracked by comparing `w.length() > longest.length()`[cite: 3, 8], and 2) word frequencies are tracked in a `HashMap<String, Integer>`[cite: 8, 9]. A second pass over the map entries identifies the word with the highest frequency count[cite: 2, 8].",
+      "hints": [
+        "Normalize and split words using regex whitespace splitting[cite: 4, 8].",
+        "Track the longest word: `if (w.length() > longest.length()) longest = w;`[cite: 3, 8].",
+        "Find the most frequent word by inspecting the maximum entry value in the frequency map[cite: 2, 8]."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String sentence = \"Java developers write robust Java applications with modern Java\";\n        String[] words = sentence.toLowerCase().split(\"\\\\s+\");\n\n        String longest = \"\";\n        Map<String, Integer> counts = new HashMap<>();\n\n        for (String w : words) {\n            if (w.length() > longest.length()) {\n                longest = w;\n            }\n            counts.put(w, counts.getOrDefault(w, 0) + 1);\n        }\n\n        String mostFrequent = \"\";\n        int maxCount = 0;\n        for (Map.Entry<String, Integer> entry : counts.entrySet()) {\n            if (entry.getValue() > maxCount) {\n                maxCount = entry.getValue();\n                mostFrequent = entry.getKey();\n            }\n        }\n\n        System.out.println(\"Longest word: \" + longest);\n        System.out.println(\"Most frequent word: '\" + mostFrequent + \"' (\" + maxCount + \" times)\");\n    }\n}",
+      "expectedOutput": "Longest word: applications\nMost frequent word: 'java' (3 times)"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Dual-Strategy Email Validator: Methods vs Regex",
+      "question": "Implement an email address validator using manual string methods (`indexOf`, `lastIndexOf`, `substring`), and compare its validation against `String.matches()` using a regular expression.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-14",
+      "id": "string-methods-024",
+      "explanation": "Validating email format can be done via manual string checks or regular expressions[cite: 8, 20]. The manual approach verifies structural rules using `indexOf()` and `lastIndexOf()`: exactly one `@` character must exist, the `@` cannot be the first or last character, a period `.` must follow the `@`, and the domain suffix must be at least two characters[cite: 8, 20]. The regex approach uses `String.matches(\"^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$\")` to evaluate syntax rules in a single step[cite: 8, 20]. Comparing both implementations highlights the trade-off between manual character checks and declarative regex validation[cite: 8, 20].",
+      "hints": [
+        "Manual: verify `atIndex > 0`, `dotIndex > atIndex + 1`, and `dotIndex < email.length() - 2`[cite: 8, 20].",
+        "Regex: validate using `email.matches(\"^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$\")`[cite: 8, 20].",
+        "Test valid and invalid cases across both implementations[cite: 8]."
+      ],
+      "sampleCode": "public class Solution {\n    public static boolean validateManual(String email) {\n        if (email == null) return false;\n        int at = email.indexOf('@');\n        int lastAt = email.lastIndexOf('@');\n        if (at <= 0 || at != lastAt) return false; // Must contain exactly one '@', not at start\n        int dot = email.indexOf('.', at + 1);\n        return dot > at + 1 && dot < email.length() - 2; // Domain must have dot with extension\n    }\n\n    public static boolean validateRegex(String email) {\n        if (email == null) return false;\n        return email.matches(\"^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$\");\n    }\n\n    public static void main(String[] args) {\n        String test = \"dev.user@cloud.com\";\n        System.out.println(\"Email: \" + test);\n        System.out.println(\"Manual validation: \" + validateManual(test));\n        System.out.println(\"Regex validation:  \" + validateRegex(test));\n    }\n}",
+      "expectedOutput": "Email: dev.user@cloud.com\nManual validation: true\nRegex validation:  true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Bidirectional Run-Length Compression and Decompression",
+      "question": "Implement run-length string compression (e.g., `'aaabbc'` becomes `'a3b2c1'`) along with its matching decompression decoder.",
+      "source": "java_coding_practice.json",
+      "source_id": "string-methods-15",
+      "id": "string-methods-025",
+      "explanation": "Run-length encoding (RLE) compresses contiguous repeating characters into character-count pairs, while decompression reconstructs the original string[cite: 18, 20]. The compression encoder counts consecutive characters in a loop, appending the character and count to a `StringBuilder` whenever the character changes[cite: 3, 18]. The decompression decoder scans the compressed string in steps of two (or parses multi-digit numbers), extracting the character with `charAt(i)` and the count with `Character.getNumericValue(charAt(i + 1))`[cite: 4, 18, 20]. An inner loop appends the character `count` times to reconstruct the original text[cite: 14].",
+      "hints": [
+        "Compression: track consecutive characters and append `character + count` on change[cite: 3, 18].",
+        "Decompression: read character at `i` and parse repeat count from `i + 1`[cite: 18, 20].",
+        "Use `Character.getNumericValue(ch)` or `Integer.parseInt` to read repeat counts[cite: 3, 4]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String compress(String s) {\n        if (s == null || s.isEmpty()) return \"\";\n        StringBuilder sb = new StringBuilder();\n        int count = 1;\n        for (int i = 1; i < s.length(); i++) {\n            if (s.charAt(i) == s.charAt(i - 1)) {\n                count++;\n            } else {\n                sb.append(s.charAt(i - 1)).append(count);\n                count = 1;\n            }\n        }\n        sb.append(s.charAt(s.length() - 1)).append(count);\n        return sb.toString();\n    }\n\n    public static String decompress(String s) {\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < s.length(); i += 2) {\n            char ch = s.charAt(i);\n            int count = Character.getNumericValue(s.charAt(i + 1));\n            for (int k = 0; k < count; k++) {\n                sb.append(ch);\n            }\n        }\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String original = \"aaabbc\";\n        String compressed = compress(original);\n        String restored = decompress(compressed);\n\n        System.out.println(\"Original:     \" + original);\n        System.out.println(\"Compressed:   \" + compressed);\n        System.out.println(\"Decompressed: \" + restored);\n    }\n}",
+      "expectedOutput": "Original:     aaabbc\nCompressed:   a3b2c1\nDecompressed: aaabbc"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Boyer-Moore-Horspool String Search",
+      "question": "Implement the Boyer-Moore-Horspool substring pattern search algorithm using a bad-character shift table, returning the first occurrence offset in $O(N)$ average time.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-11",
+      "id": "string-methods-026",
+      "explanation": "The Boyer-Moore-Horspool algorithm optimizes substring search by comparing characters from right to left within the pattern window[cite: 18, 20]. A bad-character shift table `int[] shift = new int[256]` is precomputed: every character is assigned a skip distance of `pattern.length()`, except characters present in the pattern (excluding the final character), which are set to `pattern.length() - 1 - i`[cite: 8, 18, 20]. When a mismatch occurs, the shift table shifts the pattern past non-matching text characters, allowing the algorithm to skip multiple characters in a single step and search large texts in sub-linear average time[cite: 20].",
+      "hints": [
+        "Precompute bad-character shift table: `Arrays.fill(shift, m);` for pattern length `m`[cite: 18].",
+        "Populate pattern shifts: `shift[pattern.charAt(i)] = m - 1 - i;` for `i < m - 1`[cite: 18, 20].",
+        "Compare characters backward from `m - 1` down to 0, shifting by `shift[text.charAt(align + m - 1)]` on mismatch[cite: 8, 14, 18]."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    public static int search(String text, String pattern) {\n        int n = text.length();\n        int m = pattern.length();\n        if (m == 0) return 0;\n        if (m > n) return -1;\n\n        int[] badChar = new int[256];\n        Arrays.fill(badChar, m);\n        for (int i = 0; i < m - 1; i++) {\n            badChar[pattern.charAt(i)] = m - 1 - i;\n        }\n\n        int i = 0;\n        while (i <= n - m) {\n            int j = m - 1;\n            while (j >= 0 && pattern.charAt(j) == text.charAt(i + j)) {\n                j--;\n            }\n            if (j < 0) return i; // Match found\n            i += badChar[text.charAt(i + m - 1)];\n        }\n        return -1;\n    }\n\n    public static void main(String[] args) {\n        String text = \"BREAD AND BUTTER\";\n        String pattern = \"BUTTER\";\n        System.out.println(\"Pattern offset: \" + search(text, pattern));\n    }\n}",
+      "expectedOutput": "Pattern offset: 10"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Levenshtein Distance Calculator",
+      "question": "Compute the edit distance (minimum insertions, deletions, and substitutions to convert string A to B) using dynamic programming.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-12",
+      "id": "string-methods-027",
+      "explanation": "The Levenshtein distance measures edit distance between two character sequences: the minimum number of single-character insertions, deletions, or substitutions required to transform string $A$ into string $B$[cite: 20]. A 2D dynamic programming table `dp[m+1][n+1]` models prefix sub-problems[cite: 9, 20]. Base cases initialize boundaries: `dp[i][0] = i` (deleting all characters) and `dp[0][j] = j` (inserting all characters)[cite: 20]. For inner cells, if `s1.charAt(i - 1) == s2.charAt(j - 1)`, cost is 0 (`dp[i][j] = dp[i-1][j-1]`)[cite: 18, 20]. Otherwise, it takes $1 + \\min$ of deletion (`dp[i-1][j]`), insertion (`dp[i][j-1]`), and substitution (`dp[i-1][j-1]`), completing in $O(M \\times N)$ time[cite: 3, 20].",
+      "hints": [
+        "Initialize `dp = new int[m + 1][n + 1]` with boundary indices[cite: 9, 20].",
+        "If characters match, carry over diagonal: `dp[i][j] = dp[i-1][j-1]`[cite: 18, 20].",
+        "On mismatch, take `1 + Math.min(deletion, Math.min(insertion, substitution))`[cite: 3, 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static int computeLevenshtein(String s1, String s2) {\n        int m = s1.length(), n = s2.length();\n        int[][] dp = new int[m + 1][n + 1];\n\n        for (int i = 0; i <= m; i++) dp[i][0] = i;\n        for (int j = 0; j <= n; j++) dp[0][j] = j;\n\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {\n                    dp[i][j] = dp[i - 1][j - 1];\n                } else {\n                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], // substitution\n                                   Math.min(dp[i - 1][j],     // deletion\n                                            dp[i][j - 1]));   // insertion\n                }\n            }\n        }\n        return dp[m][n];\n    }\n\n    public static void main(String[] args) {\n        String a = \"kitten\";\n        String b = \"sitting\";\n        System.out.println(\"Edit distance ('\" + a + \"' -> '\" + b + \"'): \" + computeLevenshtein(a, b));\n    }\n}",
+      "expectedOutput": "Edit distance ('kitten' -> 'sitting'): 3"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Template Interpolation Engine",
+      "question": "Implement a template engine that replaces variable placeholders formatted as `${variableName}` with values from a lookup map using index-based string slicing.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-13",
+      "id": "string-methods-028",
+      "explanation": "Template interpolation parses and substitutes dynamic placeholders like `${var}` within template text[cite: 20]. Using a `while` loop with `indexOf(\"${\", cursor)` and `indexOf(\"}\", startIdx)`, the engine finds placeholder boundaries[cite: 15, 20]. Literal text before the placeholder is appended to a `StringBuilder`[cite: 3, 20]. The variable name between `${` and `}` is extracted with `substring()`, retrieved from the lookup map, and appended to the output[cite: 3, 20]. The cursor then advances past the closing `}`[cite: 20]. This index-based approach runs in $O(N)$ time without regular expression compilation overhead[cite: 18, 20].",
+      "hints": [
+        "Locate placeholder start using `template.indexOf(\"${\", cursor)`[cite: 20].",
+        "Locate closing brace using `template.indexOf(\"}\", start)`[cite: 20].",
+        "Extract key name with `template.substring(start + 2, end)` and look up in map[cite: 3, 20]."
+      ],
+      "sampleCode": "import java.util.HashMap;\nimport java.util.Map;\n\npublic class Solution {\n    public static String interpolate(String template, Map<String, String> values) {\n        StringBuilder sb = new StringBuilder();\n        int cursor = 0;\n        int start;\n\n        while ((start = template.indexOf(\"${\", cursor)) != -1) {\n            int end = template.indexOf(\"}\", start + 2);\n            if (end == -1) break;\n            sb.append(template, cursor, start);\n            String key = template.substring(start + 2, end);\n            sb.append(values.getOrDefault(key, \"${unresolved:\" + key + \"}\"));\n            cursor = end + 1;\n        }\n        sb.append(template.substring(cursor));\n        return sb.toString();\n    }\n\n    public static void main(String[] args) {\n        String template = \"Hello ${name}, your order ${orderId} is confirmed.\";\n        Map<String, String> params = new HashMap<>();\n        params.put(\"name\", \"Akshat\");\n        params.put(\"orderId\", \"ORD-2026\");\n\n        System.out.println(interpolate(template, params));\n    }\n}",
+      "expectedOutput": "Hello Akshat, your order ORD-2026 is confirmed."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Quoted CSV Field Parsing Engine",
+      "question": "Implement a CSV parser that splits fields by commas while preserving commas contained inside quoted strings (e.g., `123, \"Doe, John\", 45`) using character traversal.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-14",
+      "id": "string-methods-029",
+      "explanation": "Standard `String.split(\",\")` fails on CSV lines containing quoted fields like `101, \"Smith, Jane\", 45`, because it splits inside the quoted name[cite: 8, 20]. A robust parser uses a state machine to track quote state character by character[cite: 8, 20]. An `inQuotes` boolean flag toggles whenever a double-quote character `\"` is encountered[cite: 8]. When a comma `,` is scanned while `inQuotes` is `false`, it marks a field boundary, and the current token buffer is flushed to the result list[cite: 3, 8]. Comma characters encountered while `inQuotes` is `true` are treated as literal characters and appended to the active field[cite: 8], parsing quoted CSV records accurately in linear time[cite: 18, 20].",
+      "hints": [
+        "Track quote boundaries with an `inQuotes = !inQuotes` boolean toggle on `\"`[cite: 8].",
+        "Only treat commas as field separators when `!inQuotes`[cite: 8].",
+        "Trim surrounding quotes from fields before adding them to the result list[cite: 8, 20]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    public static List<String> parseCsvLine(String line) {\n        List<String> fields = new ArrayList<>();\n        StringBuilder sb = new StringBuilder();\n        boolean inQuotes = false;\n\n        for (int i = 0; i < line.length(); i++) {\n            char ch = line.charAt(i);\n            if (ch == '\"') {\n                inQuotes = !inQuotes;\n            } else if (ch == ',' && !inQuotes) {\n                fields.add(sb.toString().trim());\n                sb.setLength(0);\n            } else {\n                sb.append(ch);\n            }\n        }\n        fields.add(sb.toString().trim());\n        return fields;\n    }\n\n    public static void main(String[] args) {\n        String csv = \"101, \\\"Doe, John\\\", 45, \\\"Engineer, Senior\\\"\";\n        List<String> parsed = parseCsvLine(csv);\n        System.out.println(\"Parsed CSV fields:\");\n        for (int i = 0; i < parsed.size(); i++) {\n            System.out.println((i + 1) + \": \" + parsed.get(i));\n        }\n    }\n}",
+      "expectedOutput": "Parsed CSV fields:\n1: 101\n2: \"Doe, John\"\n3: 45\n4: \"Engineer, Senior\""
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Longest Common Subsequence",
+      "question": "Find the length and reconstructed string of the Longest Common Subsequence (LCS) between two strings using dynamic programming and character retrieval.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CSM-15",
+      "id": "string-methods-030",
+      "explanation": "The Longest Common Subsequence (LCS) finds the longest sequence of characters that appear in the same relative order in two strings, without requiring them to be contiguous[cite: 20]. A 2D dynamic programming table `dp[m+1][n+1]` stores optimal prefix lengths[cite: 9, 20]. If `s1.charAt(i-1) == s2.charAt(j-1)`, the length increases: `dp[i][j] = 1 + dp[i-1][j-1]`[cite: 18, 20]. If they differ, it takes the maximum of skipping a character from either string: `Math.max(dp[i-1][j], dp[i][j-1])`[cite: 3, 20]. Once the table is populated, backtracking from `dp[m][n]` to `dp[0][0]` reconstructs the actual subsequence string[cite: 20], completing in $O(M \\times N)$ time[cite: 20].",
+      "hints": [
+        "Populate `dp[m+1][n+1]` using `dp[i][j] = 1 + dp[i-1][j-1]` when characters match[cite: 18, 20].",
+        "Take `Math.max(dp[i-1][j], dp[i][j-1])` when characters differ[cite: 3, 20].",
+        "Backtrack through the DP table from `(m, n)` to reconstruct the common subsequence string[cite: 20]."
+      ],
+      "sampleCode": "public class Solution {\n    public static String computeLCS(String s1, String s2) {\n        int m = s1.length(), n = s2.length();\n        int[][] dp = new int[m + 1][n + 1];\n\n        for (int i = 1; i <= m; i++) {\n            for (int j = 1; j <= n; j++) {\n                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {\n                    dp[i][j] = 1 + dp[i - 1][j - 1];\n                } else {\n                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);\n                }\n            }\n        }\n\n        StringBuilder sb = new StringBuilder();\n        int i = m, j = n;\n        while (i > 0 && j > 0) {\n            if (s1.charAt(i - 1) == s2.charAt(j - 1)) {\n                sb.append(s1.charAt(i - 1));\n                i--;\n                j--;\n            } else if (dp[i - 1][j] > dp[i][j - 1]) {\n                i--;\n            } else {\n                j--;\n            }\n        }\n        return sb.reverse().toString();\n    }\n\n    public static void main(String[] args) {\n        String a = \"AGGTAB\";\n        String b = \"GXTXAYB\";\n        String lcs = computeLCS(a, b);\n        System.out.println(\"String A: \" + a);\n        System.out.println(\"String B: \" + b);\n        System.out.println(\"LCS: \" + lcs + \" (Length: \" + lcs.length() + \")\");\n    }\n}",
+      "expectedOutput": "String A: AGGTAB\nString B: GXTXAYB\nLCS: GTAB (Length: 4)"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

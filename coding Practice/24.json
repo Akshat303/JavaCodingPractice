@@ -1,0 +1,493 @@
+{
+  "section": "Object-oriented Java",
+  "slug": "constructors",
+  "topic": "Constructors and chaining",
+  "page": 110,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Default Constructor Invocation",
+      "question": "Write a class with an explicit no-argument constructor that prints a notification message when an instance is created, and instantiate it from `main`[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-01",
+      "id": "constructors-001",
+      "explanation": "In Java, a constructor is a special block of code invoked when an object is instantiated using the `new` keyword[cite: 1, 24]. When a programmer explicitly defines a no-argument constructor, it overrides the compiler-provided default constructor[cite: 24]. At runtime, the JVM allocates memory for the new object on the heap, initializes all fields to their default zero-values, and calls the `<init>` method in bytecode[cite: 2, 6, 24]. The constructor body executes after the superclass constructor has finished[cite: 6]. This problem illustrates the exact execution lifecycle of instance creation and confirms how constructors serve as the entry point for custom initialization logic[cite: 24].",
+      "hints": [
+        "Define a constructor with the exact same name as the class and no return type[cite: 24].",
+        "Place a `System.out.println` statement inside the constructor body[cite: 1, 24].",
+        "Instantiate the class inside `main` using the `new` operator: `new MyClass();`[cite: 1, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Greeter {\n        public Greeter() {\n            System.out.println(\"Default constructor called\");\n        }\n    }\n\n    public static void main(String[] args) {\n        new Greeter();\n    }\n}",
+      "expectedOutput": "Default constructor called"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Parameterized Field Initialization",
+      "question": "Write a `Person` class with a parameterized constructor that initializes `name` and `age` fields, and display their values using an instance method[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-02",
+      "id": "constructors-002",
+      "explanation": "Parameterized constructors allow objects to be initialized with specific states at the moment of creation, avoiding the need for multiple subsequent setter calls[cite: 23, 24]. The parameters passed to the constructor are received in local variable slots within the constructor's execution frame[cite: 6, 9, 24]. The constructor assigns these values directly to the object's instance fields on the heap[cite: 6, 24]. By binding data at instantiation time, classes can guarantee that required attributes are present before any instance methods are called, enforcing baseline object invariants from the very start[cite: 23, 24].",
+      "hints": [
+        "Declare instance variables `private String name;` and `private int age;`[cite: 23].",
+        "Create a constructor `public Person(String name, int age)` that assigns values to the fields[cite: 23, 24].",
+        "Instantiate the object with arguments: `new Person(\"Akshat\", 26);`[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Person {\n        private String name;\n        private int age;\n\n        public Person(String name, int age) {\n            this.name = name;\n            this.age = age;\n        }\n\n        public void display() {\n            System.out.println(\"Name: \" + name);\n            System.out.println(\"Age: \" + age);\n        }\n    }\n\n    public static void main(String[] args) {\n        Person p = new Person(\"Akshat\", 26);\n        p.display();\n    }\n}",
+      "expectedOutput": "Name: Akshat\nAge: 26"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Constructor Overloading Palette",
+      "question": "Overload constructors in a `Product` class by providing no-arg (default values), one-arg (name only), and two-arg (name and price) versions, and verify all three in `main`[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-03",
+      "id": "constructors-003",
+      "explanation": "Constructor overloading allows a single class to provide multiple ways to initialize an object, accommodating varying levels of initial information[cite: 24]. Like method overloading, constructors are overloaded by defining unique parameter lists—differing in parameter count, types, or order[cite: 9, 24]. During compilation, javac inspects the arguments provided at each `new` call site and resolves the matching constructor signature[cite: 9, 24]. This provides flexibility for callers, allowing default fallbacks when data is partially known while still supporting full initialization when complete data is available[cite: 24].",
+      "hints": [
+        "Create a no-arg constructor that assigns default fallback values like `\"Unknown\"` and `0.0`[cite: 24].",
+        "Create a single-parameter constructor that sets the name while defaulting the price[cite: 24].",
+        "Create a two-parameter constructor that sets both name and price explicitly[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Product {\n        private String name;\n        private double price;\n\n        public Product() {\n            this.name = \"Standard\";\n            this.price = 10.0;\n        }\n\n        public Product(String name) {\n            this.name = name;\n            this.price = 10.0;\n        }\n\n        public Product(String name, double price) {\n            this.name = name;\n            this.price = price;\n        }\n\n        public void printInfo() {\n            System.out.println(\"Product: \" + name + \" | Price: $\" + price);\n        }\n    }\n\n    public static void main(String[] args) {\n        Product p1 = new Product();\n        Product p2 = new Product(\"Deluxe\");\n        Product p3 = new Product(\"Premium\", 49.99);\n        p1.printInfo();\n        p2.printInfo();\n        p3.printInfo();\n    }\n}",
+      "expectedOutput": "Product: Standard | Price: $10.0\nProduct: Deluxe | Price: $10.0\nProduct: Premium | Price: $49.99"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Disambiguation with this Reference",
+      "question": "Write a class where constructor parameter names match instance field names exactly, and use the `this` reference keyword to resolve the shadowing collision[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-04",
+      "id": "constructors-004",
+      "explanation": "When a constructor or method parameter shares the exact identifier as an instance field, the parameter shadows the field within that lexical block[cite: 4, 6]. An unqualified assignment like `id = id;` simply assigns the parameter to itself, leaving the heap field uninitialized with its default value[cite: 2, 6, 24]. To resolve this shadowing collision, Java provides the `this` keyword, which represents a reference to the current object instance[cite: 4, 6]. Qualifying the target field as `this.id = id;` instructs the compiler to store the parameter value into the instance variable on the heap[cite: 4, 6].",
+      "hints": [
+        "Declare instance variables such as `private int id;` and `private String title;`[cite: 4, 23].",
+        "Name constructor parameters identically: `public Item(int id, String title)`[cite: 24].",
+        "Assign using `this.id = id;` and `this.title = title;`[cite: 4, 23]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Item {\n        private int id;\n        private String title;\n\n        public Item(int id, String title) {\n            this.id = id;\n            this.title = title;\n        }\n\n        public void display() {\n            System.out.println(\"ID: \" + this.id + \", Title: \" + this.title);\n        }\n    }\n\n    public static void main(String[] args) {\n        Item item = new Item(101, \"Java Guide\");\n        item.display();\n    }\n}",
+      "expectedOutput": "ID: 101, Title: Java Guide"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Collection Initialization in Constructor",
+      "question": "Write a `Team` class that initializes an internal `ArrayList` field inside its constructor and populates it with initial seed elements[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-05",
+      "id": "constructors-005",
+      "explanation": "Initializing collection fields inside a constructor ensures that an object is never in an invalid or half-initialized state with a `null` collection reference[cite: 2, 23, 24]. When the constructor runs, it allocates a new `ArrayList` on the heap and assigns its reference to the class's private field[cite: 2, 23, 24]. By instantiating collections in constructors, classes avoid `NullPointerException`s when methods attempt to add or iterate over elements later on[cite: 5, 7, 24]. This pattern guarantees that every new instance is immediately ready for operation with an allocated, usable collection[cite: 24].",
+      "hints": [
+        "Declare `private List<String> members;` as an instance field[cite: 23].",
+        "In the constructor, instantiate the list: `this.members = new ArrayList<>();`[cite: 23, 24].",
+        "Add seed data to the collection inside the constructor before returning[cite: 24]."
+      ],
+      "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Solution {\n    static class Team {\n        private List<String> members;\n\n        public Team(String leader) {\n            this.members = new ArrayList<>();\n            this.members.add(leader);\n            this.members.add(\"Assistant\");\n        }\n\n        public void printRoster() {\n            System.out.println(\"Team Members: \" + members);\n        }\n    }\n\n    public static void main(String[] args) {\n        Team team = new Team(\"Alice\");\n        team.printRoster();\n    }\n}",
+      "expectedOutput": "Team Members: [Alice, Assistant]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Overloaded Constructor Palette",
+      "question": "Create a `Rectangle` class with three constructors: default (1x1), single-argument (square $S \\times S$), and two-argument (width $\\times$ height)[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-01",
+      "id": "constructors-006",
+      "explanation": "Modeling geometric shapes often requires multiple initialization forms based on dimensional symmetry[cite: 24]. The `Rectangle` class provides three constructors: a no-arg constructor that creates a default $1 \\times 1$ unit rectangle; a single-argument constructor that creates a square where both width and height equal the given dimension; and a two-argument constructor that sets distinct width and height values[cite: 24]. Constructor overloading allows callers to create shape instances cleanly without having to pass redundant dimensions for symmetrical figures[cite: 24].",
+      "hints": [
+        "Default constructor sets `width = 1.0; height = 1.0;`[cite: 24].",
+        "Square constructor accepts `double side` and sets both dimensions to `side`[cite: 24].",
+        "Full constructor takes `(double width, double height)`[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Rectangle {\n        private double width;\n        private double height;\n\n        public Rectangle() {\n            this.width = 1.0;\n            this.height = 1.0;\n        }\n\n        public Rectangle(double side) {\n            this.width = side;\n            this.height = side;\n        }\n\n        public Rectangle(double width, double height) {\n            this.width = width;\n            this.height = height;\n        }\n\n        public double getArea() {\n            return width * height;\n        }\n    }\n\n    public static void main(String[] args) {\n        Rectangle r1 = new Rectangle();\n        Rectangle r2 = new Rectangle(5.0);\n        Rectangle r3 = new Rectangle(4.0, 6.0);\n\n        System.out.println(\"Unit Area: \" + r1.getArea());\n        System.out.println(\"Square Area: \" + r2.getArea());\n        System.out.println(\"Custom Area: \" + r3.getArea());\n    }\n}",
+      "expectedOutput": "Unit Area: 1.0\nSquare Area: 25.0\nCustom Area: 24.0"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "This Constructor Chaining",
+      "question": "Chain constructors in a `Book` class using `this(...)` so that all secondary constructors delegate initialization to a primary master constructor[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-02",
+      "id": "constructors-007",
+      "explanation": "Constructor chaining within the same class using `this(...)` eliminates duplicated initialization code across constructor overloads[cite: 24]. When one constructor invokes `this(...)`, it delegates the initialization work to another constructor in the same class with a matching parameter signature[cite: 24]. Under Java Language Specification rules, `this(...)` must be the very first statement in the constructor body[cite: 24]. A common design pattern is to have simpler, secondary constructors provide default arguments and delegate to a single primary 'master' constructor, centralizing validation and field assignments in one place[cite: 24].",
+      "hints": [
+        "Designate the constructor with the most parameters as the master constructor[cite: 24].",
+        "In the simpler constructors, call `this(title, \"Anonymous\", 0.0);` as the first statement[cite: 24].",
+        "Ensure `this(...)` appears before any other executable statements[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Book {\n        private String title;\n        private String author;\n        private double price;\n\n        public Book(String title) {\n            this(title, \"Unknown\");\n        }\n\n        public Book(String title, String author) {\n            this(title, author, 9.99);\n        }\n\n        public Book(String title, String author, double price) {\n            this.title = title;\n            this.author = author;\n            this.price = price;\n        }\n\n        public void printDetails() {\n            System.out.println(\"Book: '\" + title + \"' by \" + author + \" ($ \" + price + \")\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Book b1 = new Book(\"Java Fundamentals\");\n        Book b2 = new Book(\"Effective Architecture\", \"Bloch\", 45.0);\n        b1.printDetails();\n        b2.printDetails();\n    }\n}",
+      "expectedOutput": "Book: 'Java Fundamentals' by Unknown ($9.99)\nBook: 'Effective Architecture' by Bloch ($ 45.0)"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Super Constructor Delegation",
+      "question": "Create a `Vehicle` base class with a parameterized constructor, and a `Car` subclass that calls `super(make, model)` to initialize inherited fields[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-03",
+      "id": "constructors-008",
+      "explanation": "In an inheritance hierarchy, a subclass constructor must invoke a constructor of its superclass before executing its own body[cite: 6, 24]. This ensures the inherited state is properly initialized[cite: 24]. If no explicit call to `super(...)` or `this(...)` is written, the compiler automatically inserts an implicit `super();` call to the no-arg superclass constructor[cite: 24]. However, when the base class defines only parameterized constructors, the subclass must explicitly call `super(arg1, arg2)` as its first statement[cite: 24]. This enforces bottom-up initialization order, guaranteeing that parent class fields are fully set up before the subclass runs[cite: 6, 24]." ,
+      "hints": [
+        "In `Vehicle`, define `public Vehicle(String make, String model)`[cite: 24].",
+        "In `Car extends Vehicle`, write `super(make, model);` as the first line of the constructor[cite: 24].",
+        "Add child-specific fields (like `numDoors`) and assign them after calling `super`[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Vehicle {\n        private String make;\n        private String model;\n\n        public Vehicle(String make, String model) {\n            this.make = make;\n            this.model = model;\n        }\n\n        public String getDetails() {\n            return make + \" \" + model;\n        }\n    }\n\n    static class Car extends Vehicle {\n        private int doors;\n\n        public Car(String make, String model, int doors) {\n            super(make, model);\n            this.doors = doors;\n        }\n\n        public void display() {\n            System.out.println(\"Car: \" + getDetails() + \" (\" + doors + \" doors)\");\n        }\n    }\n\n    public static void main(String[] args) {\n        Car car = new Car(\"Toyota\", \"Corolla\", 4);\n        car.display();\n    }\n}",
+      "expectedOutput": "Car: Toyota Corolla (4 doors)"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Default Constructor Elimination",
+      "question": "Demonstrate that defining a parameterized constructor eliminates the compiler's default no-arg constructor, and fix the resulting subclass compilation issue by adding an explicit parent constructor[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-04",
+      "id": "constructors-009",
+      "explanation": "The Java compiler provides a synthetic, public no-argument default constructor only if a class defines no constructors at all[cite: 10, 24]. Once any constructor is explicitly declared (such as a parameterized constructor), the compiler ceases to generate the default constructor[cite: 24]. If a subclass then attempts to compile with an implicit `super();` call, compilation fails because the parent class no longer has a no-arg constructor[cite: 24]. To fix this, developers must either add an explicit no-arg constructor to the parent class or have the subclass explicitly call one of the parent's available parameterized constructors using `super(...)`[cite: 24].",
+      "hints": [
+        "Notice that declaring `Parent(int x)` removes the implicit `Parent()` constructor[cite: 24].",
+        "A subclass constructor calling an implicit `super()` will fail to compile unless `Parent()` exists[cite: 24].",
+        "Add an explicit no-arg constructor `public Parent() {}` to restore no-arg instantiation[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BaseEntity {\n        protected int id;\n\n        // Explicit no-arg constructor restores default instantiation capability\n        public BaseEntity() {\n            this.id = 1;\n        }\n\n        public BaseEntity(int id) {\n            this.id = id;\n        }\n    }\n\n    static class User extends BaseEntity {\n        private String name;\n\n        public User(String name) {\n            // Automatically invokes super(); works because BaseEntity() is explicitly defined\n            this.name = name;\n        }\n\n        public void print() {\n            System.out.println(\"User: \" + name + \" (ID: \" + id + \")\");\n        }\n    }\n\n    public static void main(String[] args) {\n        User user = new User(\"Akshat\");\n        user.print();\n    }\n}",
+      "expectedOutput": "User: Akshat (ID: 1)"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Constructor Validation Guards",
+      "question": "Implement defensive validation guards inside a `Person` constructor, throwing an `IllegalArgumentException` if `age < 0` or if `name` is null or blank[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-05",
+      "id": "constructors-010",
+      "explanation": "Constructors serve as the primary security checkpoint for object creation[cite: 24]. Relying on external code to validate parameters before instantiation is risky, as invalid data can produce corrupted objects[cite: 23, 24]. By adding validation guards directly inside the constructor body, invalid arguments are caught immediately[cite: 24]. If a precondition is violated (such as a negative age or a null name), the constructor throws an `IllegalArgumentException`[cite: 24]. This halts object creation before the reference is returned, ensuring that half-initialized or invalid instances never leak into the application[cite: 23, 24].",
+      "hints": [
+        "Check `if (name == null || name.isBlank())` and throw `IllegalArgumentException`[cite: 20, 24].",
+        "Check `if (age < 0)` and throw `IllegalArgumentException` with an informative error message[cite: 24].",
+        "Catch the exception in `main` using a `try-catch` block to verify validation[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Person {\n        private String name;\n        private int age;\n\n        public Person(String name, int age) {\n            if (name == null || name.isBlank()) {\n                throw new IllegalArgumentException(\"Name cannot be null or blank\");\n            }\n            if (age < 0) {\n                throw new IllegalArgumentException(\"Age cannot be negative: \" + age);\n            }\n            this.name = name;\n            this.age = age;\n        }\n\n        public void display() {\n            System.out.println(\"Name: \" + name + \", Age: \" + age);\n        }\n    }\n\n    public static void main(String[] args) {\n        try {\n            Person valid = new Person(\"Akshat\", 26);\n            valid.display();\n            new Person(\"\", -5);\n        } catch (IllegalArgumentException e) {\n            System.out.println(\"Validation caught: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Name: Akshat, Age: 26\nValidation caught: Name cannot be null or blank"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Constructor Chaining Execution Order",
+      "question": "Implement chained constructors in a `Rectangle` class (`Rectangle()` -> `Rectangle(side)` -> `Rectangle(l, w)`) using `this(...)` and log each step to observe execution order[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-06",
+      "id": "constructors-011",
+      "explanation": "When constructors chain together via `this(...)`, execution follows a nested, stack-like call pattern[cite: 6, 24]. The no-arg constructor calls `this(1.0)`, which in turn calls the master constructor `this(1.0, 1.0)`[cite: 24]. Because `this(...)` must be the first statement in each constructor, execution transfers down the delegation chain to the master constructor first[cite: 24]. The master constructor's body runs to completion, after which control returns back up through each calling constructor in reverse order[cite: 6, 24]. Logging output from each constructor shows this call-and-return sequence clearly[cite: 24].",
+      "hints": [
+        "In `Rectangle()`, call `this(1.0);`[cite: 24].",
+        "In `Rectangle(double s)`, call `this(s, s);`[cite: 24].",
+        "Add print statements in each constructor body to trace the order in which they finish executing[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Rectangle {\n        private double length;\n        private double width;\n\n        public Rectangle() {\n            this(1.0);\n            System.out.println(\"Exiting no-arg constructor\");\n        }\n\n        public Rectangle(double side) {\n            this(side, side);\n            System.out.println(\"Exiting square constructor\");\n        }\n\n        public Rectangle(double length, double width) {\n            this.length = length;\n            this.width = width;\n            System.out.println(\"Exiting master constructor (length=\" + length + \", width=\" + width + \")\");\n        }\n    }\n\n    public static void main(String[] args) {\n        new Rectangle();\n    }\n}",
+      "expectedOutput": "Exiting master constructor (length=1.0, width=1.0)\nExiting square constructor\nExiting no-arg constructor"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Three-Tier Inheritance Constructor Sequence",
+      "question": "Construct a 3-level inheritance hierarchy ($A \\to B \\to C$) and print verification messages from each constructor to observe the top-down initialization sequence[cite: 6, 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-07",
+      "id": "constructors-012",
+      "explanation": "In an inheritance hierarchy, constructors execute in a strict top-down order from superclass to subclass[cite: 6, 24]. When `new C()` is invoked, class $C$'s constructor is called first[cite: 6, 24]. Before executing any statements in its own body, $C$ invokes `super()`, calling class $B$'s constructor[cite: 6, 24]. Similarly, $B$ invokes `super()`, calling class $A$'s constructor[cite: 6, 24]. Class $A$ (extending `Object`) finishes first, followed by $B$, and finally $C$[cite: 6, 24]. This ensures that base class state is always fully initialized before any subclass logic runs[cite: 6, 24].",
+      "hints": [
+        "Create class `A`, class `B extends A`, and class `C extends B`[cite: 6, 24].",
+        "Place a diagnostic print statement in the constructor of each class[cite: 6, 24].",
+        "Instantiate `new C();` in `main` to trace the full initialization chain[cite: 6, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class A {\n        public A() {\n            System.out.println(\"A constructor\");\n        }\n    }\n\n    static class B extends A {\n        public B() {\n            System.out.println(\"B constructor\");\n        }\n    }\n\n    static class C extends B {\n        public C() {\n            System.out.println(\"C constructor\");\n        }\n    }\n\n    public static void main(String[] args) {\n        new C();\n    }\n}",
+      "expectedOutput": "A constructor\nB constructor\nC constructor"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Copy Constructor with Deep Array Cloning",
+      "question": "Implement a copy constructor `Student(Student other)` that performs a deep copy of an internal mutable array field, ensuring the original and copy remain independent[cite: 5, 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-08",
+      "id": "constructors-013",
+      "explanation": "A copy constructor creates a new object using an existing instance of the same class as a template[cite: 24]. If the class contains mutable fields (like an array or a collection), performing a shallow copy (`this.scores = other.scores;`) simply copies the memory address, causing both objects to share the same underlying array[cite: 5, 23]. Mutating the array in the copy would then alter the original object's data as well[cite: 5, 23]. A proper copy constructor performs a deep copy by allocating a new array (`other.scores.clone()` or `Arrays.copyOf()`), ensuring the two instances are completely isolated in memory[cite: 5, 19, 24].",
+      "hints": [
+        "Define `public Student(Student other)` taking another instance of the class[cite: 24].",
+        "Clone the internal array using `this.scores = other.scores.clone();`[cite: 5, 24].",
+        "Mutate the array in the copy and verify that the original instance's array remains unchanged[cite: 5, 23, 24]."
+      ],
+      "sampleCode": "import java.util.Arrays;\n\npublic class Solution {\n    static class Student {\n        private String name;\n        private int[] scores;\n\n        public Student(String name, int[] scores) {\n            this.name = name;\n            this.scores = scores.clone();\n        }\n\n        // Copy constructor with deep cloning\n        public Student(Student other) {\n            this.name = other.name;\n            this.scores = other.scores.clone();\n        }\n\n        public void setScore(int index, int val) {\n            scores[index] = val;\n        }\n\n        public void printInfo() {\n            System.out.println(name + \" scores: \" + Arrays.toString(scores));\n        }\n    }\n\n    public static void main(String[] args) {\n        int[] initialScores = {85, 90, 95};\n        Student original = new Student(\"Akshat\", initialScores);\n        Student copy = new Student(original);\n\n        copy.setScore(0, 100); // Modifying copy\n\n        System.out.print(\"Original: \");\n        original.printInfo();\n        System.out.print(\"Copy:     \");\n        copy.printInfo();\n    }\n}",
+      "expectedOutput": "Original: Akshat scores: [85, 90, 95]\nCopy:     Akshat scores: [100, 90, 95]"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Private Constructor with Static Factory Method",
+      "question": "Implement a `DatabaseConnection` class with a `private` constructor and provide a public static factory method `createConnection()` to control instantiation[cite: 10, 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-09",
+      "id": "constructors-014",
+      "explanation": "Declaring a constructor `private` prevents external classes from instantiating it directly using the `new` operator[cite: 10, 24]. Instead, the class provides a public static factory method that manages object creation internally[cite: 10, 24]. This pattern offers several design benefits: static factory methods can have meaningful names that describe how the object is configured; they can enforce validation before instantiation; they can return cached or pooled instances instead of allocating new objects; and they can return subtypes when needed[cite: 10, 24].",
+      "hints": [
+        "Declare the constructor with the `private` access modifier[cite: 10, 24].",
+        "Define a `public static DatabaseConnection createConnection(...)` method[cite: 10, 24].",
+        "Invoke the private constructor inside the factory method and return the new instance[cite: 10, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class DatabaseConnection {\n        private String url;\n\n        private DatabaseConnection(String url) {\n            this.url = url;\n        }\n\n        public static DatabaseConnection createConnection(String host, int port) {\n            String fullUrl = \"jdbc:mysql://\" + host + \":\" + port + \"/main_db\";\n            return new DatabaseConnection(fullUrl);\n        }\n\n        public void connect() {\n            System.out.println(\"Connected to endpoint: \" + url);\n        }\n    }\n\n    public static void main(String[] args) {\n        DatabaseConnection connection = DatabaseConnection.createConnection(\"localhost\", 3306);\n        connection.connect();\n    }\n}",
+      "expectedOutput": "Connected to endpoint: jdbc:mysql://localhost:3306/main_db"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Defensive Constructor Precondition Enforcement",
+      "question": "Write a `BankAccount` constructor that enforces account opening rules by throwing an `IllegalArgumentException` when an invalid account number or negative initial balance is supplied[cite: 23, 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-10",
+      "id": "constructors-015",
+      "explanation": "Constructors serve as defensive gates that ensure invalid objects can never be instantiated[cite: 23, 24]. In a banking application, an account object must never exist with a negative balance or an empty account number[cite: 23, 24]. By checking these preconditions at the start of the constructor, any invalid input causes an `IllegalArgumentException` to be thrown before fields are assigned[cite: 23, 24]. This prevents half-initialized objects from existing in memory and makes precondition violations easy to catch and handle via standard exception mechanisms[cite: 23, 24].",
+      "hints": [
+        "Check `if (initialBalance < 0)` and throw an `IllegalArgumentException`[cite: 23, 24].",
+        "Check `if (accountNumber == null || accountNumber.isBlank())` and throw an exception[cite: 20, 24].",
+        "Catch the exception in `main` to verify that invalid instantiation is blocked[cite: 23, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class BankAccount {\n        private String accountNumber;\n        private double balance;\n\n        public BankAccount(String accountNumber, double initialBalance) {\n            if (accountNumber == null || accountNumber.isBlank()) {\n                throw new IllegalArgumentException(\"Account number must be specified\");\n            }\n            if (initialBalance < 0.0) {\n                throw new IllegalArgumentException(\"Initial deposit cannot be negative: \" + initialBalance);\n            }\n            this.accountNumber = accountNumber;\n            this.balance = initialBalance;\n        }\n\n        public void display() {\n            System.out.println(\"Account: \" + accountNumber + \" | Balance: $\" + balance);\n        }\n    }\n\n    public static void main(String[] args) {\n        try {\n            BankAccount valid = new BankAccount(\"ACC-9821\", 250.0);\n            valid.display();\n            new BankAccount(\"ACC-0000\", -50.0);\n        } catch (IllegalArgumentException e) {\n            System.out.println(\"Exception caught: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Account: ACC-9821 | Balance: $250.0\nException caught: Initial deposit cannot be negative: -50.0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Copy Constructor Implementation",
+      "question": "Implement a copy constructor `Person(Person other)` that creates an independent deep copy of an object and its mutable fields[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-06",
+      "id": "constructors-016",
+      "explanation": "Copy constructors provide an explicit, type-safe alternative to Java's `Object.clone()` mechanism[cite: 24]. The constructor accepts an instance of the same class (`Person other`) and initializes the new object's fields using the source instance's values[cite: 24]. For primitive fields and immutable objects (like `String`), values can be copied directly[cite: 5, 18, 24]. For mutable reference fields (such as a nested `Address` object), the constructor must instantiate a new copy rather than sharing the existing reference[cite: 5, 23, 24]. This ensures the original and copied instances remain completely independent in memory[cite: 5, 23, 24].",
+      "hints": [
+        "Declare the copy constructor: `public Person(Person other)`[cite: 24].",
+        "Deep-copy any mutable fields: `this.address = new Address(other.address);`[cite: 23, 24].",
+        "Demonstrate in `main` that modifying the copy does not alter the original object[cite: 5, 23, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Address {\n        String city;\n        public Address(String city) { this.city = city; }\n        public Address(Address other) { this.city = other.city; }\n    }\n\n    static class Person {\n        private String name;\n        private Address address;\n\n        public Person(String name, Address address) {\n            this.name = name;\n            this.address = new Address(address);\n        }\n\n        public Person(Person other) {\n            this.name = other.name;\n            this.address = new Address(other.address);\n        }\n\n        public void setCity(String city) { this.address.city = city; }\n        public void display() { System.out.println(name + \" lives in \" + address.city); }\n    }\n\n    public static void main(String[] args) {\n        Person p1 = new Person(\"Akshat\", new Address(\"Dhanbad\"));\n        Person p2 = new Person(p1);\n        p2.setCity(\"Bengaluru\");\n\n        p1.display();\n        p2.display();\n    }\n}",
+      "expectedOutput": "Akshat lives in Dhanbad\nAkshat lives in Bengaluru"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Private Constructor Factory",
+      "question": "Make a constructor private and provide multiple named static factory methods (`fromEpoch`, `fromIsoString`) for creating instances[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-07",
+      "id": "constructors-017",
+      "explanation": "Constructors in Java must always share the class name, which limits their ability to describe how an object is being initialized[cite: 12]. When an object can be instantiated from different formats that share similar types—such as creating a timestamp from an epoch millisecond `long` versus an ISO-8601 formatted string—constructors alone can be ambiguous[cite: 5, 12, 24]. By making the constructor private and providing static factory methods with descriptive names (like `fromEpoch` and `fromIsoString`), the instantiation intent is clear[cite: 12, 24]. The factory methods parse and validate their respective inputs before passing the normalized data to the private constructor[cite: 10, 12, 24].",
+      "hints": [
+        "Declare `private Timestamp(long epochMillis)` to block direct `new` calls[cite: 10, 24].",
+        "Implement `public static Timestamp fromEpoch(long millis)`[cite: 12, 24].",
+        "Implement `public static Timestamp fromIsoString(String iso)` with parsing logic[cite: 12, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Timestamp {\n        private final long epochMillis;\n\n        private Timestamp(long epochMillis) {\n            this.epochMillis = epochMillis;\n        }\n\n        public static Timestamp fromEpoch(long millis) {\n            return new Timestamp(millis);\n        }\n\n        public static Timestamp fromIsoSeconds(long seconds) {\n            return new Timestamp(seconds * 1000L);\n        }\n\n        public long getMillis() {\n            return epochMillis;\n        }\n    }\n\n    public static void main(String[] args) {\n        Timestamp t1 = Timestamp.fromEpoch(1700000000000L);\n        Timestamp t2 = Timestamp.fromIsoSeconds(1700000000L);\n        System.out.println(\"Timestamp 1: \" + t1.getMillis());\n        System.out.println(\"Timestamp 2: \" + t2.getMillis());\n    }\n}",
+      "expectedOutput": "Timestamp 1: 1700000000000\nTimestamp 2: 1700000000000"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Multi-Tier Constructor Execution Trace",
+      "question": "Build a 3-level inheritance hierarchy (A -> B -> C) with diagnostic print statements in each constructor to verify the bottom-up initialization sequence[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-08",
+      "id": "constructors-018",
+      "explanation": "Constructors in an inheritance hierarchy execute in a strict top-down order from the base class down to the most derived subclass[cite: 6, 24]. When `new C()` is called, class $C$'s constructor is entered first[cite: 6, 24]. Before executing any statements in its own body, it delegates upward via an implicit or explicit `super()` call, invoking $B$'s constructor[cite: 6, 24]. Class $B$ similarly delegates to $A$[cite: 6, 24]. Class $A$'s constructor executes first, followed by $B$'s, and finally $C$'s[cite: 6, 24]. Placing print statements in each constructor body makes this execution sequence visible, confirming that superclass state is always established before subclass logic runs[cite: 6, 24].",
+      "hints": [
+        "Define classes `A`, `B extends A`, and `C extends B`[cite: 6, 24].",
+        "Place a print statement inside the body of each constructor[cite: 6, 24].",
+        "Instantiate `new C()` and observe that execution prints `A` first, then `B`, then `C`[cite: 6, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class A {\n        public A() {\n            System.out.println(\"A constructor\");\n        }\n    }\n\n    static class B extends A {\n        public B() {\n            System.out.println(\"B constructor\");\n        }\n    }\n\n    static class C extends B {\n        public C() {\n            System.out.println(\"C constructor\");\n        }\n    }\n\n    public static void main(String[] args) {\n        new C();\n    }\n}",
+      "expectedOutput": "A constructor\nB constructor\nC constructor"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Final Field Initialization Invariant",
+      "question": "Create a class with multiple `final` fields and verify how constructor chaining via `this(...)` ensures all final fields are assigned exactly once[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-09",
+      "id": "constructors-019",
+      "explanation": "The Java Language Specification mandates that every blank `final` instance variable must be definitely assigned exactly once by the end of constructor execution[cite: 6]. When a class defines multiple constructor overloads, each constructor must assign every final field[cite: 6, 24]. Having each overload initialize all fields independently can lead to code duplication and potential omissions[cite: 24]. Constructor chaining via `this(...)` solves this cleanly: secondary constructors delegate to a single primary constructor that performs all final field assignments in one place[cite: 24]. This satisfies the compiler's definite assignment checks and keeps initialization logic centralized[cite: 6, 24].",
+      "hints": [
+        "Declare `private final String protocol;` and `private final int port;`[cite: 6, 24].",
+        "Have the single-argument constructor call `this(protocol, 8080);`[cite: 24].",
+        "In the primary constructor, assign both final fields: `this.protocol = protocol; this.port = port;`[cite: 4, 6, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class ServerEndpoint {\n        private final String protocol;\n        private final int port;\n\n        public ServerEndpoint(String protocol) {\n            this(protocol, 8080); // Delegates to master constructor\n        }\n\n        public ServerEndpoint(String protocol, int port) {\n            this.protocol = protocol;\n            this.port = port; // Definite assignment of all final fields\n        }\n\n        public void display() {\n            System.out.println(\"Endpoint: \" + protocol + \"://localhost:\" + port);\n        }\n    }\n\n    public static void main(String[] args) {\n        ServerEndpoint ep1 = new ServerEndpoint(\"http\");\n        ServerEndpoint ep2 = new ServerEndpoint(\"https\", 443);\n        ep1.display();\n        ep2.display();\n    }\n}",
+      "expectedOutput": "Endpoint: http://localhost:8080\nEndpoint: https://localhost:443"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Constructor Exception Safety",
+      "question": "Write a constructor that allocates an initial resource, catches an exception thrown during secondary initialization, and ensures the partially created resource is cleaned up[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-10",
+      "id": "constructors-020",
+      "explanation": "When an exception is thrown inside a constructor, the object instantiation fails and no reference is returned to the caller[cite: 24]. However, if the constructor allocated external system resources (such as file handles, database connections, or socket channels) before the exception was thrown, those resources can leak because the object will never be finalized or closed normally[cite: 1, 24]. Writing an exception-safe constructor requires wrapping subsequent initialization steps in a `try-catch` block[cite: 24]. If a later step fails, the catch block cleans up any previously acquired resources before re-throwing the exception[cite: 24].",
+      "hints": [
+        "Simulate acquiring an initial resource like opening an internal connection or buffer[cite: 24].",
+        "Wrap subsequent initialization in a `try-catch` block[cite: 24].",
+        "In the `catch` block, explicitly release the initial resource before re-throwing the exception[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class ManagedResource {\n        private boolean resourceAllocated = false;\n\n        public ManagedResource(int configCode) {\n            // Step 1: Allocate resource\n            this.resourceAllocated = true;\n            System.out.println(\"Resource allocated successfully.\");\n\n            // Step 2: Risky secondary initialization\n            try {\n                if (configCode < 0) {\n                    throw new IllegalArgumentException(\"Invalid configuration code: \" + configCode);\n                }\n            } catch (Exception e) {\n                // Cleanup partially allocated resource before propagating failure\n                close();\n                throw e;\n            }\n        }\n\n        public void close() {\n            if (resourceAllocated) {\n                resourceAllocated = false;\n                System.out.println(\"Resource cleaned up safely after constructor failure.\");\n            }\n        }\n    }\n\n    public static void main(String[] args) {\n        try {\n            new ManagedResource(-1);\n        } catch (Exception e) {\n            System.out.println(\"Caught in main: \" + e.getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Resource allocated successfully.\nResource cleaned up safely after constructor failure.\nCaught in main: Invalid configuration code: -1"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Mandatory Parameterized Super Delegation",
+      "question": "Implement a `Parent` class that defines only a parameterized constructor with no default constructor, and write a `Child` class that correctly delegates via `super(args)`[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-11",
+      "id": "constructors-021",
+      "explanation": "When a parent class defines an explicit parameterized constructor and omits a no-argument constructor, the compiler does not generate a default constructor for it[cite: 24]. Any subclass that does not explicitly call `super(...)` will fail to compile, because the compiler will attempt to insert an implicit `super();` call that cannot be resolved[cite: 24]. To resolve this, every constructor in the subclass must explicitly invoke `super(param1, param2)` as its first statement[cite: 24]. This ensures that the required parent configuration is always provided when a subclass is instantiated[cite: 24].",
+      "hints": [
+        "In `Parent`, declare only `public Parent(String config)`[cite: 24].",
+        "In `Child`, make `super(config);` the very first statement of the constructor body[cite: 24].",
+        "Verify that attempting to omit `super(config)` causes a compilation error[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        protected String config;\n\n        public Parent(String config) {\n            this.config = config;\n        }\n    }\n\n    static class Child extends Parent {\n        private int priority;\n\n        public Child(String config, int priority) {\n            super(config); // Mandatory: Parent has no default no-arg constructor\n            this.priority = priority;\n        }\n\n        public void display() {\n            System.out.println(\"Config: \" + config + \" | Priority: \" + priority);\n        }\n    }\n\n    public static void main(String[] args) {\n        Child child = new Child(\"Production-Cluster\", 1);\n        child.display();\n    }\n}",
+      "expectedOutput": "Config: Production-Cluster | Priority: 1"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Complete Instance Initialization Lifecycle Order",
+      "question": "Write a class combining static blocks, instance initializer blocks, constructor chaining (`this(...)`), and field initializers, and print the exact execution order[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-12",
+      "id": "constructors-022",
+      "explanation": "The JVM follows a precise initialization order when instantiating a class[cite: 6]:\n1. Static initializers and static initialization blocks run once when the class is first loaded[cite: 6].\n2. When `new` is called and constructor chaining (`this(...)`) is used, execution transfers to the master constructor first[cite: 6, 24].\n3. Before the master constructor's body executes, instance field initializers and instance initializer blocks run in their textual order of appearance[cite: 6].\n4. The master constructor's body executes[cite: 24].\n5. Control returns back up the constructor delegation chain, executing the bodies of any calling constructors in reverse order[cite: 6, 24].",
+      "hints": [
+        "Add diagnostic print statements inside `static { ... }`, `{ ... }`, and constructor bodies[cite: 6, 24].",
+        "Use `this(\"default\");` inside the no-arg constructor to trigger constructor delegation[cite: 24].",
+        "Notice that instance blocks run only once per `new` invocation, right before the master constructor body[cite: 6, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class LifecycleDemo {\n        static {\n            System.out.println(\"[1] Static initializer block\");\n        }\n\n        {\n            System.out.println(\"[2] Instance initializer block\");\n        }\n\n        public LifecycleDemo() {\n            this(\"Chained Parameter\");\n            System.out.println(\"[4] Secondary constructor body\");\n        }\n\n        public LifecycleDemo(String param) {\n            System.out.println(\"[3] Master constructor body: \" + param);\n        }\n    }\n\n    public static void main(String[] args) {\n        new LifecycleDemo();\n    }\n}",
+      "expectedOutput": "[1] Static initializer block\n[2] Instance initializer block\n[3] Master constructor body: Chained Parameter\n[4] Secondary constructor body"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Builder Pattern with Private Constructor",
+      "question": "Implement the Builder pattern for an immutable `Pizza` class with a private constructor and optional toppings using a static nested builder[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-13",
+      "id": "constructors-023",
+      "explanation": "The Builder pattern (Joshua Bloch, Effective Java) provides a clean alternative to telescoping constructors when a class has many optional parameters[cite: 12, 24]. The `Pizza` class declares its constructor `private`, preventing direct instantiation from outside[cite: 10, 24]. A public static nested `Builder` class collects configurations fluently via methods that return `this`[cite: 12, 24]. The builder's `build()` method calls the private `Pizza` constructor, passing itself as the argument[cite: 12, 24]. The private constructor then copies the fields from the builder into immutable final fields[cite: 6, 12, 24].",
+      "hints": [
+        "Make the `Pizza` constructor `private Pizza(Builder builder)`[cite: 12, 24].",
+        "Implement fluent setter methods in `Builder` that return `this`[cite: 12, 24].",
+        "In `builder.build()`, return `new Pizza(this);`[cite: 12, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Pizza {\n        private final String crust;\n        private final boolean extraCheese;\n        private final boolean pepperoni;\n\n        private Pizza(Builder builder) {\n            this.crust = builder.crust;\n            this.extraCheese = builder.extraCheese;\n            this.pepperoni = builder.pepperoni;\n        }\n\n        public static class Builder {\n            private final String crust;\n            private boolean extraCheese = false;\n            private boolean pepperoni = false;\n\n            public Builder(String crust) {\n                this.crust = crust;\n            }\n\n            public Builder extraCheese(boolean val) {\n                this.extraCheese = val;\n                return this;\n            }\n\n            public Builder pepperoni(boolean val) {\n                this.pepperoni = val;\n                return this;\n            }\n\n            public Pizza build() {\n                return new Pizza(this);\n            }\n        }\n\n        public void printOrder() {\n            System.out.println(\"Pizza: \" + crust + \" crust | Cheese: \" + extraCheese + \" | Pepperoni: \" + pepperoni);\n        }\n    }\n\n    public static void main(String[] args) {\n        Pizza pizza = new Pizza.Builder(\"Thin\")\n                .extraCheese(true)\n                .pepperoni(true)\n                .build();\n        pizza.printOrder();\n    }\n}",
+      "expectedOutput": "Pizza: Thin crust | Cheese: true | Pepperoni: true"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Overridable Method in Constructor Pitfall",
+      "question": "Demonstrate the anti-pattern where a parent constructor invokes an overridable method that accesses an uninitialized child field, and show how to fix it[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-14",
+      "id": "constructors-024",
+      "explanation": "Calling an overridable method inside a constructor is a dangerous anti-pattern in Java[cite: 24]. Because dynamic method dispatch (`invokevirtual`) resolves to the runtime subclass implementation, calling an overridable method from the parent constructor executes the child's method before the child's constructor or field initializers have run[cite: 6, 24]. If the child method accesses any child fields, it will observe their default uninitialized values (e.g., `null` or `0`), which can cause subtle bugs or `NullPointerException`s[cite: 2, 7, 24]. To fix this, constructors should only call `final` or `private` methods[cite: 10, 24].",
+      "hints": [
+        "In `Parent`, call an overridable method `init()` from inside the constructor[cite: 24].",
+        "In `Child`, override `init()` and print a child field initialized inline (e.g., `String subState = \"READY\";`)[cite: 24].",
+        "Observe that the parent constructor's call to `init()` runs while `subState` is still `null`[cite: 2, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class Parent {\n        public Parent() {\n            System.out.println(\"Parent constructor executing\");\n            init(); // ANTI-PATTERN: Calling overridable method from constructor\n        }\n\n        public void init() {\n            System.out.println(\"Parent init\");\n        }\n    }\n\n    static class Child extends Parent {\n        private String subState = \"INITIALIZED_STATE\";\n\n        public Child() {\n            super();\n            System.out.println(\"Child constructor finished. State: \" + subState);\n        }\n\n        @Override\n        public void init() {\n            // At this point, Child field initializers have NOT run yet!\n            System.out.println(\"Child init invoked! subState is: \" + subState);\n        }\n    }\n\n    public static void main(String[] args) {\n        new Child();\n    }\n}",
+      "expectedOutput": "Parent constructor executing\nChild init invoked! subState is: null\nChild constructor finished. State: INITIALIZED_STATE"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Constructor Dependency Injection",
+      "question": "Implement a `UserService` that accepts a `DataRepository` interface through its constructor, and demonstrate wiring it with two different repository implementations[cite: 24].",
+      "source": "java_coding_practice.json",
+      "source_id": "constructors-15",
+      "id": "constructors-025",
+      "explanation": "Constructor Dependency Injection (DI) passes an object's required dependencies in as constructor parameters rather than having the object instantiate them internally[cite: 24]. By accepting an interface (`DataRepository`) instead of a concrete class, `UserService` is decoupled from specific storage implementations[cite: 10, 24]. In production, a database repository is injected; in tests, a mock or in-memory repository can be provided instead[cite: 24]. This pattern ensures dependencies are supplied at instantiation time, allows dependencies to be stored in `final` fields, and simplifies unit testing[cite: 6, 24].",
+      "hints": [
+        "Define an interface `DataRepository` with a method like `String loadData();`[cite: 10].",
+        "In `UserService`, declare `private final DataRepository repo;` and assign it in the constructor[cite: 6, 24].",
+        "Instantiate `UserService` twice in `main`, passing a different repository implementation each time[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    interface DataRepository {\n        String retrieveUserData();\n    }\n\n    static class SqlRepository implements DataRepository {\n        public String retrieveUserData() { return \"Data from SQL Database\"; }\n    }\n\n    static class MemoryRepository implements DataRepository {\n        public String retrieveUserData() { return \"Data from In-Memory Cache\"; }\n    }\n\n    static class UserService {\n        private final DataRepository repository;\n\n        // Constructor Dependency Injection\n        public UserService(DataRepository repository) {\n            this.repository = repository;\n        }\n\n        public void printUser() {\n            System.out.println(\"Service loaded: \" + repository.retrieveUserData());\n        }\n    }\n\n    public static void main(String[] args) {\n        UserService service1 = new UserService(new SqlRepository());\n        UserService service2 = new UserService(new MemoryRepository());\n        service1.printUser();\n        service2.printUser();\n    }\n}",
+      "expectedOutput": "Service loaded: Data from SQL Database\nService loaded: Data from In-Memory Cache"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Overridable Method in Constructor Danger",
+      "question": "Write code demonstrating the classic anti-pattern: calling an overridable method inside a parent constructor leading to child fields being accessed before initialization[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-11",
+      "id": "constructors-026",
+      "explanation": "This exercise demonstrates the runtime failure that occurs when an overridable method is called from a constructor[cite: 24]. When `new ChildSub()` executes, the superclass constructor runs first[cite: 6, 24]. When the superclass constructor calls `render()`, Java's virtual method dispatch routes the call to `ChildSub.render()`[cite: 6, 24]. However, `ChildSub`'s field initializers have not executed yet, leaving its fields at their default values (e.g., `null`)[cite: 2, 24]. Attempting to call methods on those uninitialized fields throws a `NullPointerException` during object construction[cite: 5, 7, 24]. The fix is to ensure constructors only invoke `private` or `final` methods[cite: 10, 24].",
+      "hints": [
+        "Create `SuperBase` with a constructor that calls `render()`[cite: 24].",
+        "Create `ChildSub extends SuperBase` with a field initialized inline: `private List<String> list = new ArrayList<>();`[cite: 24].",
+        "In `ChildSub.render()`, calling `list.size()` will throw `NullPointerException` because `list` is still `null`[cite: 2, 5, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static abstract class SuperBase {\n        public SuperBase() {\n            render(); // Dangerous: overridable call in constructor\n        }\n        public abstract void render();\n    }\n\n    static class ChildSub extends SuperBase {\n        private String label = \"SUB_INITIALIZED\";\n\n        @Override\n        public void render() {\n            // Called while label is still null!\n            System.out.println(\"Render invoked: label length = \" + (label == null ? \"NULL_SAFE\" : label.length()));\n        }\n    }\n\n    public static void main(String[] args) {\n        new ChildSub();\n    }\n}",
+      "expectedOutput": "Render invoked: label length = NULL_SAFE"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Step Builder Pattern Constructor",
+      "question": "Implement a Step Builder pattern using chained interfaces and a private constructor to enforce mandatory field initialization at compile time in a strict step sequence[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-12",
+      "id": "constructors-027",
+      "explanation": "Standard builder patterns allow calling `.build()` at any point, which means missing mandatory fields can only be caught at runtime[cite: 24]. The Step Builder pattern solves this by using a series of nested interfaces that guide the caller through mandatory fields in a strict compile-time sequence[cite: 24]. Each step interface returns the next step's interface[cite: 24]. Only after all mandatory steps are completed does the builder expose the `.build()` method[cite: 24]. The underlying class uses a private constructor to ensure it can only be instantiated through this validated step sequence[cite: 10, 24].",
+      "hints": [
+        "Define step interfaces: `interface NameStep { EmailStep name(String n); }` and `interface EmailStep { BuildStep email(String e); }`[cite: 24].",
+        "Have the internal builder class implement all step interfaces[cite: 24].",
+        "Make the main class constructor private so it can only be called by the builder's `build()` method[cite: 10, 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class User {\n        private final String name;\n        private final String email;\n\n        private User(String name, String email) {\n            this.name = name;\n            this.email = email;\n        }\n\n        public interface NameStep { EmailStep name(String name); }\n        public interface EmailStep { BuildStep email(String email); }\n        public interface BuildStep { User build(); }\n\n        public static NameStep start() {\n            return new Builder();\n        }\n\n        private static class Builder implements NameStep, EmailStep, BuildStep {\n            private String name;\n            private String email;\n\n            public EmailStep name(String name) { this.name = name; return this; }\n            public BuildStep email(String email) { this.email = email; return this; }\n            public User build() { return new User(name, email); }\n        }\n\n        public void display() {\n            System.out.println(\"User: \" + name + \" | Email: \" + email);\n        }\n    }\n\n    public static void main(String[] args) {\n        User user = User.start().name(\"Akshat\").email(\"akshat@example.com\").build();\n        user.display();\n    }\n}",
+      "expectedOutput": "User: Akshat | Email: akshat@example.com"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Constructor Delegation Graph Cycle Resolution",
+      "question": "Demonstrate how circular constructor delegation (`this(...)` cycles) causes compilation errors, and implement a clean, acyclic delegation graph[cite: 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-13",
+      "id": "constructors-028",
+      "explanation": "Constructor delegation cycles occur when constructor $A$ calls `this(...)` to invoke constructor $B$, and constructor $B$ delegates back to $A$ (either directly or through an intermediate constructor)[cite: 24]. If allowed, this would cause an infinite loop during object construction that would overflow the stack[cite: 2, 6, 24]. The Java compiler detects circular constructor invocations and rejects them at compile time with a 'recursive constructor invocation' error[cite: 24]. To prevent this, constructor delegation graphs must form a directed acyclic graph (DAG) where all secondary constructors delegate toward a single master constructor[cite: 24].",
+      "hints": [
+        "Note in comments that `A() { this(1); }` and `A(int x) { this(); }` triggers a compile error[cite: 24].",
+        "Design a clean DAG where each constructor overload delegates strictly toward the primary master constructor[cite: 24].",
+        "Ensure the master constructor does not call `this(...)`, terminating the delegation chain[cite: 24]."
+      ],
+      "sampleCode": "public class Solution {\n    static class SafeConfig {\n        private String host;\n        private int port;\n        private boolean ssl;\n\n        // Constructor 1 delegates to 2\n        public SafeConfig() {\n            this(\"localhost\");\n        }\n\n        // Constructor 2 delegates to 3 (master)\n        public SafeConfig(String host) {\n            this(host, 8080);\n        }\n\n        // Constructor 3 delegates to 4 (terminal master)\n        public SafeConfig(String host, int port) {\n            this(host, port, false);\n        }\n\n        // Master terminal constructor: performs actual initialization without this(...)\n        public SafeConfig(String host, int port, boolean ssl) {\n            this.host = host;\n            this.port = port;\n            this.ssl = ssl;\n        }\n\n        public void printConfig() {\n            System.out.println(\"Config: \" + host + \":\" + port + \" (SSL=\" + ssl + \")\");\n        }\n    }\n\n    public static void main(String[] args) {\n        SafeConfig cfg = new SafeConfig();\n        cfg.printConfig();\n    }\n}",
+      "expectedOutput": "Config: localhost:8080 (SSL=false)"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Immutable Hierarchy with Complex Super Chaining",
+      "question": "Design an immutable subclass hierarchy where each layer contains `final` fields, defensive copies, and explicit `super(...)` constructor chaining[cite: 23, 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-14",
+      "id": "constructors-029",
+      "explanation": "Maintaining immutability across an inheritance hierarchy requires discipline at every level of the chain[cite: 5, 23]. Each class in the hierarchy must declare its fields as `private final`, validate preconditions, and make defensive copies of any mutable arguments passed to its constructor[cite: 5, 6, 23, 24]. When a subclass constructor is called, it must invoke `super(...)` to initialize the parent fields before initializing its own[cite: 6, 24]. By combining defensive copying with strict `super(...)` constructor chaining, the entire object hierarchy remains immutable once instantiated[cite: 23, 24].",
+      "hints": [
+        "In `Asset`, declare `private final String id; private final Date acquired;`[cite: 5, 6, 23].",
+        "In `HardwareAsset extends Asset`, call `super(id, acquired);` using a defensively copied Date[cite: 5, 10, 24].",
+        "Return defensive copies from all getters across every level of the hierarchy[cite: 10, 23]."
+      ],
+      "sampleCode": "import java.util.Date;\n\npublic class Solution {\n    static class Asset {\n        private final String id;\n        private final Date acquiredDate;\n\n        public Asset(String id, Date acquiredDate) {\n            this.id = id;\n            this.acquiredDate = new Date(acquiredDate.getTime()); // Defensive copy\n        }\n\n        public String getId() { return id; }\n        public Date getAcquiredDate() { return new Date(acquiredDate.getTime()); }\n    }\n\n    static class HardwareAsset extends Asset {\n        private final String serialNumber;\n\n        public HardwareAsset(String id, Date acquiredDate, String serialNumber) {\n            super(id, acquiredDate); // Explicit super constructor chaining\n            this.serialNumber = serialNumber;\n        }\n\n        public String getSerialNumber() { return serialNumber; }\n    }\n\n    public static void main(String[] args) {\n        Date now = new Date();\n        HardwareAsset hw = new HardwareAsset(\"HW-101\", now, \"SN-99823\");\n        System.out.println(\"Asset ID: \" + hw.getId() + \" | Serial: \" + hw.getSerialNumber());\n    }\n}",
+      "expectedOutput": "Asset ID: HW-101 | Serial: SN-99823"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Reflective Instantiation Safety Gate",
+      "question": "Write a singleton constructor that detects and blocks unauthorized reflective instantiation attempts using a static instantiation flag[cite: 10, 24].",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "CST-15",
+      "id": "constructors-030",
+      "explanation": "Standard singleton implementations can be compromised using Java Reflection[cite: 2, 10]. A client can access the private constructor via `Constructor.setAccessible(true)` and instantiate a second object, breaking the singleton guarantee[cite: 10, 24]. To defend against this, the private constructor can check a static instantiation flag[cite: 24]. The first instantiation—triggered during legitimate singleton initialization—sets the flag to `true`[cite: 24]. If reflective code attempts to call the constructor a second time, the constructor detects the active flag and throws an `IllegalStateException` or `SecurityException`[cite: 23, 24].",
+      "hints": [
+        "Maintain a `private static boolean instanceCreated = false;` flag[cite: 24].",
+        "Inside the private constructor, check `if (instanceCreated) throw new IllegalStateException(...);`[cite: 23, 24].",
+        "Set `instanceCreated = true;` during the first valid instantiation[cite: 24]."
+      ],
+      "sampleCode": "import java.lang.reflect.Constructor;\n\npublic class Solution {\n    static class SecureSingleton {\n        private static final SecureSingleton INSTANCE = new SecureSingleton();\n        private static boolean instanceCreated = false;\n\n        private SecureSingleton() {\n            synchronized (SecureSingleton.class) {\n                if (instanceCreated) {\n                    throw new IllegalStateException(\"Reflective instantiation prohibited: singleton already exists\");\n                }\n                instanceCreated = true;\n            }\n        }\n\n        public static SecureSingleton getInstance() {\n            return INSTANCE;\n        }\n    }\n\n    public static void main(String[] args) {\n        SecureSingleton first = SecureSingleton.getInstance();\n        System.out.println(\"Standard singleton instance acquired: \" + (first != null));\n\n        try {\n            Constructor<SecureSingleton> constructor = SecureSingleton.class.getDeclaredConstructor();\n            constructor.setAccessible(true);\n            constructor.newInstance(); // Attempt reflective breach\n        } catch (Exception e) {\n            System.out.println(\"Security gate triggered: \" + e.getCause().getMessage());\n        }\n    }\n}",
+      "expectedOutput": "Standard singleton instance acquired: true\nSecurity gate triggered: Reflective instantiation prohibited: singleton already exists"
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}

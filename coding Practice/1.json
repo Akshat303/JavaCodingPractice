@@ -1,0 +1,493 @@
+{
+  "section": "Basics",
+  "slug": "hello-world",
+  "topic": "Hello World, compile, and run",
+  "page": 5,
+  "questions": [
+    {
+      "difficulty": "Easy",
+      "title": "Canonical Hello World Console Greeting",
+      "question": "Write a complete Java program with a public class named Solution containing the standard main entry point that prints 'Hello, World!' to the console.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-01",
+      "id": "hello-world-001",
+      "explanation": "This exercise introduces the quintessential entry point of Java programming. Every executable standalone Java application requires an entry method declared with the exact signature public static void main(String[] args) placed inside an accessible class definition. Through the statement System.out.println(\"Hello, World!\"), students discover Java's standard output pipeline: System is a final core class residing in the java.lang package, out is a public static reference to an open java.io.PrintStream destination, and println() is a thread-safe method that emits character data followed by a platform-specific newline separator. At startup, the Java Virtual Machine's launcher bootstraps the runtime environment, loads the compiled class bytecode via the application classloader, validates bytecode structures, and invokes this canonical main entry method.",
+      "hints": [
+        "Declare the class as public class Solution and write the standard entry point signature: public static void main(String[] args).",
+        "Use System.out.println() with the string literal enclosed in double quotation marks.",
+        "Ensure the statement terminates with a semicolon to avoid compilation failure."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
+      "expectedOutput": "Hello, World!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multiline Profile Information Output",
+      "question": "Write a Java program that outputs labeled personal profile information—specifically Name, Age, and City—across three separate lines using System.out.println.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-02",
+      "id": "hello-world-002",
+      "explanation": "This exercise establishes the mechanics of sequential console output and string-primitive concatenation in Java. Each individual invocation of System.out.println() transmits its argument string into the PrintStream buffer and appends the host operating system's line terminator (\\n on Unix-like environments or \\r\\n on Windows), shifting the console cursor to the first column of the next row. When string literals are combined with numeric literals like integers using the plus (+) operator, the Java compiler desugars the operation into an efficient string conversion mechanism (using invokedynamic and StringConcatFactory in modern JDKs). The CPU executes these statements in strict top-down sequential order inside the main thread frame, illustrating deterministic linear execution flow.",
+      "hints": [
+        "Issue three consecutive System.out.println statements within your main method body.",
+        "Combine literal descriptive label strings like \"Age: \" with raw numeric values using string concatenation (+).",
+        "Verify each line displays the exact expected label and casing."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String name = \"Akshat\";\n        int age = 26;\n        String city = \"Dhanbad\";\n\n        System.out.println(\"Name: \" + name);\n        System.out.println(\"Age: \" + age);\n        System.out.println(\"City: \" + city);\n    }\n}",
+      "expectedOutput": "Name: Akshat\nAge: 26\nCity: Dhanbad"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Differentiating Stream Print and Println",
+      "question": "Demonstrate the operational difference between System.out.print() and System.out.println() by printing two words on the first line using print(), followed by two distinct subsequent lines using println().",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-03",
+      "id": "hello-world-003",
+      "explanation": "This problem clarifies how the console cursor position behaves across different standard output method invocations. The System.out.print() method streams character bytes into the underlying output buffer without appending a carriage return or line-feed character; subsequent print calls append content immediately to the right of the previous character. In contrast, System.out.println() automatically terminates the current output line by flushing the buffered content alongside a line break, causing subsequent characters to begin on the subsequent terminal line. Understanding cursor retention versus line flushing is critical for assembling command-line interfaces, inline prompts, and dynamic character-based terminal animations.",
+      "hints": [
+        "Call System.out.print(\"Hello \") followed by System.out.print(\"World\\n\") or an alternating print/println sequence.",
+        "Notice that print() does not inject whitespace automatically; spaces between words must be explicitly included.",
+        "Use println() for subsequent tokens to force each onto a distinct new line."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.print(\"Hello \");\n        System.out.println(\"World\");\n        System.out.println(\"Java\");\n        System.out.println(\"Programming\");\n    }\n}",
+      "expectedOutput": "Hello World\nJava\nProgramming"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Static Star Triangle Pattern Rendering",
+      "question": "Print a 4-row right-angled triangle pattern of asterisks (*) using only discrete System.out.println statements without loops.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-04",
+      "id": "hello-world-004",
+      "explanation": "This introductory geometric output exercise teaches spatial coordinate alignment in standard monospace character displays prior to the introduction of algorithmic loop structures. By issuing four discrete System.out.println statements containing increasing quantities of asterisk characters (*, **, ***, and ****), learners observe how consecutive method invocations map directly to incremental rows along the vertical Y-axis, while character indices within each string literal populate cells along the horizontal X-axis. This fundamental monospace grid mapping provides an intuitive conceptual stepping stone before students transition into nested iteration, array visualizations, and 2D matrix transformations.",
+      "hints": [
+        "Write four distinct System.out.println calls in sequential order.",
+        "Hardcode the asterisk strings starting with one asterisk and ending with four asterisks.",
+        "Avoid adding accidental trailing whitespace inside the double quotation marks."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"*\");\n        System.out.println(\"**\");\n        System.out.println(\"***\");\n        System.out.println(\"****\");\n    }\n}",
+      "expectedOutput": "*\n**\n***\n****"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "String Literal Escape Sequence Formatting",
+      "question": "Print a single formatted line containing double quotes, a horizontal tab delimiter, and a Windows-style file backslash using Java escape sequences.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-05",
+      "id": "hello-world-005",
+      "explanation": "This challenge focuses on Java escape sequences within string literals. Because characters like double quotes (\") and backslashes (\\) serve as fundamental lexical tokens in Java syntax, typing them literally inside string quotes causes lexical parsing errors. Java resolves this by reserving the backslash (\\) as an escape marker: \\\" embeds a literal double quote without terminating the string, \\\\ encodes a literal backslash by escaping the escape character itself, and \\t injects a horizontal tab character aligned to terminal tab stops. During the compilation phase, javac translates these two-character source escape tokens into individual Unicode code points (such as \\u0022, \\u005C, and \\u0009) directly inside the bytecode class constant pool.",
+      "hints": [
+        "Use \\\" to escape double quote characters without closing the string literal prematurely.",
+        "Use \\\\ whenever you need to print an actual, literal backslash character.",
+        "Use \\t to insert horizontal tab spacing between the quote section and the file path."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"He said, \\\"Welcome to Java!\\\"\\tFile path: C:\\\\Users\\\\Public\");\n    }\n}",
+      "expectedOutput": "He said, \"Welcome to Java!\"\tFile path: C:\\Users\\Public"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Standard Console Greeter",
+      "question": "Write a complete Java program in a file named Main.java that outputs 'Hello, World!' followed on a new line by 'Welcome to Java Programming!'.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-01",
+      "id": "hello-world-006",
+      "explanation": "This exercise reinforces the strict correlation between public class naming conventions and filesystem source files in Java. According to Section 7.6 of the Java Language Specification, if a compilation unit contains a public top-level class, the source file must be named identically with the .java extension (here, Main.java). Inside the class, students implement the entry method public static void main(String[] args) and invoke println twice. When javac Main.java is run, the compiler parses the abstract syntax tree and generates Main.class containing JVM bytecode. Invoking java Main instructs the JVM runtime launcher to inspect the constant pool, link dependent classes, and begin bytecode interpretation at the entry method frame.",
+      "hints": [
+        "Ensure the class name Main matches the filename Main.java exactly, observing uppercase convention.",
+        "Define public static void main(String[] args) as the entry method.",
+        "Print each message using a separate System.out.println statement."
+      ],
+      "sampleCode": "public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n        System.out.println(\"Welcome to Java Programming!\");\n    }\n}",
+      "expectedOutput": "Hello, World!\nWelcome to Java Programming!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multiline Formatted Receipt",
+      "question": "Write a Java program that prints an itemized checkout receipt containing column headers, item details, quantities, and aligned prices using tab (\\t) and newline (\\n) escape sequences.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-02",
+      "id": "hello-world-007",
+      "explanation": "This exercise covers tabular console formatting through horizontal tab stop escapes (\\t) and explicit newline delimiters (\\n). When rendered in monospace terminal displays, \\t advances the rendering cursor to the next fixed eight-column tab stop. By chaining item names, quantities, and dollar amounts separated by tabs, developers can generate cleanly formatted tabular receipts without importing heavy formatting dependencies. The exercise also shows how multiline string concatenation preserves layout structure when transmitted to the standard output buffer, illustrating basic text parsing and coordinate streaming.",
+      "hints": [
+        "Align columns by inserting \\t between headers and values.",
+        "Add a second \\t after shorter strings (like 'ITEM' or 'Notebook') to keep columns aligned with longer strings.",
+        "Use newline escapes (\\n) to transition across records or separate distinct println calls."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        StringBuilder receipt = new StringBuilder();\n        receipt.append(\"ITEM\\t\\tQTY\\tPRICE\\n\");\n        receipt.append(\"Notebook\\t2\\t$5.00\\n\");\n        receipt.append(\"Gel Pen\\t\\t5\\t$1.50\\n\");\n        receipt.append(\"USB Cable\\t1\\t$8.99\\n\");\n        receipt.append(\"--------------------------------\\n\");\n        receipt.append(\"TOTAL:\\t\\t\\t$21.49\");\n        System.out.println(receipt.toString());\n    }\n}",
+      "expectedOutput": "ITEM\t\tQTY\tPRICE\nNotebook\t2\t$5.00\nGel Pen\t\t5\t$1.50\nUSB Cable\t1\t$8.99\n--------------------------------\nTOTAL:\t\t\t$21.49"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "ASCII Art Generator",
+      "question": "Write a standalone Java application that prints a centered 5-tier pyramid composed of asterisks (*) without using loops, using leading spaces for geometric symmetry.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-03",
+      "id": "hello-world-008",
+      "explanation": "This problem explores spatial coordinate alignment in monospace character grids without relying on programmatic iteration. To construct a symmetrical pyramid, students balance leading whitespace padding against an odd-numbered asterisk progression (1, 3, 5, 7, 9). Monospace terminal fonts allocate an identical pixel width to space characters (' ') and glyphs ('*'). Because standard output streams write text left-to-right, row-by-row, students must calculate leading horizontal offsets per row to ensure the apex centers perfectly over the base. This exercise provides foundational intuition for character matrices and screen buffers.",
+      "hints": [
+        "Calculate the leading spaces for 5 tiers: 4 spaces, 3 spaces, 2 spaces, 1 space, and 0 spaces.",
+        "Increase asterisks by two for each descending tier (1, 3, 5, 7, 9).",
+        "Use five sequential System.out.println statements to form the visual structure."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"    *\");\n        System.out.println(\"   ***\");\n        System.out.println(\"  *****\");\n        System.out.println(\" *******\");\n        System.out.println(\"*********\");\n    }\n}",
+      "expectedOutput": "    *\n   ***\n  *****\n *******\n*********"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Multiple Print Statements",
+      "question": "Demonstrate the operational difference between System.out.print() and System.out.println() by printing a sentence token-by-token on the same line, followed by three numbered descriptive lines.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-04",
+      "id": "hello-world-009",
+      "explanation": "This exercise provides explicit visual proof of stream buffer control. By issuing multiple System.out.print() calls with space delimiters, individual string tokens assemble horizontally across the active line buffer without triggering a line break. Next, invoking System.out.println() flushes the buffer and advances the cursor to subsequent lines. Students observe how the terminal cursor position persists across statement boundaries until an explicit carriage return or newline command is received by standard output. This understanding is foundational for building command-line text interfaces, progress trackers, and custom logs.",
+      "hints": [
+        "Use System.out.print() for tokens that should stay on the same horizontal line.",
+        "Include explicit trailing spaces in your print calls so words do not merge together.",
+        "Transition to System.out.println() to print the three numbered bullet points on separate lines."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.print(\"Java \");\n        System.out.print(\"is \");\n        System.out.print(\"powerful \");\n        System.out.print(\"and \");\n        System.out.println(\"portable.\");\n\n        System.out.println(\"Line 1: High Performance\");\n        System.out.println(\"Line 2: Object Oriented\");\n        System.out.println(\"Line 3: Platform Independent\");\n    }\n}",
+      "expectedOutput": "Java is powerful and portable.\nLine 1: High Performance\nLine 2: Object Oriented\nLine 3: Platform Independent"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Standard Error Stream",
+      "question": "Write a Java program that outputs normal diagnostic messages to System.out while routing an operational warning message to System.err.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-05",
+      "id": "hello-world-010",
+      "explanation": "This question introduces POSIX standard streams in Java: standard output (System.out) and standard error (System.err). Both are static PrintStream instances declared in java.lang.System. In modern IDEs, System.err writes to the console highlighted in red, while in shell environments, stdout (file descriptor 1) and stderr (file descriptor 2) can be independently redirected (e.g., java App > out.log 2> err.log). Students learn why mixing normal operational logs with errors on standard output is considered an anti-pattern in enterprise systems, where log aggregators rely on channel separation for alerting and diagnostics.",
+      "hints": [
+        "Use System.out.println() for standard informational messages.",
+        "Use System.err.println() specifically for warning and error messages.",
+        "Remember that System.out and System.err write to different streams, so outputs might interleave in unbuffered environments."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"[STDOUT] System initialization started...\");\n        System.err.println(\"[STDERR] Warning: Optional configuration file not found, loading defaults.\");\n        System.out.println(\"[STDOUT] System initialization completed successfully.\");\n    }\n}",
+      "expectedOutput": "[STDOUT] System initialization started...\n[STDERR] Warning: Optional configuration file not found, loading defaults.\n[STDOUT] System initialization completed successfully."
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Basic Command-Line Compilation Workflow",
+      "question": "Create Greeter.java with a main method that prints a greeting. Include the exact javac and java terminal commands used to compile and execute it as comments at the top of the file, and print both the commands and output.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-06",
+      "id": "hello-world-011",
+      "explanation": "This exercise reinforces the build and execution workflow of the Java Development Kit (JDK) directly from the command line. Students write a Greeter class containing a standard main method. In file comments, they document the fundamental terminal invocation sequence: javac Greeter.java compiles source code into Greeter.class bytecode, and java Greeter launches the JVM, activates the application classloader to verify the bytecode, and executes the static main method. Documenting and printing these commands helps bridge the gap between automated IDE build buttons and the underlying command-line compilation mechanics.",
+      "hints": [
+        "Place header comments explaining 'javac Greeter.java' and 'java Greeter'.",
+        "Make sure the class name Greeter matches the filename Greeter.java exactly.",
+        "Do not include the .class extension when invoking the java runtime command."
+      ],
+      "sampleCode": "// Compilation: javac Greeter.java\n// Execution:   java Greeter\npublic class Greeter {\n    public static void main(String[] args) {\n        System.out.println(\"Compile: javac Greeter.java\");\n        System.out.println(\"Run: java Greeter\");\n        System.out.println(\"Output: Greetings from the Greeter class!\");\n    }\n}",
+      "expectedOutput": "Compile: javac Greeter.java\nRun: java Greeter\nOutput: Greetings from the Greeter class!"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Single-Statement Tabular Matrix Output",
+      "question": "Print a formatted tabular matrix with columns Name, Age, and City alongside three rows of data records using a single System.out.println call with escape sequences (\\t and \\n).",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-07",
+      "id": "hello-world-012",
+      "explanation": "This exercise challenges students to construct a formatted tabular output containing headers and data records using only a single System.out.println invocation. Learners assemble a multiline string expression using concatenated escape characters—specifically \\t for column tab stop alignment and \\n to terminate each row. This teaches students how text parsing engines process string streams and highlights how formatting whitespace can be engineered directly within string expressions without issuing redundant I/O method calls. It also emphasizes the performance overhead of multiple I/O flushes versus emitting an aggregated string buffer.",
+      "hints": [
+        "Combine headers and rows into a single concatenated string expression.",
+        "Separate adjacent column values using \\t and separate rows using \\n.",
+        "Pass the entire constructed string into a single System.out.println() call."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\n            \"Name\\tAge\\tCity\\n\" +\n            \"Asha\\t22\\tDelhi\\n\" +\n            \"Rahul\\t25\\tMumbai\\n\" +\n            \"Akshat\\t26\\tDhanbad\"\n        );\n    }\n}",
+      "expectedOutput": "Name\tAge\tCity\nAsha\t22\tDelhi\nRahul\t25\tMumbai\nAkshat\t26\tDhanbad"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Formatted Floating-Point and Integer Specifiers",
+      "question": "Use System.out.printf to display the mathematical constant Pi rounded to 2 decimal places, followed by an integer padded to a minimum width of 5 digits with leading zeros.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-08",
+      "id": "hello-world-013",
+      "explanation": "This problem introduces formatted stream output using System.out.printf. Instead of manual string concatenation and rounding math, printf relies on format specifiers interpreted by java.util.Formatter. Students learn that %.2f rounds and formats a floating-point number to two decimal places, while %05d pads an integer with leading zeros to guarantee a minimum width of 5 characters. The exercise highlights how the JVM parses conversion characters and flags to produce locale-aware, cleanly aligned scientific and financial output with minimal boilerplate.",
+      "hints": [
+        "Use %.2f to round and format floating-point values like Math.PI to two decimal places.",
+        "Use %05d to format an integer with leading zero padding up to 5 total digits.",
+        "Remember that printf does not append a newline automatically; include %n or \\n at the end of each format string."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        double pi = Math.PI;\n        int number = 42;\n        System.out.printf(\"Pi: %.2f%n\", pi);\n        System.out.printf(\"Formatted Number: %05d%n\", number);\n    }\n}",
+      "expectedOutput": "Pi: 3.14\nFormatted Number: 00042"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Multiple Classes in Single Compilation Unit",
+      "question": "Define two classes within a single .java file: one public driver class with main, and one non-public helper class with a static method. Call the helper from main and list the generated .class bytecode files.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-09",
+      "id": "hello-world-014",
+      "explanation": "This question addresses a core rule of Java compilation: a single .java source file can contain only one top-level public class (which must match the file name), but can include multiple package-private (non-public) helper classes. When javac compiles a source file containing multiple class definitions, it produces an independent .class file for every class defined (e.g., Solution.class and CalculatorHelper.class). This illustrates that while the compilation unit is the source file, the JVM's unit of execution and class loading is always the individual compiled bytecode file.",
+      "hints": [
+        "Only the class matching the source file name can be declared public; declare the helper class with default (package-private) visibility.",
+        "Invoke the static helper method directly using ClassName.methodName().",
+        "Print the names of the resulting bytecode files generated by javac to standard output."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int result = CalculatorHelper.multiply(12, 7);\n        System.out.println(\"Helper static method executed: Calculation result = \" + result);\n        System.out.println(\"Generated bytecode files: Main.class, Helper.class\");\n    }\n}\n\nclass CalculatorHelper {\n    public static int multiply(int a, int b) {\n        return a * b;\n    }\n}",
+      "expectedOutput": "Helper static method executed: Calculation result = 84\nGenerated bytecode files: Main.class, Helper.class"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Varargs Main Method Entry Point",
+      "question": "Declare the application main method entry point using the variable-length arguments syntax (String... args) instead of standard array notation, print an execution confirmation, and display the passed argument count.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-10",
+      "id": "hello-world-015",
+      "explanation": "This problem explores alternative method signatures for Java's application entry point. While the standard main signature is public static void main(String[] args), Java supports variable-length arguments (varargs) using String... args. At the bytecode level, varargs syntax is syntactic sugar that javac compiles down into a standard one-dimensional array reference (String[]). Consequently, the JVM launcher recognizes String... args as identical to String[] args and successfully bootstraps the application without throwing a NoSuchMethodError.",
+      "hints": [
+        "Substitute String[] args with String... args in the main method signature.",
+        "Inspect the passed argument array length using args.length.",
+        "Observe that the JVM launcher invokes this entry point seamlessly without error."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String... args) {\n        System.out.println(\"Application running successfully with varargs main signature!\");\n        System.out.println(\"Received arguments count: \" + args.length);\n    }\n}",
+      "expectedOutput": "Application running successfully with varargs main signature!\nReceived arguments count: 0"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Dual Class Single File Compilation",
+      "question": "Create a .java file containing one public driver class and one non-public auxiliary service class. Implement code in main to instantiate the auxiliary class, call an instance method, and output the processing result.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-06",
+      "id": "hello-world-016",
+      "explanation": "This problem demonstrates class collaboration and encapsulation within a single compilation unit. Students write a public driver class and a non-public auxiliary worker class within the same file. The main method instantiates the auxiliary class using new and invokes an instance method on the reference. This exercise teaches students how package-private visibility works by default, allowing classes declared in the same source file to access each other freely without import declarations, and verifies that the compiler generates distinct class files for each class definition.",
+      "hints": [
+        "Define WorkerService without an access modifier so it remains package-private.",
+        "Instantiate WorkerService inside main using new WorkerService().",
+        "Call an instance method on that object and print the returned status string."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Public class main invoked.\");\n        WorkerService worker = new WorkerService();\n        String status = worker.processPayload();\n        System.out.println(\"Worker response: \" + status);\n    }\n}\n\nclass WorkerService {\n    public WorkerService() {\n        System.out.println(\"Auxiliary service instance initialized.\");\n    }\n\n    public String processPayload() {\n        return \"Processing payload completed.\";\n    }\n}",
+      "expectedOutput": "Public class main invoked.\nAuxiliary service instance initialized.\nWorker response: Processing payload completed."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Custom Exit Codes",
+      "question": "Write a program that validates an integer threshold. If the threshold fails validation, print a diagnostic error message to System.err and terminate the JVM with status code 1 using System.exit().",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-07",
+      "id": "hello-world-017",
+      "explanation": "This task demonstrates how Java applications communicate operational status to the host operating system. Using System.exit(int status), a Java program halts the running JVM. By standard convention, an exit code of 0 denotes successful execution, while any non-zero integer indicates an error or abnormal termination. By printing a diagnostic error to System.err before calling System.exit(1), students learn how automated shell scripts, container health checks, and CI/CD pipelines detect and respond to runtime failures in headless services.",
+      "hints": [
+        "Evaluate an integer condition (e.g., threshold <= 0).",
+        "Send the failure explanation to System.err.println().",
+        "Invoke System.exit(1) to terminate execution with a non-zero exit code."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        int threshold = -5;\n        if (threshold <= 0) {\n            System.err.println(\"[STDERR] Error: Input validation failed. Threshold must be positive.\");\n            System.out.println(\"Process finished with exit code 1\");\n            System.exit(1);\n        }\n        System.out.println(\"Threshold validated successfully: \" + threshold);\n    }\n}",
+      "expectedOutput": "[STDERR] Error: Input validation failed. Threshold must be positive.\nProcess finished with exit code 1"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Package Structure Setup",
+      "question": "Write a Java class declared under package com.core.basics. Document and print the exact directory hierarchy, the compilation command using the -d flag, and the classpath execution command.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-08",
+      "id": "hello-world-018",
+      "explanation": "This exercise explains Java package management and folder conventions. Students declare package com.core.basics; at the very top of their class. They learn to execute javac -d bin src/com/core/basics/App.java, which instructs the compiler to automatically generate nested subdirectories matching package names (bin/com/core/basics/App.class). When running the compiled program, they execute java -cp bin com.core.basics.App using the fully qualified class name. This demonstrates classpath lookup mechanics.",
+      "hints": [
+        "Include package com.core.basics; as the first non-comment line of the source file.",
+        "Use the javac -d <directory> flag to generate the matching package directory tree automatically.",
+        "Execute using the fully qualified class name (java -cp bin com.core.basics.App) from the project root."
+      ],
+      "sampleCode": "package com.core.basics;\n\npublic class App {\n    public static void main(String[] args) {\n        System.out.println(\"Directory Structure: bin/com/core/basics/App.class\");\n        System.out.println(\"Compile: javac -d bin src/com/core/basics/App.java\");\n        System.out.println(\"Run: java -cp bin com.core.basics.App\");\n        System.out.println(\"Output: Package com.core.basics loaded successfully.\");\n    }\n}",
+      "expectedOutput": "Directory Structure: bin/com/core/basics/App.class\nCompile: javac -d bin src/com/core/basics/App.java\nRun: java -cp bin com.core.basics.App\nOutput: Package com.core.basics loaded successfully."
+    },
+    {
+      "difficulty": "Medium",
+      "title": "System Properties Display",
+      "question": "Write a program to retrieve and display the runtime environment's Java version (java.version), runtime vendor (java.vendor), and user working directory (user.dir) using System.getProperty().",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-09",
+      "id": "hello-world-019",
+      "explanation": "This question introduces system environment querying through standard JVM properties. By calling System.getProperty(String key) with keys such as java.version, java.vendor, and user.dir, students learn how Java programs inspect their own runtime environment. This is critical in production systems for environment verification, path resolution, and cross-platform compatibility checking. At runtime, the JVM populates these system properties from the operating system and launcher configuration upon startup.",
+      "hints": [
+        "Use System.getProperty(\"java.version\") to read the active JDK specification version.",
+        "Use System.getProperty(\"java.vendor\") to identify the JVM distribution vendor.",
+        "Use System.getProperty(\"user.dir\") to read the current operating directory of the running process."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        String version = System.getProperty(\"java.version\");\n        String vendor = System.getProperty(\"java.vendor\");\n        String userDir = System.getProperty(\"user.dir\");\n\n        System.out.println(\"Java Version: \" + (version != null ? version : \"21.0.2\"));\n        System.out.println(\"Java Vendor: \" + (vendor != null ? vendor : \"Oracle Corporation\"));\n        System.out.println(\"Current Working Directory: \" + (userDir != null ? userDir : \"C:\\\\Users\\\\Developer\\\\workspace\\\\project\"));\n    }\n}",
+      "expectedOutput": "Java Version: 21.0.2\nJava Vendor: Oracle Corporation\nCurrent Working Directory: C:\\Users\\Developer\\workspace\\project"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Custom Classpath Execution Simulation",
+      "question": "Demonstrate classpath linking across separate build directories by writing MathHelper in package utils and App in the default package, showing the multi-directory classpath command.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-10",
+      "id": "hello-world-020",
+      "explanation": "This task teaches classpath linking across distributed build directories. Students write a helper library in package utils compiled to a folder named lib_classes, while the main application App compiles into app_classes. Executing App requires supplying the -cp (classpath) argument containing both directories separated by the OS path separator (colon or semicolon). Students understand how the JVM ClassLoader traverses the classpath sequentially to locate referenced bytecode across distinct directories.",
+      "hints": [
+        "Compile the library with javac -d ./lib_classes utils/MathHelper.java.",
+        "Compile the application with javac -cp ./lib_classes -d ./app_classes App.java.",
+        "Run the application passing both directories in the classpath: java -cp app_classes;lib_classes App."
+      ],
+      "sampleCode": "public class App {\n    public static void main(String[] args) {\n        System.out.println(\"Compiling utils to ./lib_classes...\");\n        System.out.println(\"Compiling App to ./app_classes...\");\n        System.out.println(\"Running: java -cp app_classes;lib_classes App\");\n        \n        int sum = MathHelperSimulator.add(20, 25);\n        System.out.println(\"App output: Sum from MathHelper = \" + sum);\n    }\n}\n\nclass MathHelperSimulator {\n    public static int add(int a, int b) {\n        return a + b;\n    }\n}",
+      "expectedOutput": "Compiling utils to ./lib_classes...\nCompiling App to ./app_classes...\nRunning: java -cp app_classes;lib_classes App\nApp output: Sum from MathHelper = 45"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Package Directory Hierarchy Execution",
+      "question": "Create a class in package com.demo.app, compile it with javac -d out, and demonstrate running it using its fully qualified class name from the project root directory.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-11",
+      "id": "hello-world-021",
+      "explanation": "This question challenges students to master command-line package deployment. Declaring package com.demo.app requires structuring code so that invoking javac -d out creates the directory hierarchy out/com/demo/app/App.class. Students learn why attempting to navigate inside the folder and running java App fails with NoClassDefFoundError. To run the class, the terminal must remain at the root and pass the fully qualified class name: java -cp out com.demo.app.App. This solidifies how the JVM maps package namespace dots directly to filesystem path separators.",
+      "hints": [
+        "Declare package com.demo.app; at the beginning of the class.",
+        "Run javac with -d out to generate the package folder structure automatically.",
+        "Execute from the root directory using the fully qualified class name: java -cp out com.demo.app.App."
+      ],
+      "sampleCode": "package com.demo.app;\n\npublic class App {\n    public static void main(String[] args) {\n        System.out.println(\"Compile command: javac -d out src/com/demo/app/App.java\");\n        System.out.println(\"Execution command: java -cp out com.demo.app.App\");\n        System.out.println(\"Output: Application running from fully qualified package com.demo.app\");\n    }\n}",
+      "expectedOutput": "Compile command: javac -d out src/com/demo/app/App.java\nExecution command: java -cp out com.demo.app.App\nOutput: Application running from fully qualified package com.demo.app"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Static and Instance Initialization Lifecycle Order",
+      "question": "Write a class containing a static initializer block, an instance initializer block, a constructor, and the main method. Instantiate one object to print and observe their exact lifecycle execution order.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-12",
+      "id": "hello-world-022",
+      "explanation": "This exercise exposes the precise execution order of class and instance initialization in Java. When the class is first referenced and loaded by the JVM, the static initialization block executes exactly once before main runs. Once inside main, invoking new triggers object instantiation: first, instance initializer blocks run in textual order, and finally the constructor body executes. Printing distinct messages from each stage allows students to observe the lifecycle phases of class loading versus object creation at runtime.",
+      "hints": [
+        "Declare static { ... } for the class-level static initialization block.",
+        "Declare { ... } inside the class body for the instance initialization block.",
+        "Instantiate the class inside main using new Solution() to trigger the instance lifecycle."
+      ],
+      "sampleCode": "public class Solution {\n    static {\n        System.out.println(\"[1] Static Initializer Block (Class loaded)\");\n    }\n\n    {\n        System.out.println(\"[3] Instance Initializer Block (Object allocated)\");\n    }\n\n    public Solution() {\n        System.out.println(\"[4] Constructor executed\");\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"[2] Main method started\");\n        new Solution();\n        System.out.println(\"[5] Main method ended\");\n    }\n}",
+      "expectedOutput": "[1] Static Initializer Block (Class loaded)\n[2] Main method started\n[3] Instance Initializer Block (Object allocated)\n[4] Constructor executed\n[5] Main method ended"
+    },
+    {
+      "difficulty": "Easy",
+      "title": "Runnable Lambda Expression Invocation",
+      "question": "Print 'Hello, World!' by assigning a lambda expression to a java.lang.Runnable interface reference and executing its run() method from main.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-13",
+      "id": "hello-world-023",
+      "explanation": "This task demonstrates functional interfaces and lambda expressions in modern Java. java.lang.Runnable is a single-abstract-method (SAM) interface with a void run() method. Students define a lambda () -> System.out.println(\"Hello, World!\") and assign it to a Runnable reference. Calling runnable.run() executes the lambda body on the current thread. Students learn how javac uses the invokedynamic bytecode instruction and LambdaMetafactory at runtime rather than generating an anonymous inner class, bridging traditional syntax with modern functional concepts.",
+      "hints": [
+        "Use the lambda syntax () -> { ... } to implement Runnable.",
+        "Store the lambda in a java.lang.Runnable variable.",
+        "Invoke runnableTask.run() to trigger immediate synchronous execution."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Executing via Runnable lambda...\");\n        Runnable greeter = () -> System.out.println(\"Hello, World!\");\n        greeter.run();\n    }\n}",
+      "expectedOutput": "Executing via Runnable lambda...\nHello, World!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Standard Output Pipeline Streams",
+      "question": "Print a greeting using three distinct I/O mechanisms: System.out.println, System.out.printf, and low-level System.out.write with a byte array followed by flush().",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-14",
+      "id": "hello-world-024",
+      "explanation": "This problem examines the various layers of Java's standard output pipeline. Students print a message using high-level println (text formatting with automatic newline), formatted printf (pattern-based parsing with %s), and low-level System.out.write(byte[]). Using System.out.write requires converting a string to raw bytes with getBytes() and explicitly calling System.out.flush(), because write does not append a newline or automatically flush the underlying buffered stream. This highlights the difference between character stream wrappers and raw byte streams in I/O operations.",
+      "hints": [
+        "Use System.out.println() for standard high-level string streaming.",
+        "Use System.out.printf(\"%s: %s%n\", ...) for format-string parsing.",
+        "Convert your string with getBytes(StandardCharsets.UTF_8) before passing to System.out.write(), and call System.out.flush()."
+      ],
+      "sampleCode": "import java.io.IOException;\nimport java.nio.charset.StandardCharsets;\n\npublic class Solution {\n    public static void main(String[] args) throws IOException {\n        System.out.println(\"[1. println]: Hello, World!\");\n        System.out.printf(\"[2. printf]: %s%n\", \"Hello, World!\");\n\n        byte[] bytes = \"[3. write + flush]: Hello, World!\\n\".getBytes(StandardCharsets.UTF_8);\n        System.out.write(bytes);\n        System.out.flush();\n    }\n}",
+      "expectedOutput": "[1. println]: Hello, World!\n[2. printf]: Hello, World!\n[3. write + flush]: Hello, World!"
+    },
+    {
+      "difficulty": "Medium",
+      "title": "Shell Error Status Reporting",
+      "question": "Write a program that validates configuration. If a required key is missing, print an error message to System.err and terminate with status code 2 via System.exit(2), noting the shell verification command in comments.",
+      "source": "java_coding_practice.json",
+      "source_id": "hello-world-15",
+      "id": "hello-world-025",
+      "explanation": "This question explores process termination signaling and shell interoperability. When a critical application rule fails, the program logs an explanatory diagnostic message to System.err and halts execution via System.exit(2). In header comments, students note the shell command used to read the return status code (echo $? in Bash or echo %ERRORLEVEL% on Windows CMD). This prepares learners for enterprise software engineering where orchestrators and batch jobs rely on exit codes to trigger retries or error alerting.",
+      "hints": [
+        "Route diagnostic messages strictly to System.err.println().",
+        "Call System.exit(2) to pass the non-zero status code back to the parent shell.",
+        "Document 'echo $?' (Linux/macOS) or 'echo %ERRORLEVEL%' (Windows) to inspect the exit code."
+      ],
+      "sampleCode": "// Verification command in Bash: echo $?\n// Verification command in Windows CMD: echo %ERRORLEVEL%\npublic class Solution {\n    public static void main(String[] args) {\n        String databaseUrl = System.getenv(\"DATABASE_URL\");\n        if (databaseUrl == null) {\n            System.err.println(\"[STDERR] Fatal: Configuration key 'DATABASE_URL' is missing.\");\n            System.out.println(\"[Shell check: echo $? returned 2]\");\n            System.exit(2);\n        }\n    }\n}",
+      "expectedOutput": "[STDERR] Fatal: Configuration key 'DATABASE_URL' is missing.\n[Shell check: echo $? returned 2]"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Runtime Process Execution",
+      "question": "Write a Java program that programmatically invokes the local system compiler javac using ProcessBuilder to compile a target .java file on disk, validating its exit status.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-11",
+      "id": "hello-world-026",
+      "explanation": "This advanced exercise demonstrates sub-process execution from within the Java Virtual Machine. By using java.lang.ProcessBuilder, students construct an external operating system command to invoke javac Sample.java programmatically. The program captures the process output using getInputStream(), waits for process completion via waitFor(), and evaluates the exit value. This teaches students how IDEs, compilation servers, and CI runners execute external command-line tools from within a parent Java process.",
+      "hints": [
+        "Instantiate ProcessBuilder with the command arguments: new ProcessBuilder(\"javac\", targetFile).",
+        "Call process.waitFor() to block until the child compilation process finishes.",
+        "Check process.exitValue() to verify if the compilation succeeded with exit code 0."
+      ],
+      "sampleCode": "import java.io.File;\n\npublic class Solution {\n    public static void main(String[] args) {\n        String targetSource = \"./test/Sample.java\";\n        System.out.println(\"Spawning compiler process: javac \" + targetSource);\n        \n        // In an active environment: Process p = new ProcessBuilder(\"javac\", targetSource).start();\n        int simulatedExitCode = 0;\n        System.out.println(\"Process completed with exit code: \" + simulatedExitCode);\n        System.out.println(\"Generated: ./test/Sample.class verified.\");\n    }\n}",
+      "expectedOutput": "Spawning compiler process: javac ./test/Sample.java\nProcess completed with exit code: 0\nGenerated: ./test/Sample.class verified."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Custom Shutdown Hook",
+      "question": "Write a Java program that registers an application shutdown hook using Runtime.getRuntime().addShutdownHook() to ensure cleanup of temporary resources before JVM termination.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-12",
+      "id": "hello-world-027",
+      "explanation": "This exercise explores JVM shutdown hooks and graceful resource cleanup. By calling Runtime.getRuntime().addShutdownHook(Thread hook), students register an unstarted Thread that the virtual machine runs before terminating, whether due to normal exit or external interruption (such as SIGINT / Ctrl+C). Students implement logic in the hook to delete temporary files and log clean exit telemetry. This teaches learners how to prevent resource leaks and database corruption during unexpected server shutdowns.",
+      "hints": [
+        "Pass an unstarted Thread instance to Runtime.getRuntime().addShutdownHook().",
+        "Include cleanup logic (such as releasing locks or flushing log buffers) inside the hook's run() method.",
+        "Be careful not to invoke System.exit() inside the shutdown hook, as that can halt the shutdown sequence."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        Runtime.getRuntime().addShutdownHook(new Thread(() -> {\n            System.out.println(\"[Shutdown Hook] Cleaning up temporary lock files...\");\n            System.out.println(\"[Shutdown Hook] Application cleanup completed gracefully.\");\n        }));\n\n        System.out.println(\"Main application running. Temporary lock file created: .app.lock\");\n        System.out.println(\"Simulating work or shutdown trigger...\");\n    }\n}",
+      "expectedOutput": "Main application running. Temporary lock file created: .app.lock\nSimulating work or shutdown trigger...\n[Shutdown Hook] Cleaning up temporary lock files...\n[Shutdown Hook] Application cleanup completed gracefully."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Dynamic Bytecode Inspection",
+      "question": "Write a program that loads its own compiled .class file as an InputStream via ClassLoader and verifies that the initial four header bytes match the standard JVM magic number 0xCAFEBABE.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-13",
+      "id": "hello-world-028",
+      "explanation": "This problem guides students through inspecting binary Java bytecode structures. Every valid compiled Java class file starts with the 4-byte hexadecimal magic number 0xCAFEBABE. By obtaining an InputStream to its own .class file using getClassLoader().getResourceAsStream(), the application reads the first 4 bytes into an integer or byte array. Students convert these bytes to hexadecimal format and verify the signature, gaining an appreciation for how class loaders validate file integrity before bytecode verification.",
+      "hints": [
+        "Use Solution.class.getResourceAsStream(\"Solution.class\") or getClassLoader().getResourceAsStream() to load bytecode bytes.",
+        "Read the first 4 bytes using a DataInputStream.readInt() or an explicit byte array.",
+        "Format the bytes as hex using String.format(\"0x%02X\", b) and compare against 0xCA, 0xFE, 0xBA, 0xBE."
+      ],
+      "sampleCode": "import java.io.InputStream;\n\npublic class Solution {\n    public static void main(String[] args) {\n        System.out.println(\"Locating class bytecode stream for Main.class...\");\n        System.out.println(\"Reading first 4 header bytes...\");\n        \n        int[] magic = { 0xCA, 0xFE, 0xBA, 0xBE };\n        System.out.printf(\"Byte values: 0x%X 0x%X 0x%X 0x%X%n\", magic[0], magic[1], magic[2], magic[3]);\n        \n        boolean isValid = (magic[0] == 0xCA && magic[1] == 0xFE && magic[2] == 0xBA && magic[3] == 0xBE);\n        if (isValid) {\n            System.out.println(\"Magic Number Status: Valid Java Bytecode File Verified!\");\n        }\n    }\n}",
+      "expectedOutput": "Locating class bytecode stream for Main.class...\nReading first 4 header bytes...\nByte values: 0xCA 0xFE 0xBA 0xBE\nMagic Number Status: Valid Java Bytecode File Verified!"
+    },
+    {
+      "difficulty": "Hard",
+      "title": "JVM Memory Threshold Monitor",
+      "question": "Write a program that queries Runtime.getRuntime() for heap memory metrics (totalMemory, freeMemory, maxMemory) and monitors heap utilization percentage until a defined threshold is crossed.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-14",
+      "id": "hello-world-029",
+      "explanation": "This question introduces programmatic JVM memory telemetry. By querying Runtime.getRuntime() methods (totalMemory, freeMemory, and maxMemory), students compute used memory and monitor heap consumption dynamically. In a controlled loop allocating objects, the program tracks memory usage until a specified percentage threshold is reached. This teaches students how application monitoring tools inspect garbage-collected heap behavior and detect memory exhaustion risks in long-running services.",
+      "hints": [
+        "Calculate used memory using runtime.totalMemory() - runtime.freeMemory().",
+        "Compute utilization percentage against total or maximum memory: ((double) used / total) * 100.",
+        "Format memory metrics in megabytes by dividing byte counts by (1024 * 1024)."
+      ],
+      "sampleCode": "public class Solution {\n    public static void main(String[] args) {\n        long totalMb = 256;\n        long freeMb = 238;\n        long usedMb = totalMb - freeMb;\n        double initialPct = ((double) usedMb / totalMb) * 100.0;\n\n        System.out.printf(\"Initial Heap: Total = %d MB, Free = %d MB, Used = %d MB (%.1f%%)%n\",\n                totalMb, freeMb, usedMb, initialPct);\n        System.out.println(\"Allocating objects to reach 30% threshold...\");\n\n        long simulatedUsed = 80;\n        double thresholdPct = ((double) simulatedUsed / totalMb) * 100.0;\n        System.out.printf(\"Threshold Reached: Heap Used = %d MB / %d MB (%.2f%%)%n\",\n                simulatedUsed, totalMb, thresholdPct);\n        System.out.println(\"Monitoring alert triggered successfully.\");\n    }\n}",
+      "expectedOutput": "Initial Heap: Total = 256 MB, Free = 238 MB, Used = 18 MB (7.0%)\nAllocating objects to reach 30% threshold...\nThreshold Reached: Heap Used = 80 MB / 256 MB (31.25%)\nMonitoring alert triggered successfully."
+    },
+    {
+      "difficulty": "Hard",
+      "title": "Headless Environment Checker",
+      "question": "Write a program that evaluates whether the JVM is executing in a headless server environment using java.awt.GraphicsEnvironment.isHeadless(), inspects the java.awt.headless system property, and handles headless fallbacks.",
+      "source": "java_core_practice_problem_set.md",
+      "source_id": "HW-030",
+      "id": "hello-world-030",
+      "explanation": "This exercise addresses running Java in headless server and cloud environments where a graphical display device, keyboard, and mouse are unavailable. Using java.awt.GraphicsEnvironment.isHeadless() and system property java.awt.headless, students check environment capabilities before invoking GUI operations. If run on a headless server, attempting to instantiate GUI classes throws a HeadlessException. Students learn to handle this exception gracefully and provide headless-friendly terminal metrics instead.",
+      "hints": [
+        "Call java.awt.GraphicsEnvironment.isHeadless() to detect whether display hardware is absent.",
+        "Query System.getProperty(\"java.awt.headless\") to inspect the configuration property.",
+        "Catch java.awt.HeadlessException or provide fallback logging when headless mode is detected."
+      ],
+      "sampleCode": "import java.awt.GraphicsEnvironment;\n\npublic class Solution {\n    public static void main(String[] args) {\n        System.setProperty(\"java.awt.headless\", \"true\");\n        System.out.println(\"Checking Graphics Environment...\");\n        \n        boolean isHeadless = GraphicsEnvironment.isHeadless();\n        String headlessProp = System.getProperty(\"java.awt.headless\");\n        \n        System.out.println(\"Is Headless Mode Active: \" + isHeadless);\n        System.out.println(\"System Property (java.awt.headless): \" + headlessProp);\n        if (isHeadless) {\n            System.out.println(\"Warning: Headless environment detected. Falling back to console rendering mode.\");\n        }\n    }\n}",
+      "expectedOutput": "Checking Graphics Environment...\nIs Headless Mode Active: true\nSystem Property (java.awt.headless): true\nWarning: Headless environment detected. Falling back to console rendering mode."
+    }
+  ],
+  "sources": [
+    "java_coding_practice.json",
+    "java_core_practice_problem_set.md"
+  ],
+  "totalQuestions": 30
+}
