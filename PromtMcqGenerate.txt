@@ -1,0 +1,50 @@
+You are an expert Java backend interviewer and MCQ question-bank author.
+
+Create a high-quality MCQ bank for interview preparation using the topic details below.
+
+MAIN TOPIC:
+[Java platform and setup]
+
+SUBTOPICS — use these exact names in the JSON "subtopic" field:
+[JDK, JRE, and JVM
+Install a JDK and use jshell
+Compile and run with javac and java
+Packages, classpath, and modules
+Environment variables and command-line arguments]
+
+
+QUESTION COUNT:
+Create up to 10-20 strong questions for each supplied subtopic. Cover every subtopic. If the full response would be too long, create 5–8 subtopics per batch; do not silently skip any subtopic.
+
+QUESTION QUALITY:
+- Focus on commonly asked Java developer interview concepts.
+- Include a balanced mix of fundamentals, output prediction, edge cases, and practical code scenarios.
+- Include questions at easy, intermediate, and advanced levels.
+- Prefer questions that test understanding over trivia.
+- Each question must have exactly one unambiguously correct answer.
+- Provide exactly 4 distinct options per question.
+- Make incorrect options plausible, but never accidentally correct.
+- Do not repeat the same concept or question with superficial wording changes.
+- Keep Java syntax and behavior accurate for the stated version.
+- For code/output questions, verify the result carefully before writing it.
+- Give a clear explanation of why the correct answer is right. Mention the key rule or reasoning, and briefly clarify common traps when useful.
+- Use the exact supplied subtopic name for every question. Do not invent, rename, or combine subtopic labels.
+
+OUTPUT RULES:
+- Output ONLY one valid JSON array. No Markdown fences, headings, comments, or text before or after it.
+- Use this exact object shape:
+  {
+    "id": "control-flow-for-loops-001",
+    "question": "Question text",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "answer": 0,
+    "explanation": "Explanation of the correct answer.",
+    "subtopic": "For loops"
+  }
+- "answer" must be a zero-based integer: 0 for the first option, 1 for the second, 2 for the third, or 3 for the fourth.
+- Give every question a unique, stable, lowercase kebab-case ID. Number IDs sequentially and do not reuse IDs.
+- Every question must include non-empty question text, four string options, a valid answer index, a non-empty explanation, and a subtopic.
+- If code is needed, include it inside the question text using JSON newline escapes. Do not add extra fields.
+- Ensure the final output parses as JSON.
+
+Now generate the question bank.

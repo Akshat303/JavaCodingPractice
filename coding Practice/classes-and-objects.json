@@ -1,0 +1,632 @@
+[
+  {
+    "id": "classes-and-objects-001",
+    "title": "Create a Student object",
+    "difficulty": "Low",
+    "question": "Create a Student class with name and age fields. Construct one student using the sample values and print both fields. Assume age is a non-negative integer.\nSubtopic: Class, object, fields, constructor",
+    "sampleCode": "public class Main {\n    static class Student {\n        String name;\n        int age;\n        Student(String name, int age) { this.name = name; this.age = age; }\n    }\n    public static void main(String[] args) {\n        Student s = new Student(\"Asha\", 19);\n        System.out.println(\"Name: \" + s.name);\n        System.out.println(\"Age: \" + s.age);\n    }\n}",
+    "hints": [
+      "Identify the data each Student object must store.",
+      "Use a constructor to initialize the fields.",
+      "Create the object with new, then read its fields."
+    ],
+    "expectedOutput": "Name: Asha\nAge: 19\nEdge case: Java's default int value is 0 if age is not explicitly initialized.",
+    "explanation": "Student is a class blueprint. The constructor assigns the supplied values to the new object's fields using this.name and this.age.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Name: Asha\nAge: 19"
+      }
+    ],
+    "challenge": "Try creating two students and printing each one."
+  },
+  {
+    "id": "classes-and-objects-002",
+    "title": "Rectangle area",
+    "difficulty": "Low",
+    "question": "Create a Rectangle class with width and height and an area() method. For width 4 and height 3, print the area. Use positive integer dimensions.\nSubtopic: Instance fields and methods",
+    "sampleCode": "public class Main {\n    static class Rectangle {\n        int width, height;\n        Rectangle(int width, int height) { this.width = width; this.height = height; }\n        int area() { return width * height; }\n    }\n    public static void main(String[] args) {\n        Rectangle r = new Rectangle(4, 3);\n        System.out.println(\"Area: \" + r.area());\n    }\n}",
+    "hints": [
+      "Store dimensions in instance fields.",
+      "Put the calculation in an instance method.",
+      "Call the method through the rectangle object."
+    ],
+    "expectedOutput": "Area: 12\nEdge case: A zero dimension would produce area 0.",
+    "explanation": "The area method uses the current object's dimensions, so each Rectangle can calculate its own area.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Area: 12"
+      }
+    ],
+    "challenge": "Add a perimeter() method."
+  },
+  {
+    "id": "classes-and-objects-003",
+    "title": "Book details",
+    "difficulty": "Low",
+    "question": "Create a Book class with title and author fields and a display() method. Display the sample book on two lines. Treat titles and authors as non-null strings.\nSubtopic: Object state and behavior",
+    "sampleCode": "public class Main {\n    static class Book {\n        String title, author;\n        Book(String title, String author) { this.title = title; this.author = author; }\n        void display() {\n            System.out.println(\"Title: \" + title);\n            System.out.println(\"Author: \" + author);\n        }\n    }\n    public static void main(String[] args) {\n        new Book(\"Clean Code\", \"Robert Martin\").display();\n    }\n}",
+    "hints": [
+      "Separate stored state from behavior.",
+      "Let display() print the object's fields.",
+      "Call display() on the newly created object."
+    ],
+    "expectedOutput": "Title: Clean Code\nAuthor: Robert Martin",
+    "explanation": "Book holds state in fields and behavior in a method. Creating an object initializes its own title and author.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Title: Clean Code\nAuthor: Robert Martin"
+      }
+    ],
+    "challenge": "Add publicationYear and display it."
+  },
+  {
+    "id": "classes-and-objects-004",
+    "title": "Counter object",
+    "difficulty": "Low",
+    "question": "Create a Counter class starting at zero with an increment() method. Call increment three times and print the count.\nSubtopic: Mutable object state",
+    "sampleCode": "public class Main {\n    static class Counter {\n        int count;\n        void increment() { count++; }\n    }\n    public static void main(String[] args) {\n        Counter c = new Counter();\n        c.increment(); c.increment(); c.increment();\n        System.out.println(\"Count: \" + c.count);\n    }\n}",
+    "hints": [
+      "A new int field starts at 0.",
+      "Each increment call should update the same field.",
+      "Print the field after all calls."
+    ],
+    "expectedOutput": "Count: 3",
+    "explanation": "All calls operate on the same Counter object, so its state persists between method calls.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Count: 3"
+      }
+    ],
+    "challenge": "Add a reset() method."
+  },
+  {
+    "id": "classes-and-objects-005",
+    "title": "Circle circumference",
+    "difficulty": "Low",
+    "question": "Create a Circle class storing radius and a circumference() method returning 2 * PI * radius. Use radius 2 and print two decimal places.\nSubtopic: Methods and object fields",
+    "sampleCode": "public class Main {\n    static class Circle {\n        double radius;\n        Circle(double radius) { this.radius = radius; }\n        double circumference() { return 2 * Math.PI * radius; }\n    }\n    public static void main(String[] args) {\n        Circle c = new Circle(2.0);\n        System.out.printf(\"Circumference: %.2f%n\", c.circumference());\n    }\n}",
+    "hints": [
+      "Store radius as a double.",
+      "Use Math.PI for pi.",
+      "Format the returned value with %.2f."
+    ],
+    "expectedOutput": "Circumference: 12.57\nEdge case: Radius 0 gives circumference 0.00.",
+    "explanation": "The method reads the radius from this Circle and returns a double. printf rounds the displayed value to two decimal places.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Circumference: 12.57"
+      }
+    ],
+    "challenge": "Add an area() method."
+  },
+  {
+    "id": "classes-and-objects-006",
+    "title": "Employee annual salary",
+    "difficulty": "Low",
+    "question": "Create an Employee class with name and monthlySalary. Add annualSalary() that returns twelve times the monthly salary. Use the given sample values.\nSubtopic: Constructors and calculations",
+    "sampleCode": "public class Main {\n    static class Employee {\n        String name;\n        int monthlySalary;\n        Employee(String name, int monthlySalary) {\n            this.name = name; this.monthlySalary = monthlySalary;\n        }\n        int annualSalary() { return monthlySalary * 12; }\n    }\n    public static void main(String[] args) {\n        Employee e = new Employee(\"Ravi\", 25000);\n        System.out.println(e.name + \" annual salary: \" + e.annualSalary());\n    }\n}",
+    "hints": [
+      "Initialize both fields through the constructor.",
+      "Keep the calculation in a method.",
+      "Return the computed amount instead of printing inside the method."
+    ],
+    "expectedOutput": "Ravi annual salary: 300000",
+    "explanation": "annualSalary() derives a value from stored state. Returning the result makes it reusable by other code.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Ravi annual salary: 300000"
+      }
+    ],
+    "challenge": "Handle a bonus by adding a bonus field."
+  },
+  {
+    "id": "classes-and-objects-007",
+    "title": "Two independent objects",
+    "difficulty": "Low",
+    "question": "Create two Lamp objects, each with an on field. Turn on only the first lamp and print both states.\nSubtopic: Object identity and independent state",
+    "sampleCode": "public class Main {\n    static class Lamp { boolean on; }\n    public static void main(String[] args) {\n        Lamp first = new Lamp();\n        Lamp second = new Lamp();\n        first.on = true;\n        System.out.println(\"First: \" + first.on);\n        System.out.println(\"Second: \" + second.on);\n    }\n}",
+    "hints": [
+      "Each call to new creates a separate object.",
+      "Change the field through only the first reference.",
+      "Print both fields to compare their states."
+    ],
+    "expectedOutput": "First: true\nSecond: false",
+    "explanation": "Instance fields belong to individual objects. Updating first.on does not update second.on.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "First: true\nSecond: false"
+      }
+    ],
+    "challenge": "Add a toggle() method to each lamp."
+  },
+  {
+    "id": "classes-and-objects-008",
+    "title": "Use a constructor default",
+    "difficulty": "Low",
+    "question": "Create a Player class with a name field. Provide a no-argument constructor that sets the name to Guest, then print it.\nSubtopic: No-argument constructors and defaults",
+    "sampleCode": "public class Main {\n    static class Player {\n        String name;\n        Player() { name = \"Guest\"; }\n    }\n    public static void main(String[] args) {\n        Player p = new Player();\n        System.out.println(\"Player: \" + p.name);\n    }\n}",
+    "hints": [
+      "Define a constructor with no parameters.",
+      "Assign a meaningful default value.",
+      "Instantiate Player with empty parentheses."
+    ],
+    "expectedOutput": "Player: Guest",
+    "explanation": "A user-defined no-argument constructor runs when new Player() is evaluated and initializes the field.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Player: Guest"
+      }
+    ],
+    "challenge": "Add a second constructor accepting a custom name."
+  },
+  {
+    "id": "classes-and-objects-009",
+    "title": "Compare two product prices",
+    "difficulty": "Low",
+    "question": "Create a Product class with name and price. Compare two products and print the cheaper product's name. Prices are distinct non-negative integers.\nSubtopic: Multiple objects and comparisons",
+    "sampleCode": "public class Main {\n    static class Product {\n        String name; int price;\n        Product(String name, int price) { this.name = name; this.price = price; }\n    }\n    public static void main(String[] args) {\n        Product a = new Product(\"Pen\", 10);\n        Product b = new Product(\"Notebook\", 35);\n        Product cheaper = a.price < b.price ? a : b;\n        System.out.println(\"Cheaper: \" + cheaper.name);\n    }\n}",
+    "hints": [
+      "Create one object for each product.",
+      "Compare their price fields.",
+      "Keep the reference to the cheaper object and print its name."
+    ],
+    "expectedOutput": "Cheaper: Pen\nEdge case: If prices are equal, this sample's ternary expression chooses the second product.",
+    "explanation": "The comparison selects an object reference, not just a price, so its name remains available.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Cheaper: Pen"
+      }
+    ],
+    "challenge": "Change the rule to report both products when prices tie."
+  },
+  {
+    "id": "classes-and-objects-010",
+    "title": "Method returns a greeting",
+    "difficulty": "Low",
+    "question": "Create a Greeter class with greet(String name) returning Hello, followed by the name and an exclamation mark. Call it with Mira and print the returned string.\nSubtopic: Instance methods and parameters",
+    "sampleCode": "public class Main {\n    static class Greeter {\n        String greet(String name) { return \"Hello, \" + name + \"!\"; }\n    }\n    public static void main(String[] args) {\n        Greeter g = new Greeter();\n        System.out.println(g.greet(\"Mira\"));\n    }\n}",
+    "hints": [
+      "The method takes one String parameter.",
+      "Return a String instead of printing inside greet().",
+      "Print the method's returned value in main."
+    ],
+    "expectedOutput": "Hello, Mira!",
+    "explanation": "The Greeter object provides behavior through greet(). The argument Mira becomes the method parameter name.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Hello, Mira!"
+      }
+    ],
+    "challenge": "Decide how an empty name should be handled."
+  },
+  {
+    "id": "classes-and-objects-011",
+    "title": "Bank account deposit and withdrawal",
+    "difficulty": "Mid",
+    "question": "Implement a BankAccount with private balance, deposit(amount), and withdraw(amount). Reject non-positive deposits, negative withdrawals, and withdrawals larger than the balance. Start with 1000, deposit 250, then withdraw 400. Print the final balance.\nSubtopic: Encapsulation and state transitions",
+    "sampleCode": "public class Main {\n    static class BankAccount {\n        private int balance;\n        BankAccount(int openingBalance) { balance = Math.max(0, openingBalance); }\n        boolean deposit(int amount) {\n            if (amount <= 0) return false;\n            balance += amount; return true;\n        }\n        boolean withdraw(int amount) {\n            if (amount <= 0 || amount > balance) return false;\n            balance -= amount; return true;\n        }\n        int getBalance() { return balance; }\n    }\n    public static void main(String[] args) {\n        BankAccount account = new BankAccount(1000);\n        account.deposit(250);\n        account.withdraw(400);\n        System.out.println(\"Balance: \" + account.getBalance());\n    }\n}",
+    "hints": [
+      "Keep balance private so callers cannot change it directly.",
+      "Validate each transaction before modifying balance.",
+      "Expose the balance through a getter."
+    ],
+    "expectedOutput": "Balance: 850\nEdge case: Invalid transactions leave the balance unchanged.",
+    "explanation": "deposit and withdraw return success/failure and update state only after validation. The getter provides controlled read access.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Balance: 850"
+      }
+    ],
+    "challenge": "Add a transaction history list."
+  },
+  {
+    "id": "classes-and-objects-012",
+    "title": "Student average and grade",
+    "difficulty": "Mid",
+    "question": "Create a StudentResult class storing three marks from 0 to 100. Provide average() and grade(): A for average >= 80, B for >= 60, C for >= 40, otherwise F. Use marks 80, 70, and 90.\nSubtopic: Object methods and conditional logic",
+    "sampleCode": "public class Main {\n    static class StudentResult {\n        private final int a, b, c;\n        StudentResult(int a, int b, int c) {\n            this.a = valid(a); this.b = valid(b); this.c = valid(c);\n        }\n        private int valid(int mark) {\n            if (mark < 0 || mark > 100) throw new IllegalArgumentException(\"Invalid mark\");\n            return mark;\n        }\n        double average() { return (a + b + c) / 3.0; }\n        String grade() {\n            double avg = average();\n            if (avg >= 80) return \"A\";\n            if (avg >= 60) return \"B\";\n            if (avg >= 40) return \"C\";\n            return \"F\";\n        }\n    }\n    public static void main(String[] args) {\n        StudentResult result = new StudentResult(80, 70, 90);\n        System.out.printf(\"Average: %.2f%nGrade: %s%n\", result.average(), result.grade());\n    }\n}",
+    "hints": [
+      "Validate marks when the object is created.",
+      "Use 3.0 to avoid integer division.",
+      "Check grade thresholds from highest to lowest."
+    ],
+    "expectedOutput": "Average: 80.00\nGrade: A\nEdge case: Any mark outside 0–100 causes IllegalArgumentException.",
+    "explanation": "The constructor enforces valid state. average() computes a floating-point mean, and grade() classifies that mean.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Average: 80.00\nGrade: A"
+      }
+    ],
+    "challenge": "Support any number of marks using an int array."
+  },
+  {
+    "id": "classes-and-objects-013",
+    "title": "Track inventory stock",
+    "difficulty": "Mid",
+    "question": "Create an InventoryItem with a private stock count. restock(quantity) accepts only positive values; sell(quantity) succeeds only when quantity is positive and available. Start at 8, sell 3, restock 5, then print stock.\nSubtopic: Encapsulation and guarded updates",
+    "sampleCode": "public class Main {\n    static class InventoryItem {\n        private int stock;\n        InventoryItem(int stock) { this.stock = Math.max(0, stock); }\n        boolean restock(int quantity) {\n            if (quantity <= 0) return false;\n            stock += quantity; return true;\n        }\n        boolean sell(int quantity) {\n            if (quantity <= 0 || quantity > stock) return false;\n            stock -= quantity; return true;\n        }\n        int getStock() { return stock; }\n    }\n    public static void main(String[] args) {\n        InventoryItem item = new InventoryItem(8);\n        item.sell(3);\n        item.restock(5);\n        System.out.println(\"Stock: \" + item.getStock());\n    }\n}",
+    "hints": [
+      "Keep stock private.",
+      "Check quantity before changing stock.",
+      "Use the return value to indicate whether an operation succeeded."
+    ],
+    "expectedOutput": "Stock: 10\nEdge case: Selling more than available stock is rejected.",
+    "explanation": "Each operation preserves the invariant stock >= 0 by rejecting invalid sales and restocks.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Stock: 10"
+      }
+    ],
+    "challenge": "Add a low-stock warning when stock falls below 3."
+  },
+  {
+    "id": "classes-and-objects-014",
+    "title": "Overloaded constructors",
+    "difficulty": "Mid",
+    "question": "Create a Point class with x and y. Provide Point(x, y) and Point(value), where the one-argument constructor creates (value, value). Print a point created with 5.\nSubtopic: Constructor overloading and this()",
+    "sampleCode": "public class Main {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        Point(int value) { this(value, value); }\n        public String toString() { return \"(\" + x + \", \" + y + \")\"; }\n    }\n    public static void main(String[] args) {\n        Point p = new Point(5);\n        System.out.println(p);\n    }\n}",
+    "hints": [
+      "Constructors can share a name but differ in parameter lists.",
+      "Use this(x, y) as the first statement to delegate.",
+      "Override toString() for readable output."
+    ],
+    "expectedOutput": "(5, 5)",
+    "explanation": "The single-argument constructor delegates to the two-argument constructor, keeping initialization logic in one place.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "(5, 5)"
+      }
+    ],
+    "challenge": "Add a no-argument constructor that creates (0, 0)."
+  },
+  {
+    "id": "classes-and-objects-015",
+    "title": "Class-level object counter",
+    "difficulty": "Mid",
+    "question": "Create a Ticket class that counts how many Ticket objects have been constructed. Create three objects and print the count. The count belongs to the class, not each ticket.\nSubtopic: Static fields versus instance fields",
+    "sampleCode": "public class Main {\n    static class Ticket {\n        static int created = 0;\n        Ticket() { created++; }\n    }\n    public static void main(String[] args) {\n        new Ticket(); new Ticket(); new Ticket();\n        System.out.println(\"Tickets created: \" + Ticket.created);\n    }\n}",
+    "hints": [
+      "A static field is shared by all instances.",
+      "Increment the shared field inside the constructor.",
+      "Read it using the class name."
+    ],
+    "expectedOutput": "Tickets created: 3",
+    "explanation": "The constructor runs once per object. Since created is static, each constructor call updates the same counter.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Tickets created: 3"
+      }
+    ],
+    "challenge": "Track active tickets separately from total created."
+  },
+  {
+    "id": "classes-and-objects-016",
+    "title": "Immutable temperature reading",
+    "difficulty": "Mid",
+    "question": "Create an immutable Temperature class storing Celsius in a private final double. Provide a getter and fahrenheit() conversion. For 25°C, print Celsius and Fahrenheit to one decimal place.\nSubtopic: Final fields and immutability",
+    "sampleCode": "public class Main {\n    static class Temperature {\n        private final double celsius;\n        Temperature(double celsius) { this.celsius = celsius; }\n        double getCelsius() { return celsius; }\n        double fahrenheit() { return celsius * 9.0 / 5.0 + 32; }\n    }\n    public static void main(String[] args) {\n        Temperature t = new Temperature(25.0);\n        System.out.printf(\"C: %.1f%nF: %.1f%n\", t.getCelsius(), t.fahrenheit());\n    }\n}",
+    "hints": [
+      "Mark the field private and final.",
+      "Do not provide a setter.",
+      "Use the conversion formula with floating-point arithmetic."
+    ],
+    "expectedOutput": "C: 25.0\nF: 77.0",
+    "explanation": "After construction, the final field cannot be reassigned. A getter exposes the value without allowing mutation.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "C: 25.0\nF: 77.0"
+      }
+    ],
+    "challenge": "Reject non-finite temperature inputs using Double.isFinite."
+  },
+  {
+    "id": "classes-and-objects-017",
+    "title": "Transfer between accounts",
+    "difficulty": "Mid",
+    "question": "Implement transferTo(other, amount) for a BankAccount with private balance. A transfer succeeds only for a positive amount, enough source funds, and a non-null destination. Transfer 300 from an account with 900 to one with 100, then print both balances.\nSubtopic: Object interaction and invariants",
+    "sampleCode": "public class Main {\n    static class BankAccount {\n        private int balance;\n        BankAccount(int balance) { this.balance = Math.max(0, balance); }\n        boolean transferTo(BankAccount other, int amount) {\n            if (other == null || other == this || amount <= 0 || amount > balance) return false;\n            balance -= amount;\n            other.balance += amount;\n            return true;\n        }\n        int getBalance() { return balance; }\n    }\n    public static void main(String[] args) {\n        BankAccount a = new BankAccount(900);\n        BankAccount b = new BankAccount(100);\n        System.out.println(\"Success: \" + a.transferTo(b, 300));\n        System.out.println(\"Source: \" + a.getBalance());\n        System.out.println(\"Destination: \" + b.getBalance());\n    }\n}",
+    "hints": [
+      "The method must interact with two objects.",
+      "Validate every failure condition before changing either balance.",
+      "Update both accounts only after validation succeeds."
+    ],
+    "expectedOutput": "Success: true\nSource: 600\nDestination: 400\nEdge case: Null, self-transfer, non-positive amounts, and insufficient funds are rejected.",
+    "explanation": "Validation happens before mutation, so rejected transfers leave both balances unchanged. The self-transfer guard avoids unnecessary changes.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Success: true\nSource: 600\nDestination: 400"
+      }
+    ],
+    "challenge": "Return a result object with a failure reason."
+  },
+  {
+    "id": "classes-and-objects-018",
+    "title": "Compare objects by value",
+    "difficulty": "Mid",
+    "question": "Create a Coordinate class with x and y and override equals(Object) so coordinates with equal values compare equal. Compare (2, 4) with a separate (2, 4) and print the result. Use instanceof safely.\nSubtopic: equals and value equality",
+    "sampleCode": "public class Main {\n    static class Coordinate {\n        final int x, y;\n        Coordinate(int x, int y) { this.x = x; this.y = y; }\n        @Override public boolean equals(Object obj) {\n            if (this == obj) return true;\n            if (!(obj instanceof Coordinate)) return false;\n            Coordinate other = (Coordinate) obj;\n            return x == other.x && y == other.y;\n        }\n    }\n    public static void main(String[] args) {\n        Coordinate a = new Coordinate(2, 4);\n        Coordinate b = new Coordinate(2, 4);\n        System.out.println(\"Same values: \" + a.equals(b));\n    }\n}",
+    "hints": [
+      "Reference equality and value equality are different.",
+      "Handle identical references first.",
+      "Check the object's type before casting and compare both fields."
+    ],
+    "expectedOutput": "Same values: true\nEdge case: equals(null) returns false.",
+    "explanation": "Two distinct objects can represent the same value. The override compares coordinates rather than memory identity.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Same values: true"
+      }
+    ],
+    "challenge": "Override hashCode() consistently and use coordinates as HashMap keys."
+  },
+  {
+    "id": "classes-and-objects-019",
+    "title": "Method overloading for a calculator",
+    "difficulty": "Mid",
+    "question": "Create a Calculator class with add(int, int) and add(double, double). Call both methods and print their results. Use 3 and 4, then 1.5 and 2.25.\nSubtopic: Method overloading",
+    "sampleCode": "public class Main {\n    static class Calculator {\n        int add(int a, int b) { return a + b; }\n        double add(double a, double b) { return a + b; }\n    }\n    public static void main(String[] args) {\n        Calculator c = new Calculator();\n        System.out.println(c.add(3, 4));\n        System.out.printf(\"%.2f%n\", c.add(1.5, 2.25));\n    }\n}",
+    "hints": [
+      "Overloaded methods share a name but have different parameter types or counts.",
+      "The compiler chooses an overload based on argument types.",
+      "Use printf to control decimal formatting."
+    ],
+    "expectedOutput": "7\n3.75",
+    "explanation": "Both methods are named add, but their parameter signatures differ. Java selects the matching overload at compile time.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "7\n3.75"
+      }
+    ],
+    "challenge": "Add an overload that accepts three integers."
+  },
+  {
+    "id": "classes-and-objects-020",
+    "title": "Defensive copy of a list",
+    "difficulty": "Mid",
+    "question": "Create a Playlist class that stores a list of song names. Copy the incoming list in the constructor and return a copy from getSongs(). Modify the original list and the returned list; the playlist must remain unchanged.\nSubtopic: References, aliasing, and defensive copying",
+    "sampleCode": "import java.util.ArrayList;\nimport java.util.List;\npublic class Main {\n    static class Playlist {\n        private final List<String> songs;\n        Playlist(List<String> songs) { this.songs = new ArrayList<>(songs); }\n        List<String> getSongs() { return new ArrayList<>(songs); }\n    }\n    public static void main(String[] args) {\n        List<String> input = new ArrayList<>(List.of(\"Intro\", \"Finale\"));\n        Playlist p = new Playlist(input);\n        input.add(\"Injected\");\n        List<String> copy = p.getSongs();\n        copy.clear();\n        System.out.println(p.getSongs());\n    }\n}",
+    "hints": [
+      "A list field stores a reference to a mutable object.",
+      "Copy the list when receiving it.",
+      "Also return a copy so callers cannot mutate internal state."
+    ],
+    "expectedOutput": "[Intro, Finale]",
+    "explanation": "Without copies, the caller and Playlist could share the same mutable list. Defensive copies protect the object's internal state.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "[Intro, Finale]"
+      }
+    ],
+    "challenge": "Use List.copyOf for an unmodifiable snapshot."
+  },
+  {
+    "id": "classes-and-objects-021",
+    "title": "Polymorphic payment methods",
+    "difficulty": "High",
+    "question": "Create a Payment base class with pay() and two subclasses CardPayment and CashPayment that override it. Store both as Payment references and call pay() in a loop. Print each payment's message.\nSubtopic: Inheritance, overriding, and dynamic dispatch",
+    "sampleCode": "public class Main {\n    static class Payment { String pay() { return \"Generic payment\"; } }\n    static class CardPayment extends Payment {\n        @Override String pay() { return \"Paid by card\"; }\n    }\n    static class CashPayment extends Payment {\n        @Override String pay() { return \"Paid by cash\"; }\n    }\n    public static void main(String[] args) {\n        Payment[] payments = { new CardPayment(), new CashPayment() };\n        for (Payment payment : payments) System.out.println(payment.pay());\n    }\n}",
+    "hints": [
+      "Declare a common superclass with a method.",
+      "Override the method in each subclass.",
+      "Call through superclass references and observe runtime dispatch."
+    ],
+    "expectedOutput": "Paid by card\nPaid by cash",
+    "explanation": "Although the array type is Payment[], Java invokes the overridden method of each actual object at runtime.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Paid by card\nPaid by cash"
+      }
+    ],
+    "challenge": "Add UpiPayment without changing the loop."
+  },
+  {
+    "id": "classes-and-objects-022",
+    "title": "Sort employees by salary",
+    "difficulty": "High",
+    "question": "Create Employee objects with names and salaries. Sort them by ascending salary, breaking ties alphabetically by name. Print name and salary. Use the sample employees: Zed 50000, Ana 40000, Bo 40000.\nSubtopic: Objects, Comparator, and sorting",
+    "sampleCode": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\npublic class Main {\n    static class Employee {\n        String name; int salary;\n        Employee(String name, int salary) { this.name = name; this.salary = salary; }\n    }\n    public static void main(String[] args) {\n        List<Employee> employees = new ArrayList<>(List.of(\n            new Employee(\"Zed\", 50000),\n            new Employee(\"Ana\", 40000),\n            new Employee(\"Bo\", 40000)\n        ));\n        employees.sort(Comparator.comparingInt((Employee e) -> e.salary).thenComparing(e -> e.name));\n        for (Employee e : employees) System.out.println(e.name + \": \" + e.salary);\n    }\n}",
+    "hints": [
+      "Store employees as objects in a list.",
+      "Sort by salary first, then add a secondary comparator for name.",
+      "Print after sorting to make the order visible."
+    ],
+    "expectedOutput": "Ana: 40000\nBo: 40000\nZed: 50000",
+    "explanation": "The comparator defines a deterministic ordering. The secondary name comparison handles equal salaries.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Ana: 40000\nBo: 40000\nZed: 50000"
+      }
+    ],
+    "challenge": "Sort descending by salary while keeping alphabetical tie-breaking."
+  },
+  {
+    "id": "classes-and-objects-023",
+    "title": "Detect overlapping rectangles",
+    "difficulty": "High",
+    "question": "Create a Rectangle class represented by left, bottom, width, and height. Implement overlaps(other) for positive dimensions; rectangles that only touch at an edge are not overlapping. Test rectangles (0,0,4,3) and (3,1,2,2).\nSubtopic: Composition, methods, and geometric reasoning",
+    "sampleCode": "public class Main {\n    static class Rectangle {\n        int left, bottom, width, height;\n        Rectangle(int left, int bottom, int width, int height) {\n            if (width <= 0 || height <= 0) throw new IllegalArgumentException(\"Dimensions must be positive\");\n            this.left = left; this.bottom = bottom; this.width = width; this.height = height;\n        }\n        boolean overlaps(Rectangle r) {\n            return left < r.left + r.width && left + width > r.left\n                && bottom < r.bottom + r.height && bottom + height > r.bottom;\n        }\n    }\n    public static void main(String[] args) {\n        Rectangle a = new Rectangle(0, 0, 4, 3);\n        Rectangle b = new Rectangle(3, 1, 2, 2);\n        System.out.println(\"Overlap: \" + a.overlaps(b));\n    }\n}",
+    "hints": [
+      "Represent each rectangle with its lower-left point and dimensions.",
+      "Two rectangles overlap only if their projections overlap on both axes.",
+      "Use strict inequalities so edge-touching alone is not overlap."
+    ],
+    "expectedOutput": "Overlap: true\nEdge case: Rectangles that only share an edge return false.",
+    "explanation": "The method checks horizontal and vertical intersection. All four strict comparisons must hold for positive-area overlap.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Overlap: true"
+      }
+    ],
+    "challenge": "Add a test for rectangles with negative coordinates."
+  },
+  {
+    "id": "classes-and-objects-024",
+    "title": "Find the most expensive product",
+    "difficulty": "High",
+    "question": "Create Product objects and find the most expensive one. If prices tie, choose the lexicographically smallest name. If the list is empty, print No products. Use the sample list Laptop 60000, Mouse 800, Monitor 12000, Tablet 60000.\nSubtopic: Collections and object-based aggregation",
+    "sampleCode": "import java.util.List;\npublic class Main {\n    static class Product {\n        String name; int price;\n        Product(String name, int price) { this.name = name; this.price = price; }\n    }\n    public static void main(String[] args) {\n        List<Product> products = List.of(\n            new Product(\"Laptop\", 60000), new Product(\"Mouse\", 800),\n            new Product(\"Monitor\", 12000), new Product(\"Tablet\", 60000)\n        );\n        Product best = null;\n        for (Product p : products) {\n            if (best == null || p.price > best.price ||\n                (p.price == best.price && p.name.compareTo(best.name) < 0)) best = p;\n        }\n        System.out.println(best == null ? \"No products\" : best.name + \": \" + best.price);\n    }\n}",
+    "hints": [
+      "Track the best object seen so far.",
+      "Replace it for a higher price.",
+      "For equal prices, compare names; initialize best to null for an empty list."
+    ],
+    "expectedOutput": "Laptop: 60000\nEdge case: An empty product list prints No products.",
+    "explanation": "The single pass takes O(n) time. The tie-breaking condition makes the result deterministic.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Laptop: 60000"
+      }
+    ],
+    "challenge": "Return the top three products without sorting the entire list."
+  },
+  {
+    "id": "classes-and-objects-025",
+    "title": "Validate and normalize a user profile",
+    "difficulty": "High",
+    "question": "Create a UserProfile class that trims a username and stores it in lowercase using Locale.ROOT. Reject null or blank names with IllegalArgumentException. Create a profile from '  AkShAt  ' and print the normalized username.\nSubtopic: Encapsulation, validation, and normalization",
+    "sampleCode": "import java.util.Locale;\npublic class Main {\n    static class UserProfile {\n        private final String username;\n        UserProfile(String username) {\n            if (username == null || username.trim().isEmpty())\n                throw new IllegalArgumentException(\"Username cannot be blank\");\n            this.username = username.trim().toLowerCase(Locale.ROOT);\n        }\n        String getUsername() { return username; }\n    }\n    public static void main(String[] args) {\n        UserProfile profile = new UserProfile(\"  AkShAt  \");\n        System.out.println(profile.getUsername());\n    }\n}",
+    "hints": [
+      "Validate before calling methods on the input.",
+      "Trim surrounding whitespace, then normalize case.",
+      "Use Locale.ROOT for locale-independent identifier normalization."
+    ],
+    "expectedOutput": "akshat\nEdge case: null, empty, or whitespace-only names are rejected.",
+    "explanation": "The constructor enforces a clean, immutable username. Locale.ROOT avoids language-specific casing behavior for identifiers.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "akshat"
+      }
+    ],
+    "challenge": "Add a length constraint of 3 to 20 characters."
+  },
+  {
+    "id": "classes-and-objects-026",
+    "title": "Merge two time intervals",
+    "difficulty": "High",
+    "question": "Create an Interval class with start and end, where start <= end. Given two intervals, merge them if they overlap or touch; otherwise print them separately in start order. Test [1,5] and [5,8].\nSubtopic: Value objects and interval algorithms",
+    "sampleCode": "public class Main {\n    static class Interval {\n        int start, end;\n        Interval(int start, int end) {\n            if (start > end) throw new IllegalArgumentException(\"start must not exceed end\");\n            this.start = start; this.end = end;\n        }\n    }\n    public static void main(String[] args) {\n        Interval a = new Interval(1, 5), b = new Interval(5, 8);\n        int start = Math.min(a.start, b.start);\n        int end = Math.max(a.end, b.end);\n        if (a.end < b.start || b.end < a.start) {\n            Interval first = a.start <= b.start ? a : b;\n            Interval second = first == a ? b : a;\n            System.out.println(\"[\" + first.start + \",\" + first.end + \"] [\" + second.start + \",\" + second.end + \"]\");\n        } else {\n            System.out.println(\"[\" + start + \",\" + end + \"]\");\n        }\n    }\n}",
+    "hints": [
+      "Treat intervals as objects with start and end values.",
+      "Intervals merge if neither one ends strictly before the other starts.",
+      "When disjoint, output them in ascending start order."
+    ],
+    "expectedOutput": "[1,8]\nEdge case: Touching endpoints merge in this problem.",
+    "explanation": "The strict disjointness check makes [1,5] and [5,8] merge. For disjoint intervals, the conditional orders them by start.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "[1,8]"
+      }
+    ],
+    "challenge": "Extend the solution to merge a list of intervals efficiently."
+  },
+  {
+    "id": "classes-and-objects-027",
+    "title": "Model a shopping cart total",
+    "difficulty": "High",
+    "question": "Create Product and CartItem classes. A CartItem holds a Product and quantity; its subtotal is price times quantity. Sum the subtotals for two items and print the total. Reject non-positive quantities and negative prices.\nSubtopic: Composition and aggregation",
+    "sampleCode": "import java.util.List;\npublic class Main {\n    static class Product {\n        String name; int price;\n        Product(String name, int price) {\n            if (price < 0) throw new IllegalArgumentException(\"Negative price\");\n            this.name = name; this.price = price;\n        }\n    }\n    static class CartItem {\n        Product product; int quantity;\n        CartItem(Product product, int quantity) {\n            if (product == null || quantity <= 0) throw new IllegalArgumentException(\"Invalid cart item\");\n            this.product = product; this.quantity = quantity;\n        }\n        long subtotal() { return (long) product.price * quantity; }\n    }\n    public static void main(String[] args) {\n        List<CartItem> cart = List.of(\n            new CartItem(new Product(\"Book\", 500), 2),\n            new CartItem(new Product(\"Pen\", 20), 3)\n        );\n        long total = 0;\n        for (CartItem item : cart) total += item.subtotal();\n        System.out.println(\"Total: \" + total);\n    }\n}",
+    "hints": [
+      "A CartItem has a Product, which is composition/has-a modeling.",
+      "Calculate each line total in CartItem.subtotal().",
+      "Use long for multiplication and accumulation to reduce overflow risk."
+    ],
+    "expectedOutput": "Total: 1060\nEdge case: Invalid prices or quantities are rejected during construction.",
+    "explanation": "Each class owns one responsibility: Product stores product data, CartItem computes a line subtotal, and main aggregates all subtotals.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Total: 1060"
+      }
+    ],
+    "challenge": "Add a discount percentage to each CartItem."
+  },
+  {
+    "id": "classes-and-objects-028",
+    "title": "Cache an expensive calculation per object",
+    "difficulty": "High",
+    "question": "Create a Report class whose wordCount() lazily computes and caches the number of whitespace-separated words in its text. Repeated calls should return the same cached result. Treat null or blank text as zero words.\nSubtopic: Lazy initialization and object state",
+    "sampleCode": "public class Main {\n    static class Report {\n        private final String text;\n        private Integer cachedWordCount;\n        Report(String text) { this.text = text; }\n        int wordCount() {\n            if (cachedWordCount == null) {\n                String trimmed = text == null ? \"\" : text.trim();\n                cachedWordCount = trimmed.isEmpty() ? 0 : trimmed.split(\"\\\\s+\").length;\n            }\n            return cachedWordCount;\n        }\n    }\n    public static void main(String[] args) {\n        Report report = new Report(\"Java objects need clear responsibilities\");\n        System.out.println(report.wordCount());\n        System.out.println(report.wordCount());\n    }\n}",
+    "hints": [
+      "Use a nullable wrapper to represent 'not calculated yet'.",
+      "Normalize null and whitespace-only text before splitting.",
+      "Only calculate when the cache is empty, then reuse the result."
+    ],
+    "expectedOutput": "5\n5\nEdge case: null or blank text returns 0.",
+    "explanation": "The cached Integer distinguishes an uncomputed value from a computed count of zero. The second call reuses the stored result.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "5\n5"
+      }
+    ],
+    "challenge": "Discuss thread safety if multiple threads call wordCount() concurrently."
+  },
+  {
+    "id": "classes-and-objects-029",
+    "title": "Implement equality and hashing for an entity key",
+    "difficulty": "High",
+    "question": "Create an EmployeeKey identified by department and employeeId. Override equals and hashCode consistently, then put one key in a HashSet and test membership using a separate equal key.\nSubtopic: equals/hashCode contract and hash collections",
+    "sampleCode": "import java.util.HashSet;\nimport java.util.Objects;\nimport java.util.Set;\npublic class Main {\n    static class EmployeeKey {\n        private final String department;\n        private final int employeeId;\n        EmployeeKey(String department, int employeeId) {\n            this.department = Objects.requireNonNull(department);\n            this.employeeId = employeeId;\n        }\n        @Override public boolean equals(Object obj) {\n            if (this == obj) return true;\n            if (!(obj instanceof EmployeeKey)) return false;\n            EmployeeKey other = (EmployeeKey) obj;\n            return employeeId == other.employeeId && department.equals(other.department);\n        }\n        @Override public int hashCode() { return Objects.hash(department, employeeId); }\n    }\n    public static void main(String[] args) {\n        Set<EmployeeKey> keys = new HashSet<>();\n        keys.add(new EmployeeKey(\"Engineering\", 42));\n        System.out.println(keys.contains(new EmployeeKey(\"Engineering\", 42)));\n        System.out.println(keys.contains(new EmployeeKey(\"Sales\", 42)));\n    }\n}",
+    "hints": [
+      "Define which fields determine identity.",
+      "equals and hashCode must use the same identity fields.",
+      "HashSet membership uses hashing and then equality checks."
+    ],
+    "expectedOutput": "true\nfalse\nEdge case: A null department is rejected by the constructor.",
+    "explanation": "Hash-based collections rely on equal objects having equal hash codes. The immutable identity fields keep the key stable while stored in the set.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "true\nfalse"
+      }
+    ],
+    "challenge": "Add a test proving duplicate keys do not increase the set size."
+  },
+  {
+    "id": "classes-and-objects-030",
+    "title": "Choose the best delivery option",
+    "difficulty": "High",
+    "question": "Define a DeliveryOption interface with cost() and name(). Implement StandardDelivery and ExpressDelivery. Given a maximum budget, select the cheapest option within budget; break equal-cost ties by name. For budget 100, Standard costs 60 and Express costs 100.\nSubtopic: Interfaces, polymorphism, and selection logic",
+    "sampleCode": "import java.util.List;\npublic class Main {\n    interface DeliveryOption {\n        int cost();\n        String name();\n    }\n    static class StandardDelivery implements DeliveryOption {\n        public int cost() { return 60; }\n        public String name() { return \"Standard\"; }\n    }\n    static class ExpressDelivery implements DeliveryOption {\n        public int cost() { return 100; }\n        public String name() { return \"Express\"; }\n    }\n    public static void main(String[] args) {\n        int budget = 100;\n        List<DeliveryOption> options = List.of(new StandardDelivery(), new ExpressDelivery());\n        DeliveryOption best = null;\n        for (DeliveryOption option : options) {\n            if (option.cost() <= budget && (best == null || option.cost() < best.cost()\n                || (option.cost() == best.cost() && option.name().compareTo(best.name()) < 0))) {\n                best = option;\n            }\n        }\n        System.out.println(best == null ? \"No option within budget\" : best.name() + \": \" + best.cost());\n    }\n}",
+    "hints": [
+      "Program against the DeliveryOption interface, not concrete class types.",
+      "Ignore options that exceed the budget.",
+      "Choose lower cost first, then compare names for ties."
+    ],
+    "expectedOutput": "Standard: 60\nEdge case: If no option fits the budget, print No option within budget.",
+    "explanation": "The loop works with any implementation of the interface. Its selection condition applies budget filtering and deterministic tie-breaking in one pass.",
+    "examples": [
+      {
+        "command": "javac Main.java && java Main",
+        "expected_output": "Standard: 60"
+      }
+    ],
+    "challenge": "Add delivery time as a second criterion after cost."
+  }
+]

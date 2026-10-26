@@ -1,0 +1,72 @@
+You are an expert Java educator and backend coding-interview question author.
+
+Create exactly 30 original Java coding-practice questions for the topic below. The questions should teach the fundamentals clearly and build toward interview-level problem solving.
+
+MAIN TOPIC:
+[Apna main topic likho, e.g. Arrays]
+
+SUBTOPICS:
+[Subtopics ke exact names yahan likho, one per line]
+
+JAVA VERSION:
+Java 17
+
+LEVEL DISTRIBUTION — exactly 30 questions:
+- 10 Low: clear fundamentals and straightforward implementation
+- 10 Mid: practical logic, multiple steps, common edge cases
+- 10 High: interview-level reasoning, combined concepts, efficiency, and tricky edge cases
+
+CONTENT RULES:
+- Cover every supplied subtopic. Spread questions across the subtopics as evenly as possible.
+- Make questions useful for Java developer interviews and for learning the fundamentals.
+- State the task clearly: inputs, required behavior, constraints, and expected result.
+- Make each question solvable and meaningfully different; do not repeat the same problem with renamed variables.
+- Low questions should be beginner-friendly. Mid questions should require careful implementation. High questions should test deeper reasoning without relying on obscure trivia.
+- Include relevant edge cases and explain how the solution handles them.
+- Use only standard Java 17 libraries.
+- Each solution must compile as a standalone `Main.java` program with `public class Main`.
+- Verify the sample solution matches the problem and the sample output before returning it.
+- Write explanations in clear, beginner-friendly English, step by step.
+- Give 2–4 progressive hints per question. Hints should guide the learner without giving away the full solution immediately.
+- Give at least one runnable example per question. Use the exact command `javac Main.java && java Main`.
+- Make all question IDs unique, stable, lowercase kebab-case, and numbered from 001 to 030.
+- Use only these difficulty values: "Low", "Mid", "High".
+
+OUTPUT FILE:
+Create a downloadable JSON file named `[main-topic-slug].json`, for example `arrays.json`.
+The file must contain one JSON array with exactly 30 question objects.
+Output no Markdown fences or commentary inside the JSON file.
+If you cannot attach a downloadable file, return only the complete raw JSON so it can be saved as a `.json` file.
+
+Use exactly this schema for every object:
+{
+  "id": "arrays-001",
+  "title": "Descriptive short title",
+  "difficulty": "Low",
+  "question": "Clear problem statement, including input, requirements, and constraints.",
+  "sampleCode": "public class Main {\\n    public static void main(String[] args) {\\n        // Complete, correct solution\\n    }\\n}",
+  "hints": [
+    "First hint: suggest how to approach the problem.",
+    "Second hint: point to the key Java concept or data structure."
+  ],
+  "expectedOutput": "Show the expected result and clarify important edge-case behavior.",
+  "explanation": "Explain the approach, important steps, and why it works.",
+  "examples": [
+    {
+      "command": "javac Main.java && java Main",
+      "expected_output": "Exact output produced by the sample solution."
+    }
+  ],
+  "challenge": "Optional next-step variation that builds on this problem."
+}
+
+Before returning, check that:
+1. There are exactly 30 objects.
+2. There are exactly 10 questions at each difficulty.
+3. All supplied subtopics are covered.
+4. Every ID is unique.
+5. Every object has all required fields with the correct types.
+6. Every sampleCode is valid standalone Java 17 and matches its example output.
+7. The JSON parses correctly, with quotes, backslashes, and newlines escaped properly.
+
+Now generate the JSON file.
