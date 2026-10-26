@@ -1,0 +1,931 @@
+{
+    "title": "Kodewala Academy – Java Backend Tests: Complete Question Bank (Tests 3 & 4)",
+    "tests": [
+        {
+            "test_number": 3,
+            "title": "Test 3 – Java Backend Test # 3",
+            "total_questions": 45,
+            "questions": [
+                {
+                    "question_number": 1,
+                    "question": "Which statement is true about JDK?",
+                    "options": {
+                        "A": "Contains only JVM",
+                        "B": "Contains only JRE",
+                        "C": "Contains only compiler",
+                        "D": "Contains JRE, JVM, and development tools"
+                    },
+                    "correct_answer": "D. Contains JRE, JVM, and development tools",
+                    "explanation": "JDK = JRE (which includes JVM) + development tools such as `javac`."
+                },
+                {
+                    "question_number": 2,
+                    "question": "Why is Java called platform independent?",
+                    "options": {
+                        "A": "Java code is interpreted directly by OS",
+                        "B": "Bytecode can run on any JVM",
+                        "C": "Java programs require no OS",
+                        "D": "JVM is platform independent"
+                    },
+                    "correct_answer": "B. Bytecode can run on any JVM",
+                    "explanation": "Source compiles to bytecode, which runs on any platform having a JVM (WORA)."
+                },
+                {
+                    "question_number": 3,
+                    "question": "What is the output?\n\n```java\nint i = 1;\nwhile(i <= 3){\n    System.out.print(i++);\n}\n```",
+                    "options": {
+                        "A": "0123",
+                        "B": "123",
+                        "C": "1234",
+                        "D": "Infinite loop"
+                    },
+                    "correct_answer": "B. 123",
+                    "explanation": "Prints 1, 2, 3 (post-increment), then i becomes 4 and the loop ends."
+                },
+                {
+                    "question_number": 4,
+                    "question": "Which loop executes at least once?",
+                    "options": {
+                        "A": "for",
+                        "B": "while",
+                        "C": "do-while",
+                        "D": "enhanced for loop"
+                    },
+                    "correct_answer": "C. do-while",
+                    "explanation": "`do-while` checks its condition after the body."
+                },
+                {
+                    "question_number": 5,
+                    "question": "Which operator short-circuits evaluation?",
+                    "options": {
+                        "A": "&",
+                        "B": "Both || and &&",
+                        "C": "||",
+                        "D": "&&"
+                    },
+                    "correct_answer": "B. Both || and &&",
+                    "explanation": "`&&` and `||` skip the right operand when the result is already known; `&` doesn't."
+                },
+                {
+                    "question_number": 6,
+                    "question": "What is stored in args[0]?\n\n```java\n// java Test Hello\n```",
+                    "options": {
+                        "A": "Test",
+                        "B": "java",
+                        "C": "Hello",
+                        "D": "args"
+                    },
+                    "correct_answer": "C. Hello",
+                    "explanation": "`args` holds only the arguments after the class name, so `args[0]` is `Hello`."
+                },
+                {
+                    "question_number": 7,
+                    "question": "Which member belongs to the class rather than an object?",
+                    "options": {
+                        "A": "Instance Variable",
+                        "B": "Static Variable",
+                        "C": "Local",
+                        "D": "None of the above"
+                    },
+                    "correct_answer": "B. Static Variable",
+                    "explanation": "Static members belong to the class."
+                },
+                {
+                    "question_number": 8,
+                    "question": "Which method signature is valid?",
+                    "options": {
+                        "A": "void test(int a)",
+                        "B": "int test()",
+                        "C": "public static void main(String[] args)",
+                        "D": "All of the above"
+                    },
+                    "correct_answer": "D. All of the above",
+                    "explanation": "All three are syntactically valid method declarations."
+                },
+                {
+                    "question_number": 9,
+                    "question": "Can two methods have the same name?",
+                    "options": {
+                        "A": "Never",
+                        "B": "Only in different classes",
+                        "C": "Yes, through method overloading",
+                        "D": "No"
+                    },
+                    "correct_answer": "C. Yes, through method overloading",
+                    "explanation": "Methods with the same name but different parameter lists are overloaded."
+                },
+                {
+                    "question_number": 10,
+                    "question": "Which access modifier gives the widest accessibility?",
+                    "options": {
+                        "A": "protected",
+                        "B": "private",
+                        "C": "public",
+                        "D": "default"
+                    },
+                    "correct_answer": "C. public",
+                    "explanation": "`public` is accessible from everywhere."
+                },
+                {
+                    "question_number": 11,
+                    "question": "Which access modifier restricts access within the same class only?",
+                    "options": {
+                        "A": "protected",
+                        "B": "private",
+                        "C": "public",
+                        "D": "default"
+                    },
+                    "correct_answer": "B. private",
+                    "explanation": "`private` is limited to the declaring class."
+                },
+                {
+                    "question_number": 12,
+                    "question": "What is the output?\n\n```java\nfor(int i=1;i<=5;i++){\n    if(i==3)\n    {\n        continue;\n    }\n    System.out.print(i);\n}\n```",
+                    "options": {
+                        "A": "12345",
+                        "B": "1245",
+                        "C": "345",
+                        "D": "12"
+                    },
+                    "correct_answer": "B. 1245",
+                    "explanation": "`continue` skips the print when i == 3, giving 1245."
+                },
+                {
+                    "question_number": 13,
+                    "question": "What is the output?\n\n```java\nfor(int i=1;i<=5;i++){\n    if(i==3)\n    {\n        break;\n    }\n    System.out.print(i);\n}\n```",
+                    "options": {
+                        "A": "12345",
+                        "B": "1245",
+                        "C": "345",
+                        "D": "12"
+                    },
+                    "correct_answer": "D. 12",
+                    "explanation": "`break` exits the loop at i == 3, so only 1 and 2 are printed."
+                },
+                {
+                    "question_number": 14,
+                    "question": "Which statement immediately exits a method?",
+                    "options": {
+                        "A": "break",
+                        "B": "continue",
+                        "C": "exit",
+                        "D": "return"
+                    },
+                    "correct_answer": "D. return",
+                    "explanation": "`return` ends method execution and returns to the caller."
+                },
+                {
+                    "question_number": 15,
+                    "question": "Which package is automatically imported?",
+                    "options": {
+                        "A": "java.util",
+                        "B": "java.io",
+                        "C": "java.lang",
+                        "D": "java.sql"
+                    },
+                    "correct_answer": "C. java.lang",
+                    "explanation": "`java.lang` (String, System, Object...) is imported implicitly."
+                },
+                {
+                    "question_number": 16,
+                    "question": "Which statement about packages is correct?",
+                    "options": {
+                        "A": "Package names must start with capital letters",
+                        "B": "Packages help avoid naming conflicts",
+                        "C": "Package names can contain spaces",
+                        "D": "Packages are optional folders"
+                    },
+                    "correct_answer": "B. Packages help avoid naming conflicts",
+                    "explanation": "Packages namespace classes, avoiding name clashes and organising code."
+                },
+                {
+                    "question_number": 17,
+                    "question": "What is the size of the array?\n\n```java\nint[] arr = new int[5];\n```",
+                    "options": {
+                        "A": "4",
+                        "B": "5",
+                        "C": "6",
+                        "D": "Depends on JVM"
+                    },
+                    "correct_answer": "B. 5",
+                    "explanation": "`new int[5]` allocates 5 elements (indexes 0-4)."
+                },
+                {
+                    "question_number": 18,
+                    "question": "What is the default value of an int array element?",
+                    "options": {
+                        "A": "null",
+                        "B": "1",
+                        "C": "0",
+                        "D": "Undefined"
+                    },
+                    "correct_answer": "C. 0",
+                    "explanation": "Numeric arrays are zero-initialised."
+                },
+                {
+                    "question_number": 19,
+                    "question": "What happens?\n\n```java\nint[] arr = new int[3];\nSystem.out.println(arr[3]);\n```",
+                    "options": {
+                        "A": "0",
+                        "B": "null",
+                        "C": "ArrayIndexOutOfBoundsException",
+                        "D": "Compilation Error"
+                    },
+                    "correct_answer": "C. ArrayIndexOutOfBoundsException",
+                    "explanation": "Valid indexes are 0-2. Index 3 throws an exception at runtime."
+                },
+                {
+                    "question_number": 20,
+                    "question": "Which is NOT a JVM memory area?",
+                    "options": {
+                        "A": "Heap",
+                        "B": "stack",
+                        "C": "metaspace",
+                        "D": "Database Area"
+                    },
+                    "correct_answer": "D. Database Area",
+                    "explanation": "JVM areas include Heap, Stack, Metaspace/Method Area, PC registers, native stack. There is no 'Database Area'."
+                },
+                {
+                    "question_number": 21,
+                    "question": "What is the output?\n\n```java\npublic class Test{\n    static int count;\n    public static void main(String[] args){\n        System.out.println(count);\n    }\n}\n```",
+                    "options": {
+                        "A": "null",
+                        "B": "0",
+                        "C": "1",
+                        "D": "Compilation Error"
+                    },
+                    "correct_answer": "B. 0",
+                    "explanation": "Static int fields default to 0."
+                },
+                {
+                    "question_number": 22,
+                    "question": "Coupon Validation: what is the output?\n\n```java\nboolean isPremium = false;\nboolean couponValid = true;\nif(isPremium || couponValid)\n{\n    System.out.println(\"Discount Applied\");\n}\n```",
+                    "options": {
+                        "A": "No Output",
+                        "B": "Discount Applied",
+                        "C": "Compilation Error",
+                        "D": "Runtime Error"
+                    },
+                    "correct_answer": "B. Discount Applied",
+                    "explanation": "`false || true` is true, so the message prints."
+                },
+                {
+                    "question_number": 23,
+                    "question": "Which class can access stock directly?\n\n```java\npublic class Inventory{\n    private int stock = 10;\n}\n```",
+                    "options": {
+                        "A": "Any class",
+                        "B": "Same package",
+                        "C": "Subclass",
+                        "D": "Inventory class only"
+                    },
+                    "correct_answer": "D. Inventory class only",
+                    "explanation": "`private` limits access to the declaring class."
+                },
+                {
+                    "question_number": 24,
+                    "question": "What is the output?\n\n```java\nint[] ids = {101,102,103};\nSystem.out.println(ids[3]);\n```",
+                    "options": {
+                        "A": "103",
+                        "B": "null",
+                        "C": "ArrayIndexOutOfBoundsException",
+                        "D": "0"
+                    },
+                    "correct_answer": "C. ArrayIndexOutOfBoundsException",
+                    "explanation": "The array has 3 elements (indexes 0-2), so `ids[3]` throws an exception."
+                },
+                {
+                    "question_number": 25,
+                    "question": "A customer can get a discount if they are a premium member OR they have a valid coupon. Why is validCoupon not evaluated?\n\n```java\nboolean premiumMember = true;\nboolean validCoupon = false;\nif(premiumMember || validCoupon)\n{\n    System.out.println(\"Discount Applied\");\n}\n```",
+                    "options": {
+                        "A": "JVM Optimization",
+                        "B": "Compiler Error",
+                        "C": "Short-Circuit Evaluation of ||",
+                        "D": "Both variables are boolean"
+                    },
+                    "correct_answer": "C. Short-Circuit Evaluation of ||",
+                    "explanation": "`premiumMember` is already true, so `||` short-circuits."
+                },
+                {
+                    "question_number": 26,
+                    "question": "Which key should be used if you want to see the execution of `return a + b;` when the debugger is stopped at `int result = add(10, 20);`?\n\n```java\npublic static void main(String[] args)\n{\n    int result = add(10, 20);\n    System.out.println(result);\n}\npublic static int add(int a, int b)\n{\n    return a + b;\n}\n```",
+                    "options": {
+                        "A": "F8",
+                        "B": "F7",
+                        "C": "F6",
+                        "D": "F5"
+                    },
+                    "correct_answer": "D. F5",
+                    "explanation": "F5 (Step Into) enters the `add()` method."
+                },
+                {
+                    "question_number": 27,
+                    "question": "You are debugging `int result = add(10,20);`. You don't want to enter the add() method. Which key should you use?",
+                    "options": {
+                        "A": "F8",
+                        "B": "F7",
+                        "C": "F6",
+                        "D": "F5"
+                    },
+                    "correct_answer": "C. F6",
+                    "explanation": "F6 (Step Over) executes the call without entering the method."
+                },
+                {
+                    "question_number": 28,
+                    "question": "What does F8 do?",
+                    "options": {
+                        "A": "Enter method",
+                        "B": "Execute current line only",
+                        "C": "Run till next breakpoint or program completion",
+                        "D": "Exit JVM"
+                    },
+                    "correct_answer": "C. Run till next breakpoint or program completion",
+                    "explanation": "F8 = Resume."
+                },
+                {
+                    "question_number": 29,
+                    "question": "Which variable is stored in Stack Memory during execution?\n\n```java\nclass Product {\n    static int gst = 18;\n    int price = 1000;\n    public void calculate() {\n        int discount = 100;\n    }\n}\n```",
+                    "options": {
+                        "A": "gst",
+                        "B": "price",
+                        "C": "discount",
+                        "D": "Product object"
+                    },
+                    "correct_answer": "C. discount",
+                    "explanation": "`discount` is a local variable (stack). `gst` is static (method area/metaspace) and `price` lives in the object on the heap."
+                },
+                {
+                    "question_number": 30,
+                    "question": "An inventory system stores 10,000 product IDs in an array. Which characteristic of arrays allows quick retrieval of any element using its index?",
+                    "options": {
+                        "A": "Elements are sorted automatically.",
+                        "B": "Elements are stored in contiguous memory locations.",
+                        "C": "Arrays use HashMap internally.",
+                        "D": "Arrays store data in Method Area."
+                    },
+                    "correct_answer": "B. Elements are stored in contiguous memory locations.",
+                    "explanation": "Contiguous storage gives O(1) access: address = base + index × size."
+                },
+                {
+                    "question_number": 31,
+                    "question": "If arrays require contiguous memory, what happens when we need a larger array?",
+                    "options": {
+                        "A": "JVM automatically increases the same memory block.",
+                        "B": "A new larger array is created and data is copied.",
+                        "C": "Existing array size changes.",
+                        "D": "Array moves to Stack."
+                    },
+                    "correct_answer": "B. A new larger array is created and data is copied.",
+                    "explanation": "Array size is fixed, so you allocate a bigger array and copy elements over."
+                },
+                {
+                    "question_number": 32,
+                    "question": "When should a for loop be preferred over a while loop?",
+                    "options": {
+                        "A": "When the number of iterations is unknown",
+                        "B": "Only for arrays",
+                        "C": "Only for strings",
+                        "D": "When the number of iterations is known in advance"
+                    },
+                    "correct_answer": "D. When the number of iterations is known in advance",
+                    "explanation": "`for` bundles init, condition and update, which suits a known iteration count."
+                },
+                {
+                    "question_number": 33,
+                    "question": "Which loop is generally preferred for reading user input until the user enters a specific value?",
+                    "options": {
+                        "A": "for loop",
+                        "B": "while loop",
+                        "C": "do-while",
+                        "D": "none"
+                    },
+                    "correct_answer": "B. while loop",
+                    "explanation": "The iteration count is unknown, so a condition-driven `while` loop fits."
+                },
+                {
+                    "question_number": 34,
+                    "question": "What happens?\n\n```java\nfor( ; ; )\n{\n    System.out.println(\"Java\");\n}\n```",
+                    "options": {
+                        "A": "Prints once",
+                        "B": "Compilation Error",
+                        "C": "Infinite Loop",
+                        "D": "Runtime Exception"
+                    },
+                    "correct_answer": "C. Infinite Loop",
+                    "explanation": "With no condition, `for(;;)` runs forever."
+                },
+                {
+                    "question_number": 35,
+                    "question": "Which statement is TRUE?",
+                    "options": {
+                        "A": "for loop cannot become an infinite loop.",
+                        "B": "while loop cannot become an infinite loop.",
+                        "C": "Both for and while can become infinite loops.",
+                        "D": "Neither can become an infinite loop."
+                    },
+                    "correct_answer": "C. Both for and while can become infinite loops.",
+                    "explanation": "Any loop whose condition never becomes false (or is omitted) runs forever."
+                },
+                {
+                    "question_number": 36,
+                    "question": "An ATM application keeps asking for a PIN until the correct PIN is entered. Which loop is more suitable?",
+                    "options": {
+                        "A": "for",
+                        "B": "while",
+                        "C": "do-while",
+                        "D": "switch"
+                    },
+                    "correct_answer": "B. while",
+                    "explanation": "The number of attempts is unknown, so a condition-based loop fits."
+                },
+                {
+                    "question_number": 37,
+                    "question": "An inventory system needs to scan exactly 500 products. Which loop should be preferred?",
+                    "options": {
+                        "A": "while loop because it is faster",
+                        "B": "for loop because the number of iterations is known",
+                        "C": "switch case",
+                        "D": "do-while"
+                    },
+                    "correct_answer": "B. for loop because the number of iterations is known",
+                    "explanation": "A known iteration count suits `for`; speed is not the reason."
+                },
+                {
+                    "question_number": 38,
+                    "question": "An inventory system needs to scan exactly 500 products. Which loop should be preferred? (duplicate)",
+                    "options": {
+                        "A": "while loop because it is faster",
+                        "B": "for loop because the number of iterations is known",
+                        "C": "switch case",
+                        "D": "do-while"
+                    },
+                    "correct_answer": "B. for loop because the number of iterations is known",
+                    "explanation": "Same as Q37: use `for` when the iteration count is known. > ⚠️ This question appears twice (Q37 and Q38) in the test; the stem is identical."
+                },
+                {
+                    "question_number": 39,
+                    "question": "What is the output?\n\n```java\nclass A {\n    A() { System.out.println(\"A\"); }\n    A(int x) { this(); System.out.println(\"A-int\"); }\n}\nclass B extends A {\n    B() { this(10); System.out.println(\"B\"); }\n    B(int x) { super(x); System.out.println(\"B-int\"); }\n}\npublic class Test {\n    public static void main(String[] args) { new B(); }\n}\n```",
+                    "options": {
+                        "A": "A → A-int → B-int → B",
+                        "B": "A-int → A → B → B-int",
+                        "C": "A → B-int → A-int → B",
+                        "D": "Compilation error"
+                    },
+                    "correct_answer": "A. A → A-int → B-int → B",
+                    "explanation": "`B()` → `this(10)` → `B(int)` → `super(x)` → `A(int)` → `this()` → `A()` prints A; then A-int, B-int, B."
+                },
+                {
+                    "question_number": 40,
+                    "question": "What is the output?\n\n```java\nint total = 0;\nfor (int i = 1; i <= 5; i++)\n{\n    if (i % 2 == 0)\n    {\n        continue;\n    }\n    total += i;\n    if (total > 4)\n    {\n        break;\n    }\n}\nSystem.out.println(total);\n```",
+                    "options": {
+                        "A": "1",
+                        "B": "4",
+                        "C": "5",
+                        "D": "9"
+                    },
+                    "correct_answer": "D. 9",
+                    "explanation": "i=1 → total 1; i=2 skipped; i=3 → total 4 (not > 4); i=4 skipped; i=5 → total 9 > 4 → break. Prints 9."
+                },
+                {
+                    "question_number": 41,
+                    "question": "Output?\n\n```java\nclass Parent {\n    Parent() { System.out.println(\"Parent\"); }\n}\nclass Child extends Parent {\n    Child() { this(10); System.out.println(\"Child\"); }\n    Child(int x) { System.out.println(\"Child-int\"); }\n}\npublic class Test {\n    public static void main(String[] args) { new Child(); }\n}\n```",
+                    "options": {
+                        "A": "Child → Child-int → Parent",
+                        "B": "Parent → Child-int → Child",
+                        "C": "Child-int → Parent → Child",
+                        "D": "Compilation error"
+                    },
+                    "correct_answer": "B. Parent → Child-int → Child",
+                    "explanation": "`Child()` delegates to `Child(int)`, which implicitly calls `super()`. Order: Parent, Child-int, Child."
+                },
+                {
+                    "question_number": 42,
+                    "question": "Which statement about this() and super() is correct?",
+                    "options": {
+                        "A": "Both can be used together in the same constructor",
+                        "B": "this() must always be the last statement",
+                        "C": "this() or super() must be the first statement of a constructor",
+                        "D": "super() can be called from any method"
+                    },
+                    "correct_answer": "C. this() or super() must be the first statement of a constructor",
+                    "explanation": "A constructor call must be the first statement, and only one of the two can be used."
+                },
+                {
+                    "question_number": 43,
+                    "question": "What happens?\n\n```java\nclass A {\n    A() { this(10); }\n    A(int x) { this(); }\n}\n```",
+                    "options": {
+                        "A": "Executes successfully",
+                        "B": "Runtime exception",
+                        "C": "Compile-time error due to recursive constructor invocation",
+                        "D": "StackOverflowError at runtime"
+                    },
+                    "correct_answer": "C. Compile-time error due to recursive constructor invocation",
+                    "explanation": "Constructors calling each other in a cycle are detected by the compiler (recursive constructor invocation)."
+                },
+                {
+                    "question_number": 44,
+                    "question": "What happens?\n\n```java\nclass A {\n    A(int x) { System.out.println(\"A\"); }\n}\nclass B extends A {\n    B() { System.out.println(\"B\"); }\n}\n```",
+                    "options": {
+                        "A": "A → B",
+                        "B": "B only",
+                        "C": "Compilation error",
+                        "D": "Runtime exception"
+                    },
+                    "correct_answer": "C. Compilation error",
+                    "explanation": "`B()` implicitly calls `super()`, but `A` has no no-arg constructor (only `A(int)`), so compilation fails."
+                },
+                {
+                    "question_number": 45,
+                    "question": "What will be printed, and what will be the final values of orderId and status?\n\n```java\nclass Order {\n    int orderId;\n    String status;\n    Order() { this(0); System.out.println(\"Default Order\"); }\n    Order(int orderId) { this(orderId, \"NEW\"); System.out.println(\"Order with ID\"); }\n    Order(int orderId, String status) {\n        this.orderId = orderId;\n        this.status = status;\n        System.out.println(\"Order Created\");\n    }\n}\npublic class Test {\n    public static void main(String[] args) { Order order = new Order(); }\n}\n```",
+                    "options": {
+                        "A": "Order Created / Order with ID / Default Order / orderId = 0 / status = \"NEW\"",
+                        "B": "Default Order / Order with ID / Order Created / orderId = 0 / status = \"NEW\"",
+                        "C": "Order Created / Default Order / Order with ID / orderId = 0 / status = null",
+                        "D": "Compilation error because constructors cannot call another constructor"
+                    },
+                    "correct_answer": "A. Order Created / Order with ID / Default Order / orderId = 0 / status = \"NEW\"",
+                    "explanation": "`new Order()` → `this(0)` → `this(0,\"NEW\")`. The innermost runs first (Order Created), then Order with ID, then Default Order. Final values: orderId = 0, status = \"NEW\"."
+                }
+            ]
+        },
+        {
+            "test_number": 4,
+            "title": "Test 4 – Java Backend Test # 4",
+            "total_questions": 31,
+            "questions": [
+                {
+                    "question_number": 1,
+                    "question": "What is the output?\n\n```java\nString s1 = new String(\"Java\");\nString s2 = new String(\"Java\");\nSystem.out.println(s1 == s2);\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "false",
+                        "C": "0",
+                        "D": "1"
+                    },
+                    "correct_answer": "B. false",
+                    "explanation": "`new` always creates a distinct heap object, and `==` compares references."
+                },
+                {
+                    "question_number": 2,
+                    "question": "What is the output?\n\n```java\nString s1 = \"Java\";\nString s2 = new String(\"java\");\nSystem.out.println(s1.equals(s2));\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "Compilation Error",
+                        "C": "false",
+                        "D": "1"
+                    },
+                    "correct_answer": "C. false",
+                    "explanation": "`equals()` is case-sensitive: \"Java\" ≠ \"java\"."
+                },
+                {
+                    "question_number": 3,
+                    "question": "What is the output?\n\n```java\nString s = \"Hello\";\ns.concat(\" World\");\nSystem.out.println(s);\n```",
+                    "options": {
+                        "A": "Hello World",
+                        "B": "Compilation Error",
+                        "C": "Runtime Error",
+                        "D": "Hello"
+                    },
+                    "correct_answer": "D. Hello",
+                    "explanation": "Strings are immutable. `concat` returns a new String that was discarded, so `s` is unchanged."
+                },
+                {
+                    "question_number": 4,
+                    "question": "Which method compares String contents?",
+                    "options": {
+                        "A": "==",
+                        "B": "equals()",
+                        "C": "hashCode()",
+                        "D": "compare()"
+                    },
+                    "correct_answer": "B. equals()",
+                    "explanation": "`equals()` compares content; `==` compares references."
+                },
+                {
+                    "question_number": 5,
+                    "question": "Which statement is TRUE?",
+                    "options": {
+                        "A": "String is mutable",
+                        "B": "StringBuilder is immutable",
+                        "C": "String is immutable",
+                        "D": "StringBuffer is immutable"
+                    },
+                    "correct_answer": "C. String is immutable",
+                    "explanation": "String objects cannot change after creation; StringBuilder/StringBuffer are mutable."
+                },
+                {
+                    "question_number": 6,
+                    "question": "Which method is inherited by every Java class?",
+                    "options": {
+                        "A": "None",
+                        "B": "Both - equals() and hashCode()",
+                        "C": "hashCode()",
+                        "D": "equals()"
+                    },
+                    "correct_answer": "B. Both - equals() and hashCode()",
+                    "explanation": "Every class inherits from `Object`, which provides both `equals()` and `hashCode()`."
+                },
+                {
+                    "question_number": 7,
+                    "question": "What happens if equals() is not overridden?",
+                    "options": {
+                        "A": "Compares content",
+                        "B": "Uses == internally",
+                        "C": "Compilation Error",
+                        "D": "Runtime Exception"
+                    },
+                    "correct_answer": "B. Uses == internally",
+                    "explanation": "`Object.equals()` compares references, behaving like `==`."
+                },
+                {
+                    "question_number": 8,
+                    "question": "Which class is final?",
+                    "options": {
+                        "A": "Object",
+                        "B": "Thread",
+                        "C": "String",
+                        "D": "Exception"
+                    },
+                    "correct_answer": "C. String",
+                    "explanation": "`String` is declared `final`, so it cannot be extended."
+                },
+                {
+                    "question_number": 9,
+                    "question": "When is a constructor called?",
+                    "options": {
+                        "A": "Method call",
+                        "B": "Object creation",
+                        "C": "Compilation",
+                        "D": "Garbage collection"
+                    },
+                    "correct_answer": "B. Object creation",
+                    "explanation": "A constructor runs when an object is created with `new`."
+                },
+                {
+                    "question_number": 10,
+                    "question": "If no constructor is written:",
+                    "options": {
+                        "A": "Compilation Error",
+                        "B": "JVM creates",
+                        "C": "Compiler provides default constructor",
+                        "D": "None"
+                    },
+                    "correct_answer": "C. Compiler provides default constructor",
+                    "explanation": "The compiler adds a no-arg default constructor."
+                },
+                {
+                    "question_number": 11,
+                    "question": "The first statement inside a constructor can be:",
+                    "options": {
+                        "A": "super()",
+                        "B": "this()",
+                        "C": "either super() or this()",
+                        "D": "anything"
+                    },
+                    "correct_answer": "C. either super() or this()",
+                    "explanation": "The first statement may be `this(...)` or `super(...)`; otherwise the compiler inserts `super()`."
+                },
+                {
+                    "question_number": 12,
+                    "question": "Which keyword invokes the parent constructor?",
+                    "options": {
+                        "A": "parent()",
+                        "B": "this()",
+                        "C": "super()",
+                        "D": "extends()"
+                    },
+                    "correct_answer": "C. super()",
+                    "explanation": "`super()` calls the superclass constructor."
+                },
+                {
+                    "question_number": 13,
+                    "question": "Object class is:",
+                    "options": {
+                        "A": "Parent of all classes",
+                        "B": "Interface",
+                        "C": "Final class",
+                        "D": "Abstract class"
+                    },
+                    "correct_answer": "A. Parent of all classes",
+                    "explanation": "`java.lang.Object` is the root class of every Java class."
+                },
+                {
+                    "question_number": 14,
+                    "question": "Instance variable is created:",
+                    "options": {
+                        "A": "Once",
+                        "B": "During class loading",
+                        "C": "With every object",
+                        "D": "During compilation"
+                    },
+                    "correct_answer": "C. With every object",
+                    "explanation": "Each object gets its own copy when it is created."
+                },
+                {
+                    "question_number": 15,
+                    "question": "A Java application receives thousands of requests simultaneously. Each request builds a large string by appending multiple values. The same string object is shared by multiple threads.",
+                    "options": {
+                        "A": "String",
+                        "B": "StringBuilder",
+                        "C": "StringBuffer",
+                        "D": "Thread"
+                    },
+                    "correct_answer": "C. StringBuffer",
+                    "explanation": "A shared mutable string needs thread safety. `StringBuffer`'s methods are synchronized; `StringBuilder` is not."
+                },
+                {
+                    "question_number": 16,
+                    "question": "Why is StringBuilder preferred over StringBuffer in this program?\n\n```java\npublic class Demo {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < 100000; i++) {\n            sb.append(i);\n        }\n        System.out.println(sb.length());\n    }\n}\n```",
+                    "options": {
+                        "A": "StringBuilder uses less memory",
+                        "B": "StringBuilder is immutable.",
+                        "C": "StringBuffer cannot append integers.",
+                        "D": "The program is single-threaded, so synchronization overhead is unnecessary."
+                    },
+                    "correct_answer": "D. The program is single-threaded, so synchronization overhead is unnecessary.",
+                    "explanation": "Only one thread is used, so StringBuffer's synchronization is pure overhead. StringBuilder is faster here (and it's mutable, not immutable)."
+                },
+                {
+                    "question_number": 17,
+                    "question": "A developer accidentally loses the source code (.java files), but the compiled .class files are still available. Which statement is correct?",
+                    "options": {
+                        "A": "It is impossible to recover the Java code.",
+                        "B": "A Java decompiler can generate readable Java source code from the .class files, although comments and original formatting are usually lost.",
+                        "C": "The JVM can automatically recreate the original source code with comments.",
+                        "D": "The .class file contains only machine code, so decompilation is impossible."
+                    },
+                    "correct_answer": "B. A Java decompiler can generate readable Java source code from the .class files, although comments and original formatting are usually lost.",
+                    "explanation": "Bytecode retains enough structure to be decompiled, but comments and formatting are lost."
+                },
+                {
+                    "question_number": 18,
+                    "question": "What happens? (Employee does NOT override equals().)\n\n```java\nEmployee e1 = new Employee(101);\nEmployee e2 = new Employee(101);\nSystem.out.println(e1.equals(e2));\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "false",
+                        "C": "Compilation Error",
+                        "D": "Runtime Exception"
+                    },
+                    "correct_answer": "B. false",
+                    "explanation": "The default `equals()` compares references; two separate objects are not equal."
+                },
+                {
+                    "question_number": 19,
+                    "question": "A banking application updates a shared transaction log using multiple threads simultaneously. Which class should be used?",
+                    "options": {
+                        "A": "String",
+                        "B": "StringBuilder",
+                        "C": "StringBuffer",
+                        "D": "char[]"
+                    },
+                    "correct_answer": "C. StringBuffer",
+                    "explanation": "StringBuffer is synchronized and thread-safe."
+                },
+                {
+                    "question_number": 20,
+                    "question": "What will be printed?\n\n```java\nString id1 = new String(\"P101\");\nString id2 = new String(\"P101\");\nif(id1 == id2){\n    System.out.println(\"Cache Hit\");\n}else{\n    System.out.println(\"Cache Miss\");\n}\n```",
+                    "options": {
+                        "A": "Cache Hit",
+                        "B": "Cache Miss",
+                        "C": "Compilation Error",
+                        "D": "Depends on JVM"
+                    },
+                    "correct_answer": "B. Cache Miss",
+                    "explanation": "Two `new String` objects are different references, so `==` is false. Use `equals()`."
+                },
+                {
+                    "question_number": 21,
+                    "question": "How many String objects are created at runtime?\n\n```java\nString s = \"Java\" + \"Backend\";\n```",
+                    "options": {
+                        "A": "0",
+                        "B": "1",
+                        "C": "2",
+                        "D": "3"
+                    },
+                    "correct_answer": "B. 1",
+                    "explanation": "Concatenating two literals is a compile-time constant (\"JavaBackend\"), so only one pooled String exists."
+                },
+                {
+                    "question_number": 22,
+                    "question": "Why is the constructor made private?\n\n```java\npublic class Utility {\n    private Utility()\n    {\n    }\n}\n```",
+                    "options": {
+                        "A": "To improve performance.",
+                        "B": "To prevent object creation because the class contains only utility/static methods.",
+                        "C": "To support inheritance.",
+                        "D": "To reduce memory usage."
+                    },
+                    "correct_answer": "B. To prevent object creation because the class contains only utility/static methods.",
+                    "explanation": "A private constructor stops instantiation (as with utility classes and singletons)."
+                },
+                {
+                    "question_number": 23,
+                    "question": "Output?\n\n```java\nString s1 = \"Java\";\nString s2 = new String(\"Java\");\nString s3 = s2.intern();\nSystem.out.println(s1 == s2);\nSystem.out.println(s1 == s3);\nSystem.out.println(s2 == s3);\n```",
+                    "options": {
+                        "A": "true, true, true",
+                        "B": "false, true, false",
+                        "C": "false, false, true",
+                        "D": "true, false, false"
+                    },
+                    "correct_answer": "B. false, true, false",
+                    "explanation": "`s2` is a heap object (≠ s1). `intern()` returns the pooled instance, same as `s1`, so s1 == s3 is true and s2 == s3 is false."
+                },
+                {
+                    "question_number": 24,
+                    "question": "Order class has only `Order(String orderId)` and no equals()/hashCode(). Two orders `new Order(\"ORD101\")` print \"New Order\" with `o1.equals(o2)`, but the business wants same orderId to be equal. What is the best solution?\n\n```java\npublic class Order {\n    private String orderId;\n    public Order(String orderId) { this.orderId = orderId; }\n}\n```",
+                    "options": {
+                        "A": "Compare o1 == o2",
+                        "B": "Override only hashCode().",
+                        "C": "Override both equals() and hashCode() based on orderId.",
+                        "D": "Make orderId static."
+                    },
+                    "correct_answer": "C. Override both equals() and hashCode() based on orderId.",
+                    "explanation": "Override `equals()` for logical equality and `hashCode()` consistently, which is required for hash-based collections."
+                },
+                {
+                    "question_number": 25,
+                    "question": "What is the output?\n\n```java\nString s1 = \"Ja\" + \"va\";\nString s2 = \"Java\";\nSystem.out.println(s1 == s2);\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "false",
+                        "C": "Compilation error",
+                        "D": "Runtime Error"
+                    },
+                    "correct_answer": "A. true",
+                    "explanation": "The compiler folds the constant expression to \"Java\", so both refer to the same pooled String."
+                },
+                {
+                    "question_number": 26,
+                    "question": "What is the output?\n\n```java\nString a = \"Java\";\nString b = \"Ja\";\nString c = b + \"va\";\nSystem.out.println(a == c);\nSystem.out.println(a == c.intern());\n```",
+                    "options": {
+                        "A": "true, true",
+                        "B": "false, true",
+                        "C": "false, false",
+                        "D": "true, false"
+                    },
+                    "correct_answer": "B. false, true",
+                    "explanation": "`b` is not final, so `b + \"va\"` is built at runtime on the heap (a ≠ c). `c.intern()` returns the pooled \"Java\" (a == intern is true)."
+                },
+                {
+                    "question_number": 27,
+                    "question": "What is the output?\n\n```java\nString s1 = new String(\"Spring\");\nString s2 = s1.intern();\nSystem.out.println(s1 == s2);\nSystem.out.println(s2 == \"Spring\");\n```",
+                    "options": {
+                        "A": "true, true",
+                        "B": "false, false",
+                        "C": "false, true",
+                        "D": "true, false"
+                    },
+                    "correct_answer": "C. false, true",
+                    "explanation": "`s1` is a heap copy; `s2` is the pooled instance, so s1 == s2 is false. The literal \"Spring\" is the same pooled instance, so s2 == \"Spring\" is true."
+                },
+                {
+                    "question_number": 28,
+                    "question": "What is the output?\n\n```java\nfinal String x = \"Ja\";\nString s1 = x + \"va\";\nString s2 = \"Java\";\nSystem.out.println(s1 == s2);\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "false",
+                        "C": "Compilation error",
+                        "D": "Depends on garbage collection"
+                    },
+                    "correct_answer": "A. true",
+                    "explanation": "`x` is a final constant variable, so `x + \"va\"` is a compile-time constant interned as \"Java\". Result: true."
+                },
+                {
+                    "question_number": 29,
+                    "question": "Which approach is generally best for repeated string concatenation inside a loop?",
+                    "options": {
+                        "A": "Use result.intern() on every iteration.",
+                        "B": "Use new String(result) on every iteration.",
+                        "C": "Use final String result.",
+                        "D": "Use StringBuilder and append each value."
+                    },
+                    "correct_answer": "D. Use StringBuilder and append each value.",
+                    "explanation": "Strings are immutable, so `+` in a loop creates many temporary objects. StringBuilder appends in place."
+                },
+                {
+                    "question_number": 30,
+                    "question": "What is the output?\n\n```java\nString s = new String(\"Ja\") + new String(\"va\");\ns.intern();\nString s1 = \"Java\";\nSystem.out.println(s == s1);\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "false",
+                        "C": "Compilation error",
+                        "D": "Runtime exception"
+                    },
+                    "correct_answer": "A. true",
+                    "explanation": "\"Java\" isn't in the pool yet when `s.intern()` runs, so `intern()` puts `s` itself into the pool. The later literal `\"Java\"` resolves to that same object, so `s == s1` is true (Java 7+)."
+                },
+                {
+                    "question_number": 31,
+                    "question": "What is the output?\n\n```java\npublic class Test {\n    public static void main(String[] args) {\n        String s1 = \"Java\";\n        String s2 = new String(\"Java\");\n        s2.intern();\n        System.out.println(s1 == s2);\n    }\n}\n```",
+                    "options": {
+                        "A": "true",
+                        "B": "false",
+                        "C": "Compilation error",
+                        "D": "Runtime exception"
+                    },
+                    "correct_answer": "B. false",
+                    "explanation": "`s2.intern()` returns the pooled String but the result is discarded, so `s2` still points to the heap object. s1 == s2 is false."
+                }
+            ]
+        }
+    ]
+}
