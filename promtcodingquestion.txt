@@ -1,72 +1,100 @@
-You are an expert Java educator and backend coding-interview question author.
+You are an expert Java educator, object-oriented design mentor, and backend coding-interview question author.
 
-Create exactly 30 original Java coding-practice questions for the topic below. The questions should teach the fundamentals clearly and build toward interview-level problem solving.
+Create exactly 30 original Java coding-practice questions for the topic and subtopics below. The questions must teach concepts clearly, strengthen object-oriented thinking, and build toward realistic Java backend interviews.
 
 MAIN TOPIC:
-[Apna main topic likho, e.g. Arrays]
+[Classes and objects]
 
-SUBTOPICS:
-[Subtopics ke exact names yahan likho, one per line]
-
-JAVA VERSION:
-Java 17
 
 LEVEL DISTRIBUTION — exactly 30 questions:
 - 10 Low: clear fundamentals and straightforward implementation
 - 10 Mid: practical logic, multiple steps, common edge cases
-- 10 High: interview-level reasoning, combined concepts, efficiency, and tricky edge cases
+- 10 High: interview-level reasoning, object-oriented design, combined concepts, and tricky edge cases
 
-CONTENT RULES:
-- Cover every supplied subtopic. Spread questions across the subtopics as evenly as possible.
-- Make questions useful for Java developer interviews and for learning the fundamentals.
-- State the task clearly: inputs, required behavior, constraints, and expected result.
-- Make each question solvable and meaningfully different; do not repeat the same problem with renamed variables.
-- Low questions should be beginner-friendly. Mid questions should require careful implementation. High questions should test deeper reasoning without relying on obscure trivia.
-- Include relevant edge cases and explain how the solution handles them.
-- Use only standard Java 17 libraries.
-- Each solution must compile as a standalone `Main.java` program with `public class Main`.
-- Verify the sample solution matches the problem and the sample output before returning it.
-- Write explanations in clear, beginner-friendly English, step by step.
-- Give 2–4 progressive hints per question. Hints should guide the learner without giving away the full solution immediately.
-- Give at least one runnable example per question. Use the exact command `javac Main.java && java Main`.
-- Make all question IDs unique, stable, lowercase kebab-case, and numbered from 001 to 030.
-- Use only these difficulty values: "Low", "Mid", "High".
+SOLID COVERAGE:
+Include at least 8 questions that apply SOLID principles to concrete Java design problems. Cover all five principles:
+- Single Responsibility
+- Open/Closed
+- Liskov Substitution
+- Interface Segregation
+- Dependency Inversion
+
+Use appropriate difficulty:
+- Low questions can identify or apply one principle in a small class design.
+- Mid questions can refactor a class or model a small feature using one or two principles.
+- High questions can combine principles in a realistic backend scenario.
+Do not force SOLID into questions where it does not naturally fit. Ask about practical design choices, not just definitions.
+
+QUESTION-WRITING RULES:
+- Write each problem as a clear task, not as a vague instruction such as “implement classes.”
+- Give a short, realistic context when useful, such as orders, payments, notifications, employees, or inventory.
+- State exactly what the program or classes must do.
+- Specify inputs, outputs, constraints, and important behavior. If no external input is needed, say what values or objects the program should create and demonstrate.
+- Make each question independently understandable. Do not refer to another question.
+- Keep each question focused on one primary learning objective.
+- For design questions, specify the expected responsibilities and observable behavior without prescribing the whole solution.
+- Include useful edge cases, such as null or empty data, invalid values, duplicate IDs, object mutation, or substitutability, only when relevant.
+- Make questions meaningfully different; do not repeat the same exercise with renamed classes.
+- Balance hands-on coding with class design, debugging, refactoring, and output-prediction tasks.
+- Use clear, beginner-friendly English. Avoid unnecessary jargon; define any required term in the problem statement.
+- Make the title concise and specific so a learner can tell what concept it practices.
+
+DIFFICULTY RULES:
+- Low: one core concept, a small number of classes, direct expected behavior.
+- Mid: multiple objects or classes, validation, collections, interactions, or a focused refactor.
+- High: design trade-offs, extensibility, substitutability, dependency boundaries, or multiple interacting requirements.
+- High must still be solvable from the stated requirements and standard Java 17 knowledge.
+
+SOLUTION AND EXAMPLE RULES:
+- Every `sampleCode` must be a complete, correct, standalone Java 17 solution in `public class Main`, saved as `Main.java`.
+- Additional classes may be nested inside `Main` or declared package-private in the same source string. Do not declare another public top-level class.
+- The solution must implement the requirements, not merely print the expected output.
+- Use readable names, sensible encapsulation, and simple structure appropriate to the question’s difficulty.
+- Avoid external libraries, TODOs, pseudocode, omitted methods, and unexplained placeholders.
+- Each example must use the exact command `javac Main.java && java Main`.
+- Ensure the example output exactly matches what the provided solution prints.
+- Give 2–4 progressive hints. Do not reveal the full solution in the hints.
+- Explain the design and important Java concepts step by step. For SOLID questions, name the principle(s) applied and explain why the design follows them.
+- Make `expectedOutput` concise and consistent with the example output.
+- Use `challenge` for one optional extension, not for a requirement needed to solve the original problem.
 
 OUTPUT FILE:
-Create a downloadable JSON file named `[main-topic-slug].json`, for example `arrays.json`.
+Create a downloadable JSON file named `classes-and-objects.json`.
 The file must contain one JSON array with exactly 30 question objects.
-Output no Markdown fences or commentary inside the JSON file.
+Do not put Markdown fences, comments, or explanatory text inside the JSON file.
 If you cannot attach a downloadable file, return only the complete raw JSON so it can be saved as a `.json` file.
 
 Use exactly this schema for every object:
 {
-  "id": "arrays-001",
-  "title": "Descriptive short title",
+  "id": "classes-and-objects-001",
+  "title": "Specific, descriptive title",
   "difficulty": "Low",
-  "question": "Clear problem statement, including input, requirements, and constraints.",
-  "sampleCode": "public class Main {\\n    public static void main(String[] args) {\\n        // Complete, correct solution\\n    }\\n}",
+  "question": "A clear standalone problem statement with requirements, inputs, constraints, and expected behavior.",
+  "sampleCode": "public class Main {\\n    public static void main(String[] args) {\\n        // Complete, working solution\\n    }\\n}",
   "hints": [
-    "First hint: suggest how to approach the problem.",
-    "Second hint: point to the key Java concept or data structure."
+    "A progressive hint that points toward the approach.",
+    "A second hint that points toward the relevant Java concept."
   ],
-  "expectedOutput": "Show the expected result and clarify important edge-case behavior.",
-  "explanation": "Explain the approach, important steps, and why it works.",
+  "expectedOutput": "The expected result, matching the sample solution.",
+  "explanation": "A clear step-by-step explanation of the implementation and relevant design principles.",
   "examples": [
     {
       "command": "javac Main.java && java Main",
       "expected_output": "Exact output produced by the sample solution."
     }
   ],
-  "challenge": "Optional next-step variation that builds on this problem."
+  "challenge": "One optional extension related to the same concept."
 }
 
-Before returning, check that:
-1. There are exactly 30 objects.
-2. There are exactly 10 questions at each difficulty.
-3. All supplied subtopics are covered.
-4. Every ID is unique.
-5. Every object has all required fields with the correct types.
-6. Every sampleCode is valid standalone Java 17 and matches its example output.
-7. The JSON parses correctly, with quotes, backslashes, and newlines escaped properly.
+FINAL VALIDATION — complete before returning:
+1. There are exactly 30 questions: 10 Low, 10 Mid, and 10 High.
+2. The chosen subtopics are all covered.
+3. At least 8 questions apply SOLID, and all five SOLID principles appear in practical coding/design questions.
+4. Every ID is unique and numbered from 001 to 030.
+5. Every question has all required fields with the correct JSON types.
+6. Every solution compiles independently as `Main.java` on Java 17.
+7. Run through each example mentally or with Java and confirm its output exactly matches.
+8. The JSON parses correctly, including escaped quotes, backslashes, and newlines.
+9. Return the downloadable `.json` file when file creation is supported; otherwise return only raw JSON.
 
-Now generate the JSON file.
+Now create the file.
