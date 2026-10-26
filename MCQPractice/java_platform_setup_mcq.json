@@ -1,0 +1,795 @@
+[
+  {
+    "id": "java-platform-jdk-jre-jvm-001",
+    "question": "Which statement best describes the relationship between the JDK, JRE, and JVM?",
+    "options": [
+      "The JVM contains the JRE, which in turn contains the JDK",
+      "The JDK contains development tools and a runtime; the runtime includes the JVM that executes bytecode",
+      "The JRE contains the compiler javac, and the JDK contains only the JVM",
+      "The JVM is a development kit and the JDK is a runtime for executing bytecode"
+    ],
+    "answer": 1,
+    "explanation": "The JDK is the full development kit (javac, jar, jshell, javadoc, etc.) and includes a Java runtime. The runtime provides the class libraries and the JVM, which executes bytecode. The containment is JDK ⊃ JRE ⊃ JVM, not the reverse.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-002",
+    "question": "What does the javac compiler produce from a .java source file?",
+    "options": [
+      "Native machine code specific to the operating system",
+      "Platform-independent bytecode stored in .class files",
+      "An executable .exe or ELF binary",
+      "A .jar file containing the compiled program"
+    ],
+    "answer": 1,
+    "explanation": "javac compiles source into platform-independent bytecode in .class files. The JVM then interprets it or JIT-compiles it to native code at run time. A JAR is created separately with the jar tool.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-003",
+    "question": "Which component of the JVM is responsible for compiling frequently executed bytecode ('hot' methods) into native machine code at run time?",
+    "options": [
+      "Class loader subsystem",
+      "Garbage collector",
+      "JIT (Just-In-Time) compiler",
+      "Bytecode verifier"
+    ],
+    "answer": 2,
+    "explanation": "The JIT compiler (e.g., C1 and C2 in HotSpot) profiles running code and compiles hot methods to optimized native code. The class loader loads classes, the verifier checks bytecode safety, and the GC reclaims memory.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-004",
+    "question": "Why is Java described as 'write once, run anywhere'?",
+    "options": [
+      "javac generates native code for every operating system at once",
+      "The same bytecode runs on any platform that has a compatible JVM",
+      "The JVM is identical on all platforms, so no platform-specific implementations exist",
+      "Java source code is interpreted directly without any compilation"
+    ],
+    "answer": 1,
+    "explanation": "Bytecode is platform-neutral, and each platform provides its own JVM implementation that executes it. The JVM itself is platform-specific; the bytecode is what is portable.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-005",
+    "question": "Which JVM memory area is shared among all threads and stores objects created with new?",
+    "options": [
+      "Java stack",
+      "Heap",
+      "Program counter register",
+      "Native method stack"
+    ],
+    "answer": 1,
+    "explanation": "The heap is shared by all threads and holds object instances and arrays; it is managed by the garbage collector. Each thread has its own Java stack, PC register, and native method stack.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-006",
+    "question": "What is stored in a thread's Java stack frame?",
+    "options": [
+      "All objects created by that thread",
+      "Local variables, operand stack, and frame data for a method invocation",
+      "The loaded class definitions",
+      "The string constant pool"
+    ],
+    "answer": 1,
+    "explanation": "Each method call pushes a frame holding local variables (including references to objects, not the objects themselves), an operand stack, and frame data. Objects live on the heap, and class metadata lives in the metaspace.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-007",
+    "question": "Since Java 8, where is class metadata (such as class structure and method information) stored in HotSpot?",
+    "options": [
+      "PermGen inside the heap",
+      "Metaspace in native memory",
+      "The Java stack",
+      "The code cache only"
+    ],
+    "answer": 1,
+    "explanation": "Java 8 removed PermGen and introduced Metaspace, which uses native memory and by default grows as needed. A common trap is answering PermGen, which applies only to Java 7 and earlier.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-008",
+    "question": "Which class loader loads the core Java classes such as java.lang.Object in modern HotSpot JVMs (Java 9+)?",
+    "options": [
+      "Application (system) class loader",
+      "Platform class loader",
+      "Bootstrap class loader",
+      "Custom user-defined class loader"
+    ],
+    "answer": 2,
+    "explanation": "The bootstrap class loader loads core classes from the base module (java.base) and is implemented natively; calling getClassLoader() on such classes typically returns null. The platform loader (replacing the extension loader) and the application loader come later in the delegation chain.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-009",
+    "question": "What does the class loader delegation model do when asked to load a class?",
+    "options": [
+      "It tries to load the class itself first, then asks its parent",
+      "It delegates to its parent loader first and loads the class itself only if the parent cannot",
+      "It loads the class from all loaders and picks the newest version",
+      "It always asks the bootstrap loader only and fails otherwise"
+    ],
+    "answer": 1,
+    "explanation": "The parent-first delegation model prevents user code from replacing core classes such as java.lang.String, since the bootstrap loader finds them first. Only if the parent fails does the child attempt to load the class.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-010",
+    "question": "Which statement about a standalone JRE in modern Java is most accurate?",
+    "options": [
+      "Oracle's JDK distribution still ships a separate JRE installer for every release",
+      "Since Java 11, standalone JRE downloads are generally not provided, and jlink can build a custom runtime image",
+      "The JRE became mandatory for compiling code starting with Java 9",
+      "The JRE replaced the JVM in Java 9"
+    ],
+    "answer": 1,
+    "explanation": "Starting with Java 11, vendors generally stopped shipping a separate JRE, and developers use the JDK or build trimmed runtime images with jlink. The JRE concept still exists as the runtime part, but it is not compile-time mandatory.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-011",
+    "question": "What is the role of the bytecode verifier in the JVM?",
+    "options": [
+      "To optimize bytecode for speed",
+      "To check that loaded bytecode is structurally valid and type-safe before execution",
+      "To compile bytecode into native code",
+      "To remove unused classes from memory"
+    ],
+    "answer": 1,
+    "explanation": "The verifier checks constraints such as valid stack usage, correct types, and legal control flow so malformed or malicious bytecode cannot break JVM safety guarantees. Optimization is done by the JIT and unloading is related to GC.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jdk-jre-jvm-012",
+    "question": "Which of the following is a true statement about the JVM specification versus implementations?",
+    "options": [
+      "HotSpot is the only JVM that conforms to the specification",
+      "The JVM specification defines behavior, while HotSpot, OpenJ9, and others are implementations",
+      "The JVM specification mandates a particular garbage collection algorithm",
+      "All JVM implementations must use the same JIT compiler"
+    ],
+    "answer": 1,
+    "explanation": "The JVM specification defines required behavior and the class file format, while vendors implement it (HotSpot, OpenJ9, GraalVM, etc.). The specification does not dictate a specific GC or JIT design.",
+    "subtopic": "JDK, JRE, and JVM"
+  },
+  {
+    "id": "java-platform-jshell-001",
+    "question": "Which JDK tool provides a REPL (read-eval-print loop) for trying Java snippets interactively?",
+    "options": [
+      "javap",
+      "jshell",
+      "jconsole",
+      "jdb"
+    ],
+    "answer": 1,
+    "explanation": "jshell, introduced in Java 9, evaluates declarations, statements, and expressions interactively. javap disassembles class files, jconsole monitors JVMs, and jdb is a debugger.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-002",
+    "question": "After installing a JDK, which command verifies the installed compiler version?",
+    "options": [
+      "java -compiler",
+      "javac -version",
+      "jshell --compiler",
+      "javap -v"
+    ],
+    "answer": 1,
+    "explanation": "javac -version prints the compiler version, which confirms a JDK (not just a JRE) is installed and on the PATH. java -version shows the runtime version, which can differ if multiple installations exist.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-003",
+    "question": "In jshell, you type: int x = 5 and press Enter. What happens?",
+    "options": [
+      "A compile error occurs because a class is required",
+      "The variable x is declared and jshell prints something like x ==> 5",
+      "Nothing is printed and x is discarded",
+      "jshell requires a trailing semicolon or it waits forever"
+    ],
+    "answer": 1,
+    "explanation": "jshell allows top-level variable declarations without a class or main method and echoes the value, e.g., x ==> 5. Semicolons are optional for single statements and expressions in jshell.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-004",
+    "question": "Which jshell command lists the variables, methods, and classes you have defined in the current session?",
+    "options": [
+      "/vars only",
+      "/list",
+      "/show",
+      "/history"
+    ],
+    "answer": 1,
+    "explanation": "/list shows the snippets you entered with their IDs. /vars shows only variables, /methods only methods, and /history shows everything typed, including commands. The question asks for variables, methods, and classes together, which matches /list.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-005",
+    "question": "How do you exit jshell?",
+    "options": [
+      "Type quit()",
+      "Type /exit",
+      "Type System.exit(0) only",
+      "Press Ctrl+Z and Enter on all platforms"
+    ],
+    "answer": 1,
+    "explanation": "/exit is the built-in jshell command for ending the session (Ctrl+D also works on many terminals). System.exit(0) is not the idiomatic way, and quit() is not a jshell command.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-006",
+    "question": "In jshell you enter: String s = \"hi\"; and then s.toUpperCase(). What is shown for the second input?",
+    "options": [
+      "Nothing, because expression results are discarded",
+      "$2 ==> \"HI\" (a temporary variable is created for the expression result)",
+      "A compile error because the result is not assigned",
+      "s ==> \"HI\" because s is modified"
+    ],
+    "answer": 1,
+    "explanation": "jshell stores unassigned expression results in scratch variables named $1, $2, etc. Strings are immutable, so s is not modified. The exact number depends on the snippet ID.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-007",
+    "question": "Which jshell command lets you start with an external library JAR on the classpath?",
+    "options": [
+      "jshell --class-path mylib.jar",
+      "jshell -lib mylib.jar",
+      "jshell --import mylib.jar",
+      "jshell --jar-add mylib.jar"
+    ],
+    "answer": 0,
+    "explanation": "jshell accepts --class-path (or -cp) like java does, and you can also use /env -class-path inside a session. The other options are not valid flags.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-008",
+    "question": "Which classes does jshell import automatically at startup by default?",
+    "options": [
+      "Only java.lang",
+      "A set of common packages such as java.util, java.io, java.math, and java.util.stream",
+      "No packages, so every class must be imported manually",
+      "All packages in the JDK"
+    ],
+    "answer": 1,
+    "explanation": "jshell's default startup includes imports such as java.io.*, java.math.*, java.net.*, java.nio.file.*, java.util.*, java.util.concurrent.*, java.util.function.*, java.util.prefs.*, java.util.regex.*, and java.util.stream.*. This makes quick experiments convenient, and java.lang is implicit as always.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-009",
+    "question": "On a machine with multiple JDKs installed, java -version shows 11 but javac -version shows 17. What is the most likely cause?",
+    "options": [
+      "The JVM and compiler are always different versions by design",
+      "The PATH resolves java and javac from different JDK installations",
+      "javac ignores JAVA_HOME while java requires it",
+      "Java 17 removed the java launcher"
+    ],
+    "answer": 1,
+    "explanation": "Each command is resolved from PATH, so mismatched entries (or a system-provided java shim) can point to different installations. Fixing PATH and JAVA_HOME to a single JDK resolves the mismatch.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-jshell-010",
+    "question": "In jshell, which of the following is valid without wrapping in a class?",
+    "options": [
+      "int add(int a, int b) { return a + b; }",
+      "public static void main(String[] args) only",
+      "A method must always be inside a class declaration",
+      "Only variables can be declared at top level"
+    ],
+    "answer": 0,
+    "explanation": "jshell allows top-level method declarations, which it manages in a synthetic wrapper. This is a jshell convenience and is not valid in a normal .java file.",
+    "subtopic": "Install a JDK and use jshell"
+  },
+  {
+    "id": "java-platform-javac-java-001",
+    "question": "A file named Hello.java contains a public class Hello with a valid main method. Which command sequence compiles and runs it?",
+    "options": [
+      "javac Hello.java then java Hello",
+      "javac Hello then java Hello.class",
+      "java Hello.java then javac Hello",
+      "javac Hello.class then java Hello.java"
+    ],
+    "answer": 0,
+    "explanation": "javac takes the source file name (with .java), and java takes the fully qualified class name without the .class extension. A common trap is passing Hello.class to java.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-002",
+    "question": "A file contains `public class Test { }` but is saved as Demo.java. What happens when compiling with javac Demo.java?",
+    "options": [
+      "It compiles and produces Demo.class",
+      "A compile error: class Test is public and must be declared in a file named Test.java",
+      "It compiles and produces Test.class",
+      "It compiles with a warning only"
+    ],
+    "answer": 1,
+    "explanation": "A public top-level class must be declared in a file with the same name. A non-public class could live in a differently named file.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-003",
+    "question": "Which command runs a single-file source program directly without a separate javac step (Java 11+)?",
+    "options": [
+      "java Hello.java",
+      "javac -run Hello.java",
+      "java -source Hello",
+      "jrun Hello.java"
+    ],
+    "answer": 0,
+    "explanation": "JEP 330 lets the java launcher compile and run a single source file in memory, e.g., java Hello.java. No .class file is written to disk by default.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-004",
+    "question": "What is the exact signature the JVM looks for as the traditional entry point of a Java application?",
+    "options": [
+      "public static void main(String[] args)",
+      "public void main(String[] args)",
+      "static void main(String args)",
+      "public static int main(String[] args)"
+    ],
+    "answer": 0,
+    "explanation": "The traditional entry point is public static void main(String[] args); varargs String... is also accepted. Return type must be void and the method must be static. (Newer preview features relax this in recent releases, but this is the standard answer.)",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-005",
+    "question": "You run java Hello but the class has no main method. What is the typical result?",
+    "options": [
+      "Compile-time error from javac only",
+      "A runtime error indicating the main method was not found",
+      "The JVM silently exits with code 0",
+      "The JVM calls the constructor instead"
+    ],
+    "answer": 1,
+    "explanation": "javac compiles the class fine because main is not required to compile. The launcher then reports an error that no main method was found (in older releases, a message like 'Main method not found in class Hello').",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-006",
+    "question": "Which javac option places the generated .class files in a specified output directory?",
+    "options": [
+      "-o out",
+      "-d out",
+      "-output out",
+      "-target out"
+    ],
+    "answer": 1,
+    "explanation": "-d sets the destination directory for class files, and javac creates package subdirectories there as needed. The other options are not valid for this purpose.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-007",
+    "question": "What does the javac option --release 17 do?",
+    "options": [
+      "Runs the program on Java 17 only",
+      "Compiles against the Java 17 language level and its platform API, even if a newer JDK is used",
+      "Upgrades the source to Java 17 syntax automatically",
+      "Sets the JVM heap size to 17 MB"
+    ],
+    "answer": 1,
+    "explanation": "--release configures source level, target bytecode version, and the available API signatures for that release, which is safer than -source/-target alone since it prevents using newer APIs accidentally.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-008",
+    "question": "You compile with JDK 21 and run on JRE 17 without using --release. The program was compiled with the default target. What is the likely outcome?",
+    "options": [
+      "It runs normally because bytecode is always backward compatible",
+      "UnsupportedClassVersionError because the class file version is newer than the runtime supports",
+      "A compile error on the JRE 17 machine",
+      "It runs but ignores newer features"
+    ],
+    "answer": 1,
+    "explanation": "Bytecode is forward compatible only: newer JVMs run older class files, not the reverse. Running a Java 21 class file on Java 17 throws java.lang.UnsupportedClassVersionError.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-009",
+    "question": "Given the following code, what is printed when running java Main a b c?\n\npublic class Main {\n  public static void main(String[] args) {\n    System.out.println(args.length);\n  }\n}",
+    "options": [
+      "0",
+      "1",
+      "3",
+      "4"
+    ],
+    "answer": 2,
+    "explanation": "The class name is not part of args, so the three arguments a, b, and c give an array of length 3. A common trap is counting the class name.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-010",
+    "question": "What does the command javac Hello.java produce if Hello.java declares classes Hello and a non-public class Helper?",
+    "options": [
+      "Only Hello.class",
+      "Hello.class and Helper.class",
+      "A single combined Hello.jar",
+      "Only Helper.class"
+    ],
+    "answer": 1,
+    "explanation": "javac generates one .class file per top-level class (and per nested or anonymous class), regardless of access modifier. So both Hello.class and Helper.class are created.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-011",
+    "question": "Which tool can you use to inspect the bytecode of a compiled class?",
+    "options": [
+      "javap -c Hello",
+      "javadoc Hello",
+      "jar -c Hello",
+      "jlink Hello"
+    ],
+    "answer": 0,
+    "explanation": "javap disassembles class files, and -c prints the bytecode instructions. javadoc generates documentation, jar packages archives, and jlink builds runtime images.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-javac-java-012",
+    "question": "Which command packages compiled classes in the directory out into an executable JAR with entry point com.app.Main?",
+    "options": [
+      "jar --create --file app.jar --main-class com.app.Main -C out .",
+      "javac --jar app.jar com.app.Main",
+      "java -jar --create app.jar out",
+      "jar -x app.jar out"
+    ],
+    "answer": 0,
+    "explanation": "The jar tool with --create, --file, and --main-class (or the short form -cfe) writes the Main-Class manifest attribute, and -C out . adds the contents of the out directory. The java -jar command only runs a JAR; -x extracts one.",
+    "subtopic": "Compile and run with javac and java"
+  },
+  {
+    "id": "java-platform-packages-classpath-001",
+    "question": "A class declared with `package com.shop.model;` is compiled with javac -d out. Where is the resulting .class file placed?",
+    "options": [
+      "out/Product.class",
+      "out/com/shop/model/Product.class",
+      "out/model/Product.class",
+      "com/shop/model/out/Product.class"
+    ],
+    "answer": 1,
+    "explanation": "With -d, javac creates directories matching the package name under the destination. The package structure must mirror the directory structure for the class loader to find it.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-002",
+    "question": "Classes are compiled into the out directory. Which command correctly runs com.shop.App?",
+    "options": [
+      "java -cp out com.shop.App",
+      "java -cp out com/shop/App.class",
+      "java out/com/shop/App",
+      "java -cp out App"
+    ],
+    "answer": 0,
+    "explanation": "The classpath points to the root directory of the package hierarchy (out), and the class is given by its fully qualified name using dots. Passing the file path or the simple name fails.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-003",
+    "question": "On Linux/macOS, which separator is used between entries in -cp, and what about on Windows?",
+    "options": [
+      "Colon on Linux/macOS, semicolon on Windows",
+      "Semicolon on Linux/macOS, colon on Windows",
+      "Comma on both",
+      "Colon on both"
+    ],
+    "answer": 0,
+    "explanation": "The path separator is platform-dependent: ':' on Unix-like systems and ';' on Windows. Using the wrong one is a classic cause of ClassNotFoundException.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-004",
+    "question": "What does the classpath entry lib/* (with the wildcard) mean in java -cp \"lib/*\" App?",
+    "options": [
+      "All files in lib, including non-JAR files, are added",
+      "All .jar files directly in lib are added, but not subdirectories' contents",
+      "All JARs in lib and every nested subdirectory are added recursively",
+      "Only the first JAR in lib is added"
+    ],
+    "answer": 1,
+    "explanation": "The wildcard expands to all .jar (and .JAR) files in that directory only, not recursively and not .class files. The order of expansion is unspecified.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-005",
+    "question": "Two JARs on the classpath contain the same class com.util.Helper with different implementations. Which one is used?",
+    "options": [
+      "The one with the newer file timestamp",
+      "The first one found in classpath order",
+      "Both are merged by the class loader",
+      "The JVM throws a duplicate class error at startup"
+    ],
+    "answer": 1,
+    "explanation": "The class loader searches classpath entries in order and loads the first match, silently hiding later duplicates. This is a common source of subtle bugs known as classpath hell.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-006",
+    "question": "Running java App prints an error saying 'Could not find or load main class App' even though App.class exists in the current directory and is in package com.x. What is the most likely cause?",
+    "options": [
+      "The JVM does not support running from the current directory",
+      "The class is in a package, so it must be run with the fully qualified name from the package root",
+      "The class must be in a JAR to be loaded",
+      "javac did not generate the class correctly"
+    ],
+    "answer": 1,
+    "explanation": "A class in package com.x has the fully qualified name com.x.App and must be found under com/x/ relative to a classpath root. Running java App from inside that folder fails the lookup.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-007",
+    "question": "Which file declares a Java module and its dependencies (Java 9+)?",
+    "options": [
+      "module.xml",
+      "module-info.java",
+      "package-info.java",
+      "manifest.mf"
+    ],
+    "answer": 1,
+    "explanation": "module-info.java sits at the root of the module source and declares the module name, `requires`, `exports`, and related directives. package-info.java is for package-level annotations and documentation.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-008",
+    "question": "Consider this module declaration:\n\nmodule com.app {\n  requires com.lib;\n}\n\nModule com.lib has a package com.lib.api that it does NOT export. What happens when com.app tries to use a public class from com.lib.api?",
+    "options": [
+      "It compiles because the class is public",
+      "A compile error because the package is not exported to com.app",
+      "It compiles but fails at runtime only",
+      "It works if reflection is used"
+    ],
+    "answer": 1,
+    "explanation": "Public alone is not enough in the module system; a package must be exported (`exports com.lib.api;`) to be accessible to other modules. Strong encapsulation applies at compile time and run time, including for ordinary reflection access.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-009",
+    "question": "What is the difference between the classpath and the module path?",
+    "options": [
+      "They are identical and interchangeable",
+      "The module path enforces explicit module dependencies and encapsulation, while the classpath treats everything as one flat set (the unnamed module)",
+      "The classpath is only for JARs and the module path only for directories",
+      "The module path is used only by javac, not java"
+    ],
+    "answer": 1,
+    "explanation": "Code on the classpath ends up in the unnamed module, which can read all modules but has no encapsulation guarantees among its own packages. The module path gives reliable configuration via requires/exports and is used by both javac and java (--module-path or -p).",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-010",
+    "question": "Which command runs the main class com.app.Main from module com.app located in the directory mods?",
+    "options": [
+      "java -p mods -m com.app/com.app.Main",
+      "java -cp mods com.app.Main",
+      "java --module mods com.app",
+      "java -m mods/com.app.Main"
+    ],
+    "answer": 0,
+    "explanation": "The -p (--module-path) flag gives the module location and -m (--module) takes module/mainclass. The other forms use incorrect syntax or the classpath.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-011",
+    "question": "What is an automatic module?",
+    "options": [
+      "A module generated by javac when module-info.java is missing in source",
+      "A plain JAR without module-info placed on the module path, which is treated as a module that exports all its packages and reads all other modules",
+      "A module that is loaded automatically at JVM startup",
+      "A module that has no name"
+    ],
+    "answer": 1,
+    "explanation": "Automatic modules ease migration: a non-modular JAR on the module path gets a module name (from the Automatic-Module-Name manifest entry or derived from the file name) and exports every package. The unnamed module is a different concept for code on the classpath.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-012",
+    "question": "Which import statement is NOT needed to use java.lang.String in your code?",
+    "options": [
+      "import java.lang.String;",
+      "None; java.lang is implicitly imported",
+      "import java.lang.*;",
+      "import static java.lang.String.*;"
+    ],
+    "answer": 1,
+    "explanation": "Every compilation unit implicitly imports java.lang.*, so String, Object, Math, and others need no import. The explicit imports are legal but redundant.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-013",
+    "question": "What happens if two imported packages both contain a class named Date (e.g., java.util.Date and java.sql.Date) via on-demand imports `import java.util.*; import java.sql.*;` and you write `Date d;`?",
+    "options": [
+      "java.util.Date is chosen because it is alphabetically later",
+      "A compile error due to an ambiguous reference",
+      "java.sql.Date is chosen because it was imported last",
+      "The compiler picks one with a warning"
+    ],
+    "answer": 1,
+    "explanation": "Using a simple name that matches types from two on-demand imports is ambiguous and results in a compile error. Resolve it with a single-type import or the fully qualified name.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-packages-classpath-014",
+    "question": "Which module directive makes a module's dependency available transitively to modules that require it?",
+    "options": [
+      "requires static",
+      "requires transitive",
+      "exports to",
+      "opens"
+    ],
+    "answer": 1,
+    "explanation": "`requires transitive` implies readability: any module that requires this one also reads the transitive dependency. `requires static` makes a dependency optional at run time, and `opens` governs deep reflection access.",
+    "subtopic": "Packages, classpath, and modules"
+  },
+  {
+    "id": "java-platform-env-args-001",
+    "question": "What is the purpose of the JAVA_HOME environment variable?",
+    "options": [
+      "It stores the classpath for all Java programs",
+      "It points to the JDK installation directory so tools and scripts can locate it",
+      "It sets the maximum heap size",
+      "It lists all installed Java versions"
+    ],
+    "answer": 1,
+    "explanation": "JAVA_HOME is a convention used by build tools (Maven, Gradle), IDEs, and scripts to find the JDK. It does not by itself make java available on the command line; PATH must include its bin directory.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-002",
+    "question": "Why must the JDK's bin directory be added to the PATH environment variable?",
+    "options": [
+      "So the JVM can find .class files",
+      "So the shell can locate executables such as java and javac",
+      "So the compiler can find imported packages",
+      "So garbage collection can run"
+    ],
+    "answer": 1,
+    "explanation": "PATH is used by the operating system shell to find executables. The classpath is a separate concept used by the JVM and javac to find classes.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-003",
+    "question": "What does the following code print when run with java Main (no arguments)?\n\npublic class Main {\n  public static void main(String[] args) {\n    System.out.println(args.length + \":\" + (args == null));\n  }\n}",
+    "options": [
+      "0:false",
+      "0:true",
+      "NullPointerException",
+      "1:false"
+    ],
+    "answer": 0,
+    "explanation": "When no arguments are supplied, args is an empty array, not null, so length is 0 and args == null is false. A common trap is assuming null.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-004",
+    "question": "Given the code below, what happens when run with java Main hello?\n\npublic class Main {\n  public static void main(String[] args) {\n    int n = Integer.parseInt(args[0]);\n    System.out.println(n);\n  }\n}",
+    "options": [
+      "Prints 0",
+      "Throws NumberFormatException",
+      "Throws ArrayIndexOutOfBoundsException",
+      "Prints hello"
+    ],
+    "answer": 1,
+    "explanation": "args[0] exists (it is \"hello\"), so there is no index error. Integer.parseInt cannot parse \"hello\" and throws NumberFormatException.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-005",
+    "question": "Which API reads the value of an operating-system environment variable named HOME inside a Java program?",
+    "options": [
+      "System.getProperty(\"HOME\")",
+      "System.getenv(\"HOME\")",
+      "System.getEnvironment(\"HOME\")",
+      "Runtime.getenv(\"HOME\")"
+    ],
+    "answer": 1,
+    "explanation": "System.getenv(String) returns the environment variable value or null if it is not set. System.getProperty reads JVM system properties, which are a different mechanism.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-006",
+    "question": "How do you pass a system property app.mode=prod to a Java program and read it in code?",
+    "options": [
+      "java -Dapp.mode=prod Main, then System.getProperty(\"app.mode\")",
+      "java --app.mode=prod Main, then System.getenv(\"app.mode\")",
+      "java -Papp.mode=prod Main, then System.getProperty(\"app.mode\")",
+      "java Main -Dapp.mode=prod, then System.getProperty(\"app.mode\")"
+    ],
+    "answer": 0,
+    "explanation": "JVM options such as -D must come before the main class name. If -D is placed after the class name, it becomes a program argument in args rather than a system property.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-007",
+    "question": "Given the command java Main -Dx=1 and the code `System.out.println(System.getProperty(\"x\") + \" \" + args.length);` what is printed?",
+    "options": [
+      "1 0",
+      "null 1",
+      "1 1",
+      "null 0"
+    ],
+    "answer": 1,
+    "explanation": "Because -Dx=1 appears after the main class name, it is passed as a program argument, not a JVM option. So the property x is not set (null) and args has length 1.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-008",
+    "question": "Which JVM option sets the maximum heap size to 512 megabytes?",
+    "options": [
+      "-Xms512m",
+      "-Xmx512m",
+      "-Xss512m",
+      "-XX:MaxMetaspaceSize=512m"
+    ],
+    "answer": 1,
+    "explanation": "-Xmx sets the maximum heap size. -Xms sets the initial heap, -Xss sets the thread stack size, and MaxMetaspaceSize limits class metadata memory.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-009",
+    "question": "What does the JAVA_TOOL_OPTIONS environment variable do?",
+    "options": [
+      "It lists the tools available in the JDK",
+      "It provides JVM options that are picked up automatically by the JVM at startup",
+      "It sets the default package for compilation",
+      "It replaces the PATH variable for Java"
+    ],
+    "answer": 1,
+    "explanation": "The JVM reads JAVA_TOOL_OPTIONS at startup and prepends those options, printing a 'Picked up JAVA_TOOL_OPTIONS' message. It is handy for applying flags without editing the launch command, for example in containers.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-010",
+    "question": "On a shell, you run java Main *.txt in a directory that contains a.txt and b.txt. What is args.length in the program?",
+    "options": [
+      "1",
+      "2",
+      "0",
+      "It depends on the JVM"
+    ],
+    "answer": 1,
+    "explanation": "The shell expands the wildcard before launching Java (on Unix-like shells), so the program receives a.txt and b.txt as two arguments. Quoting the pattern ('*.txt') would pass the literal string instead.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-011",
+    "question": "What does System.getenv(\"UNSET_VAR_XYZ\") return if the variable is not defined?",
+    "options": [
+      "An empty string",
+      "null",
+      "It throws IllegalArgumentException",
+      "The string \"undefined\""
+    ],
+    "answer": 1,
+    "explanation": "System.getenv(String) returns null when the environment variable does not exist. Always null-check, or use Optional or a default value, before using the result.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-012",
+    "question": "Which statement about modifying environment variables from Java code is correct?",
+    "options": [
+      "System.setenv(name, value) updates the current process's environment",
+      "The map from System.getenv() is unmodifiable, and Java provides no standard API to change the current process's environment",
+      "System.getenv().put(name, value) works but only on Windows",
+      "System.setProperty also changes environment variables"
+    ],
+    "answer": 1,
+    "explanation": "The map returned by System.getenv() is read-only, and there is no System.setenv. You can customize the environment of a child process via ProcessBuilder.environment(), and System.setProperty only affects JVM system properties.",
+    "subtopic": "Environment variables and command-line arguments"
+  },
+  {
+    "id": "java-platform-env-args-013",
+    "question": "Which command-line precedence statement about classpath is correct when running java -cp libs/a.jar -jar app.jar?",
+    "options": [
+      "-cp is merged with the JAR's manifest classpath",
+      "When -jar is used, the -cp option and CLASSPATH environment variable are ignored, and the JAR's manifest Class-Path is used",
+      "-jar is ignored when -cp is present",
+      "Both are combined in alphabetical order"
+    ],
+    "answer": 1,
+    "explanation": "With java -jar, the classpath comes only from the JAR's manifest Class-Path attribute; -cp and the CLASSPATH environment variable are ignored. This is a frequent source of ClassNotFoundException with executable JARs.",
+    "subtopic": "Environment variables and command-line arguments"
+  }
+]
