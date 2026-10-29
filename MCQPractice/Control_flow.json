@@ -1,72 +1,1080 @@
 [
-{"id":"java-control-flow-if-else-if-001","question":"In a Java if / else-if / else chain, which statement is correct?","options":["Every condition is evaluated and every branch whose condition is true runs","Only the first branch whose condition is true runs, and the remaining conditions are skipped","Only the last branch whose condition is true runs","The else block always runs after a matching else-if block"],"answer":1,"explanation":"An if / else-if / else chain is evaluated top to bottom. As soon as one condition is true, its block runs and the rest of the chain is skipped. The else block runs only when none of the earlier conditions is true.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-002","question":"What is the output?\n\nint x = 15;\nif (x > 10) {\n    System.out.println(\"A\");\n} else if (x > 5) {\n    System.out.println(\"B\");\n} else {\n    System.out.println(\"C\");\n}","options":["B","C","A","Nothing is printed"],"answer":2,"explanation":"x > 10 is true, so \"A\" is printed and the else-if and else branches are skipped, even though x > 5 is also true.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-003","question":"What is the output?\n\nint x = 15;\nif (x > 10) {\n    System.out.println(\"A\");\n}\nif (x > 5) {\n    System.out.println(\"B\");\n} else {\n    System.out.println(\"C\");\n}","options":["A only","A, then B on separate lines","B only","A, then C on separate lines"],"answer":1,"explanation":"These are two independent if statements, not one chain. The first prints A. The second is evaluated separately, and since x > 5 is true it prints B. The else belongs to the second if only.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-004","question":"What happens when the following code is compiled?\n\nint x = 5;\nif (x = 5) {\n    System.out.println(\"Five\");\n}","options":["It prints Five","It fails to compile because an int cannot be converted to boolean","It compiles but throws a runtime exception","It compiles and prints nothing"],"answer":1,"explanation":"Java's if requires a boolean expression. x = 5 is an assignment whose type is int, so the compiler reports an incompatible types error. This differs from C/C++, where such code compiles. The comparison should be x == 5.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-005","question":"What is the output?\n\nint a = 5, b = 0;\nif (a > 3)\n    if (b > 0)\n        System.out.println(\"X\");\nelse\n    System.out.println(\"Y\");","options":["Nothing is printed","X","Compile-time error","Y"],"answer":3,"explanation":"This is the dangling-else case. An else always binds to the nearest unmatched if, here if (b > 0), regardless of indentation. Since a > 3 is true and b > 0 is false, the else runs and prints Y. Braces avoid this confusion.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-006","question":"What is the output?\n\nint n = 3;\nif (n > 5);\n{\n    System.out.println(\"Big\");\n}","options":["Nothing is printed","Compile-time error","Big","Runtime exception"],"answer":2,"explanation":"The semicolon after if (n > 5) is an empty statement that forms the whole body of the if. The braces that follow are a plain block that always runs, so Big is printed even though n > 5 is false.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-007","question":"A grading program should give A for 90 and above, B for 80-89, D for 60-79, and F below 60. This code prints D for a score of 95. What is the best fix?\n\nint score = 95;\nchar grade;\nif (score >= 60) {\n    grade = 'D';\n} else if (score >= 80) {\n    grade = 'B';\n} else if (score >= 90) {\n    grade = 'A';\n} else {\n    grade = 'F';\n}\nSystem.out.println(grade);","options":["Replace the final else with another else if","Declare grade as a String instead of a char","Change each >= to >","Reorder the conditions so the highest threshold is tested first (90, then 80, then 60)"],"answer":3,"explanation":"In an else-if chain the first true condition wins. Because score >= 60 is tested first, every score of 60 or more gets D. Chains with overlapping ranges must test the most restrictive condition first.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-008","question":"Complete the condition so that leap is true exactly for Gregorian leap years (for example 2000 and 2024 are leap years; 2100 is not).\n\nint year = 2100;\nboolean leap;\nif (____) {\n    leap = true;\n} else {\n    leap = false;\n}","options":["year % 4 == 0 && year % 100 != 0","(year % 4 == 0 && year % 100 != 0) || year % 400 == 0","year % 4 == 0 || year % 400 == 0","year % 100 == 0 || year % 400 != 0"],"answer":1,"explanation":"A year is a leap year if it is divisible by 4 and not by 100, or if it is divisible by 400. Option A wrongly rejects 2000. Option C wrongly accepts 2100. Option D accepts many non-leap years such as 2023.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-009","question":"A String variable s may be null. Which condition reliably tests whether its content equals \"yes\" without throwing a NullPointerException?","options":["s.equals(\"yes\")","s == \"yes\"","\"yes\".equals(s)","s.compareTo(\"yes\") == 0"],"answer":2,"explanation":"Calling equals on the literal \"yes\" is null-safe, because equals(null) returns false. s.equals and s.compareTo throw a NullPointerException when s is null. == compares references, not content, so it is unreliable for Strings.","subtopic":"If and else-if"},
-{"id":"java-control-flow-if-else-if-010","question":"What is the output?\n\nint i = 0;\nif (i != 0 && 10 / i > 1) {\n    System.out.println(\"A\");\n} else {\n    System.out.println(\"B\");\n}","options":["A","B","ArithmeticException: / by zero","Compile-time error"],"answer":1,"explanation":"The && operator short-circuits. Since i != 0 is false, the right operand 10 / i is never evaluated, so no division by zero occurs and the else branch prints B. With the non-short-circuit & operator, the exception would be thrown.","subtopic":"If and else-if"},
-{"id":"java-control-flow-for-loops-001","question":"What is the output?\n\nfor (int i = 0; i < 5; i += 2) {\n    System.out.print(i);\n}","options":["01234","0246","024","24"],"answer":2,"explanation":"i takes the values 0, 2, 4. After 4, i becomes 6, and 6 < 5 is false, so the loop ends. The output is 024.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-002","question":"Which option correctly describes the execution order of a basic for loop: for (init; condition; update) { body }?","options":["Condition, init, body, update","Init runs once; then repeat: condition check, body, update","Init, body, condition, update, all repeated each time","Init and update run before every condition check, then the body"],"answer":1,"explanation":"Initialization runs exactly once. Then the condition is checked before each iteration, the body runs if it is true, and the update runs after the body. The condition is then checked again.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-003","question":"What happens when this code is compiled and run?\n\nfor (int i = 0; i < 3; i++) {\n}\nSystem.out.println(i);","options":["It prints 3","It prints 0","Compile-time error: i cannot be resolved to a variable","It prints 2"],"answer":2,"explanation":"A variable declared in the for-init section is scoped to the for statement only. Outside the loop, i is not in scope, so the compiler reports a cannot find symbol error.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-004","question":"What is printed?\n\nint count = 0;\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < i; j++) {\n        count++;\n    }\n}\nSystem.out.println(count);","options":["3","4","6","9"],"answer":0,"explanation":"The inner loop runs i times for each i: 0 times for i=0, 1 time for i=1, and 2 times for i=2. The total is 0 + 1 + 2 = 3.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-005","question":"Which statement about for (;;) { ... } is correct?","options":["It is a compile-time error because the condition is required","It is valid and loops indefinitely unless exited by break, return, or an exception","It executes the body exactly once","It is valid but never executes the body"],"answer":1,"explanation":"All three parts of a for header are optional. An omitted condition is treated as true, so for (;;) is an intentional infinite loop that must be exited explicitly.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-006","question":"What is the output?\n\nint count = 0;\nfor (byte b = 120; b > 0; b++) {\n    count++;\n}\nSystem.out.println(count);","options":["7","8","The loop never ends","Compile-time error"],"answer":1,"explanation":"b takes the values 120 to 127, which is 8 iterations. Then b++ overflows the byte to -128, and -128 > 0 is false, so the loop stops. The compound increment on a byte compiles without a cast.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-007","question":"What is the output?\n\nfor (int i = 0, j = 10; i < j; i += 3, j -= 3) {\n    System.out.print(i + \":\" + j + \";\");\n}","options":["0:10;3:7;6:4;","0:10;3:7;","0:10;","0:10;3:7;6:4;9:1;"],"answer":1,"explanation":"Iteration 1 has i=0, j=10 and prints 0:10;. After the update, i=3 and j=7, and 3 < 7 is true, so it prints 3:7;. After the next update, i=6 and j=4, and 6 < 4 is false, so the loop ends.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-008","question":"Complete the loop so it prints the elements of arr in reverse order (for {1,2,3} it prints 321).\n\nint[] arr = {1, 2, 3};\nfor (____) {\n    System.out.print(arr[i]);\n}","options":["int i = arr.length; i > 0; i--","int i = arr.length - 1; i >= 0; i--","int i = arr.length - 1; i > 0; i--","int i = 0; i < arr.length; i--"],"answer":1,"explanation":"The last valid index is length - 1, and the loop must include index 0, so the condition is i >= 0. Starting at arr.length throws ArrayIndexOutOfBoundsException. i > 0 skips the first element. Decrementing from 0 goes out of bounds.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-009","question":"What is the output?\n\nint[] a = {1, 2, 3};\nfor (int x : a) {\n    x *= 2;\n}\nSystem.out.println(a[0] + a[1] + a[2]);","options":["6","12","246","Compile-time error"],"answer":0,"explanation":"In an enhanced for loop, x is a copy of each element value. Modifying x does not change the array, so the array is still {1, 2, 3}. The int addition gives 6.","subtopic":"For loops"},
-{"id":"java-control-flow-for-loops-010","question":"Consider this pseudocode, where FOR k FROM 1 TO 4 means k takes the values 1, 2, 3, 4 (inclusive, step 1).\n\ntotal = 0\nFOR k FROM 1 TO 4\n    total = total + k * k\nEND FOR\nPRINT total\n\nWhat is printed?","options":["10","16","25","30"],"answer":3,"explanation":"The loop accumulates the squares: 1 + 4 + 9 + 16 = 30. Option A is the sum of k, not of k squared.","subtopic":"For loops"},
-{"id":"java-control-flow-while-loops-001","question":"What is the output?\n\nint i = 1;\nwhile (i <= 3) {\n    System.out.print(i);\n    i++;\n}","options":["123","12","234","0123"],"answer":0,"explanation":"The condition i <= 3 is true for i = 1, 2, 3, so each value is printed. When i becomes 4 the loop ends.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-002","question":"Which statement about a while loop is correct?","options":["The body always executes at least once","The condition is checked before each iteration, so the body may execute zero times","The condition is checked after each iteration","The loop variable must be declared in the while header"],"answer":1,"explanation":"A while loop is an entry-controlled loop. If the condition is false at the start, the body never runs. A do-while loop is the one that always runs at least once.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-003","question":"What is the output?\n\nint n = 0;\nwhile (n < 0) {\n    System.out.println(\"x\");\n}\nSystem.out.println(\"done\");","options":["x, then done","done","x printed forever","Compile-time error"],"answer":1,"explanation":"n < 0 is false at the first check, so the body is skipped. Only done is printed.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-004","question":"What happens when this code is compiled?\n\nint x = 0;\nwhile (false) {\n    x++;\n}\nSystem.out.println(x);","options":["It prints 0","It prints 1","It throws a runtime exception","Compile-time error: unreachable statement"],"answer":3,"explanation":"Per the Java Language Specification, the body of a while loop whose condition is the constant expression false is unreachable. The compiler rejects the code. A non-constant condition such as x < 0 would compile and simply skip the body.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-005","question":"What is the output?\n\nint n = 12345, sum = 0;\nwhile (n > 0) {\n    sum += n % 10;\n    n /= 10;\n}\nSystem.out.println(sum);","options":["5","10","15","54321"],"answer":2,"explanation":"Each iteration adds the last digit (n % 10) and removes it (n /= 10). The digits 5+4+3+2+1 sum to 15.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-006","question":"What happens when this program runs?\n\nint i = 0;\nwhile (i < 5) {\n    System.out.println(i);\n}\nSystem.out.println(\"end\");","options":["It prints 0 to 4, then end","It prints 0, then end","It prints 0 repeatedly forever and never reaches end","Compile-time error: missing update"],"answer":2,"explanation":"The loop never changes i, so i < 5 stays true forever. The compiler does not detect this, because the condition is not a constant expression. The program prints 0 endlessly.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-007","question":"What happens when this code runs?\n\nint i = 0;\nwhile (i < 3);\n{\n    i++;\n}\nSystem.out.println(i);","options":["It prints 3","It prints 0","Compile-time error","The program hangs without printing anything"],"answer":3,"explanation":"The semicolon makes the loop body an empty statement. i is never changed, so i < 3 stays true forever. The block with i++ is a separate block that is never reached, but the compiler accepts it.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-008","question":"Complete the loop so that it prints 54321.\n\nint c = 5;\nwhile (____) {\n    System.out.print(c);\n    c--;\n}","options":["c >= 0","c > 1","c < 5","c > 0"],"answer":3,"explanation":"The loop must continue while c is 5, 4, 3, 2, 1 and stop at 0, so c > 0 is correct. c >= 0 also prints 0. c > 1 omits 1. c < 5 is false at the start, so the loop never runs.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-009","question":"Which task is best suited to a while loop rather than a counting for loop?","options":["Printing the numbers 1 to 100","Visiting every element of a fixed-size array by index","Reading lines from input until the end of the data, when the number of lines is unknown","Computing 5 factorial"],"answer":2,"explanation":"A while loop fits when the number of iterations is not known in advance and depends on a condition such as end of input. The other tasks have a known iteration count, which suits a for loop.","subtopic":"While loops"},
-{"id":"java-control-flow-while-loops-010","question":"What is the output?\n\nint i = 0;\nwhile (i++ < 3) {\n    System.out.print(i);\n}\nSystem.out.print(i);","options":["123","0123","1234","234"],"answer":2,"explanation":"i++ < 3 compares the old value and then increments. For old values 0, 1, 2 the body runs with i = 1, 2, 3 and prints 123. The last check compares 3 < 3, which is false, but i still becomes 4, so the final print outputs 4. The total output is 1234.","subtopic":"While loops"},
-{"id":"java-control-flow-do-while-loop-001","question":"Which statement best describes a do-while loop?","options":["It checks the condition before the first iteration","The body executes at least once because the condition is checked after the body","It cannot use break or continue","The body never runs if the condition is initially false"],"answer":1,"explanation":"A do-while loop is exit-controlled. The body runs first and the condition is evaluated afterwards, so the body always runs at least once.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-002","question":"What is the output?\n\nint i = 10;\ndo {\n    System.out.print(i);\n    i++;\n} while (i < 5);","options":["Nothing is printed","10","1011121314","Compile-time error"],"answer":1,"explanation":"The body runs once before the condition is checked, so 10 is printed. Then i becomes 11, and 11 < 5 is false, so the loop ends.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-003","question":"What happens when this code is compiled?\n\nint x = 0;\ndo {\n    x++;\n} while (x < 5)\nSystem.out.println(x);","options":["It prints 5","Compile-time error: a semicolon is required after the while condition","It prints 4","It runs forever"],"answer":1,"explanation":"A do-while statement must end with a semicolon after the while (condition) part. Without it the compiler reports a syntax error.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-004","question":"What is the output?\n\nint n = 3, f = 1;\ndo {\n    f *= n;\n    n--;\n} while (n > 2);\nSystem.out.println(f);","options":["1","2","3","6"],"answer":2,"explanation":"The first pass sets f = 1 * 3 = 3 and n = 2. The condition 2 > 2 is false, so the loop ends. f is 3, not 3!.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-005","question":"What is the output?\n\nint a = 0, b = 0;\nwhile (a > 0) {\n    a--;\n}\ndo {\n    b--;\n} while (b > 0);\nSystem.out.println(a + \" \" + b);","options":["0 0","0 -1","-1 -1","-1 0"],"answer":1,"explanation":"The while loop checks first, finds 0 > 0 false, and never runs, so a stays 0. The do-while loop runs once and b becomes -1. Then -1 > 0 is false, so it stops.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-006","question":"What happens when this code is compiled?\n\ndo {\n    int x = 5;\n} while (x > 0);","options":["It loops forever","It runs once and then exits","Compile-time error: x cannot be resolved in the loop condition","Runtime error"],"answer":2,"explanation":"x is declared inside the do block, so its scope ends at the closing brace. The condition lies outside that scope, so x must be declared before the loop to be used in the condition.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-007","question":"Consider this pseudocode, where DO ... WHILE checks the condition after the body.\n\ncount = 0\nDO\n    count = count + 2\nWHILE count < 7\nPRINT count\n\nWhat is printed?","options":["6","7","8","9"],"answer":2,"explanation":"count takes the values 2, 4, 6, and 6 < 7 is true so the loop repeats. Then count becomes 8, and 8 < 7 is false, so 8 is printed.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-008","question":"What is the output?\n\nint i = 0;\ndo {\n    i++;\n    if (i == 2) {\n        continue;\n    }\n    System.out.print(i);\n} while (i < 4);","options":["134","1234","13","The loop never ends"],"answer":0,"explanation":"In a do-while loop, continue jumps to the condition check. When i == 2, the print is skipped, but 2 < 4 is true so the loop goes on. It prints 1, 3, 4 and stops when 4 < 4 is false.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-009","question":"Complete the loop so it keeps asking until the user enters an age from 1 to 120 inclusive.\n\nint age;\ndo {\n    age = sc.nextInt();\n} while (____);","options":["age >= 1 && age <= 120","age < 1 || age > 120","age < 1 && age > 120","age > 1 || age < 120"],"answer":1,"explanation":"The loop must repeat while the input is invalid, so the condition is the negation of 1 <= age <= 120, which is age < 1 || age > 120. Option A repeats for valid input. Option C is never true. Option D is true for every integer.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-do-while-loop-010","question":"What is the output?\n\nint i = 0;\ndo {\n    i++;\n    if (i == 3) {\n        break;\n    }\n} while (true);\nSystem.out.println(i);","options":["2","3","4","The loop never ends"],"answer":1,"explanation":"The loop condition is always true, but break exits the loop when i reaches 3. Because a break exists, the statement after the loop is reachable and the code compiles. The output is 3.","subtopic":"Do-while loop"},
-{"id":"java-control-flow-switch-statements-001","question":"In Java 17, which type cannot be used as the selector of a classic switch statement?","options":["String","byte","char","long"],"answer":3,"explanation":"A classic switch supports byte, short, char, int, their wrapper types, String, and enums. long, float, double, and boolean are not allowed.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-002","question":"What is the output?\n\nint d = 2;\nswitch (d) {\n    case 1:\n        System.out.print(\"Mon\");\n        break;\n    case 2:\n        System.out.print(\"Tue\");\n        break;\n    default:\n        System.out.print(\"X\");\n}","options":["Mon","TueX","Tue","X"],"answer":2,"explanation":"d is 2, so execution jumps to case 2, prints Tue, and break leaves the switch. Default is not executed.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-003","question":"What happens when this code is compiled?\n\nint x = 1;\nswitch (x) {\n    case 1:\n        System.out.println(\"A\");\n        break;\n    case 1:\n        System.out.println(\"B\");\n        break;\n}","options":["It prints A","It prints B","It prints A then B","Compile-time error: duplicate case label"],"answer":3,"explanation":"Each case label in a switch must be unique. Two case 1 labels cause a compile-time error.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-004","question":"What happens when this code is compiled?\n\nint a = 1;\nint x = 1;\nswitch (x) {\n    case a:\n        System.out.println(\"one\");\n}","options":["It prints one","It prints nothing","Compile-time error: case label must be a constant expression","Runtime exception"],"answer":2,"explanation":"Case labels must be compile-time constants. a is a non-final variable, so it is not a constant expression. Declaring it as final int a = 1; would make the code valid.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-005","question":"What is the result?\n\nString s = null;\nswitch (s) {\n    case \"a\":\n        System.out.println(\"A\");\n        break;\n    default:\n        System.out.println(\"D\");\n}","options":["It prints D","It prints A","It throws a NullPointerException","Compile-time error"],"answer":2,"explanation":"A switch on a String calls its hashCode and equals, so a null selector throws a NullPointerException. The default label does not handle null in this case.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-006","question":"Assume Java 17. What is the output?\n\nint day = 3;\nString t = switch (day) {\n    case 1, 7 -> \"Weekend\";\n    case 2, 3, 4, 5, 6 -> \"Weekday\";\n    default -> \"Invalid\";\n};\nSystem.out.println(t);","options":["Weekend","Weekday","Invalid","Compile-time error"],"answer":1,"explanation":"Arrow-form switch expressions allow multiple comma-separated labels and produce a value. day = 3 matches the second case, so t is Weekday.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-007","question":"Assume Java 17. Which statement completes the block so the result is \"two\" when n is 2?\n\nString r = switch (n) {\n    case 1 -> \"one\";\n    case 2 -> {\n        String s = \"tw\";\n        ____\n    }\n    default -> \"many\";\n};","options":["return s + \"o\";","yield s + \"o\";","break s + \"o\";","s + \"o\";"],"answer":1,"explanation":"In a switch expression, a block must produce its value with yield. return would exit the enclosing method, break cannot carry a value, and a bare expression is not a valid statement here.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-008","question":"Assume Java 17. What happens when this code is compiled?\n\nint x = 3;\nint y = switch (x) {\n    case 1 -> 10;\n    case 2 -> 20;\n};","options":["y is assigned 10","y is assigned 0","Compile-time error: the switch expression does not cover all possible input values","Runtime exception only because x is 3"],"answer":2,"explanation":"A switch expression must be exhaustive. For an int selector without an enum or sealed type, a default branch is required. The compiler rejects the code regardless of the runtime value of x.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-009","question":"Which requirement is least suitable for a switch statement?","options":["Mapping a menu option number from 1 to 5 to an action","Printing the name of a day from an enum constant","Printing a grade based on score ranges such as 90-100, 80-89, and 70-79","Choosing a method to run from a command string such as \"start\" or \"stop\""],"answer":2,"explanation":"A switch compares one value to discrete constants. Range checks are naturally expressed with an if / else-if chain, because writing every value of every range as a case label would be impractical.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-statements-010","question":"What is the output?\n\nchar c = 'b';\nswitch (c) {\n    case 'a':\n        System.out.print(\"1\");\n        break;\n    case 98:\n        System.out.print(\"2\");\n        break;\n    default:\n        System.out.print(\"3\");\n}","options":["1","2","3","Compile-time error"],"answer":1,"explanation":"Case constants must be assignable to the selector type. The int constant 98 fits in a char, and the character 'b' has the value 98. The second case therefore matches and prints 2.","subtopic":"Switch statements"},
-{"id":"java-control-flow-switch-break-001","question":"What is the output?\n\nint x = 2;\nswitch (x) {\n    case 1:\n        System.out.print(\"A\");\n    case 2:\n        System.out.print(\"B\");\n    case 3:\n        System.out.print(\"C\");\n        break;\n    case 4:\n        System.out.print(\"D\");\n}","options":["B","BC","BCD","ABC"],"answer":1,"explanation":"Execution starts at case 2 and prints B. Without a break it falls through into case 3 and prints C, where break stops it. Case 4 is never reached.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-002","question":"What happens in a classic switch statement if a matching case does not end with break?","options":["A compile-time error occurs at the next case label","Execution continues into the following case statements until a break or the end of the switch","Only the matched case executes anyway","The switch restarts from the first case"],"answer":1,"explanation":"Classic switch statements fall through. After the matching label, all later statements run regardless of their labels until a break, return, or the end of the switch.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-003","question":"What is the output?\n\nint x = 3;\nswitch (x) {\n    case 1:\n    case 2:\n        System.out.print(\"Low\");\n        break;\n    case 3:\n    case 4:\n        System.out.print(\"Mid\");\n        break;\n    default:\n        System.out.print(\"High\");\n}","options":["Low","High","LowMid","Mid"],"answer":3,"explanation":"Stacked labels share the same statements. x = 3 matches case 3, which falls through to the statements under case 4, prints Mid, and break ends the switch.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-004","question":"What is the output?\n\nint n = 1;\nint r = 0;\nswitch (n) {\n    case 1:\n        r += 1;\n    case 2:\n        r += 2;\n    case 3:\n        r += 3;\n        break;\n    case 4:\n        r += 4;\n}\nSystem.out.println(r);","options":["1","3","6","10"],"answer":2,"explanation":"Starting at case 1, execution falls through cases 1, 2, and 3, adding 1 + 2 + 3 = 6. The break after case 3 stops it, so case 4 is not executed.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-005","question":"Assume Java 17. What is the output?\n\nint x = 1;\nswitch (x) {\n    case 1 -> System.out.print(\"A\");\n    case 2 -> System.out.print(\"B\");\n    default -> System.out.print(\"C\");\n}","options":["A","AB","ABC","Compile-time error"],"answer":0,"explanation":"Arrow-form cases do not fall through, so no break is needed. Only the matching case runs and prints A.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-006","question":"What is the output?\n\nint x = 5;\nswitch (x) {\n    default:\n        System.out.print(\"D\");\n    case 1:\n        System.out.print(\"1\");\n        break;\n    case 2:\n        System.out.print(\"2\");\n}","options":["D","D1","D12","1"],"answer":1,"explanation":"No case matches 5, so execution jumps to default even though it is written first. It prints D, falls through to case 1 and prints 1, and then break stops it.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-007","question":"For day = 6, this code prints both Weekend and Invalid, but only Weekend is wanted. What is the best fix?\n\nint day = 6;\nswitch (day) {\n    case 6:\n    case 7:\n        System.out.println(\"Weekend\");\n    default:\n        System.out.println(\"Invalid\");\n}","options":["Add a break; statement after the Weekend println","Move the default label above case 6","Replace case 6: with case (6):","Add a semicolon after case 7:"],"answer":0,"explanation":"Without a break, execution falls through from the Weekend statement into default. Adding break after the Weekend println ends the switch there. Moving the default label does not stop fall-through.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-008","question":"What is the output?\n\nfor (int i = 0; i < 3; i++) {\n    switch (i) {\n        case 1:\n            break;\n        default:\n            System.out.print(i);\n    }\n    System.out.print(\"-\");\n}","options":["0-2-","0--2-","0-","0-1-2-"],"answer":1,"explanation":"break inside a switch exits only the switch, not the enclosing loop. For i = 1 the switch ends and the dash is still printed. The sequence is 0-, then -, then 2-.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-009","question":"In a classic switch statement whose last label is default, which statement is true?","options":["A break after the default block is required or the code will not compile","A break after the default block is optional because no statements follow it","The compiler refuses to compile a case that is missing a break","break may appear only in the last case"],"answer":1,"explanation":"Fall-through only matters when other statements follow. Since default is last, a break there does not change behavior. Java never requires break to compile, and a missing break is legal.","subtopic":"Switch break"},
-{"id":"java-control-flow-switch-break-010","question":"The int variable day is always between 1 and 7. Using classic switch syntax, which implementation prints Weekday for 1-5 and Weekend for 6 and 7 only?","options":["switch (day) {\n  case 1: case 2: case 3: case 4: case 5:\n    System.out.println(\"Weekday\");\n  case 6: case 7:\n    System.out.println(\"Weekend\");\n    break;\n}","switch (day) {\n  case 1: case 2: case 3: case 4: case 5:\n    System.out.println(\"Weekday\");\n    break;\n  case 6: case 7:\n    System.out.println(\"Weekend\");\n    break;\n}","switch (day) {\n  case 1..5:\n    System.out.println(\"Weekday\");\n    break;\n  case 6..7:\n    System.out.println(\"Weekend\");\n    break;\n}","switch (day) {\n  case 1: case 2: case 3: case 4: case 5:\n    System.out.println(\"Weekday\");\n    break;\n  case 6:\n    System.out.println(\"Weekend\");\n    break;\n}"],"answer":1,"explanation":"Option A forgets the break after Weekday, so days 1-5 also print Weekend. Option C uses range syntax, which Java does not support. Option D ignores day 7. Option B groups labels and breaks correctly.","subtopic":"Switch break"},
-{"id":"java-control-flow-break-and-continue-001","question":"Which statement correctly summarizes break and continue in loops?","options":["break skips the rest of the current iteration, and continue terminates the loop","break terminates the innermost enclosing loop or switch, and continue skips the rest of the current loop iteration","Both statements terminate the loop","continue terminates the loop, and break only skips to the update expression"],"answer":1,"explanation":"break exits the innermost enclosing loop or switch. continue skips the remaining statements of the current iteration and moves on to the next iteration.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-002","question":"What is the output?\n\nfor (int i = 1; i <= 5; i++) {\n    if (i == 3) {\n        break;\n    }\n    System.out.print(i);\n}","options":["123","1245","12345","12"],"answer":3,"explanation":"The loop prints 1 and 2. When i is 3, break exits the loop entirely, so nothing further is printed.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-003","question":"What is the output?\n\nfor (int i = 1; i <= 5; i++) {\n    if (i == 3) {\n        continue;\n    }\n    System.out.print(i);\n}","options":["1245","12","12345","345"],"answer":0,"explanation":"When i is 3, continue skips the print and moves on to the next iteration. Every other value is printed, giving 1245.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-004","question":"What happens when this code runs?\n\nint i = 0;\nwhile (i < 5) {\n    if (i == 2) {\n        continue;\n    }\n    System.out.print(i);\n    i++;\n}","options":["It prints 01234","It prints 0134","It prints 01 and then hangs forever","Compile-time error"],"answer":2,"explanation":"In a while loop, continue jumps straight to the condition check and does not run the increment placed after it. Once i is 2, it never changes again, so the loop runs forever with no more output. A for loop would still run its update expression.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-005","question":"What is the output?\n\nouter:\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        if (i == 1 && j == 1) {\n            break outer;\n        }\n        System.out.print(i + \"\" + j + \",\");\n    }\n}","options":["00,01,02,10,20,21,22,","00,01,02,10,","00,01,02,","00,01,02,10,12,20,21,22,"],"answer":1,"explanation":"break outer terminates the labeled outer loop, not just the inner one. The output covers i = 0 with j = 0 to 2, then 10, and stops at i = 1, j = 1. A plain break would produce option A.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-006","question":"What is the output?\n\nouter:\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        if (j == 1) {\n            continue outer;\n        }\n        System.out.print(i + \"\" + j + \",\");\n    }\n}","options":["00,02,10,12,20,22,","00,","00,10,20,","00,01,02,10,11,12,20,21,22,"],"answer":2,"explanation":"continue outer abandons the inner loop and continues the outer loop with its next iteration. For each i, only j = 0 is printed before j == 1 triggers it. A plain continue would produce option A.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-007","question":"What happens when this method is compiled?\n\npublic static void check(int x) {\n    if (x > 0) {\n        break;\n    }\n    System.out.println(x);\n}","options":["It compiles, and break exits the method like return","Compile-time error: break is not inside a loop or switch","It compiles, and break only skips the if block","Runtime exception: IllegalStateException"],"answer":1,"explanation":"break is allowed only inside a loop or a switch (or with a label on an enclosing statement). Using it in a plain if block inside a method is a compile-time error. return should be used to exit a method.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-008","question":"The method must return the first even number in nums, or -1 if none exists, and must stop scanning once it is found. Which statement completes it?\n\nstatic int firstEven(int[] nums) {\n    int first = -1;\n    for (int n : nums) {\n        if (n % 2 == 0) {\n            first = n;\n            ____\n        }\n    }\n    return first;\n}","options":["continue;","return;","break;","first = -1;"],"answer":2,"explanation":"break exits the loop immediately after the first even number is stored, and the method then returns first. continue would keep scanning and overwrite first with later even numbers. return; without a value does not compile in a method that returns int.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-009","question":"What is the output?\n\nfor (int i = 0; i < 4; i++) {\n    switch (i) {\n        case 1:\n            continue;\n        case 2:\n            break;\n        default:\n            System.out.print(i);\n    }\n    System.out.print(\"-\");\n}","options":["0-1-2-3-","0-3-","0--3-","0--2-3-"],"answer":2,"explanation":"i = 0 prints 0 and a dash. For i = 1, continue skips the rest of the loop body, so no dash is printed. For i = 2, break exits only the switch, so a dash is printed. For i = 3, it prints 3 and a dash. The total is 0--3-.","subtopic":"Break and continue"},
-{"id":"java-control-flow-break-and-continue-010","question":"Which statement about continue in a for loop is correct?","options":["continue skips the update expression and goes directly to the condition","continue jumps to the update expression, and then the condition is re-evaluated","continue terminates the for loop","continue can be used only in while loops"],"answer":1,"explanation":"In a for loop, continue ends the current iteration and runs the update expression, such as i++, before the condition is checked again. This is why a for loop with continue does not hang the way the equivalent while loop can.","subtopic":"Break and continue"}
+{
+"id": "java-control-flow-if-else-if-001",
+"question": "In a Java if / else-if / else chain, which statement is correct?",
+"options": [
+"Every condition is evaluated and every branch whose condition is true runs",
+"Only the first branch whose condition is true runs, and the remaining conditions are skipped",
+"Only the last branch whose condition is true runs",
+"The else block always runs after a matching else-if block"
+],
+"answer": 1,
+"explanation": "An if / else-if / else chain is evaluated top to bottom. As soon as one condition is true, its block runs and the rest of the chain is skipped. The else block runs only when none of the earlier conditions is true.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-002",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 15;\nif (x > 10) {\n    System.out.println("A");\n} else if (x > 5) {\n    System.out.println("B");\n} else {\n    System.out.println("C");\n}",
+"options": [
+"B",
+"C",
+"A",
+"Nothing is printed"
+],
+"answer": 2,
+"explanation": "x > 10 is true, so "A" is printed and the else-if and else branches are skipped, even though x > 5 is also true.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-003",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 15;\nif (x > 10) {\n    System.out.println("A");\n}\nif (x > 5) {\n    System.out.println("B");\n} else {\n    System.out.println("C");\n}",
+"options": [
+"A only",
+"A, then B on separate lines",
+"B only",
+"A, then C on separate lines"
+],
+"answer": 1,
+"explanation": "These are two independent if statements, not one chain. The first prints A. The second is evaluated separately, and since x > 5 is true it prints B. The else belongs to the second if only.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-004",
+"question": "What happens when the following code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 5;\nif (x = 5) {\n    System.out.println("Five");\n}",
+"options": [
+"It prints Five",
+"It fails to compile because an int cannot be converted to boolean",
+"It compiles but throws a runtime exception",
+"It compiles and prints nothing"
+],
+"answer": 1,
+"explanation": "Java's if requires a boolean expression. x = 5 is an assignment whose type is int, so the compiler reports an incompatible types error. This differs from C/C++, where such code compiles. The comparison should be x == 5.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-005",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int a = 5, b = 0;\nif (a > 3)\n    if (b > 0)\n        System.out.println("X");\nelse\n    System.out.println("Y");",
+"options": [
+"Nothing is printed",
+"X",
+"Compile-time error",
+"Y"
+],
+"answer": 3,
+"explanation": "This is the dangling-else case. An else always binds to the nearest unmatched if, here if (b > 0), regardless of indentation. Since a > 3 is true and b > 0 is false, the else runs and prints Y. Braces avoid this confusion.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-006",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int n = 3;\nif (n > 5);\n{\n    System.out.println("Big");\n}",
+"options": [
+"Nothing is printed",
+"Compile-time error",
+"Big",
+"Runtime exception"
+],
+"answer": 2,
+"explanation": "The semicolon after if (n > 5) is an empty statement that forms the whole body of the if. The braces that follow are a plain block that always runs, so Big is printed even though n > 5 is false.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-007",
+"question": "A grading program should give A for 90 and above, B for 80-89, D for 60-79, and F below 60. This code prints D for a score of 95. What is the best fix?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int score = 95;\nchar grade;\nif (score >= 60) {\n    grade = 'D';\n} else if (score >= 80) {\n    grade = 'B';\n} else if (score >= 90) {\n    grade = 'A';\n} else {\n    grade = 'F';\n}\nSystem.out.println(grade);",
+"options": [
+"Replace the final else with another else if",
+"Declare grade as a String instead of a char",
+"Change each >= to >",
+"Reorder the conditions so the highest threshold is tested first (90, then 80, then 60)"
+],
+"answer": 3,
+"explanation": "In an else-if chain the first true condition wins. Because score >= 60 is tested first, every score of 60 or more gets D. Chains with overlapping ranges must test the most restrictive condition first.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-008",
+"question": "Complete the condition so that leap is true exactly for Gregorian leap years (for example 2000 and 2024 are leap years; 2100 is not).",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int year = 2100;\nboolean leap;\nif () {\n    leap = true;\n} else {\n    leap = false;\n}",
+"options": [
+"year % 4 == 0 && year % 100 != 0",
+"(year % 4 == 0 && year % 100 != 0) || year % 400 == 0",
+"year % 4 == 0 || year % 400 == 0",
+"year % 100 == 0 || year % 400 != 0"
+],
+"answer": 1,
+"explanation": "A year is a leap year if it is divisible by 4 and not by 100, or if it is divisible by 400. Option A wrongly rejects 2000. Option C wrongly accepts 2100. Option D accepts many non-leap years such as 2023.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-009",
+"question": "A String variable s may be null. Which condition reliably tests whether its content equals "yes" without throwing a NullPointerException?",
+"options": [
+"s.equals("yes")",
+"s == "yes"",
+""yes".equals(s)",
+"s.compareTo("yes") == 0"
+],
+"answer": 2,
+"explanation": "Calling equals on the literal "yes" is null-safe, because equals(null) returns false. s.equals and s.compareTo throw a NullPointerException when s is null. == compares references, not content, so it is unreliable for Strings.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-if-else-if-010",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\nif (i != 0 && 10 / i > 1) {\n    System.out.println("A");\n} else {\n    System.out.println("B");\n}",
+"options": [
+"A",
+"B",
+"ArithmeticException: / by zero",
+"Compile-time error"
+],
+"answer": 1,
+"explanation": "The && operator short-circuits. Since i != 0 is false, the right operand 10 / i is never evaluated, so no division by zero occurs and the else branch prints B. With the non-short-circuit & operator, the exception would be thrown.",
+"subtopic": "If and else-if"
+},
+{
+"id": "java-control-flow-for-loops-001",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 0; i < 5; i += 2) {\n    System.out.print(i);\n}",
+"options": [
+"01234",
+"0246",
+"024",
+"24"
+],
+"answer": 2,
+"explanation": "i takes the values 0, 2, 4. After 4, i becomes 6, and 6 < 5 is false, so the loop ends. The output is 024.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-002",
+"question": "Which option correctly describes the execution order of a basic for loop: for (init; condition; update) { body }?",
+"options": [
+"Condition, init, body, update",
+"Init runs once; then repeat: condition check, body, update",
+"Init, body, condition, update, all repeated each time",
+"Init and update run before every condition check, then the body"
+],
+"answer": 1,
+"explanation": "Initialization runs exactly once. Then the condition is checked before each iteration, the body runs if it is true, and the update runs after the body. The condition is then checked again.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-003",
+"question": "What happens when this code is compiled and run?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 0; i < 3; i++) {\n}\nSystem.out.println(i);",
+"options": [
+"It prints 3",
+"It prints 0",
+"Compile-time error: i cannot be resolved to a variable",
+"It prints 2"
+],
+"answer": 2,
+"explanation": "A variable declared in the for-init section is scoped to the for statement only. Outside the loop, i is not in scope, so the compiler reports a cannot find symbol error.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-004",
+"question": "What is printed?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int count = 0;\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < i; j++) {\n        count++;\n    }\n}\nSystem.out.println(count);",
+"options": [
+"3",
+"4",
+"6",
+"9"
+],
+"answer": 0,
+"explanation": "The inner loop runs i times for each i: 0 times for i=0, 1 time for i=1, and 2 times for i=2. The total is 0 + 1 + 2 = 3.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-005",
+"question": "Which statement about for (;;) { ... } is correct?",
+"options": [
+"It is a compile-time error because the condition is required",
+"It is valid and loops indefinitely unless exited by break, return, or an exception",
+"It executes the body exactly once",
+"It is valid but never executes the body"
+],
+"answer": 1,
+"explanation": "All three parts of a for header are optional. An omitted condition is treated as true, so for (;;) is an intentional infinite loop that must be exited explicitly.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-006",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int count = 0;\nfor (byte b = 120; b > 0; b++) {\n    count++;\n}\nSystem.out.println(count);",
+"options": [
+"7",
+"8",
+"The loop never ends",
+"Compile-time error"
+],
+"answer": 1,
+"explanation": "b takes the values 120 to 127, which is 8 iterations. Then b++ overflows the byte to -128, and -128 > 0 is false, so the loop stops. The compound increment on a byte compiles without a cast.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-007",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 0, j = 10; i < j; i += 3, j -= 3) {\n    System.out.print(i + ":" + j + ";");\n}",
+"options": [
+"0:10;3:7;6:4;",
+"0:10;3:7;",
+"0:10;",
+"0:10;3:7;6:4;9:1;"
+],
+"answer": 1,
+"explanation": "Iteration 1 has i=0, j=10 and prints 0:10;. After the update, i=3 and j=7, and 3 < 7 is true, so it prints 3:7;. After the next update, i=6 and j=4, and 6 < 4 is false, so the loop ends.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-008",
+"question": "Complete the loop so it prints the elements of arr in reverse order (for {1,2,3} it prints 321).",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int[] arr = {1, 2, 3};\nfor () {\n    System.out.print(arr[i]);\n}",
+"options": [
+"int i = arr.length; i > 0; i--",
+"int i = arr.length - 1; i >= 0; i--",
+"int i = arr.length - 1; i > 0; i--",
+"int i = 0; i < arr.length; i--"
+],
+"answer": 1,
+"explanation": "The last valid index is length - 1, and the loop must include index 0, so the condition is i >= 0. Starting at arr.length throws ArrayIndexOutOfBoundsException. i > 0 skips the first element. Decrementing from 0 goes out of bounds.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-009",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int[] a = {1, 2, 3};\nfor (int x : a) {\n    x *= 2;\n}\nSystem.out.println(a[0] + a[1] + a[2]);",
+"options": [
+"6",
+"12",
+"246",
+"Compile-time error"
+],
+"answer": 0,
+"explanation": "In an enhanced for loop, x is a copy of each element value. Modifying x does not change the array, so the array is still {1, 2, 3}. The int addition gives 6.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-for-loops-010",
+"question": "Consider this pseudocode, where FOR k FROM 1 TO 4 means k takes the values 1, 2, 3, 4 (inclusive, step 1). What is printed?",
+"codeLanguage": "pseudocode",
+"codeFileName": "Pseudocode.txt",
+"code": "total = 0\nFOR k FROM 1 TO 4\n    total = total + k * k\nEND FOR\nPRINT total",
+"options": [
+"10",
+"16",
+"25",
+"30"
+],
+"answer": 3,
+"explanation": "The loop accumulates the squares: 1 + 4 + 9 + 16 = 30. Option A is the sum of k, not of k squared.",
+"subtopic": "For loops"
+},
+{
+"id": "java-control-flow-while-loops-001",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 1;\nwhile (i <= 3) {\n    System.out.print(i);\n    i++;\n}",
+"options": [
+"123",
+"12",
+"234",
+"0123"
+],
+"answer": 0,
+"explanation": "The condition i <= 3 is true for i = 1, 2, 3, so each value is printed. When i becomes 4 the loop ends.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-002",
+"question": "Which statement about a while loop is correct?",
+"options": [
+"The body always executes at least once",
+"The condition is checked before each iteration, so the body may execute zero times",
+"The condition is checked after each iteration",
+"The loop variable must be declared in the while header"
+],
+"answer": 1,
+"explanation": "A while loop is an entry-controlled loop. If the condition is false at the start, the body never runs. A do-while loop is the one that always runs at least once.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-003",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int n = 0;\nwhile (n < 0) {\n    System.out.println("x");\n}\nSystem.out.println("done");",
+"options": [
+"x, then done",
+"done",
+"x printed forever",
+"Compile-time error"
+],
+"answer": 1,
+"explanation": "n < 0 is false at the first check, so the body is skipped. Only done is printed.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-004",
+"question": "What happens when this code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 0;\nwhile (false) {\n    x++;\n}\nSystem.out.println(x);",
+"options": [
+"It prints 0",
+"It prints 1",
+"It throws a runtime exception",
+"Compile-time error: unreachable statement"
+],
+"answer": 3,
+"explanation": "Per the Java Language Specification, the body of a while loop whose condition is the constant expression false is unreachable. The compiler rejects the code. A non-constant condition such as x < 0 would compile and simply skip the body.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-005",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int n = 12345, sum = 0;\nwhile (n > 0) {\n    sum += n % 10;\n    n /= 10;\n}\nSystem.out.println(sum);",
+"options": [
+"5",
+"10",
+"15",
+"54321"
+],
+"answer": 2,
+"explanation": "Each iteration adds the last digit (n % 10) and removes it (n /= 10). The digits 5+4+3+2+1 sum to 15.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-006",
+"question": "What happens when this program runs?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\nwhile (i < 5) {\n    System.out.println(i);\n}\nSystem.out.println("end");",
+"options": [
+"It prints 0 to 4, then end",
+"It prints 0, then end",
+"It prints 0 repeatedly forever and never reaches end",
+"Compile-time error: missing update"
+],
+"answer": 2,
+"explanation": "The loop never changes i, so i < 5 stays true forever. The compiler does not detect this, because the condition is not a constant expression. The program prints 0 endlessly.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-007",
+"question": "What happens when this code runs?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\nwhile (i < 3);\n{\n    i++;\n}\nSystem.out.println(i);",
+"options": [
+"It prints 3",
+"It prints 0",
+"Compile-time error",
+"The program hangs without printing anything"
+],
+"answer": 3,
+"explanation": "The semicolon makes the loop body an empty statement. i is never changed, so i < 3 stays true forever. The block with i++ is a separate block that is never reached, but the compiler accepts it.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-008",
+"question": "Complete the loop so that it prints 54321.",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int c = 5;\nwhile () {\n    System.out.print(c);\n    c--;\n}",
+"options": [
+"c >= 0",
+"c > 1",
+"c < 5",
+"c > 0"
+],
+"answer": 3,
+"explanation": "The loop must continue while c is 5, 4, 3, 2, 1 and stop at 0, so c > 0 is correct. c >= 0 also prints 0. c > 1 omits 1. c < 5 is false at the start, so the loop never runs.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-009",
+"question": "Which task is best suited to a while loop rather than a counting for loop?",
+"options": [
+"Printing the numbers 1 to 100",
+"Visiting every element of a fixed-size array by index",
+"Reading lines from input until the end of the data, when the number of lines is unknown",
+"Computing 5 factorial"
+],
+"answer": 2,
+"explanation": "A while loop fits when the number of iterations is not known in advance and depends on a condition such as end of input. The other tasks have a known iteration count, which suits a for loop.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-while-loops-010",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\nwhile (i++ < 3) {\n    System.out.print(i);\n}\nSystem.out.print(i);",
+"options": [
+"123",
+"0123",
+"1234",
+"234"
+],
+"answer": 2,
+"explanation": "i++ < 3 compares the old value and then increments. For old values 0, 1, 2 the body runs with i = 1, 2, 3 and prints 123. The last check compares 3 < 3, which is false, but i still becomes 4, so the final print outputs 4. The total output is 1234.",
+"subtopic": "While loops"
+},
+{
+"id": "java-control-flow-do-while-loop-001",
+"question": "Which statement best describes a do-while loop?",
+"options": [
+"It checks the condition before the first iteration",
+"The body executes at least once because the condition is checked after the body",
+"It cannot use break or continue",
+"The body never runs if the condition is initially false"
+],
+"answer": 1,
+"explanation": "A do-while loop is exit-controlled. The body runs first and the condition is evaluated afterwards, so the body always runs at least once.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-002",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 10;\ndo {\n    System.out.print(i);\n    i++;\n} while (i < 5);",
+"options": [
+"Nothing is printed",
+"10",
+"1011121314",
+"Compile-time error"
+],
+"answer": 1,
+"explanation": "The body runs once before the condition is checked, so 10 is printed. Then i becomes 11, and 11 < 5 is false, so the loop ends.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-003",
+"question": "What happens when this code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 0;\ndo {\n    x++;\n} while (x < 5)\nSystem.out.println(x);",
+"options": [
+"It prints 5",
+"Compile-time error: a semicolon is required after the while condition",
+"It prints 4",
+"It runs forever"
+],
+"answer": 1,
+"explanation": "A do-while statement must end with a semicolon after the while (condition) part. Without it the compiler reports a syntax error.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-004",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int n = 3, f = 1;\ndo {\n    f *= n;\n    n--;\n} while (n > 2);\nSystem.out.println(f);",
+"options": [
+"1",
+"2",
+"3",
+"6"
+],
+"answer": 2,
+"explanation": "The first pass sets f = 1 * 3 = 3 and n = 2. The condition 2 > 2 is false, so the loop ends. f is 3, not 3!.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-005",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int a = 0, b = 0;\nwhile (a > 0) {\n    a--;\n}\ndo {\n    b--;\n} while (b > 0);\nSystem.out.println(a + " " + b);",
+"options": [
+"0 0",
+"0 -1",
+"-1 -1",
+"-1 0"
+],
+"answer": 1,
+"explanation": "The while loop checks first, finds 0 > 0 false, and never runs, so a stays 0. The do-while loop runs once and b becomes -1. Then -1 > 0 is false, so it stops.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-006",
+"question": "What happens when this code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "do {\n    int x = 5;\n} while (x > 0);",
+"options": [
+"It loops forever",
+"It runs once and then exits",
+"Compile-time error: x cannot be resolved in the loop condition",
+"Runtime error"
+],
+"answer": 2,
+"explanation": "x is declared inside the do block, so its scope ends at the closing brace. The condition lies outside that scope, so x must be declared before the loop to be used in the condition.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-007",
+"question": "Consider this pseudocode, where DO ... WHILE checks the condition after the body. What is printed?",
+"codeLanguage": "pseudocode",
+"codeFileName": "Pseudocode.txt",
+"code": "count = 0\nDO\n    count = count + 2\nWHILE count < 7\nPRINT count",
+"options": [
+"6",
+"7",
+"8",
+"9"
+],
+"answer": 2,
+"explanation": "count takes the values 2, 4, 6, and 6 < 7 is true so the loop repeats. Then count becomes 8, and 8 < 7 is false, so 8 is printed.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-008",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\ndo {\n    i++;\n    if (i == 2) {\n        continue;\n    }\n    System.out.print(i);\n} while (i < 4);",
+"options": [
+"134",
+"1234",
+"13",
+"The loop never ends"
+],
+"answer": 0,
+"explanation": "In a do-while loop, continue jumps to the condition check. When i == 2, the print is skipped, but 2 < 4 is true so the loop goes on. It prints 1, 3, 4 and stops when 4 < 4 is false.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-009",
+"question": "Complete the loop so it keeps asking until the user enters an age from 1 to 120 inclusive.",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int age;\ndo {\n    age = sc.nextInt();\n} while ();",
+"options": [
+"age >= 1 && age <= 120",
+"age < 1 || age > 120",
+"age < 1 && age > 120",
+"age > 1 || age < 120"
+],
+"answer": 1,
+"explanation": "The loop must repeat while the input is invalid, so the condition is the negation of 1 <= age <= 120, which is age < 1 || age > 120. Option A repeats for valid input. Option C is never true. Option D is true for every integer.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-do-while-loop-010",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\ndo {\n    i++;\n    if (i == 3) {\n        break;\n    }\n} while (true);\nSystem.out.println(i);",
+"options": [
+"2",
+"3",
+"4",
+"The loop never ends"
+],
+"answer": 1,
+"explanation": "The loop condition is always true, but break exits the loop when i reaches 3. Because a break exists, the statement after the loop is reachable and the code compiles. The output is 3.",
+"subtopic": "Do-while loop"
+},
+{
+"id": "java-control-flow-switch-statements-001",
+"question": "In Java 17, which type cannot be used as the selector of a classic switch statement?",
+"options": [
+"String",
+"byte",
+"char",
+"long"
+],
+"answer": 3,
+"explanation": "A classic switch supports byte, short, char, int, their wrapper types, String, and enums. long, float, double, and boolean are not allowed.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-002",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int d = 2;\nswitch (d) {\n    case 1:\n        System.out.print("Mon");\n        break;\n    case 2:\n        System.out.print("Tue");\n        break;\n    default:\n        System.out.print("X");\n}",
+"options": [
+"Mon",
+"TueX",
+"Tue",
+"X"
+],
+"answer": 2,
+"explanation": "d is 2, so execution jumps to case 2, prints Tue, and break leaves the switch. Default is not executed.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-003",
+"question": "What happens when this code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 1;\nswitch (x) {\n    case 1:\n        System.out.println("A");\n        break;\n    case 1:\n        System.out.println("B");\n        break;\n}",
+"options": [
+"It prints A",
+"It prints B",
+"It prints A then B",
+"Compile-time error: duplicate case label"
+],
+"answer": 3,
+"explanation": "Each case label in a switch must be unique. Two case 1 labels cause a compile-time error.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-004",
+"question": "What happens when this code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int a = 1;\nint x = 1;\nswitch (x) {\n    case a:\n        System.out.println("one");\n}",
+"options": [
+"It prints one",
+"It prints nothing",
+"Compile-time error: case label must be a constant expression",
+"Runtime exception"
+],
+"answer": 2,
+"explanation": "Case labels must be compile-time constants. a is a non-final variable, so it is not a constant expression. Declaring it as final int a = 1; would make the code valid.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-005",
+"question": "What is the result?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "String s = null;\nswitch (s) {\n    case "a":\n        System.out.println("A");\n        break;\n    default:\n        System.out.println("D");\n}",
+"options": [
+"It prints D",
+"It prints A",
+"It throws a NullPointerException",
+"Compile-time error"
+],
+"answer": 2,
+"explanation": "A switch on a String calls its hashCode and equals, so a null selector throws a NullPointerException. The default label does not handle null in this case.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-006",
+"question": "Assume Java 17. What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int day = 3;\nString t = switch (day) {\n    case 1, 7 -> "Weekend";\n    case 2, 3, 4, 5, 6 -> "Weekday";\n    default -> "Invalid";\n};\nSystem.out.println(t);",
+"options": [
+"Weekend",
+"Weekday",
+"Invalid",
+"Compile-time error"
+],
+"answer": 1,
+"explanation": "Arrow-form switch expressions allow multiple comma-separated labels and produce a value. day = 3 matches the second case, so t is Weekday.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-007",
+"question": "Assume Java 17. Which statement completes the block so the result is "two" when n is 2?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "String r = switch (n) {\n    case 1 -> "one";\n    case 2 -> {\n        String s = "tw";\n        ____\n    }\n    default -> "many";\n};",
+"options": [
+"return s + "o";",
+"yield s + "o";",
+"break s + "o";",
+"s + "o";"
+],
+"answer": 1,
+"explanation": "In a switch expression, a block must produce its value with yield. return would exit the enclosing method, break cannot carry a value, and a bare expression is not a valid statement here.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-008",
+"question": "Assume Java 17. What happens when this code is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 3;\nint y = switch (x) {\n    case 1 -> 10;\n    case 2 -> 20;\n};",
+"options": [
+"y is assigned 10",
+"y is assigned 0",
+"Compile-time error: the switch expression does not cover all possible input values",
+"Runtime exception only because x is 3"
+],
+"answer": 2,
+"explanation": "A switch expression must be exhaustive. For an int selector without an enum or sealed type, a default branch is required. The compiler rejects the code regardless of the runtime value of x.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-009",
+"question": "Which requirement is least suitable for a switch statement?",
+"options": [
+"Mapping a menu option number from 1 to 5 to an action",
+"Printing the name of a day from an enum constant",
+"Printing a grade based on score ranges such as 90-100, 80-89, and 70-79",
+"Choosing a method to run from a command string such as "start" or "stop""
+],
+"answer": 2,
+"explanation": "A switch compares one value to discrete constants. Range checks are naturally expressed with an if / else-if chain, because writing every value of every range as a case label would be impractical.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-statements-010",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "char c = 'b';\nswitch (c) {\n    case 'a':\n        System.out.print("1");\n        break;\n    case 98:\n        System.out.print("2");\n        break;\n    default:\n        System.out.print("3");\n}",
+"options": [
+"1",
+"2",
+"3",
+"Compile-time error"
+],
+"answer": 1,
+"explanation": "Case constants must be assignable to the selector type. The int constant 98 fits in a char, and the character 'b' has the value 98. The second case therefore matches and prints 2.",
+"subtopic": "Switch statements"
+},
+{
+"id": "java-control-flow-switch-break-001",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 2;\nswitch (x) {\n    case 1:\n        System.out.print("A");\n    case 2:\n        System.out.print("B");\n    case 3:\n        System.out.print("C");\n        break;\n    case 4:\n        System.out.print("D");\n}",
+"options": [
+"B",
+"BC",
+"BCD",
+"ABC"
+],
+"answer": 1,
+"explanation": "Execution starts at case 2 and prints B. Without a break it falls through into case 3 and prints C, where break stops it. Case 4 is never reached.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-002",
+"question": "What happens in a classic switch statement if a matching case does not end with break?",
+"options": [
+"A compile-time error occurs at the next case label",
+"Execution continues into the following case statements until a break or the end of the switch",
+"Only the matched case executes anyway",
+"The switch restarts from the first case"
+],
+"answer": 1,
+"explanation": "Classic switch statements fall through. After the matching label, all later statements run regardless of their labels until a break, return, or the end of the switch.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-003",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 3;\nswitch (x) {\n    case 1:\n    case 2:\n        System.out.print("Low");\n        break;\n    case 3:\n    case 4:\n        System.out.print("Mid");\n        break;\n    default:\n        System.out.print("High");\n}",
+"options": [
+"Low",
+"High",
+"LowMid",
+"Mid"
+],
+"answer": 3,
+"explanation": "Stacked labels share the same statements. x = 3 matches case 3, which falls through to the statements under case 4, prints Mid, and break ends the switch.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-004",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int n = 1;\nint r = 0;\nswitch (n) {\n    case 1:\n        r += 1;\n    case 2:\n        r += 2;\n    case 3:\n        r += 3;\n        break;\n    case 4:\n        r += 4;\n}\nSystem.out.println(r);",
+"options": [
+"1",
+"3",
+"6",
+"10"
+],
+"answer": 2,
+"explanation": "Starting at case 1, execution falls through cases 1, 2, and 3, adding 1 + 2 + 3 = 6. The break after case 3 stops it, so case 4 is not executed.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-005",
+"question": "Assume Java 17. What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 1;\nswitch (x) {\n    case 1 -> System.out.print("A");\n    case 2 -> System.out.print("B");\n    default -> System.out.print("C");\n}",
+"options": [
+"A",
+"AB",
+"ABC",
+"Compile-time error"
+],
+"answer": 0,
+"explanation": "Arrow-form cases do not fall through, so no break is needed. Only the matching case runs and prints A.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-006",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int x = 5;\nswitch (x) {\n    default:\n        System.out.print("D");\n    case 1:\n        System.out.print("1");\n        break;\n    case 2:\n        System.out.print("2");\n}",
+"options": [
+"D",
+"D1",
+"D12",
+"1"
+],
+"answer": 1,
+"explanation": "No case matches 5, so execution jumps to default even though it is written first. It prints D, falls through to case 1 and prints 1, and then break stops it.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-007",
+"question": "For day = 6, this code prints both Weekend and Invalid, but only Weekend is wanted. What is the best fix?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int day = 6;\nswitch (day) {\n    case 6:\n    case 7:\n        System.out.println("Weekend");\n    default:\n        System.out.println("Invalid");\n}",
+"options": [
+"Add a break; statement after the Weekend println",
+"Move the default label above case 6",
+"Replace case 6: with case (6):",
+"Add a semicolon after case 7:"
+],
+"answer": 0,
+"explanation": "Without a break, execution falls through from the Weekend statement into default. Adding break after the Weekend println ends the switch there. Moving the default label does not stop fall-through.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-008",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 0; i < 3; i++) {\n    switch (i) {\n        case 1:\n            break;\n        default:\n            System.out.print(i);\n    }\n    System.out.print("-");\n}",
+"options": [
+"0-2-",
+"0--2-",
+"0-",
+"0-1-2-"
+],
+"answer": 1,
+"explanation": "break inside a switch exits only the switch, not the enclosing loop. For i = 1 the switch ends and the dash is still printed. The sequence is 0-, then -, then 2-.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-009",
+"question": "In a classic switch statement whose last label is default, which statement is true?",
+"options": [
+"A break after the default block is required or the code will not compile",
+"A break after the default block is optional because no statements follow it",
+"The compiler refuses to compile a case that is missing a break",
+"break may appear only in the last case"
+],
+"answer": 1,
+"explanation": "Fall-through only matters when other statements follow. Since default is last, a break there does not change behavior. Java never requires break to compile, and a missing break is legal.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-switch-break-010",
+"question": "The int variable day is always between 1 and 7. Using classic switch syntax, which implementation prints Weekday for 1-5 and Weekend for 6 and 7 only?",
+"options": [
+"switch (day) {\n  case 1: case 2: case 3: case 4: case 5:\n    System.out.println("Weekday");\n  case 6: case 7:\n    System.out.println("Weekend");\n    break;\n}",
+"switch (day) {\n  case 1: case 2: case 3: case 4: case 5:\n    System.out.println("Weekday");\n    break;\n  case 6: case 7:\n    System.out.println("Weekend");\n    break;\n}",
+"switch (day) {\n  case 1..5:\n    System.out.println("Weekday");\n    break;\n  case 6..7:\n    System.out.println("Weekend");\n    break;\n}",
+"switch (day) {\n  case 1: case 2: case 3: case 4: case 5:\n    System.out.println("Weekday");\n    break;\n  case 6:\n    System.out.println("Weekend");\n    break;\n}"
+],
+"answer": 1,
+"explanation": "Option A forgets the break after Weekday, so days 1-5 also print Weekend. Option C uses range syntax, which Java does not support. Option D ignores day 7. Option B groups labels and breaks correctly.",
+"subtopic": "Switch break"
+},
+{
+"id": "java-control-flow-break-and-continue-001",
+"question": "Which statement correctly summarizes break and continue in loops?",
+"options": [
+"break skips the rest of the current iteration, and continue terminates the loop",
+"break terminates the innermost enclosing loop or switch, and continue skips the rest of the current loop iteration",
+"Both statements terminate the loop",
+"continue terminates the loop, and break only skips to the update expression"
+],
+"answer": 1,
+"explanation": "break exits the innermost enclosing loop or switch. continue skips the remaining statements of the current iteration and moves on to the next iteration.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-002",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 1; i <= 5; i++) {\n    if (i == 3) {\n        break;\n    }\n    System.out.print(i);\n}",
+"options": [
+"123",
+"1245",
+"12345",
+"12"
+],
+"answer": 3,
+"explanation": "The loop prints 1 and 2. When i is 3, break exits the loop entirely, so nothing further is printed.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-003",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 1; i <= 5; i++) {\n    if (i == 3) {\n        continue;\n    }\n    System.out.print(i);\n}",
+"options": [
+"1245",
+"12",
+"12345",
+"345"
+],
+"answer": 0,
+"explanation": "When i is 3, continue skips the print and moves on to the next iteration. Every other value is printed, giving 1245.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-004",
+"question": "What happens when this code runs?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "int i = 0;\nwhile (i < 5) {\n    if (i == 2) {\n        continue;\n    }\n    System.out.print(i);\n    i++;\n}",
+"options": [
+"It prints 01234",
+"It prints 0134",
+"It prints 01 and then hangs forever",
+"Compile-time error"
+],
+"answer": 2,
+"explanation": "In a while loop, continue jumps straight to the condition check and does not run the increment placed after it. Once i is 2, it never changes again, so the loop runs forever with no more output. A for loop would still run its update expression.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-005",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "outer:\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        if (i == 1 && j == 1) {\n            break outer;\n        }\n        System.out.print(i + "" + j + ",");\n    }\n}",
+"options": [
+"00,01,02,10,20,21,22,",
+"00,01,02,10,",
+"00,01,02,",
+"00,01,02,10,12,20,21,22,"
+],
+"answer": 1,
+"explanation": "break outer terminates the labeled outer loop, not just the inner one. The output covers i = 0 with j = 0 to 2, then 10, and stops at i = 1, j = 1. A plain break would produce option A.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-006",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "outer:\nfor (int i = 0; i < 3; i++) {\n    for (int j = 0; j < 3; j++) {\n        if (j == 1) {\n            continue outer;\n        }\n        System.out.print(i + "" + j + ",");\n    }\n}",
+"options": [
+"00,02,10,12,20,22,",
+"00,",
+"00,10,20,",
+"00,01,02,10,11,12,20,21,22,"
+],
+"answer": 2,
+"explanation": "continue outer abandons the inner loop and continues the outer loop with its next iteration. For each i, only j = 0 is printed before j == 1 triggers it. A plain continue would produce option A.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-007",
+"question": "What happens when this method is compiled?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "public static void check(int x) {\n    if (x > 0) {\n        break;\n    }\n    System.out.println(x);\n}",
+"options": [
+"It compiles, and break exits the method like return",
+"Compile-time error: break is not inside a loop or switch",
+"It compiles, and break only skips the if block",
+"Runtime exception: IllegalStateException"
+],
+"answer": 1,
+"explanation": "break is allowed only inside a loop or a switch (or with a label on an enclosing statement). Using it in a plain if block inside a method is a compile-time error. return should be used to exit a method.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-008",
+"question": "The method must return the first even number in nums, or -1 if none exists, and must stop scanning once it is found. Which statement completes it?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "static int firstEven(int[] nums) {\n    int first = -1;\n    for (int n : nums) {\n        if (n % 2 == 0) {\n            first = n;\n            ____\n        }\n    }\n    return first;\n}",
+"options": [
+"continue;",
+"return;",
+"break;",
+"first = -1;"
+],
+"answer": 2,
+"explanation": "break exits the loop immediately after the first even number is stored, and the method then returns first. continue would keep scanning and overwrite first with later even numbers. return; without a value does not compile in a method that returns int.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-009",
+"question": "What is the output?",
+"codeLanguage": "java",
+"codeFileName": "Example.java",
+"code": "for (int i = 0; i < 4; i++) {\n    switch (i) {\n        case 1:\n            continue;\n        case 2:\n            break;\n        default:\n            System.out.print(i);\n    }\n    System.out.print("-");\n}",
+"options": [
+"0-1-2-3-",
+"0-3-",
+"0--3-",
+"0--2-3-"
+],
+"answer": 2,
+"explanation": "i = 0 prints 0 and a dash. For i = 1, continue skips the rest of the loop body, so no dash is printed. For i = 2, break exits only the switch, so a dash is printed. For i = 3, it prints 3 and a dash. The total is 0--3-.",
+"subtopic": "Break and continue"
+},
+{
+"id": "java-control-flow-break-and-continue-010",
+"question": "Which statement about continue in a for loop is correct?",
+"options": [
+"continue skips the update expression and goes directly to the condition",
+"continue jumps to the update expression, and then the condition is re-evaluated",
+"continue terminates the for loop",
+"continue can be used only in while loops"
+],
+"answer": 1,
+"explanation": "In a for loop, continue ends the current iteration and runs the update expression, such as i++, before the condition is checked again. This is why a for loop with continue does not hang the way the equivalent while loop can.",
+"subtopic": "Break and continue"
+}
 ]
