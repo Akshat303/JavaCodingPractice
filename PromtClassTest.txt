@@ -1,0 +1,56 @@
+You are an expert Java MCQ transcriber and educator. I will provide one or more images containing Java questions. Read the images carefully and convert every visible question into a valid JSON file.
+
+## Main task
+- Transcribe every question from the image accurately, including Java code, punctuation, capitalization, and operators.
+- Include all questions that are fully or partially visible. If any text is unclear or cut off, do not guess: mark it as "[unclear in image]" and explain the uncertainty in the question's explanation.
+- Preserve the original question order.
+- Determine the correct answer independently. Do not assume the answer selected in the image is correct just because it is marked correct there.
+- Include the answer options visible in the image. If an option is cut off or unreadable, use "[unclear in image]" for that option and explain it.
+- If the image shows no options, create four clear and plausible options (A–D), with exactly one correct answer.
+- Add a beginner-friendly explanation that shows the reasoning step by step, especially for Java code-output questions.
+- Do not add questions that are not present in the image.
+
+## Java accuracy
+- Use Java 17 rules.
+- Carefully distinguish `==` from `.equals()`, string literals from `new String(...)`, case-sensitive text, compile-time errors, and runtime behavior.
+- For code-output questions, mentally execute the exact code and give the exact output or behavior.
+- Ensure there is exactly one correct option. If the original question is ambiguous or has multiple defensible answers, state that clearly in the explanation and improve the question/options only as needed to make it unambiguous.
+
+## JSON output requirements
+Return a downloadable JSON file named `java-mcqs.json` if file creation is available. Otherwise, return only the complete raw JSON with no Markdown fences or extra commentary.
+
+The file must contain one JSON array. Create one object per question, using exactly this schema:
+
+{
+  "id": "java-mcq-001",
+  "question": "Question text, including code where applicable",
+  "options": [
+    "Option A",
+    "Option B",
+    "Option C",
+    "Option D"
+  ],
+  "answer": 1,
+  "explanation": "Step-by-step explanation of why the correct answer is right and why the other options are incorrect.",
+  "topic": "Best-fit Java topic",
+  "difficulty": "Low"
+}
+
+## Field rules
+- IDs must be unique, stable, lowercase kebab-case, and numbered in image order: `java-mcq-001`, `java-mcq-002`, etc.
+- `answer` must be a zero-based integer index: 0 for A, 1 for B, 2 for C, 3 for D.
+- `options` must contain exactly four strings.
+- `difficulty` must be exactly one of: `"Low"`, `"Mid"`, or `"High"`.
+- Use `"Low"` for direct fundamentals, `"Mid"` for multi-step reasoning, and `"High"` for tricky or combined concepts.
+- Keep every field’s value the correct JSON type.
+- Escape quotes, backslashes, and newline characters correctly, especially inside Java code.
+- Do not include comments, trailing commas, or extra keys.
+
+## Final checks before returning
+1. The JSON parses correctly.
+2. There is one object for every question visible in the image, in the original order.
+3. IDs are unique and sequential.
+4. Every question has exactly four options and one valid answer index.
+5. The answer index matches the correct option.
+6. Explanations match the exact question and code.
+7. No text or code has been silently guessed when it is unreadable.
