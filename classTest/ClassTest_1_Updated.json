@@ -1,0 +1,462 @@
+{
+    "title": "Kodewala Academy \u2013 Java Backend Class Test 1",
+    "total_questions": 38,
+    "questions": [
+        {
+            "question_number": 1,
+            "question": "Which of the following is a valid variable name?",
+            "options": {
+                "A": "student-name",
+                "B": "123name",
+                "C": "studentName",
+                "D": "class"
+            },
+            "correct_answer": "C. studentName",
+            "explanation": "Variable names cannot start with numbers, contain hyphens, or use reserved keywords."
+        },
+        {
+            "question_number": 2,
+            "question": "Which command compiles a Java program?",
+            "options": {
+                "A": "java Test",
+                "B": "javacompile Test.java",
+                "C": "java Test.java",
+                "D": "javac Test.java"
+            },
+            "correct_answer": "D. javac Test.java",
+            "explanation": "javac converts source code into bytecode."
+        },
+        {
+            "question_number": 3,
+            "question": "Which symbol is used to terminate a statement in Java?",
+            "options": {
+                "A": ".",
+                "B": ":",
+                "C": ";",
+                "D": ","
+            },
+            "correct_answer": "C. ;",
+            "explanation": "Most Java statements end with a semicolon."
+        },
+        {
+            "question_number": 4,
+            "question": "Which component executes Java bytecode?",
+            "options": {
+                "A": "Compiler",
+                "B": "JVM",
+                "C": "JDK",
+                "D": "JRE"
+            },
+            "correct_answer": "B. JVM",
+            "explanation": "JVM loads and executes .class files."
+        },
+        {
+            "question_number": 5,
+            "question": "Which variable belongs to an object?",
+            "options": {
+                "A": "Static Variable",
+                "B": "Local Variable",
+                "C": "Final Variable",
+                "D": "Instance Variable"
+            },
+            "correct_answer": "D. Instance Variable",
+            "explanation": "Every object gets its own copy of instance variables."
+        },
+        {
+            "question_number": 6,
+            "question": "Which variable is shared among all objects?",
+            "options": {
+                "A": "Static Variable",
+                "B": "Instance Variable",
+                "C": "Local Variable",
+                "D": "Method Variable"
+            },
+            "correct_answer": "A. Static Variable",
+            "explanation": "Static variables belong to the class, not objects."
+        },
+        {
+            "question_number": 7,
+            "question": "What is the output?\n\n```java\nSystem.out.println(10 + 20 + \"Java\");\n```",
+            "options": {
+                "A": "1020Java",
+                "B": "Error",
+                "C": "30Java",
+                "D": "102030Java"
+            },
+            "correct_answer": "C. 30Java",
+            "explanation": "Integer addition happens before string concatenation."
+        },
+        {
+            "question_number": 8,
+            "question": "Which statement is correct?",
+            "options": {
+                "A": "JRE contains JDK",
+                "B": "JRE contains JVM",
+                "C": "JVM contains JRE",
+                "D": "JDK contains only JVM"
+            },
+            "correct_answer": "B. JRE contains JVM",
+            "explanation": "JRE = JVM + runtime libraries."
+        },
+        {
+            "question_number": 9,
+            "question": "What is the output?\n\n```java\nSystem.out.println(10 + \"20\" + 30);\n```",
+            "options": {
+                "A": "102030",
+                "B": "3030",
+                "C": "60",
+                "D": "Compilation Error"
+            },
+            "correct_answer": "A. 102030",
+            "explanation": "Once a String appears, concatenation starts."
+        },
+        {
+            "question_number": 10,
+            "question": "What is the output?\n\n```java\nbyte b = 10;\nbyte c = 20;\nbyte d = b + c;\n```",
+            "options": {
+                "A": "30",
+                "B": "Runtime Error",
+                "C": "Compilation Error",
+                "D": "0"
+            },
+            "correct_answer": "C. Compilation Error",
+            "explanation": "b + c becomes int, not byte."
+        },
+        {
+            "question_number": 11,
+            "question": "What is the output?\n\n```java\nString[] arr = {\"Java\", \"Python\"};\nSystem.out.println(arr.length);\n```",
+            "options": {
+                "A": "0",
+                "B": "2",
+                "C": "1",
+                "D": "Compilation Error"
+            },
+            "correct_answer": "B. 2",
+            "explanation": "Array contains two elements."
+        },
+        {
+            "question_number": 12,
+            "question": "Is the main() method mandatory in every Java class?",
+            "options": {
+                "A": "Yes, every class must have it",
+                "B": "No, only the class that needs to be executed directly requires it",
+                "C": "Only for abstract classes",
+                "D": "Only for interfaces"
+            },
+            "correct_answer": "B. No, only the class that needs to be executed directly requires it",
+            "explanation": "A Java class can exist without a main() method. However, to run directly via JVM, main() is required."
+        },
+        {
+            "question_number": 13,
+            "question": "Which is the correct signature of the main() method?",
+            "options": {
+                "A": "static public void main(String args)",
+                "B": "public void static main(String[] args)",
+                "C": "public static void main(String[] args)",
+                "D": "void main(String args[])"
+            },
+            "correct_answer": "C. public static void main(String[] args)",
+            "explanation": "The JVM looks for exactly public static void main(String[] args)."
+        },
+        {
+            "question_number": 14,
+            "question": "Which of the following is a valid Java class name?",
+            "options": {
+                "A": "class",
+                "B": "123Student",
+                "C": "StudentDetails",
+                "D": "student-details"
+            },
+            "correct_answer": "C. StudentDetails",
+            "explanation": "Class names follow identifier rules and PascalCase convention."
+        },
+        {
+            "question_number": 15,
+            "question": "What happens if a class does not contain a main() method and you try to run it?",
+            "options": {
+                "A": "Compilation Error",
+                "B": "Runtime Error: Main method not found",
+                "C": "Runs successfully",
+                "D": "JVM restarts"
+            },
+            "correct_answer": "B. Runtime Error: Main method not found",
+            "explanation": "The class compiles, but JVM throws Main method not found error on execution."
+        },
+        {
+            "question_number": 16,
+            "question": "What is the primary purpose of JIT (Just-In-Time) Compiler?",
+            "options": {
+                "A": "To convert source code to bytecode",
+                "B": "To manage memory",
+                "C": "To parse XML",
+                "D": "To convert bytecode into machine code during execution for better performance"
+            },
+            "correct_answer": "D. To convert bytecode into machine code during execution for better performance",
+            "explanation": "JIT converts frequently executed bytecode into native machine code."
+        },
+        {
+            "question_number": 17,
+            "question": "Why should hardcoding values be avoided in Java applications?",
+            "options": {
+                "A": "It is required by JVM",
+                "B": "It increases bytecode size",
+                "C": "It makes maintenance and configuration difficult",
+                "D": "It causes compilation failures"
+            },
+            "correct_answer": "C. It makes maintenance and configuration difficult",
+            "explanation": "Hardcoded values make maintenance hard; external configuration is preferred."
+        },
+        {
+            "question_number": 18,
+            "question": "Why is Java called a Platform Independent language?",
+            "options": {
+                "A": "Java works only on Windows and Linux",
+                "B": "It requires no OS",
+                "C": "Java bytecode can run on any platform that has a JVM",
+                "D": "It has built-in database support"
+            },
+            "correct_answer": "C. Java bytecode can run on any platform that has a JVM",
+            "explanation": "WORA: Write Once, Run Anywhere via JVM."
+        },
+        {
+            "question_number": 19,
+            "question": "Where are objects stored in Java memory?",
+            "options": {
+                "A": "Stack Memory",
+                "B": "Heap Memory",
+                "C": "Method Area",
+                "D": "CPU Cache"
+            },
+            "correct_answer": "B. Heap Memory",
+            "explanation": "Objects created with new are stored in Heap Memory."
+        },
+        {
+            "question_number": 20,
+            "question": "Where are local variables stored?",
+            "options": {
+                "A": "Heap Memory",
+                "B": "Method Area",
+                "C": "Static Pool",
+                "D": "Stack Memory"
+            },
+            "correct_answer": "D. Stack Memory",
+            "explanation": "Local variables declared inside methods are stored in Stack Memory."
+        },
+        {
+            "question_number": 21,
+            "question": "What is a common use case of a static variable in Java?",
+            "options": {
+                "A": "Storing local variables",
+                "B": "Storing data shared by all objects of a class",
+                "C": "Storing passwords securely",
+                "D": "Managing thread execution"
+            },
+            "correct_answer": "B. Storing data shared by all objects of a class",
+            "explanation": "Static variables belong to the class and are shared by all objects."
+        },
+        {
+            "question_number": 22,
+            "question": "What is the scope of a local variable in Java?",
+            "options": {
+                "A": "Entire application",
+                "B": "Entire class",
+                "C": "Only within the method/block where it is declared",
+                "D": "Accessible across packages"
+            },
+            "correct_answer": "C. Only within the method/block where it is declared",
+            "explanation": "Local variables are accessible only within their declaring method or block."
+        },
+        {
+            "question_number": 23,
+            "question": "Which statement about the main() method is TRUE?",
+            "options": {
+                "A": "Every class must contain a main method.",
+                "B": "Main cannot be overloaded.",
+                "C": "A class can compile without a main method.",
+                "D": "Main must return an int."
+            },
+            "correct_answer": "C. A class can compile without a main method.",
+            "explanation": "A class without main compiles successfully."
+        },
+        {
+            "question_number": 24,
+            "question": "What is the relationship between a .java file, classes, and .class files?",
+            "options": {
+                "A": "1",
+                "B": "2",
+                "C": "4",
+                "D": "3"
+            },
+            "correct_answer": "D. 3",
+            "explanation": "One .class file is generated for each class defined in the source file."
+        },
+        {
+            "question_number": 25,
+            "question": "Which statement is TRUE?",
+            "options": {
+                "A": "A .class file contains Java source code.",
+                "B": "One .java file can contain multiple classes.",
+                "C": "A Java file cannot have helper classes.",
+                "D": "All classes must be public."
+            },
+            "correct_answer": "B. One .java file can contain multiple classes.",
+            "explanation": "A file can contain multiple classes (at most one public class)."
+        },
+        {
+            "question_number": 26,
+            "question": "File Name is Demo.java. What happens if public class Test is inside it?",
+            "options": {
+                "A": "Runtime Error",
+                "B": "Warning",
+                "C": "Compilation Error",
+                "D": "Executes successfully"
+            },
+            "correct_answer": "C. Compilation Error",
+            "explanation": "Public class name must match the file name."
+        },
+        {
+            "question_number": 27,
+            "question": "What happens when the program is executed without arguments and accesses args[0]?",
+            "options": {
+                "A": "Compilation failure",
+                "B": "Returns null",
+                "C": "ArrayIndexOutOfBoundsException",
+                "D": "Infinite loop"
+            },
+            "correct_answer": "C. ArrayIndexOutOfBoundsException",
+            "explanation": "Accessing empty args array at index 0 throws ArrayIndexOutOfBoundsException."
+        },
+        {
+            "question_number": 28,
+            "question": "What is the output when executed as 'java Test'?\n\n```java\npublic class Test {\n    public static void main(String[] args) {\n        if(args.length > 0) {\n            System.out.println(args[0]);\n        } else {\n            System.out.println(\"No Arguments\");\n        }\n    }\n}\n```",
+            "options": {
+                "A": "Compilation failure",
+                "B": "No Arguments",
+                "C": "NullPointerException",
+                "D": "ArrayIndexOutOfBoundsException"
+            },
+            "correct_answer": "B. No Arguments",
+            "explanation": "Safely checks args.length before accessing."
+        },
+        {
+            "question_number": 29,
+            "question": "What is the output when executed as 'java Test Java Spring Boot'?",
+            "options": {
+                "A": "0",
+                "B": "3",
+                "C": "4",
+                "D": "Compilation failure"
+            },
+            "correct_answer": "B. 3",
+            "explanation": "Three arguments are passed, so args.length is 3."
+        },
+        {
+            "question_number": 30,
+            "question": "A Java Employee class handles salary calculation, PDF generation, and emailing. Which SOLID principle is violated?",
+            "options": {
+                "A": "Open/Closed Principle",
+                "B": "Single Responsibility Principle",
+                "C": "Dependency Inversion Principle",
+                "D": "Liskov Substitution Principle"
+            },
+            "correct_answer": "B. Single Responsibility Principle",
+            "explanation": "Mixing multiple responsibilities violates SRP."
+        },
+        {
+            "question_number": 31,
+            "question": "What does the \u201cS\u201d in SOLID stand for?",
+            "options": {
+                "A": "Software Responsibility Principle",
+                "B": "Single Responsibility Principle",
+                "C": "Secure Routing Principle",
+                "D": "Static System Principle"
+            },
+            "correct_answer": "B. Single Responsibility Principle",
+            "explanation": "S stands for Single Responsibility Principle."
+        },
+        {
+            "question_number": 32,
+            "question": "A developer hardcodes a payment URL inside a Java class. What is the main disadvantage?",
+            "options": {
+                "A": "It improves security",
+                "B": "It reduces memory",
+                "C": "Changes require modifying and redeploying the source code",
+                "D": "It speeds up execution"
+            },
+            "correct_answer": "C. Changes require modifying and redeploying the source code",
+            "explanation": "Hardcoded values require code recompilation and redeployment upon change."
+        },
+        {
+            "question_number": 33,
+            "question": "When a static method is called, where is method call information stored during execution?",
+            "options": {
+                "A": "CPU Cache",
+                "B": "Stack",
+                "C": "Heap",
+                "D": "Metaspace"
+            },
+            "correct_answer": "B. Stack",
+            "explanation": "Method call frames are stored on the Stack."
+        },
+        {
+            "question_number": 34,
+            "question": "What is the output?\n\n```java\nint a = 10;\nint b = 20;\nSystem.out.println(a > 5 && b < 15);\n```",
+            "options": {
+                "A": "true",
+                "B": "false",
+                "C": "Compilation error",
+                "D": "Runtime exception"
+            },
+            "correct_answer": "B. false",
+            "explanation": "true && false evaluates to false."
+        },
+        {
+            "question_number": 35,
+            "question": "What is the output?\n\n```java\nint a = 10;\nif (a > 5 || ++a > 10) {\n    System.out.println(a);\n}\n```",
+            "options": {
+                "A": "10",
+                "B": "11",
+                "C": "Compilation error",
+                "D": "false"
+            },
+            "correct_answer": "A. 10",
+            "explanation": "Short-circuit OR (||) skips second operand when first is true."
+        },
+        {
+            "question_number": 36,
+            "question": "Gathering business requirements and client expectations before writing code belongs to which SDLC phase?",
+            "options": {
+                "A": "Design Phase",
+                "B": "Implementation Phase",
+                "C": "Testing Phase",
+                "D": "Requirement Analysis"
+            },
+            "correct_answer": "D. Requirement Analysis",
+            "explanation": "Requirement analysis focuses on gathering client requirements."
+        },
+        {
+            "question_number": 37,
+            "question": "What is a JAR file in Java?",
+            "options": {
+                "A": "Java Application Registry file",
+                "B": "Java Archive file used to package Java classes and resources",
+                "C": "Java Asynchronous Runtime file",
+                "D": "Java Archive Report file"
+            },
+            "correct_answer": "B. Java Archive file used to package Java classes and resources",
+            "explanation": "JAR bundles compiled classes and resources."
+        },
+        {
+            "question_number": 38,
+            "question": "Which command is used to create a JAR file?",
+            "options": {
+                "A": "jar cvf app.jar *.class",
+                "B": "java create app.jar",
+                "C": "javac -jar app.jar",
+                "D": "jar make app.jar"
+            },
+            "correct_answer": "A. jar cvf app.jar *.class",
+            "explanation": "jar cvf creates a new archive file."
+        }
+    ]
+}
