@@ -9,13 +9,19 @@ Create a high-quality, interview-focused MCQ question bank for the topic details
 ====================================================================
 
 MAIN TOPIC:
-[WRITE MAIN TOPIC HERE]
+[Encapsulation]
 
 SUBTOPICS:
-[WRITE SUBTOPICS HERE, one per line]
+[
+Data hiding with private fields,
+Access modifiers,
+Getters and setters,
+Protecting object state,
+Immutable objects and defensive copying
+]
 
 OPTIONAL SETTINGS (leave as-is or edit):
-- QUESTIONS PER SUBTOPIC: 30   (allowed range 25-30)
+- QUESTIONS PER SUBTOPIC: 50   (allowed range 45-50)
 - JAVA VERSION: 17             (use this version for every version-specific behavior)
 - OUTPUT LANGUAGE: English
 
