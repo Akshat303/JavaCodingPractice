@@ -8,6 +8,12 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "String s1 = new String(\"Java\");\nString s2 = new String(\"Java\");\nSystem.out.println(s1 == s2);",
+      "options": {
+        "a": "true",
+        "b": "false",
+        "c": "Compilation Error",
+        "d": "Runtime Exception"
+      },
       "correct_answer": "false",
       "explanation": "Operator '==' reference (memory address) ko compare karta hai. 'new' keyword se heap memory mein do alag-alag objects bante hain, isliye dono ke reference different hain."
     },
@@ -17,6 +23,12 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "String s1 = \"Java\";\nString s2 = new String(\"java\");\nSystem.out.println(s1.equals(s2));",
+      "options": {
+        "a": "true",
+        "b": "false",
+        "c": "Compilation Error",
+        "d": "NullPointerException"
+      },
       "correct_answer": "false",
       "explanation": "'.equals()' method case-sensitive hota hai. 'Java' aur 'java' alag hain, isliye yeh false return karega."
     },
@@ -26,138 +38,276 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "String s = \"Hello\";\ns.concat(\" World\");\nSystem.out.println(s);",
+      "options": {
+        "a": "Hello World",
+        "b": "Hello",
+        "c": "World",
+        "d": "Compilation Error"
+      },
       "correct_answer": "Hello",
       "explanation": "Java mein Strings immutable hoti hain. 'concat()' method ek naya string object banata hai lekin original string 's' ko change nahi karta."
     },
     {
       "id": 4,
       "question": "Which method compares String contents?",
+      "options": {
+        "a": "==",
+        "b": "equals()",
+        "c": "compareTo()",
+        "d": "equalsIgnoreCase()"
+      },
       "correct_answer": "equals()",
       "explanation": "'.equals()' method ka use do strings ke content ya value ko compare karne ke liye kiya jata hai."
     },
     {
       "id": 5,
       "question": "Which statement is TRUE?",
+      "options": {
+        "a": "String Is Mutable",
+        "b": "String Is Immutable",
+        "c": "String objects cannot be created using new keyword",
+        "d": "Strings are stored in stack memory"
+      },
       "correct_answer": "String Is Immutable",
       "explanation": "Java mein String class immutable (jise badla na ja sake) hoti hai."
     },
     {
       "id": 6,
       "question": "Which method is inherited by every Java class?",
+      "options": {
+        "a": "equals() only",
+        "b": "hashCode() only",
+        "c": "Both - equals() and hashCode()",
+        "d": "finalize() only"
+      },
       "correct_answer": "Both - equals() and hashCode()",
       "explanation": "Java ki sabhi classes 'Object' class ko inherit karti hain, jisme 'equals()' aur 'hashCode()' methods hote hain."
     },
     {
       "id": 7,
       "question": "What happens if equals() is not overridden?",
+      "options": {
+        "a": "It compares contents automatically",
+        "b": "Uses == internally",
+        "c": "Throws a RuntimeException",
+        "d": "Compilation error"
+      },
       "correct_answer": "Uses == internally",
       "explanation": "Agar 'equals()' override na kiya jaye, toh Object class ka default implementation use hota hai jo '==' operator ki tarah reference comparison karta hai."
     },
     {
       "id": 8,
       "question": "Which modifier is generally used for encapsulation(To Hide Data)?",
+      "options": {
+        "a": "public",
+        "b": "protected",
+        "c": "private",
+        "d": "default"
+      },
       "correct_answer": "private",
       "explanation": "Data hiding ke liye 'private' access modifier ka use kiya jata hai taaki class ke baahar se data direct access na ho sake."
     },
     {
       "id": 9,
       "question": "Getter methods should generally be",
+      "options": {
+        "a": "private",
+        "b": "protected",
+        "c": "public",
+        "d": "static"
+      },
       "correct_answer": "public",
       "explanation": "Getter methods ko 'public' banaya jata hai taaki doosri classes private variables ki value ko safely access kar sakein."
     },
     {
       "id": 10,
       "question": "final variable",
+      "options": {
+        "a": "Can be changed anytime",
+        "b": "Cannot change reference/value after assignment",
+        "c": "Can only be changed inside constructor",
+        "d": "Automatically gets null value"
+      },
       "correct_answer": "Cannot change reference/value after assignment",
       "explanation": "Ek baar final variable ko value assign hone ke baad uski value ya reference ko badla nahi ja sakta."
     },
     {
       "id": 11,
       "question": "final method",
+      "options": {
+        "a": "Can be overridden",
+        "b": "Cannot be overridden",
+        "c": "Can be overloaded",
+        "d": "Must be static"
+      },
       "correct_answer": "Cannot be overridden",
       "explanation": "Final method ko subclass mein override nahi kiya ja sakta."
     },
     {
       "id": 12,
       "question": "final class",
+      "options": {
+        "a": "Can be inherited",
+        "b": "Cannot be inherited",
+        "c": "Must be abstract",
+        "d": "Cannot have objects"
+      },
       "correct_answer": "Cannot be inherited",
       "explanation": "Final class ko extend ya inherit nahi kiya ja sakta."
     },
     {
       "id": 13,
       "question": "Which class is final?",
+      "options": {
+        "a": "StringBuilder",
+        "b": "StringBuffer",
+        "c": "String",
+        "d": "Object"
+      },
       "correct_answer": "String",
       "explanation": "Java mein 'String' class ko final banaya gaya hai taaki uski security aur immutability maintain rahe."
     },
     {
       "id": 14,
       "question": "When is constructor called?",
+      "options": {
+        "a": "Class loading",
+        "b": "Object creation",
+        "c": "Program termination",
+        "d": "Method invocation"
+      },
       "correct_answer": "Object creation",
       "explanation": "Constructor tabhi call hota hai jab 'new' keyword ka use karke kisi class ka object banaya jata hai."
     },
     {
       "id": 15,
       "question": "If no constructor is written",
+      "options": {
+        "a": "Compilation error occurs",
+        "b": "No constructor exists in the class",
+        "c": "Compiler provides default constructor",
+        "d": "JVM creates a parameterized constructor"
+      },
       "correct_answer": "Compiler provides default constructor",
       "explanation": "Agar aap koi constructor nahi likhte, toh Java compiler khud-ba-khud ek default constructor provide karta hai."
     },
     {
       "id": 16,
       "question": "First statement inside constructor can be",
+      "options": {
+        "a": "any print statement",
+        "b": "variable declaration",
+        "c": "either super() or this()",
+        "d": "return statement"
+      },
       "correct_answer": "either super() or this()",
       "explanation": "Constructor ke andar pehli statement ya toh 'this()' (same class ke doosre constructor ko call karne ke liye) ya 'super()' (parent class ke constructor ke liye) hoti hai."
     },
     {
       "id": 17,
       "question": "Which executes first?",
+      "options": {
+        "a": "IIB",
+        "b": "Constructor",
+        "c": "SIB",
+        "d": "Main method"
+      },
       "correct_answer": "SIB",
       "explanation": "Static Initialization Block (SIB) class loading ke waqt sabse pehle execute hota hai."
     },
     {
       "id": 18,
       "question": "IIB executes",
+      "options": {
+        "a": "Only once during class loading",
+        "b": "Every object creation",
+        "c": "Only when explicitly called",
+        "d": "Before SIB"
+      },
       "correct_answer": "Every object creation",
       "explanation": "Instance Initialization Block (IIB) har baar object create hone par constructor se theek pehle execute hota hai."
     },
     {
       "id": 19,
       "question": "Execution order",
+      "options": {
+        "a": "Constructor → IIB → SIB",
+        "b": "IIB → SIB → Constructor",
+        "c": "SIB → IIB → Constructor",
+        "d": "SIB → Constructor → IIB"
+      },
       "correct_answer": "SIB → IIB → Constructor",
       "explanation": "Java mein execution ka sahi kram yeh hai: Pehle SIB (class loading par), phir IIB (object creation par), aur ant mein Constructor."
     },
     {
       "id": 20,
       "question": "Which keyword invokes parent constructor?",
+      "options": {
+        "a": "this()",
+        "b": "parent()",
+        "c": "super()",
+        "d": "base()"
+      },
       "correct_answer": "super()",
       "explanation": "Parent class ke constructor ko bulane ke liye 'super()' keyword ka use kiya jata hai."
     },
     {
       "id": 21,
       "question": "Object class is",
+      "options": {
+        "a": "Child of all classes",
+        "b": "Parent of all classes",
+        "c": "An interface",
+        "d": "A final class"
+      },
       "correct_answer": "Parent of all classes",
       "explanation": "Java mein 'Object' class sabhi classes ki root ya parent class hoti hai."
     },
     {
       "id": 22,
       "question": "Instance variable is created",
+      "options": {
+        "a": "Once per class loading",
+        "b": "With every object",
+        "c": "Inside static methods",
+        "d": "Globally in stack"
+      },
       "correct_answer": "With every object",
       "explanation": "Instance variables tab bante hain jab bhi class ka naya object create kiya jata hai."
     },
     {
       "id": 23,
       "question": "A Java application receives thousands of requests simultaneously. Each request builds a large string by appending multiple values. The same string object is shared by multiple threads.",
+      "options": {
+        "a": "String",
+        "b": "StringBuilder",
+        "c": "StringBuffer",
+        "d": "StringJoiner"
+      },
       "correct_answer": "StringBuffer",
       "explanation": "StringBuffer thread-safe (synchronized) hota hai, isliye multi-threaded environment mein jab multiple threads ek hi object ko share karein tab yeh best hai."
     },
     {
       "id": 24,
       "question": "Why is StringBuilder preferred over StringBuffer in this program?",
+      "options": {
+        "a": "StringBuilder is thread-safe",
+        "b": "The program is single-threaded, so synchronization overhead is unnecessary.",
+        "c": "StringBuffer is deprecated",
+        "d": "StringBuilder uses less memory than StringBuffer"
+      },
       "correct_answer": "The program is single-threaded, so synchronization overhead is unnecessary.",
       "explanation": "StringBuilder thread-safe nahi hota lekin yeh fast kaam karta hai. Single-threaded program mein synchronization ki zaroorat nahi hoti, isliye StringBuilder prefer hota hai."
     },
     {
       "id": 25,
       "question": "A developer accidentally loses the source code (.java files), but the compiled .class files are still available. Which statement is correct?",
+      "options": {
+        "a": "The code is completely lost and cannot be recovered.",
+        "b": "A Java decompiler can generate readable Java source code from the .class files, although comments and original formatting are usually lost.",
+        "c": "The JVM can execute bytecode directly without any source code conversion.",
+        "d": "Only comments are preserved in .class files."
+      },
       "correct_answer": "A Java decompiler can generate readable Java source code from the .class files, although comments and original formatting are usually lost.",
       "explanation": "Bytecode (.class files) se decompiler ki madad se source code wapas prapt kiya ja sakta hai, halaanki comments aur formatting gayab ho jaati hain."
     },
@@ -167,12 +317,24 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "Employee e1 = new Employee(101);\nEmployee e2 = new Employee(101);\nSystem.out.println(e1.equals(e2));",
+      "options": {
+        "a": "true",
+        "b": "false",
+        "c": "Compilation Error",
+        "d": "NullPointerException"
+      },
       "correct_answer": "false",
       "explanation": "Kyunki Employee class ne 'equals()' method ko override nahi kiya hai, isliye yeh default reference comparison ('==') karega. Dono objects alag memory location par hain, isliye 'false' aayega."
     },
     {
       "id": 27,
       "question": "A banking application updates a shared transaction log using multiple threads simultaneously. Which class should be used?",
+      "options": {
+        "a": "StringBuilder",
+        "b": "StringBuffer",
+        "c": "String",
+        "d": "ArrayList"
+      },
       "correct_answer": "StringBuffer",
       "explanation": "Multiple threads ke sath concurrent updates ke liye thread-safe class yaani 'StringBuffer' ka use kiya jata hai."
     },
@@ -182,6 +344,12 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "class Student {\n    public int marks;\n}",
+      "options": {
+        "a": "Make marks public final",
+        "b": "Make marks private and validate in setter.",
+        "c": "Make marks static",
+        "d": "Use StringBuffer for marks"
+      },
       "correct_answer": "Make marks private and validate in setter.",
       "explanation": "Encapsulation ka use karke field ko private banaya jata hai aur setter method mein validation lagayi jaati hai taaki negative marks assign na ho sakein."
     },
@@ -191,6 +359,12 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "String id1 = new String(\"P101\");\nString id2 = new String(\"P101\");\nif(id1 == id2) {\n    // ...\n} else {\n    System.out.println(\"Cache Miss\");\n}",
+      "options": {
+        "a": "Cache Hit",
+        "b": "Cache Miss",
+        "c": "Compilation Error",
+        "d": "NullPointerException"
+      },
       "correct_answer": "Cache Miss",
       "explanation": "'==' operator references ko compare karta hai. 'new' keyword se bane do alag objects ke references alag hote hain, isliye condition false hoti hai aur 'Cache Miss' print hota hai."
     },
@@ -200,18 +374,36 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "String s = \"Java\" + \"Backend\";",
+      "options": {
+        "a": "0",
+        "b": "1",
+        "c": "2",
+        "d": "3"
+      },
       "correct_answer": "1",
       "explanation": "Compile-time constant expressions ('Java' + 'Backend') ko compiler optimize karke ek hi string literal bana deta hai, jisse runtime par sirf 1 object banta hai."
     },
     {
       "id": 31,
       "question": "An application loads configuration only once when the application starts. Which Java feature is most suitable for performing this initialization?",
+      "options": {
+        "a": "Instance Initialization Block (IIB)",
+        "b": "Constructor",
+        "c": "Static Initialization Block (SIB)",
+        "d": "Getter method"
+      },
       "correct_answer": "Static Initialization Block (SIB)",
       "explanation": "SIB class loading ke waqt sirf ek baar execute hota hai, isliye one-time configuration loading ke liye yeh sabse behtar hai."
     },
     {
       "id": 32,
       "question": "A Product object is created for every incoming request. Before every constructor execution, default values must be initialized. Which feature is most appropriate?",
+      "options": {
+        "a": "Static Initialization Block (SIB)",
+        "b": "Instance Initialization Block (IIB)",
+        "c": "Main method",
+        "d": "Final method"
+      },
       "correct_answer": "Instance Initialization Block (IIB)",
       "explanation": "IIB har baar object creation par constructor call hone se pehle execute hota hai, jo common initialization ke liye use hota hai."
     },
@@ -221,12 +413,24 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "public class Utility {\n    private Utility() {}\n}",
+      "options": {
+        "a": "To allow inheritance",
+        "b": "To prevent object creation because the class contains only utility/static methods.",
+        "c": "To make the class abstract",
+        "d": "To allow multiple threads to access it"
+      },
       "correct_answer": "To prevent object creation because the class contains only utility/static methods.",
       "explanation": "Utility classes jismein sirf static methods hote hain, unka object banana zaroori nahi hota, isliye constructor ko private banaya jata hai."
     },
     {
       "id": 34,
       "question": "You are working on a Java-based Order Management System. Two orders with the same orderId should be considered equal. What is the best solution?",
+      "options": {
+        "a": "Override only equals()",
+        "b": "Override only hashCode()",
+        "c": "Override both equals() and hashCode() based on orderId.",
+        "d": "Use final modifier on orderId"
+      },
       "correct_answer": "Override both equals() and hashCode() based on orderId.",
       "explanation": "Content-based equality ke liye 'equals()' aur 'hashCode()' dono ko override karna zaroori hota hai taaki collections aur comparisons sahi se kaam karein."
     },
@@ -236,6 +440,12 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "class PaymentService {\n    static void process() { /* ... */ }\n}\nclass UpiPaymentService extends PaymentService {\n    static void process() { /* ... */ }\n}\nPaymentService payment = new UpiPaymentService();\npayment.process();",
+      "options": {
+        "a": "UpiPaymentService",
+        "b": "PaymentService",
+        "c": "Compilation Error",
+        "d": "Runtime Exception"
+      },
       "correct_answer": "PaymentService",
       "explanation": "Static methods override nahi hote balki hide hote hain (Method Hiding). Method resolution reference type (PaymentService) ke adhar par hoti hai."
     },
@@ -245,6 +455,12 @@
       "codeLanguage": "java",
       "codeFileName": "Example.java",
       "code": "class NotificationService {\n    NotificationService() {\n        sendNotification();\n    }\n    void sendNotification() { /* ... */ }\n}\nclass EmailNotificationService extends NotificationService {\n    String email = \"admin@company.com\";\n    void sendNotification() {\n        System.out.println(email);\n    }\n}",
+      "options": {
+        "a": "admin@company.com",
+        "b": "null",
+        "c": "Compilation Error",
+        "d": "Runtime Exception"
+      },
       "correct_answer": "null",
       "explanation": "Jab parent class ka constructor call hota hai, toh child class ka instance abhi poori tarah initialize nahi hua hota hai, isliye child ka variable 'email' apne default value yaani 'null' par hota hai."
     },
@@ -253,36 +469,4 @@
       "question": "What is the output when calling Processor.process(100) on the following class?",
       "codeLanguage": "java",
       "codeFileName": "Example.java",
-      "code": "class OrderProcessor {\n    void process(long orderid) {\n        System.out.println(\"Long\");\n    }\n    void process(Integer orderid) {\n        System.out.println(\"Integer\");\n    }\n}",
-      "correct_answer": "Long",
-      "explanation": "Java mein literal '100' ek primitive int hai. Method overloading mein widening (int se long) boxing (int se Integer) se pehle priority leti hai."
-    },
-    {
-      "id": 38,
-      "question": "What will be printed by the following code?",
-      "codeLanguage": "java",
-      "codeFileName": "Example.java",
-      "code": "class Employee {\n    String role = \"Employee\";\n    String getRole() { return role; }\n}\nclass SoftwareEngineer extends Employee {\n    String role = \"Software Engineer\";\n    String getRole() { return role; }\n}\nEmployee employee = new SoftwareEngineer();\nSystem.out.println(employee.role);\nSystem.out.println(employee.getRole());",
-      "correct_answer": "Employee\nSoftware Engineer",
-      "explanation": "Instance variables (fields) shadow hote hain aur reference type (Employee) ke base par resolve hote hain, jabki methods override hote hain aur runtime object type (SoftwareEngineer) ke base par call hote hain."
-    },
-    {
-      "id": 39,
-      "question": "An e-commerce application has an OrderService class that performs three tasks: calculates order totals, saves orders to MySQL, and sends confirmation emails. What is the best design improvement according to SRP?",
-      "correct_answer": "Create separate classes: OrderCalculator, OrderRepository, and EmailService.",
-      "explanation": "Single Responsibility Principle (SRP) kehta hai ki ek class ki sirf ek hi responsibility honi chahiye, isliye alag-alag tasks ke liye alag classes banani chahiye."
-    },
-    {
-      "id": 40,
-      "question": "A payment application supports credit card and UPI payments. Whenever a new payment method is introduced, developers must modify this existing class using if-else. Which design best follows OCP?",
-      "correct_answer": "Create a Payment interface with a pay() method and implement it in CardPayment, UpiPayment, and other payment classes.",
-      "explanation": "Open/Closed Principle (OCP) kehta hai ki code extension ke liye open hona chahiye aur modification ke liye closed. Interface aur polymorphism ka use karne se naye payment methods bina purana code badle add kiye ja sakte hain."
-    },
-    {
-      "id": 41,
-      "question": "In Java 7, which of the following statements about interfaces is correct?",
-      "correct_answer": "An interface can contain public static final variables and abstract methods.",
-      "explanation": "Java 7 tak interfaces mein sirf public static final variables aur abstract methods hi ho sakte the (default aur static methods Java 8 mein aaye)."
-    }
-  ]
-}
+      "code": "class OrderProcessor {\n    void process(long orderid) {\n        System.out.println(\"Long\");\n    }\n    void process(Integer orderid) 
