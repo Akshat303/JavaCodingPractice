@@ -1,50 +1,201 @@
-You are an expert Java backend interviewer and MCQ question-bank author.
+# Java Interview MCQ Question Bank — Master Prompt
 
-Create a high-quality MCQ bank for interview preparation using the topic details below.
+You are an expert Java backend interviewer, Java educator, and MCQ question-bank author.
 
-MAIN TOPIC:
-[Java platform and setup]
+Create a high-quality, interview-focused MCQ question bank using the topic details provided below. The questions should help learners strengthen their Java fundamentals, improve programming logic, understand code execution, and prepare for technical interviews.
 
-SUBTOPICS — use these exact names in the JSON "subtopic" field:
-[JDK, JRE, and JVM
-Install a JDK and use jshell
-Compile and run with javac and java
-Packages, classpath, and modules
-Environment variables and command-line arguments]
+## MAIN TOPIC
+[Control flow]
 
+## SUBTOPICS
+[If and else-if
+For loops
+While loops
+Do-while loop
+Switch statements
+Switch break
+Break and continue]
 
-QUESTION COUNT:
-Create up to 10-20 strong questions for each supplied subtopic. Cover every subtopic. If the full response would be too long, create 5–8 subtopics per batch; do not silently skip any subtopic.
+Use the supplied subtopic names exactly as written in the JSON `"subtopic"` field. Do not rename, merge, shorten, or invent subtopic labels.
 
-QUESTION QUALITY:
-- Focus on commonly asked Java developer interview concepts.
-- Include a balanced mix of fundamentals, output prediction, edge cases, and practical code scenarios.
-- Include questions at easy, intermediate, and advanced levels.
-- Prefer questions that test understanding over trivia.
-- Each question must have exactly one unambiguously correct answer.
-- Provide exactly 4 distinct options per question.
-- Make incorrect options plausible, but never accidentally correct.
-- Do not repeat the same concept or question with superficial wording changes.
-- Keep Java syntax and behavior accurate for the stated version.
-- For code/output questions, verify the result carefully before writing it.
-- Give a clear explanation of why the correct answer is right. Mention the key rule or reasoning, and briefly clarify common traps when useful.
-- Use the exact supplied subtopic name for every question. Do not invent, rename, or combine subtopic labels.
+## QUESTION COUNT
+- Create **10–20 strong questions per supplied subtopic**, depending on the topic's complexity.
+- Cover every supplied subtopic.
+- If the complete question bank is too large for one response, generate it in batches of 5–8 subtopics.
+- Never silently skip any subtopic.
+- Maintain unique, sequential question IDs across all batches.
 
-OUTPUT RULES:
-- Output ONLY one valid JSON array. No Markdown fences, headings, comments, or text before or after it.
-- Use this exact object shape:
-  {
-    "id": "control-flow-for-loops-001",
-    "question": "Question text",
-    "options": ["Option A", "Option B", "Option C", "Option D"],
-    "answer": 0,
-    "explanation": "Explanation of the correct answer.",
-    "subtopic": "For loops"
-  }
-- "answer" must be a zero-based integer: 0 for the first option, 1 for the second, 2 for the third, or 3 for the fourth.
-- Give every question a unique, stable, lowercase kebab-case ID. Number IDs sequentially and do not reuse IDs.
-- Every question must include non-empty question text, four string options, a valid answer index, a non-empty explanation, and a subtopic.
-- If code is needed, include it inside the question text using JSON newline escapes. Do not add extra fields.
-- Ensure the final output parses as JSON.
+## QUESTION TYPES — INCLUDE ALL RELEVANT TYPES
 
-Now generate the question bank.
+Create a balanced mixture of the following MCQ types for every subtopic. Do not restrict the question bank to definition-based or theory-only questions.
+
+### 1. Conceptual and Fundamental MCQs
+- Test core definitions, principles, rules, and terminology.
+- Ask what a concept means, why it is used, and how it works.
+- Cover the differences between related concepts.
+- Test understanding of the underlying concepts rather than memorization alone.
+
+### 2. Summary-Based and Revision MCQs
+- Create questions based on the essential concepts, rules, key points, and takeaways of the subtopic.
+- Test whether a learner can identify the most accurate summary of a concept.
+- Include questions such as:
+  - Which statement best summarizes this concept?
+  - Which statements about this topic are correct?
+  - Which option correctly describes the relationship between these concepts?
+  - Which rule should a developer remember when using this feature?
+- For single-answer questions, ensure that exactly one option is correct.
+- Do not use vague questions or options that are merely different but equally valid summaries.
+
+### 3. Code Output Prediction MCQs
+- Present valid Java code snippets and ask what the program prints or what happens during execution.
+- Cover variables, data types, operators, conditions, loops, methods, classes, objects, inheritance, polymorphism, exceptions, strings, collections, and other concepts when relevant to the supplied subtopics.
+- Include normal execution, boundary conditions, and relevant edge cases.
+- Use multiple lines of code where needed to test actual understanding.
+- Ensure that the correct output is verified carefully.
+- Distinguish clearly between compile-time errors, runtime exceptions, and normal output.
+- Do not include invalid code unless the question explicitly asks the learner to identify or predict a compilation error.
+
+### 4. Pseudocode and Logic-Based MCQs
+- Include language-independent or Java-inspired pseudocode when appropriate.
+- Ask learners to predict the output, final variable values, number of iterations, execution sequence, or result of an algorithm.
+- Cover conditions, loops, nested loops, counters, accumulators, branching, and basic algorithmic reasoning when relevant.
+- Include tracing questions that require learners to follow the logic step by step.
+- Clearly define any nonstandard pseudocode conventions needed to answer the question.
+- Ensure pseudocode has one unambiguous answer.
+
+### 5. Programming and Coding Scenario MCQs
+- Present short programming problems, incomplete Java programs, or realistic developer scenarios.
+- Ask which code snippet correctly implements a requirement.
+- Test how a concept is applied in an actual program.
+- Include questions about choosing the correct implementation, method call, command, declaration, or program structure.
+- Use practical examples involving input validation, data processing, object creation, method calls, and error handling when relevant.
+- Keep the code concise enough for an MCQ but sufficiently meaningful to test programming ability.
+
+### 6. Code Completion and Missing-Code MCQs
+- Provide a partially completed Java program or code snippet.
+- Ask which statement, expression, method implementation, or command should replace the missing part.
+- Test syntax, logic, API usage, and correct program behavior.
+- Ensure only one option completes the requirement correctly.
+
+### 7. Error Detection and Code Correction MCQs
+- Present code containing a specific compilation error, runtime problem, or logical mistake.
+- Ask the learner to identify the cause or select the correct fix.
+- Distinguish syntax errors, type errors, access violations, incorrect API usage, and logical errors.
+- Ensure the question specifies the intended behavior when necessary.
+- Do not make multiple options correct because of unrelated errors.
+
+### 8. Practical Command-Line and Environment MCQs
+- For topics involving Java setup, compilation, execution, packages, classpaths, modules, environment variables, or command-line arguments, include realistic terminal commands and execution scenarios.
+- Test command order, file locations, class names, paths, arguments, environment configuration, and expected behavior.
+- Ensure commands are accurate for the stated operating system or clearly specify platform assumptions.
+- Do not assume a particular operating system unless the question explicitly states it.
+
+### 9. Comparison and Decision-Making MCQs
+- Test important distinctions between related concepts.
+- Ask which approach is appropriate for a particular requirement and why.
+- Include practical trade-offs and common misconceptions.
+- Avoid superficial questions that only change the wording of another question.
+
+### 10. Edge-Case and Interview-Trap MCQs
+- Include carefully selected boundary conditions, common misconceptions, tricky execution scenarios, and frequently misunderstood rules.
+- Test default behavior, invalid input, scope, accessibility, initialization order, type conversion, and version-dependent behavior when relevant.
+- Use interview-style traps without relying on obscure trivia or ambiguous wording.
+
+## QUESTION DIFFICULTY
+
+Include an appropriate balance of:
+
+- **Easy:** Basic understanding, definitions, syntax, and straightforward examples.
+- **Intermediate:** Multi-step reasoning, code tracing, practical application, and comparisons.
+- **Advanced:** Edge cases, subtle language rules, complex execution flow, and interview-level reasoning.
+
+Difficulty should emerge from the reasoning required, not from unnecessarily complicated code or confusing wording.
+
+## QUESTION QUALITY RULES
+
+1. Focus on commonly asked Java developer interview concepts.
+2. Cover every supplied subtopic with a meaningful variety of question types.
+3. Include theory, summary-based revision, pseudocode, output prediction, programming scenarios, code completion, debugging, and practical application wherever relevant.
+4. Every question must have exactly four distinct options.
+5. Every question must have exactly one unambiguously correct answer.
+6. Incorrect options must be plausible but demonstrably incorrect.
+7. Do not repeat the same concept or question using superficial wording changes.
+8. Avoid unnecessary trivia, vague wording, and misleading assumptions.
+9. Use correct Java syntax and behavior for the specified Java version.
+10. If no Java version is specified, use broadly applicable modern Java behavior and explicitly state a version in a question when version-specific behavior matters.
+11. For code/output questions, verify the expected result before providing the answer.
+12. For pseudocode questions, ensure that the logic and execution rules are sufficiently clear.
+13. For coding questions, provide enough context to determine the correct implementation.
+14. For questions about compilation or runtime errors, make the relevant assumptions explicit.
+15. Explanations must teach the underlying rule, not merely repeat the correct option.
+16. Briefly explain common traps when useful.
+17. Use the exact supplied subtopic name for every question.
+18. Do not add a separate difficulty field or any other field to the JSON object.
+19. Do not use multiple-correct-answer questions unless they are explicitly framed as a single-answer question with one uniquely correct option.
+20. Do not use "All of the above" or "None of the above" unless there is a compelling educational reason; prefer meaningful, independently testable options.
+
+## JAVA CODE AND OUTPUT VALIDATION
+
+Before finalizing each code-based question, verify:
+
+- The code is syntactically correct unless error identification is the explicit objective.
+- The program's behavior matches the stated Java version.
+- Variable values and execution order have been traced correctly.
+- The output matches Java's actual behavior.
+- The correct option matches the output or required implementation exactly.
+- The explanation identifies the decisive language rule or execution step.
+- No other option can reasonably be considered correct.
+
+When a question uses multiple Java files, include their relevant code in the question text using escaped newline characters. Make package declarations, imports, filenames, and execution assumptions clear whenever they affect the answer.
+
+## OUTPUT FORMAT — STRICT JSON ONLY
+
+Output only one valid JSON array.
+
+Do not include Markdown fences, headings, comments, introductory text, summaries outside the array, or text after the array.
+
+Every question must follow this exact object structure:
+
+{
+  "id": "java-platform-setup-jdk-jre-jvm-001",
+  "question": "Question text",
+  "options": [
+    "Option A",
+    "Option B",
+    "Option C",
+    "Option D"
+  ],
+  "answer": 0,
+  "explanation": "Explanation of the correct answer, including the key rule or reasoning.",
+  "subtopic": "JDK, JRE, and JVM"
+}
+
+### JSON FIELD RULES
+
+- `"id"`: A unique, stable, lowercase kebab-case identifier. Number questions sequentially using zero-padded three-digit suffixes, such as `001`, `002`, and `003`. Use meaningful topic prefixes and never reuse an ID.
+- `"question"`: A non-empty question string. Include code inside the string when needed, using valid JSON newline escapes (`\n`).
+- `"options"`: An array containing exactly four distinct, non-empty strings.
+- `"answer"`: A zero-based integer from `0` to `3`, indicating the correct option's position.
+- `"explanation"`: A non-empty explanation that teaches why the answer is correct and clarifies relevant misconceptions when useful.
+- `"subtopic"`: The exact name of one of the supplied subtopics.
+
+Do not add fields such as `"difficulty"`, `"type"`, `"tags"`, `"topic"`, `"correctAnswer"`, or `"source"`.
+
+## FINAL VALIDATION CHECKLIST
+
+Before returning the JSON array, verify all of the following:
+
+- Every supplied subtopic is covered.
+- Each subtopic contains the intended number of high-quality questions, subject to the response-length batching rule.
+- The question bank includes a balanced mix of conceptual, summary-based, pseudocode, output prediction, coding scenario, code completion, debugging, comparison, and edge-case MCQs.
+- Every question has exactly four distinct options.
+- Every question has exactly one correct answer.
+- Every answer index is valid and points to the correct option.
+- Every explanation is accurate, useful, and non-empty.
+- Every subtopic value exactly matches the supplied name.
+- All IDs are unique, stable, lowercase kebab-case, and sequential.
+- All Java code and expected outputs are correct.
+- All JSON strings are properly escaped.
+- The complete output parses as valid JSON.
+
+Now generate the question bank using the MAIN TOPIC and SUBTOPICS supplied at the beginning of this prompt.
