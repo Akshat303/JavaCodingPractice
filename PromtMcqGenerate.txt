@@ -9,15 +9,14 @@ Create a high-quality, interview-focused MCQ question bank for the topic details
 ====================================================================
 
 MAIN TOPIC:
-[Encapsulation]
+[Abstraction]
 
 SUBTOPICS:
 [
-Data hiding with private fields,
-Access modifiers,
-Getters and setters,
-Protecting object state,
-Immutable objects and defensive copying
+Abstract classes and methods,
+Interfaces as contracts,
+Abstract class vs interface,
+Hiding implementation details
 ]
 
 OPTIONAL SETTINGS (leave as-is or edit):
