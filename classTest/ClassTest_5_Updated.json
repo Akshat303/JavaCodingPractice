@@ -231,12 +231,12 @@
       "id": 19,
       "question": "Execution order",
       "options": {
-        "A": "Constructor → SIB → IIB",
-        "B": "SIB → Constructor → IIB",
-        "C": "SIB → IIB → Constructor",
-        "D": "IIB → SIB → Constructor"
+        "A": "Constructor -> SIB -> IIB",
+        "B": "SIB -> Constructor -> IIB",
+        "C": "SIB -> IIB -> Constructor",
+        "D": "IIB -> SIB -> Constructor"
       },
-      "correct_answer": "C. SIB → IIB → Constructor",
+      "correct_answer": "C. SIB -> IIB -> Constructor",
       "explanation": "Java mein execution ka sahi kram yeh hai: Pehle SIB (class loading par), phir IIB (object creation par), aur ant mein Constructor."
     },
     {
@@ -471,4 +471,64 @@
       "codeFileName": "Example.java",
       "code": "class OrderProcessor {\n    void process(long orderid) {\n        System.out.println(\"Long\");\n    }\n    void process(Integer orderid) {\n        System.out.println(\"Integer\");\n    }\n}",
       "options": {
-        "A": "Intege
+        "A": "Integer",
+        "B": "Long",
+        "C": "Compilation Error",
+        "D": "Object"
+      },
+      "correct_answer": "B. Long",
+      "explanation": "Java mein literal '100' ek primitive int hai. Method overloading mein widening (int se long) boxing (int se Integer) se pehle priority leti hai."
+    },
+    {
+      "id": 38,
+      "question": "What will be printed by the following code?",
+      "codeLanguage": "java",
+      "codeFileName": "Example.java",
+      "code": "class Employee {\n    String role = \"Employee\";\n    String getRole() { return role; }\n}\nclass SoftwareEngineer extends Employee {\n    String role = \"Software Engineer\";\n    String getRole() { return role; }\n}\nEmployee employee = new SoftwareEngineer();\nSystem.out.println(employee.role);\nSystem.out.println(employee.getRole());",
+      "options": {
+        "A": "SoftwareEngineer / Software Engineer",
+        "B": "Employee / Employee",
+        "C": "Employee / Software Engineer",
+        "D": "Software Engineer / Employee"
+      },
+      "correct_answer": "C. Employee / Software Engineer",
+      "explanation": "Instance variables (fields) shadow hote hain aur reference type (Employee) ke base par resolve hote hain, jabki methods override hote hain aur runtime object type (SoftwareEngineer) ke base par call hote hain."
+    },
+    {
+      "id": 39,
+      "question": "An e-commerce application has an OrderService class that performs three tasks: calculates order totals, saves orders to MySQL, and sends confirmation emails. What is the best design improvement according to SRP?",
+      "options": {
+        "A": "Combine all into one method",
+        "B": "Create separate classes: OrderCalculator, OrderRepository, and EmailService.",
+        "C": "Make OrderService final",
+        "D": "Use static methods for all tasks"
+      },
+      "correct_answer": "B. Create separate classes: OrderCalculator, OrderRepository, and EmailService.",
+      "explanation": "Single Responsibility Principle (SRP) kehta hai ki ek class ki sirf ek hi responsibility honi chahiye, isliye alag-alag tasks ke liye alag classes banani chahiye."
+    },
+    {
+      "id": 40,
+      "question": "A payment application supports credit card and UPI payments. Whenever a new payment method is introduced, developers must modify this existing class using if-else. Which design best follows OCP?",
+      "options": {
+        "A": "Keep using if-else",
+        "B": "Create a Payment interface with a pay() method and implement it in CardPayment, UpiPayment, and other payment classes.",
+        "C": "Make the payment class final",
+        "D": "Use abstract classes without methods"
+      },
+      "correct_answer": "B. Create a Payment interface with a pay() method and implement it in CardPayment, UpiPayment, and other payment classes.",
+      "explanation": "Open/Closed Principle (OCP) kehta hai ki code extension ke liye open hona chahiye aur modification ke liye closed. Interface aur polymorphism ka use karne se naye payment methods bina purana code badle add kiye ja sakte hain."
+    },
+    {
+      "id": 41,
+      "question": "In Java 7, which of the following statements about interfaces is correct?",
+      "options": {
+        "A": "An interface can contain concrete methods with bodies.",
+        "B": "An interface can contain public static final variables and abstract methods.",
+        "C": "An interface can contain instance variables.",
+        "D": "An interface can be instantiated directly using 'new'."
+      },
+      "correct_answer": "B. An interface can contain public static final variables and abstract methods.",
+      "explanation": "Java 7 tak interfaces mein sirf public static final variables aur abstract methods hi ho sakte the (default aur static methods Java 8 mein aaye)."
+    }
+  ]
+}
