@@ -1,201 +1,174 @@
-# Java Interview MCQ Question Bank — Master Prompt
+# Java Interview MCQ Question Bank — Master Prompt (v2)
 
 You are an expert Java backend interviewer, Java educator, and MCQ question-bank author.
 
-Create a high-quality, interview-focused MCQ question bank using the topic details provided below. The questions should help learners strengthen their Java fundamentals, improve programming logic, understand code execution, and prepare for technical interviews.
+Create a high-quality, interview-focused MCQ question bank for the topic details given in the INPUT section. The questions must help learners strengthen Java fundamentals, improve programming logic, understand code execution, and prepare for technical interviews.
 
-## MAIN TOPIC
-[Control flow]
+====================================================================
+## INPUT  (only this section changes between runs)
+====================================================================
 
-## SUBTOPICS
-[If and else-if
-For loops
-While loops
-Do-while loop
-Switch statements
-Switch break
-Break and continue]
+MAIN TOPIC:
+[WRITE MAIN TOPIC HERE]
 
-Use the supplied subtopic names exactly as written in the JSON `"subtopic"` field. Do not rename, merge, shorten, or invent subtopic labels.
+SUBTOPICS:
+[WRITE SUBTOPICS HERE, one per line]
 
-## QUESTION COUNT
-- Create **10–20 strong questions per supplied subtopic**, depending on the topic's complexity.
-- Cover every supplied subtopic.
-- If the complete question bank is too large for one response, generate it in batches of 5–8 subtopics.
-- Never silently skip any subtopic.
-- Maintain unique, sequential question IDs across all batches.
+OPTIONAL SETTINGS (leave as-is or edit):
+- QUESTIONS PER SUBTOPIC: 30   (allowed range 25-30)
+- JAVA VERSION: 17             (use this version for every version-specific behavior)
+- OUTPUT LANGUAGE: English
 
-## QUESTION TYPES — INCLUDE ALL RELEVANT TYPES
+====================================================================
+## SUBTOPIC RULES
+====================================================================
 
-Create a balanced mixture of the following MCQ types for every subtopic. Do not restrict the question bank to definition-based or theory-only questions.
+- Use the supplied subtopic names exactly as written in the JSON "subtopic" field. Do not rename, merge, shorten, reorder spelling, or invent subtopic labels.
+- Cover every supplied subtopic. Never silently skip one.
+- Generate exactly QUESTIONS PER SUBTOPIC questions for each subtopic.
+- If the whole bank is too large for one response, generate it in batches of 3-5 subtopics and continue when I say "next". Keep IDs sequential across batches. Never repeat a question from an earlier batch.
 
-### 1. Conceptual and Fundamental MCQs
-- Test core definitions, principles, rules, and terminology.
-- Ask what a concept means, why it is used, and how it works.
-- Cover the differences between related concepts.
-- Test understanding of the underlying concepts rather than memorization alone.
+====================================================================
+## QUESTION TYPES — MIX ALL RELEVANT TYPES IN EVERY SUBTOPIC
+====================================================================
 
-### 2. Summary-Based and Revision MCQs
-- Create questions based on the essential concepts, rules, key points, and takeaways of the subtopic.
-- Test whether a learner can identify the most accurate summary of a concept.
-- Include questions such as:
-  - Which statement best summarizes this concept?
-  - Which statements about this topic are correct?
-  - Which option correctly describes the relationship between these concepts?
-  - Which rule should a developer remember when using this feature?
-- For single-answer questions, ensure that exactly one option is correct.
-- Do not use vague questions or options that are merely different but equally valid summaries.
+Do not make the bank theory-only. For each subtopic include a balanced mix of:
 
-### 3. Code Output Prediction MCQs
-- Present valid Java code snippets and ask what the program prints or what happens during execution.
-- Cover variables, data types, operators, conditions, loops, methods, classes, objects, inheritance, polymorphism, exceptions, strings, collections, and other concepts when relevant to the supplied subtopics.
-- Include normal execution, boundary conditions, and relevant edge cases.
-- Use multiple lines of code where needed to test actual understanding.
-- Ensure that the correct output is verified carefully.
-- Distinguish clearly between compile-time errors, runtime exceptions, and normal output.
-- Do not include invalid code unless the question explicitly asks the learner to identify or predict a compilation error.
+1. Conceptual and fundamental: definitions, rules, terminology, why/how a feature works.
+2. Summary / revision: "Which statement best summarizes...", "Which rule must a developer remember...". Exactly one option must be correct.
+3. Code output prediction: valid Java code; ask what is printed or what happens (normal flow, boundaries, edge cases). Distinguish clearly between compile-time errors, runtime exceptions, and normal output.
+4. Pseudocode and logic tracing: loop counts, final variable values, execution order, algorithm results. Define any non-standard pseudocode convention in the question (for example "/ means integer division").
+5. Programming / coding scenario: realistic mini-requirements; ask which implementation is correct.
+6. Code completion: code with a blank marked ____ ; only one option completes the requirement correctly.
+7. Error detection and correction: a specific compile error, runtime problem, or logic bug; ask for the cause or the fix. Do not let unrelated errors make several options correct.
+8. Command-line / environment (only when the subtopic involves compiling, running, classpath, packages, modules, environment variables, or arguments): realistic commands with stated platform assumptions.
+9. Comparison and decision-making: when to use which construct, trade-offs, common misconceptions.
+10. Edge-case and interview-trap: boundary values, default behavior, scope, type conversion, short-circuiting, initialization order, version-dependent behavior. Use well-known interview traps, not obscure trivia.
 
-### 4. Pseudocode and Logic-Based MCQs
-- Include language-independent or Java-inspired pseudocode when appropriate.
-- Ask learners to predict the output, final variable values, number of iterations, execution sequence, or result of an algorithm.
-- Cover conditions, loops, nested loops, counters, accumulators, branching, and basic algorithmic reasoning when relevant.
-- Include tracing questions that require learners to follow the logic step by step.
-- Clearly define any nonstandard pseudocode conventions needed to answer the question.
-- Ensure pseudocode has one unambiguous answer.
+====================================================================
+## DIFFICULTY
+====================================================================
 
-### 5. Programming and Coding Scenario MCQs
-- Present short programming problems, incomplete Java programs, or realistic developer scenarios.
-- Ask which code snippet correctly implements a requirement.
-- Test how a concept is applied in an actual program.
-- Include questions about choosing the correct implementation, method call, command, declaration, or program structure.
-- Use practical examples involving input validation, data processing, object creation, method calls, and error handling when relevant.
-- Keep the code concise enough for an MCQ but sufficiently meaningful to test programming ability.
+Per subtopic use roughly: 30-40% Easy, 40-45% Intermediate, 20-25% Advanced. Difficulty must come from the reasoning required, not from confusing wording or bloated code. Do NOT add a difficulty field to the JSON.
 
-### 6. Code Completion and Missing-Code MCQs
-- Provide a partially completed Java program or code snippet.
-- Ask which statement, expression, method implementation, or command should replace the missing part.
-- Test syntax, logic, API usage, and correct program behavior.
-- Ensure only one option completes the requirement correctly.
-
-### 7. Error Detection and Code Correction MCQs
-- Present code containing a specific compilation error, runtime problem, or logical mistake.
-- Ask the learner to identify the cause or select the correct fix.
-- Distinguish syntax errors, type errors, access violations, incorrect API usage, and logical errors.
-- Ensure the question specifies the intended behavior when necessary.
-- Do not make multiple options correct because of unrelated errors.
-
-### 8. Practical Command-Line and Environment MCQs
-- For topics involving Java setup, compilation, execution, packages, classpaths, modules, environment variables, or command-line arguments, include realistic terminal commands and execution scenarios.
-- Test command order, file locations, class names, paths, arguments, environment configuration, and expected behavior.
-- Ensure commands are accurate for the stated operating system or clearly specify platform assumptions.
-- Do not assume a particular operating system unless the question explicitly states it.
-
-### 9. Comparison and Decision-Making MCQs
-- Test important distinctions between related concepts.
-- Ask which approach is appropriate for a particular requirement and why.
-- Include practical trade-offs and common misconceptions.
-- Avoid superficial questions that only change the wording of another question.
-
-### 10. Edge-Case and Interview-Trap MCQs
-- Include carefully selected boundary conditions, common misconceptions, tricky execution scenarios, and frequently misunderstood rules.
-- Test default behavior, invalid input, scope, accessibility, initialization order, type conversion, and version-dependent behavior when relevant.
-- Use interview-style traps without relying on obscure trivia or ambiguous wording.
-
-## QUESTION DIFFICULTY
-
-Include an appropriate balance of:
-
-- **Easy:** Basic understanding, definitions, syntax, and straightforward examples.
-- **Intermediate:** Multi-step reasoning, code tracing, practical application, and comparisons.
-- **Advanced:** Edge cases, subtle language rules, complex execution flow, and interview-level reasoning.
-
-Difficulty should emerge from the reasoning required, not from unnecessarily complicated code or confusing wording.
-
+====================================================================
 ## QUESTION QUALITY RULES
+====================================================================
 
-1. Focus on commonly asked Java developer interview concepts.
-2. Cover every supplied subtopic with a meaningful variety of question types.
-3. Include theory, summary-based revision, pseudocode, output prediction, programming scenarios, code completion, debugging, and practical application wherever relevant.
-4. Every question must have exactly four distinct options.
-5. Every question must have exactly one unambiguously correct answer.
-6. Incorrect options must be plausible but demonstrably incorrect.
-7. Do not repeat the same concept or question using superficial wording changes.
-8. Avoid unnecessary trivia, vague wording, and misleading assumptions.
-9. Use correct Java syntax and behavior for the specified Java version.
-10. If no Java version is specified, use broadly applicable modern Java behavior and explicitly state a version in a question when version-specific behavior matters.
-11. For code/output questions, verify the expected result before providing the answer.
-12. For pseudocode questions, ensure that the logic and execution rules are sufficiently clear.
-13. For coding questions, provide enough context to determine the correct implementation.
-14. For questions about compilation or runtime errors, make the relevant assumptions explicit.
-15. Explanations must teach the underlying rule, not merely repeat the correct option.
-16. Briefly explain common traps when useful.
-17. Use the exact supplied subtopic name for every question.
-18. Do not add a separate difficulty field or any other field to the JSON object.
-19. Do not use multiple-correct-answer questions unless they are explicitly framed as a single-answer question with one uniquely correct option.
-20. Do not use "All of the above" or "None of the above" unless there is a compelling educational reason; prefer meaningful, independently testable options.
+1. Focus on concepts commonly asked in Java developer interviews.
+2. Every question has exactly four distinct, non-empty options.
+3. Every question has exactly one unambiguously correct answer. Incorrect options must be plausible but demonstrably wrong.
+4. No multiple-correct-answer questions. Avoid "All of the above" / "None of the above".
+5. Do not repeat the same concept with only a wording change. Each question must test something different within the subtopic.
+6. Avoid vague wording, trivia, and misleading assumptions.
+7. State the Java version in the question text whenever version-specific behavior matters (for example "Assume Java 17.").
+8. ANSWER POSITION BALANCE: spread the correct answer evenly across indexes 0, 1, 2, and 3 over the whole bank. Never let one index exceed about 35% of the questions.
+9. Explanations must teach the underlying rule (not just repeat the correct option) and mention the common trap when useful.
+10. NEVER refer to options by letter or position in an explanation (no "Option A", "the first option"). Refer to the content instead, because option order may be shuffled later.
+11. Do not put the answer or a hint in the question text.
+12. Do not use real-world trivia, opinions, or content that depends on the date.
 
-## JAVA CODE AND OUTPUT VALIDATION
+====================================================================
+## CODE RULES (very important)
+====================================================================
 
-Before finalizing each code-based question, verify:
+A. Keep the question text and the code SEPARATE.
+   - "question" contains only the prose (for example "What is the output?").
+   - The code goes in the "code" field. Never paste code into "question".
+   - Questions with no code must NOT contain the three code fields at all.
 
-- The code is syntactically correct unless error identification is the explicit objective.
-- The program's behavior matches the stated Java version.
-- Variable values and execution order have been traced correctly.
-- The output matches Java's actual behavior.
-- The correct option matches the output or required implementation exactly.
-- The explanation identifies the decisive language rule or execution step.
-- No other option can reasonably be considered correct.
+B. Code fields (add all three, or none):
+   - "codeLanguage": "java" for Java code.
+       "pseudocode" for pseudocode.
+       "bash" for Linux/macOS terminal commands, "powershell" or "cmd" for Windows commands.
+       Use another lowercase language name only when really needed (for example "xml", "json", "properties").
+   - "codeFileName": the file name that matches the code.
+       Java: the name of the public or main class + ".java" (for example "Example.java", or "Calls.java" when the class is Calls).
+       Pseudocode: "Pseudocode.txt". Bash: "commands.sh". PowerShell/cmd: "commands.ps1" / "commands.cmd".
+   - "code": the code as one JSON string, using \n for new lines, and four spaces for indentation.
 
-When a question uses multiple Java files, include their relevant code in the question text using escaped newline characters. Make package declarations, imports, filenames, and execution assumptions clear whenever they affect the answer.
+C. Java code must be a COMPLETE, runnable class so a learner can copy it and run it:
+   - Include imports when needed (java.util.*, java.util.Scanner, and so on).
+   - Put statements inside "public static void main(String[] args)" (or inside suitable methods called from main).
+   - Method-only questions still need a class around the methods and a main that calls them.
+   - Use the same class name as codeFileName.
+   - Exceptions: (1) code containing a blank ____ for a code-completion question, and (2) code that is deliberately wrong for a compile-error question. Everything else must compile and run exactly as the question states.
+   - Multiple files: put every file in "code", separated by a line like  // ---- File: Shape.java ----  and set "codeFileName" to the file that contains main.
 
+D. Options may contain short code (for example a code-completion or "which implementation is correct" question). In that case keep the code inside the option strings and still keep the question prose in "question". If the surrounding scenario also needs shared code, put it in the "code" field.
+
+E. Programs that read input (Scanner) are allowed only when the input is not needed to answer the question. Prefer hard-coded values.
+
+F. Never write infinite-loop or non-terminating output questions that print forever. For "runs forever" questions, make it clear in the question or options that the behavior is a non-terminating loop (for example the program never reaches the last statement).
+
+====================================================================
+## JAVA CODE AND OUTPUT VALIDATION (do this silently before finalizing)
+====================================================================
+
+For each code-based question verify that:
+- The code is syntactically valid, unless identifying an error is the objective.
+- The behavior matches the stated Java version.
+- Variable values, loop iterations, and execution order were traced step by step.
+- The output string matches Java's real output exactly, including spaces, commas, and line breaks (System.out.print vs println).
+- Compile-time error vs runtime exception vs normal output is classified correctly. Remember that unreachable code, missing return, uninitialized variables, and incompatible types are compile-time errors, while NullPointerException, ArithmeticException, ArrayIndexOutOfBoundsException, ConcurrentModificationException, and ClassCastException are runtime exceptions.
+- The correct option matches exactly, and no other option can reasonably be correct.
+- The explanation identifies the decisive rule or the decisive execution step.
+
+====================================================================
 ## OUTPUT FORMAT — STRICT JSON ONLY
+====================================================================
 
-Output only one valid JSON array.
+Output exactly one valid JSON array. No Markdown fences, no headings, no comments, no introduction, no text before or after the array.
 
-Do not include Markdown fences, headings, comments, introductory text, summaries outside the array, or text after the array.
-
-Every question must follow this exact object structure:
+Object for a question WITH code (field order must be exactly this):
 
 {
-  "id": "java-platform-setup-jdk-jre-jvm-001",
-  "question": "Question text",
-  "options": [
-    "Option A",
-    "Option B",
-    "Option C",
-    "Option D"
-  ],
+  "id": "java-control-flow-while-loops-001",
+  "question": "What is the output?",
+  "codeLanguage": "java",
+  "codeFileName": "Example.java",
+  "code": "class Example {\n    public static void main(String[] args) {\n        int i = 1;\n        while (i <= 3) {\n            System.out.print(i);\n            i++;\n        }\n    }\n}",
+  "options": ["123", "12", "234", "0123"],
   "answer": 0,
-  "explanation": "Explanation of the correct answer, including the key rule or reasoning.",
-  "subtopic": "JDK, JRE, and JVM"
+  "explanation": "The condition i <= 3 is true for i = 1, 2, 3, so each value is printed. When i becomes 4 the loop ends.",
+  "subtopic": "While loops"
 }
 
-### JSON FIELD RULES
+Object for a question WITHOUT code:
 
-- `"id"`: A unique, stable, lowercase kebab-case identifier. Number questions sequentially using zero-padded three-digit suffixes, such as `001`, `002`, and `003`. Use meaningful topic prefixes and never reuse an ID.
-- `"question"`: A non-empty question string. Include code inside the string when needed, using valid JSON newline escapes (`\n`).
-- `"options"`: An array containing exactly four distinct, non-empty strings.
-- `"answer"`: A zero-based integer from `0` to `3`, indicating the correct option's position.
-- `"explanation"`: A non-empty explanation that teaches why the answer is correct and clarifies relevant misconceptions when useful.
-- `"subtopic"`: The exact name of one of the supplied subtopics.
+{
+  "id": "java-control-flow-while-loops-002",
+  "question": "Which statement about a while loop is correct?",
+  "options": ["...", "...", "...", "..."],
+  "answer": 1,
+  "explanation": "...",
+  "subtopic": "While loops"
+}
 
-Do not add fields such as `"difficulty"`, `"type"`, `"tags"`, `"topic"`, `"correctAnswer"`, or `"source"`.
+### JSON field rules
+- "id": unique, stable, lowercase kebab-case: java-<main-topic-slug>-<subtopic-slug>-<NNN>. Numbering restarts at 001 for each subtopic, is zero-padded to three digits, and is sequential with no gaps. Never reuse an ID.
+- "question": non-empty prose only (see Code Rules A). If the question needs a pseudocode convention, state it here.
+- "codeLanguage", "codeFileName", "code": only when the question has code (see Code Rules B).
+- "options": array of exactly four distinct, non-empty strings.
+- "answer": zero-based integer 0-3 pointing to the correct option.
+- "explanation": non-empty, teaches the rule, no option letters or positions.
+- "subtopic": the exact supplied subtopic name.
+- Do not add any other fields (no difficulty, type, tags, topic, source, correctAnswer).
+- Escape every JSON string properly: \n for new lines, \" for double quotes inside strings, \\ for a backslash.
 
-## FINAL VALIDATION CHECKLIST
+====================================================================
+## FINAL VALIDATION CHECKLIST (verify before returning)
+====================================================================
 
-Before returning the JSON array, verify all of the following:
+- Every supplied subtopic is covered with exactly the requested number of questions (or the batch limit was applied and I said which subtopics are in this batch).
+- A balanced mix of conceptual, summary, output prediction, pseudocode, coding scenario, code completion, debugging, comparison, and edge-case questions exists in every subtopic.
+- No question text contains code; all code lives in the code field with correct codeLanguage and codeFileName.
+- All Java code is complete and runnable (except deliberate blanks and deliberate error questions).
+- Every question has four distinct options and exactly one correct answer; every answer index is valid and correct.
+- Correct-answer positions are evenly distributed across 0, 1, 2, and 3.
+- No explanation refers to an option by letter or position.
+- IDs are unique, lowercase kebab-case, sequential per subtopic.
+- Every subtopic string matches the input exactly.
+- The complete output parses as valid JSON and contains nothing outside the array.
 
-- Every supplied subtopic is covered.
-- Each subtopic contains the intended number of high-quality questions, subject to the response-length batching rule.
-- The question bank includes a balanced mix of conceptual, summary-based, pseudocode, output prediction, coding scenario, code completion, debugging, comparison, and edge-case MCQs.
-- Every question has exactly four distinct options.
-- Every question has exactly one correct answer.
-- Every answer index is valid and points to the correct option.
-- Every explanation is accurate, useful, and non-empty.
-- Every subtopic value exactly matches the supplied name.
-- All IDs are unique, stable, lowercase kebab-case, and sequential.
-- All Java code and expected outputs are correct.
-- All JSON strings are properly escaped.
-- The complete output parses as valid JSON.
-
-Now generate the question bank using the MAIN TOPIC and SUBTOPICS supplied at the beginning of this prompt.
+Now generate the question bank for the MAIN TOPIC and SUBTOPICS written in the INPUT section.
