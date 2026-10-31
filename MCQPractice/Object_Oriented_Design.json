@@ -1,0 +1,2911 @@
+[
+  {
+    "id": "java-object-oriented-design-solid-principles-001",
+    "question": "Which statement best describes the Single Responsibility Principle?",
+    "options": [
+      "A class should contain only one method.",
+      "A class should declare only one field.",
+      "A class should never be subclassed.",
+      "A class should have only one reason to change."
+    ],
+    "answer": 3,
+    "explanation": "SRP is about reasons to change, not counting methods or fields. A class with several methods can still follow SRP if they all change for the same reason.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-002",
+    "question": "Which statement best describes the Open/Closed Principle?",
+    "options": [
+      "Software entities should be open for modification but closed for extension.",
+      "Software entities should be open for both extension and modification at any time.",
+      "Software entities should be closed for both extension and modification.",
+      "Software entities should be open for extension but closed for modification."
+    ],
+    "answer": 3,
+    "explanation": "OCP says new behavior should be added by extending the design, for example with new implementations of an abstraction, rather than by editing existing tested code.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-003",
+    "question": "Which statement best describes the Liskov Substitution Principle?",
+    "options": [
+      "Objects of a subtype must be usable wherever the supertype is expected without breaking the correctness of the program.",
+      "A subclass must override every method of its superclass.",
+      "A subclass must declare exactly the same number of methods as its superclass.",
+      "A superclass must always be declared abstract."
+    ],
+    "answer": 0,
+    "explanation": "LSP is about behavioral substitutability. Callers written against the supertype contract must keep working when given any subtype.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-004",
+    "question": "Which statement best describes the Interface Segregation Principle?",
+    "options": [
+      "Clients should not be forced to depend on methods they do not use.",
+      "Every class must implement at least two interfaces.",
+      "Interfaces must always contain exactly one method.",
+      "Interfaces should be replaced by abstract classes whenever possible."
+    ],
+    "answer": 0,
+    "explanation": "ISP favors small, client-focused interfaces over one large general-purpose interface, so a client only depends on the operations it really needs.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-005",
+    "question": "Which statement best describes the Dependency Inversion Principle?",
+    "options": [
+      "Low-level modules should depend on concrete high-level classes.",
+      "High-level modules should depend on abstractions rather than on concrete low-level modules.",
+      "Abstractions should depend on implementation details.",
+      "Every class should create its own dependencies with new."
+    ],
+    "answer": 1,
+    "explanation": "DIP inverts the typical source-code dependency: both high-level policy and low-level detail depend on an abstraction, and details depend on that abstraction instead of the other way around.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-006",
+    "question": "Which principle is most directly violated by the Report class?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Report {\n    private final int[] data = {3, 5, 7};\n\n    int calculateTotal() {\n        int sum = 0;\n        for (int d : data) sum += d;\n        return sum;\n    }\n\n    void saveToDatabase() {\n        System.out.println(\"INSERT total=\" + calculateTotal());\n    }\n\n    String formatAsHtml() {\n        return \"<p>\" + calculateTotal() + \"</p>\";\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Report r = new Report();\n        r.saveToDatabase();\n        System.out.println(r.formatAsHtml());\n    }\n}",
+    "options": [
+      "Liskov Substitution Principle",
+      "Interface Segregation Principle",
+      "Single Responsibility Principle",
+      "Open/Closed Principle"
+    ],
+    "answer": 2,
+    "explanation": "Report mixes business calculation, persistence, and presentation formatting. A database change and an HTML layout change are different reasons to change the same class, which is an SRP violation.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-007",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\nabstract class Shape {\n    abstract int area();\n}\n\nclass Rect extends Shape {\n    private final int w, h;\n    Rect(int w, int h) { this.w = w; this.h = h; }\n    int area() { return w * h; }\n}\n\nclass Square extends Shape {\n    private final int s;\n    Square(int s) { this.s = s; }\n    int area() { return s * s; }\n}\n\npublic class Example {\n    static int total(List<Shape> shapes) {\n        int sum = 0;\n        for (Shape s : shapes) sum += s.area();\n        return sum;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(total(List.of(new Rect(2, 3), new Square(3))));\n    }\n}",
+    "options": [
+      "6",
+      "9",
+      "Compilation fails",
+      "15"
+    ],
+    "answer": 3,
+    "explanation": "total() works against the abstract Shape type, so each subclass supplies its own area: 2*3 = 6 and 3*3 = 9, and the sum is 15. A new Shape subclass could be added without editing total(), which is the idea behind OCP.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-008",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Rectangle {\n    protected int width, height;\n    void setWidth(int w) { width = w; }\n    void setHeight(int h) { height = h; }\n    int area() { return width * height; }\n}\n\nclass Square extends Rectangle {\n    @Override void setWidth(int w) { width = w; height = w; }\n    @Override void setHeight(int h) { width = h; height = h; }\n}\n\npublic class Example {\n    static int resize(Rectangle r) {\n        r.setWidth(5);\n        r.setHeight(4);\n        return r.area();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(resize(new Rectangle()) + \" \" + resize(new Square()));\n    }\n}",
+    "options": [
+      "20 20",
+      "16 16",
+      "20 20 on separate lines",
+      "20 16"
+    ],
+    "answer": 3,
+    "explanation": "For Rectangle, 5 * 4 = 20. In Square both setters change both dimensions, so setHeight(4) leaves a 4 x 4 square with area 16. The caller's assumption that width and height are independent breaks, which is the classic LSP violation.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-009",
+    "question": "A ReadOnlyList class extends a mutable list class and overrides add() to throw UnsupportedOperationException. Which statement is correct?",
+    "options": [
+      "It satisfies LSP because the method still has the same signature.",
+      "It satisfies LSP because throwing an exception is always a valid postcondition.",
+      "It violates LSP because code written for the mutable list contract fails when given the subclass.",
+      "It violates OCP because the superclass was modified."
+    ],
+    "answer": 2,
+    "explanation": "A subtype must honor the behavior promised by the supertype. Callers of the mutable list expect add() to succeed, so a subclass that refuses breaks substitutability even though it compiles.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-010",
+    "question": "Which refactoring best resolves the principle violation in the Worker design shown?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Worker {\n    void work();\n    void eat();\n}\n\nclass Human implements Worker {\n    public void work() { System.out.println(\"Human works\"); }\n    public void eat() { System.out.println(\"Human eats\"); }\n}\n\nclass Robot implements Worker {\n    public void work() { System.out.println(\"Robot works\"); }\n    public void eat() { throw new UnsupportedOperationException(\"Robots do not eat\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Worker w = new Robot();\n        w.work();\n    }\n}",
+    "options": [
+      "Make Robot extend Human.",
+      "Split Worker into smaller interfaces such as Workable and Eatable.",
+      "Catch UnsupportedOperationException in every caller of eat().",
+      "Change Robot.eat() to return silently without doing anything."
+    ],
+    "answer": 1,
+    "explanation": "Robot is forced to implement eat(), which it does not need. Segregating the fat interface lets each class implement only the contracts it can honor (ISP). Hiding the problem with empty methods or exception handling leaves the design flawed.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-011",
+    "question": "Which type completes the blank so the code compiles and OrderService depends on an abstraction?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface OrderRepository {\n    void save(String order);\n}\n\nclass MySqlOrderRepository implements OrderRepository {\n    public void save(String order) { System.out.println(\"Saved \" + order); }\n}\n\nclass OrderService {\n    private final ____ repository;\n\n    OrderService(OrderRepository repository) {\n        this.repository = repository;\n    }\n\n    void place(String order) { repository.save(order); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new OrderService(new MySqlOrderRepository()).place(\"A1\");\n    }\n}",
+    "options": [
+      "MySqlOrderRepository",
+      "Object",
+      "OrderRepository",
+      "OrderService"
+    ],
+    "answer": 2,
+    "explanation": "The field must be of the interface type OrderRepository. A MySqlOrderRepository field would not accept the OrderRepository constructor argument, Object has no save method, and OrderService is unrelated. Depending on the interface is DIP in action.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-012",
+    "question": "What happens when this program runs, and what does it show?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\nclass Bird {\n    void fly() { System.out.println(\"flies\"); }\n}\n\nclass Sparrow extends Bird { }\n\nclass Penguin extends Bird {\n    @Override\n    void fly() { throw new UnsupportedOperationException(\"cannot fly\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        List<Bird> birds = List.of(new Sparrow(), new Penguin());\n        for (Bird b : birds) {\n            b.fly();\n        }\n    }\n}",
+    "options": [
+      "It prints flies twice; the design satisfies the Liskov Substitution Principle.",
+      "It prints flies, then throws UnsupportedOperationException; the design violates the Liskov Substitution Principle.",
+      "Compilation fails because Penguin cannot override fly(); the design violates the Open/Closed Principle.",
+      "It throws UnsupportedOperationException before printing anything; the design violates the Interface Segregation Principle."
+    ],
+    "answer": 1,
+    "explanation": "The loop calls fly() on each Bird in order. Sparrow prints flies, then Penguin throws. Code written against Bird cannot safely use every Bird, which is an LSP violation.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-013",
+    "question": "In SRP, what does the word responsibility most accurately mean?",
+    "options": [
+      "A reason to change tied to one stakeholder or actor.",
+      "A single public method.",
+      "One statement per method.",
+      "One class per package."
+    ],
+    "answer": 0,
+    "explanation": "SRP defines a responsibility as a reason for change. If different stakeholders can request changes to the same class for different reasons, the class has more than one responsibility.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-014",
+    "question": "Which statement about SRP is correct?",
+    "options": [
+      "A class must have exactly one method.",
+      "A class may have many methods as long as they all change for the same reason.",
+      "A class must never have private methods.",
+      "A class must never collaborate with other classes."
+    ],
+    "answer": 1,
+    "explanation": "SRP is about cohesion around one reason to change, not about method count. Splitting every method into its own class would create unnecessary fragmentation.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-015",
+    "question": "A new customer type DIAMOND must be supported. Which principle does the required change to discount() most directly violate?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class DiscountCalculator {\n    int discount(String type, int price) {\n        switch (type) {\n            case \"REGULAR\": return 0;\n            case \"GOLD\": return price / 10;\n            case \"PLATINUM\": return price / 5;\n            default: throw new IllegalArgumentException(type);\n        }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new DiscountCalculator().discount(\"GOLD\", 200));\n    }\n}",
+    "options": [
+      "Liskov Substitution Principle",
+      "Interface Segregation Principle",
+      "Dependency Inversion Principle",
+      "Open/Closed Principle"
+    ],
+    "answer": 3,
+    "explanation": "Supporting a new customer type means editing the existing switch inside a tested class. OCP prefers adding a new implementation of an abstraction, such as a DiscountPolicy, without editing the calculator.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\ninterface Discount {\n    int apply(int price);\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        List<Discount> chain = List.of(p -> p - 20, p -> p / 2);\n        int price = 200;\n        for (Discount d : chain) {\n            price = d.apply(price);\n        }\n        System.out.println(price);\n    }\n}",
+    "options": [
+      "90",
+      "80",
+      "100",
+      "180"
+    ],
+    "answer": 0,
+    "explanation": "The discounts are applied in list order: 200 - 20 = 180, then 180 / 2 = 90. Applying them in the other order would give 80. New discount rules can be added to the list without changing the loop.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-017",
+    "question": "Which change in an overriding method most clearly violates the Liskov Substitution Principle?",
+    "options": [
+      "Weakening the precondition so it accepts more inputs.",
+      "Strengthening the precondition so it rejects inputs the superclass method accepted.",
+      "Returning a more specific subtype of the superclass return type.",
+      "Strengthening the postcondition by guaranteeing more than the superclass does."
+    ],
+    "answer": 1,
+    "explanation": "Subtypes may require less and promise more, but never require more or promise less. Rejecting previously valid input breaks callers written for the supertype.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-018",
+    "question": "What is the relationship between the Dependency Inversion Principle and dependency injection?",
+    "options": [
+      "They are two names for exactly the same thing.",
+      "Dependency injection is a principle and DIP is a framework.",
+      "DIP can only be applied when a DI container such as Spring is used.",
+      "DIP is a design principle about the direction of dependencies; dependency injection is a technique that supplies dependencies from outside a class."
+    ],
+    "answer": 3,
+    "explanation": "DIP says what to depend on (abstractions). Dependency injection is one way to provide those dependencies, and it works with plain constructors without any framework.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-019",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Parent {\n    Number value() { return 1; }\n}\n\nclass Child extends Parent {\n    @Override\n    Integer value() { return 2; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Parent p = new Child();\n        System.out.println(p.value());\n    }\n}",
+    "options": [
+      "2",
+      "1",
+      "Compilation fails because the return type differs",
+      "ClassCastException"
+    ],
+    "answer": 0,
+    "explanation": "Java allows covariant return types: Integer is a subtype of Number, so the override is legal. The call is dispatched to Child, so 2 is printed. Covariant returns are consistent with LSP because callers still receive a valid Number.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-020",
+    "question": "Pseudocode convention: 'for n in a..b' is inclusive of both ends, 'all rules pass' means every rule returns true, and % is the remainder operator. What is the final value of count?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "rules = [ n > 5, n % 2 == 0, n != 8 ]\ncount = 0\nfor n in 1..10:\n    if all rules pass for n:\n        count = count + 1\nprint count",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "5"
+    ],
+    "answer": 1,
+    "explanation": "A number passes only if it is greater than 5, even, and not 8. Between 6 and 10 the even numbers are 6, 8, and 10; removing 8 leaves 6 and 10, so count is 2. Adding a rule requires no change to the loop, which supports OCP.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-021",
+    "question": "A checkout class must support new payment methods without modifying its existing, tested logic. Which design meets this requirement?",
+    "options": [
+      "Define a PaymentMethod interface and make Checkout depend on it, adding a new implementation for each method.",
+      "Add another else-if branch to Checkout.pay() for each new method.",
+      "Add an int type code to Checkout and switch on it.",
+      "Copy Checkout into a new class for every payment method."
+    ],
+    "answer": 0,
+    "explanation": "Depending on an abstraction lets new payment methods be added as new classes, so Checkout stays closed for modification (OCP). Branching or copying forces edits or duplication.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-022",
+    "question": "Which code completes the loop so the message is sent through every notifier, and adding a new Notifier subclass would not require editing alertAll()?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\nabstract class Notifier {\n    abstract void send(String msg);\n}\n\nclass Email extends Notifier {\n    void send(String msg) { System.out.println(\"Email:\" + msg); }\n}\n\nclass Sms extends Notifier {\n    void send(String msg) { System.out.println(\"Sms:\" + msg); }\n}\n\npublic class Example {\n    static void alertAll(List<Notifier> notifiers, String msg) {\n        for (Notifier n : notifiers) {\n            ____\n        }\n    }\n\n    public static void main(String[] args) {\n        alertAll(List.of(new Email(), new Sms()), \"hi\");\n    }\n}",
+    "options": [
+      "if (n instanceof Email) n.send(msg);",
+      "new Email().send(msg);",
+      "Notifier.send(msg);",
+      "n.send(msg);"
+    ],
+    "answer": 3,
+    "explanation": "Calling send on the abstract type lets polymorphism pick the right implementation. Checking instanceof or creating a concrete Email ignores other notifiers, and Notifier.send(msg) does not compile because send is an instance method.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-023",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Printer {\n    void print(String doc);\n    void scan(String doc);\n}\n\nclass BasicPrinter implements Printer {\n    public void print(String doc) { System.out.println(\"Printing \" + doc); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new BasicPrinter().print(\"A\");\n    }\n}",
+    "options": [
+      "print(String) must be declared protected in BasicPrinter.",
+      "An interface cannot declare more than one method.",
+      "BasicPrinter is concrete but does not implement the abstract method scan(), which the fat Printer interface forces on it.",
+      "BasicPrinter must use extends instead of implements."
+    ],
+    "answer": 2,
+    "explanation": "A concrete class must implement every abstract method of its interfaces. The fix that follows ISP is to split Printer into smaller interfaces such as Printable and Scannable, so BasicPrinter implements only Printable.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-024",
+    "question": "Which scenario best shows the Open/Closed Principle being followed?",
+    "options": [
+      "A new report format is added by adding another if branch inside ReportService.",
+      "ReportService is copied and edited for each new format.",
+      "ReportService is marked final and the formats are hard-coded in it.",
+      "A new report format is added by creating a new ReportFormatter implementation, with no change to ReportService."
+    ],
+    "answer": 3,
+    "explanation": "OCP is satisfied when extension happens by adding code, not by editing existing, working code. Polymorphic implementations of an abstraction achieve that.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-025",
+    "question": "What is the result of compiling this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Parent {\n    void run() { System.out.println(\"run\"); }\n}\n\nclass Child extends Parent {\n    @Override\n    void run() throws Exception { System.out.println(\"child run\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Parent p = new Child();\n        p.run();\n    }\n}",
+    "options": [
+      "It prints child run.",
+      "It prints run.",
+      "Compilation fails because an overriding method cannot declare a checked exception that the overridden method does not declare.",
+      "It compiles and throws Exception at runtime."
+    ],
+    "answer": 2,
+    "explanation": "Java enforces part of LSP at compile time: an override may not throw broader checked exceptions than the overridden method, because callers of Parent.run() are not prepared to handle them.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-026",
+    "question": "Which situation is the clearest sign that a class violates SRP?",
+    "options": [
+      "The class has private helper methods.",
+      "The class implements an interface.",
+      "The class has a constructor with arguments.",
+      "The class is edited for unrelated reasons, such as a UI change and a database schema change."
+    ],
+    "answer": 3,
+    "explanation": "Needing to change a class for unrelated reasons means it bundles several responsibilities. Helpers, interfaces, and constructors say nothing about that.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-027",
+    "question": "Which statement best summarizes the Open/Closed Principle in Java?",
+    "options": [
+      "Mark every class final so it can never change.",
+      "Add new behavior by adding new implementations of an abstraction instead of editing existing, tested code.",
+      "Build very deep inheritance hierarchies for flexibility.",
+      "Never change source code after the first release."
+    ],
+    "answer": 1,
+    "explanation": "OCP is about designing so that common changes are made by extension. It does not forbid editing code altogether, and final everywhere would block extension.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-028",
+    "question": "Which rule must a developer remember about the Dependency Inversion Principle?",
+    "options": [
+      "Both high-level and low-level modules should depend on abstractions, and details should depend on those abstractions.",
+      "High-level modules should instantiate their low-level collaborators with new.",
+      "Low-level modules should depend on concrete high-level classes.",
+      "Abstractions should be derived from implementation details."
+    ],
+    "answer": 0,
+    "explanation": "DIP reverses the naive dependency direction. Policy code depends on an abstraction it needs, and detailed implementations conform to that abstraction.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-029",
+    "question": "Which part of ReportService most directly violates the Dependency Inversion Principle?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class MySqlRepo {\n    void save(String s) { System.out.println(\"Saved \" + s); }\n}\n\nclass ReportService {\n    private final MySqlRepo repo = new MySqlRepo();\n\n    void publish(String s) { repo.save(s); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new ReportService().publish(\"Q1\");\n    }\n}",
+    "options": [
+      "The final modifier on the repo field.",
+      "The publish method delegating work to another object.",
+      "The class declaration being package-private.",
+      "The field initializer new MySqlRepo(), which hard-wires a concrete low-level class."
+    ],
+    "answer": 3,
+    "explanation": "The service creates and depends on a concrete repository, so it cannot be used or tested with another implementation. Depending on an interface and receiving it through the constructor fixes this.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-030",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Greeter {\n    String greet(String name);\n}\n\nclass Formal implements Greeter {\n    public String greet(String name) { return \"Good day, \" + name; }\n}\n\nclass Casual implements Greeter {\n    public String greet(String name) { return \"Hi \" + name; }\n}\n\nclass Service {\n    private final Greeter greeter;\n\n    Service(Greeter greeter) { this.greeter = greeter; }\n\n    String run() { return greeter.greet(\"Ann\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        String a = new Service(new Casual()).run();\n        String b = new Service(new Formal()).run();\n        System.out.println(a + \" / \" + b);\n    }\n}",
+    "options": [
+      "Good day, Ann / Hi Ann",
+      "Hi Ann / Hi Ann",
+      "Hi Ann / Good day, Ann",
+      "Good day, Ann / Good day, Ann"
+    ],
+    "answer": 2,
+    "explanation": "Each Service uses whichever Greeter it receives. The first receives Casual and the second receives Formal, so the strings are combined in that order. The Service never changes, which is the benefit of injecting an abstraction.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-031",
+    "question": "In Java 17, how can you add a new method to a widely implemented interface without breaking existing implementing classes?",
+    "options": [
+      "Declare it as a private abstract method.",
+      "Declare it as a default method with a body.",
+      "Declare it as a final method.",
+      "Declare it as a protected abstract method."
+    ],
+    "answer": 1,
+    "explanation": "Default methods let an interface evolve without forcing every implementor to change, which supports OCP. Interface methods cannot be protected or final, and private abstract methods are not allowed.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-032",
+    "question": "What is the output? (Java 17)",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Workable { String work(); }\ninterface Eatable { String eat(); }\n\nclass Human implements Workable, Eatable {\n    public String work() { return \"H-work\"; }\n    public String eat() { return \"H-eat\"; }\n}\n\nclass Robot implements Workable {\n    public String work() { return \"R-work\"; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Workable r = new Robot();\n        Workable h = new Human();\n        System.out.print(r.work() + \" \" + h.work());\n        if (h instanceof Eatable e) System.out.print(\" \" + e.eat());\n        if (r instanceof Eatable e) System.out.print(\" \" + e.eat());\n    }\n}",
+    "options": [
+      "R-work H-work H-eat",
+      "R-work H-work",
+      "R-work H-work H-eat R-eat",
+      "R-work H-work R-eat"
+    ],
+    "answer": 0,
+    "explanation": "Robot only implements Workable, so the instanceof check for Eatable fails for it and nothing extra is printed. Human implements both, so its eat result is added. Segregated interfaces let each class implement only what it supports.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-033",
+    "question": "What is the output? (Java 17)",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        List<Integer> list = List.of(1, 2);\n        try {\n            list.add(3);\n        } catch (UnsupportedOperationException e) {\n            System.out.print(\"caught \");\n        }\n        System.out.println(list.size());\n    }\n}",
+    "options": [
+      "caught 2",
+      "caught 3",
+      "3",
+      "2"
+    ],
+    "answer": 0,
+    "explanation": "List.of returns an immutable list, so add() throws UnsupportedOperationException, which is caught and printed. The list size stays 2. This shows a well-known compromise in the JDK where an immutable collection narrows the behavior of the List contract.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-034",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Base {\n    Base() { init(); }\n    void init() { System.out.print(\"Base\"); }\n}\n\nclass Derived extends Base {\n    private int x = 5;\n\n    @Override\n    void init() { System.out.print(\"x=\" + x); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new Derived();\n        System.out.println(\" done\");\n    }\n}",
+    "options": [
+      "x=0 done",
+      "x=5 done",
+      "Base done",
+      "NullPointerException"
+    ],
+    "answer": 0,
+    "explanation": "The Base constructor runs before the Derived field initializer, and it calls the overridden init(). At that time x still has its default value 0. Calling overridable methods from constructors makes subclasses behave unexpectedly and weakens substitutability.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-035",
+    "question": "Which is a direct benefit of following the Dependency Inversion Principle?",
+    "options": [
+      "Easier unit testing, because test doubles can replace real dependencies.",
+      "Guaranteed faster execution at runtime.",
+      "No need for any constructors.",
+      "Classes no longer need abstractions at all."
+    ],
+    "answer": 0,
+    "explanation": "When a class depends on an abstraction, a fake or mock implementation can be supplied in tests. DIP is about decoupling, not about speed.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-036",
+    "question": "A NotificationService needs to send messages through any kind of sender. Which constructor best supports the Dependency Inversion Principle?",
+    "options": [
+      "NotificationService(SmtpSender sender), where SmtpSender is a concrete class.",
+      "NotificationService(MessageSender sender), where MessageSender is an interface.",
+      "NotificationService(), which creates an SmtpSender internally.",
+      "NotificationService(String smtpHost), which builds an SmtpSender internally."
+    ],
+    "answer": 1,
+    "explanation": "Accepting an interface type through the constructor means the service depends on an abstraction and can work with any sender. The other designs tie the service to a concrete implementation.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-037",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface A {\n    default String hi() { return \"A\"; }\n}\n\ninterface B {\n    default String hi() { return \"B\"; }\n}\n\nclass C implements A, B { }\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new C().hi());\n    }\n}",
+    "options": [
+      "Interfaces cannot declare default methods in Java 17.",
+      "Class C inherits two unrelated default methods named hi() and must override hi() to resolve the conflict.",
+      "hi() must be declared static in both interfaces.",
+      "C must be declared abstract because it has no fields."
+    ],
+    "answer": 1,
+    "explanation": "When a class implements two interfaces with the same default method signature, the compiler cannot choose, so the class must override it (optionally calling A.super.hi()). Merging unrelated capabilities into one class is a caution for ISP-based design.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-038",
+    "question": "A UserService validates input, saves users to a database, and sends welcome emails. Which refactoring best applies SRP?",
+    "options": [
+      "Make all UserService methods static.",
+      "Merge the three tasks into a single method called process().",
+      "Mark UserService final.",
+      "Extract validation, persistence, and email sending into separate collaborating classes, with UserService coordinating them."
+    ],
+    "answer": 3,
+    "explanation": "Each concern changes for a different reason, so each gets its own class. UserService then orchestrates them. Making methods static, merging them, or marking the class final does not separate reasons to change.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-039",
+    "question": "Pseudocode convention: '*' is multiplication and steps are applied strictly in list order, one after another. What is the final value printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "steps = [Add(3), Multiply(2), Subtract(4)]\nx = 5\nfor each step in steps:\n    x = step.apply(x)\nprint x",
+    "options": [
+      "7",
+      "10",
+      "12",
+      "16"
+    ],
+    "answer": 2,
+    "explanation": "Applied in order: 5 + 3 = 8, then 8 * 2 = 16, then 16 - 4 = 12. Using normal operator precedence on one expression would give 7, but each step is applied to the previous result. New steps can be added without touching the loop.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-040",
+    "question": "An interface has twelve methods, and most client classes use only two of them. Which principle is the strongest signal being violated?",
+    "options": [
+      "Single Responsibility Principle",
+      "Liskov Substitution Principle",
+      "Interface Segregation Principle",
+      "Open/Closed Principle"
+    ],
+    "answer": 2,
+    "explanation": "Clients are forced to depend on methods they do not use, which is exactly what ISP warns about. The remedy is to split the interface into smaller, role-based interfaces.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-041",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Map;\nimport java.util.function.IntUnaryOperator;\n\npublic class Example {\n    public static void main(String[] args) {\n        Map<String, IntUnaryOperator> ops = Map.of(\n            \"double\", x -> x * 2,\n            \"square\", x -> x * x);\n        int r = ops.get(\"double\").applyAsInt(4) + ops.get(\"square\").applyAsInt(3);\n        System.out.println(r);\n    }\n}",
+    "options": [
+      "14",
+      "25",
+      "17",
+      "Compilation fails"
+    ],
+    "answer": 2,
+    "explanation": "double applied to 4 gives 8 and square applied to 3 gives 9, so the sum is 17. New operations can be added to the map without changing the calculation logic.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-042",
+    "question": "Which override is acceptable with respect to the Liskov Substitution Principle?",
+    "options": [
+      "An override that narrows the accepted input range.",
+      "An override that accepts the same parameter types and returns a more specific subtype.",
+      "An override that makes callers check instanceof before calling it.",
+      "An override that throws a new broader checked exception."
+    ],
+    "answer": 1,
+    "explanation": "A valid override keeps the contract callers rely on: no stricter preconditions and no weaker postconditions. A covariant return type is safe because callers still receive what they expect.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-043",
+    "question": "Is it a violation of the Open/Closed Principle to modify a class in order to fix a bug?",
+    "options": [
+      "No; OCP is about adding new behavior without editing existing code, not about forbidding corrections.",
+      "Yes, a closed class may never be edited.",
+      "Yes, unless the class is abstract.",
+      "Only if the bug is in a private method."
+    ],
+    "answer": 0,
+    "explanation": "OCP guides how to structure code so common extensions need no modification. Fixing a defect corrects existing behavior and is always legitimate.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-044",
+    "question": "Which statement best summarizes the Interface Segregation Principle?",
+    "options": [
+      "Prefer one interface per package.",
+      "Every class must implement exactly one interface.",
+      "Prefer several small, client-specific interfaces over one large general-purpose interface.",
+      "Interfaces must never contain default methods."
+    ],
+    "answer": 2,
+    "explanation": "ISP keeps interfaces focused on the needs of particular clients so changes and implementations stay small and cohesive.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-045",
+    "question": "What is the result of running this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Greeter {\n    String greet(String name);\n}\n\nclass Service {\n    private Greeter greeter;\n\n    Service(Greeter greeter) {\n        // dependency accepted but never stored\n    }\n\n    String run() { return greeter.greet(\"Ann\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Service(n -> \"Hi \" + n).run());\n    }\n}",
+    "options": [
+      "It prints Hi Ann.",
+      "Compilation fails because the field is not final.",
+      "StackOverflowError",
+      "NullPointerException in run(), because the constructor never stores the injected dependency."
+    ],
+    "answer": 3,
+    "explanation": "The constructor accepts a Greeter but never assigns it, so the private field keeps its default null value. Dependency injection only works if the injected object is actually stored and used.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-046",
+    "question": "Which statement about sealed types and the Open/Closed Principle is correct in Java 17?",
+    "options": [
+      "A sealed class can be extended by any class in any package.",
+      "A sealed hierarchy trades open extension for control: adding a new permitted subtype means changing the sealed type's declaration.",
+      "A sealed class cannot have any subclasses.",
+      "A sealed class is the same as a final class."
+    ],
+    "answer": 1,
+    "explanation": "Sealed types restrict which classes may extend them. This gives a closed, known set of subtypes, which helps reasoning but is intentionally less open to arbitrary extension than a normal abstraction.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-047",
+    "question": "In the classic Employee example, calculatePay(), reportHours(), and save() are requested by finance, operations, and database administrators. Why is this an SRP violation?",
+    "options": [
+      "Because a class may never have more than two methods.",
+      "Because the methods should be static.",
+      "Each method serves a different actor, so a change for one actor can accidentally break behavior needed by another.",
+      "Because Employee should be an interface."
+    ],
+    "answer": 2,
+    "explanation": "SRP groups code by the actor that causes change. Shared logic between actors makes unrelated changes interfere with each other.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-048",
+    "question": "Which expression completes the blank so the program prints T42?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Clock {\n    long now();\n}\n\nclass FixedClock implements Clock {\n    public long now() { return 42; }\n}\n\nclass Stamp {\n    private final Clock clock;\n\n    Stamp(Clock clock) { this.clock = clock; }\n\n    String make() { return \"T\" + clock.now(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Stamp s = new Stamp(____);\n        System.out.println(s.make());\n    }\n}",
+    "options": [
+      "new Clock()",
+      "FixedClock",
+      "new FixedClock()",
+      "42"
+    ],
+    "answer": 2,
+    "explanation": "Stamp needs a Clock instance. FixedClock implements Clock and returns 42, so passing new FixedClock() works. An interface cannot be instantiated, a class name alone is not an expression, and an int is not a Clock.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-049",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class P {\n    String name = \"P\";\n    String get() { return name; }\n}\n\nclass C extends P {\n    String name = \"C\";\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        P p = new C();\n        System.out.println(p.name + p.get());\n    }\n}",
+    "options": [
+      "PP",
+      "CC",
+      "PC",
+      "CP"
+    ],
+    "answer": 0,
+    "explanation": "Fields are not polymorphic. p.name uses the static type P, giving P, and get() is defined in P, so it reads P's field. Only methods are overridden, so a field in a subclass does not change inherited behavior. Relying on hidden fields breaks substitutability.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-solid-principles-050",
+    "question": "OrderService is a high-level module that currently imports MySqlOrderRepository. After applying DIP, where should the OrderRepository interface naturally belong?",
+    "options": [
+      "Only inside the database driver's package.",
+      "With the high-level module that needs it, with MySqlOrderRepository implementing it.",
+      "As an inner class of MySqlOrderRepository.",
+      "Nowhere; the service should use reflection to find the repository."
+    ],
+    "answer": 1,
+    "explanation": "In DIP the high-level module defines the abstraction it needs, and low-level details conform to it. That reverses the source-code dependency so the policy no longer depends on the database detail.",
+    "subtopic": "SOLID principles"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-001",
+    "question": "What does the guideline 'prefer composition over inheritance' recommend?",
+    "options": [
+      "Build behavior by holding references to collaborating objects, and use inheritance only for a true is-a relationship.",
+      "Never use interfaces or abstract classes.",
+      "Always make every class final.",
+      "Replace all objects with static methods."
+    ],
+    "answer": 0,
+    "explanation": "Composition reuses behavior through has-a relationships and delegation, which keeps classes loosely coupled. Inheritance is still appropriate when a subtype genuinely honors the supertype contract.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-002",
+    "question": "Which relationship does composition model?",
+    "options": [
+      "is-a",
+      "uses-static",
+      "implements-only",
+      "has-a"
+    ],
+    "answer": 3,
+    "explanation": "Composition means an object contains other objects as parts and delegates work to them. Inheritance models is-a.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-003",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Engine {\n    String start() { return \"start-\"; }\n}\n\nclass Car {\n    private final Engine engine = new Engine();\n\n    String drive() { return engine.start() + \"drive\"; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Car().drive());\n    }\n}",
+    "options": [
+      "drive",
+      "start-",
+      "Compilation fails",
+      "start-drive"
+    ],
+    "answer": 3,
+    "explanation": "Car holds an Engine and delegates to it. drive() first calls engine.start(), which returns start-, then appends drive.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-004",
+    "question": "What is the output? (Java 17)",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Collection;\nimport java.util.HashSet;\nimport java.util.List;\n\nclass CountingSet extends HashSet<String> {\n    int added = 0;\n\n    @Override\n    public boolean add(String s) {\n        added++;\n        return super.add(s);\n    }\n\n    @Override\n    public boolean addAll(Collection<? extends String> c) {\n        added += c.size();\n        return super.addAll(c);\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        CountingSet s = new CountingSet();\n        s.addAll(List.of(\"a\", \"b\", \"c\"));\n        System.out.println(s.added);\n    }\n}",
+    "options": [
+      "6",
+      "3",
+      "0",
+      "9"
+    ],
+    "answer": 0,
+    "explanation": "HashSet inherits addAll from AbstractCollection, which calls add() for every element. The override of addAll adds 3, then each of the 3 calls to the overridden add adds 1 more, giving 6. Subclassing depends on how the superclass uses its own methods internally.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-005",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Collection;\nimport java.util.HashSet;\nimport java.util.List;\nimport java.util.Set;\n\nclass CountingSet {\n    private final Set<String> set = new HashSet<>();\n    int added = 0;\n\n    boolean add(String s) {\n        added++;\n        return set.add(s);\n    }\n\n    boolean addAll(Collection<? extends String> c) {\n        added += c.size();\n        return set.addAll(c);\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        CountingSet s = new CountingSet();\n        s.addAll(List.of(\"a\", \"b\", \"c\"));\n        System.out.println(s.added);\n    }\n}",
+    "options": [
+      "3",
+      "6",
+      "0",
+      "1"
+    ],
+    "answer": 0,
+    "explanation": "The wrapper holds a HashSet and forwards calls. addAll adds c.size() once and the wrapped set's internal calls do not touch the counter, so the count is exactly 3. Composition avoids dependence on the superclass's internal method calls.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-006",
+    "question": "Why is inheritance often said to break encapsulation?",
+    "options": [
+      "Subclasses cannot access public members of the superclass.",
+      "Inheritance makes all fields private automatically.",
+      "A subclass depends on the implementation details of its superclass, so superclass changes can break it.",
+      "Superclasses cannot be changed once subclassed."
+    ],
+    "answer": 2,
+    "explanation": "Subclasses are tightly coupled to how the superclass works internally, such as which methods call which. This is the fragile base class problem.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-007",
+    "question": "What is the result of compiling and running this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "final class Base { }\n\nclass Derived extends Base { }\n\npublic class Example {\n    public static void main(String[] args) {\n        new Derived();\n        System.out.println(\"ok\");\n    }\n}",
+    "options": [
+      "Compilation fails because a final class cannot be extended.",
+      "It prints ok.",
+      "It compiles with a warning only and prints ok.",
+      "ClassFormatError at runtime."
+    ],
+    "answer": 0,
+    "explanation": "A class declared final cannot have subclasses, and the compiler rejects the extends clause. final is one way to prevent inheritance when a class is not designed for it.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-008",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Writer {\n    String write(String s) { return \"[\" + s + \"]\"; }\n}\n\nclass Printer {\n    private final Writer writer = new Writer();\n\n    String print(String s) { return writer.write(s.toUpperCase()); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Printer().print(\"ab\"));\n    }\n}",
+    "options": [
+      "[ab]",
+      "[AB]",
+      "AB",
+      "ab"
+    ],
+    "answer": 1,
+    "explanation": "Printer converts the text to uppercase and delegates formatting to its Writer, which wraps it in brackets. The Printer reuses Writer without extending it.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Fly { String go(); }\n\nclass Wings implements Fly {\n    public String go() { return \"flap\"; }\n}\n\nclass NoFly implements Fly {\n    public String go() { return \"none\"; }\n}\n\nclass Duck {\n    private Fly fly = new Wings();\n\n    void setFly(Fly f) { fly = f; }\n\n    String move() { return fly.go(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Duck d = new Duck();\n        String a = d.move();\n        d.setFly(new NoFly());\n        System.out.println(a + \" \" + d.move());\n    }\n}",
+    "options": [
+      "none none",
+      "flap flap",
+      "none flap",
+      "flap none"
+    ],
+    "answer": 3,
+    "explanation": "The first move() uses the initial Wings behavior and returns flap. After setFly installs NoFly, the same Duck object returns none. Composition lets behavior change at runtime, which a fixed superclass cannot.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-010",
+    "question": "Which situation best justifies using inheritance?",
+    "options": [
+      "A Car extends Engine only to reuse the start() method.",
+      "A Report extends ArrayList only to reuse add().",
+      "A Customer extends Address to avoid writing getters.",
+      "A Circle is a Shape and must be usable anywhere a Shape is expected, sharing a stable contract."
+    ],
+    "answer": 3,
+    "explanation": "Inheritance is appropriate for a genuine is-a relationship with a stable, honored contract. Reusing code for a has-a relationship should use composition.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-011",
+    "question": "Which JDK class is commonly cited as a misuse of inheritance because it exposes methods that break its intended behavior?",
+    "options": [
+      "java.lang.Integer extending Number",
+      "java.util.Stack extending Vector",
+      "java.io.FileInputStream extending InputStream",
+      "java.util.ArrayList implementing List"
+    ],
+    "answer": 1,
+    "explanation": "Stack extends Vector, so it exposes index-based methods such as add(int, E) that violate stack discipline. Stack is has-a Vector in spirit, not is-a. The other pairs are legitimate subtype relationships.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Stack;\n\npublic class Example {\n    public static void main(String[] args) {\n        Stack<Integer> st = new Stack<>();\n        st.push(1);\n        st.push(2);\n        st.add(0, 9);\n        System.out.println(st.pop() + \" \" + st);\n    }\n}",
+    "options": [
+      "9 [1, 2]",
+      "2 [9, 1]",
+      "2 [1, 9]",
+      "2 [9, 1, 2]"
+    ],
+    "answer": 1,
+    "explanation": "Stack inherits add(int, E) from Vector, so add(0, 9) inserts at the bottom giving [9, 1, 2]. pop() removes and returns the top element 2, leaving [9, 1]. The inherited method breaks the expected last-in-first-out discipline.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-013",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Base {\n    Base(int x) { System.out.println(\"Base \" + x); }\n}\n\nclass Derived extends Base { }\n\npublic class Example {\n    public static void main(String[] args) {\n        new Derived();\n    }\n}",
+    "options": [
+      "Base must be declared abstract.",
+      "Derived must override the Base(int) constructor.",
+      "Derived's implicit constructor calls super(), but Base has no no-argument constructor.",
+      "main must be declared in Derived."
+    ],
+    "answer": 2,
+    "explanation": "Without an explicit constructor, the compiler supplies a default one that calls super(). Base only has Base(int), so the call cannot be resolved. Inheritance couples subclasses to the superclass's construction requirements.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-014",
+    "question": "Which code completes the blank so the program prints > [T] hi?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Logger {\n    void log(String m);\n}\n\nclass ConsoleLogger implements Logger {\n    public void log(String m) { System.out.println(\"> \" + m); }\n}\n\nclass TimestampLogger implements Logger {\n    private final Logger inner;\n\n    TimestampLogger(Logger inner) { this.inner = inner; }\n\n    public void log(String m) {\n        ____\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new TimestampLogger(new ConsoleLogger()).log(\"hi\");\n    }\n}",
+    "options": [
+      "log(\"[T] \" + m);",
+      "inner.log(\"[T] \" + m);",
+      "System.out.println(\"[T] \" + m);",
+      "inner.log(m + \"[T]\");"
+    ],
+    "answer": 1,
+    "explanation": "The wrapper adds a prefix and forwards the new text to the wrapped Logger, whose own output format adds the leading marker. Calling log on itself recurses forever, printing directly bypasses the wrapped object and loses its marker, and appending the tag instead of prefixing it produces different text.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-015",
+    "question": "Which is a typical drawback of deep inheritance hierarchies?",
+    "options": [
+      "The JVM refuses to load classes deeper than three levels.",
+      "Subclasses become tightly coupled to superclass implementation, so a change near the top can ripple down.",
+      "Subclasses can no longer override methods.",
+      "Constructors stop being called."
+    ],
+    "answer": 1,
+    "explanation": "Every extra level adds dependencies on inherited behavior and state, making change risky and understanding harder.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-016",
+    "question": "What is the term for forwarding a method call to a contained object?",
+    "options": [
+      "Delegation",
+      "Overloading",
+      "Shadowing",
+      "Hoisting"
+    ],
+    "answer": 0,
+    "explanation": "In delegation a class implements an operation by calling the same or a related operation on another object it holds. It is the main mechanism of composition.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-017",
+    "question": "Pseudocode convention: 'car has a turbo' means the car was created with a turbo argument. What is the value printed for total?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "Engine.power = 100\nTurbo.boost = 50\npower(car) = car.engine.power + (car.turbo.boost if car has a turbo, else 0)\ncars = [Car(engine), Car(engine, turbo), Car(engine)]\ntotal = 0\nfor each car in cars:\n    total = total + power(car)\nprint total",
+    "options": [
+      "350",
+      "300",
+      "250",
+      "400"
+    ],
+    "answer": 0,
+    "explanation": "The plain cars give 100 each. The turbo car gives 100 + 50 = 150. The sum is 100 + 150 + 100 = 350. Optional parts are modeled by composition, not by separate subclasses.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-018",
+    "question": "A Notification must change its delivery channel at runtime between email and SMS. Which design supports this best?",
+    "options": [
+      "Create EmailNotification and SmsNotification subclasses and cast between them.",
+      "Give Notification a field of a Channel interface and swap the implementation when needed.",
+      "Use a static final field of the concrete channel class.",
+      "Copy the Notification class once per channel."
+    ],
+    "answer": 1,
+    "explanation": "A composed collaborator can be replaced while the object lives. A fixed subclass identity cannot change at runtime.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-019",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Pizza { int cost(); }\n\nclass Plain implements Pizza {\n    public int cost() { return 10; }\n}\n\nclass Cheese implements Pizza {\n    private final Pizza base;\n    Cheese(Pizza base) { this.base = base; }\n    public int cost() { return base.cost() + 2; }\n}\n\nclass Olive implements Pizza {\n    private final Pizza base;\n    Olive(Pizza base) { this.base = base; }\n    public int cost() { return base.cost() + 1; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Olive(new Cheese(new Plain())).cost());\n    }\n}",
+    "options": [
+      "13",
+      "10",
+      "12",
+      "3"
+    ],
+    "answer": 0,
+    "explanation": "Each decorator wraps another Pizza and adds to its cost: 10 for Plain, +2 for Cheese, +1 for Olive, totaling 13. Behavior is combined by wrapping objects rather than by creating subclasses.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-020",
+    "question": "A class needs to reuse behavior from several unrelated sources. Which approach works in Java 17?",
+    "options": [
+      "Declare class A extends B, C.",
+      "Declare instance fields in interfaces and implement them.",
+      "Hold references to several collaborators and delegate to them.",
+      "Use two super keywords such as super1 and super2."
+    ],
+    "answer": 2,
+    "explanation": "Java allows a class to extend only one class. Composition lets a class use any number of collaborators.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-021",
+    "question": "What is the result of compiling this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class A { }\nclass B { }\nclass C extends A, B { }\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(\"ok\");\n    }\n}",
+    "options": [
+      "It compiles and prints ok.",
+      "It compiles with a warning only.",
+      "It fails only at runtime.",
+      "Compilation fails because a class can extend only one class."
+    ],
+    "answer": 3,
+    "explanation": "Java has single class inheritance, so a list of superclasses after extends is a syntax error. Use interfaces or composition to combine capabilities.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-022",
+    "question": "How does composition make unit testing easier?",
+    "options": [
+      "It makes private methods public.",
+      "It removes the need for any assertions.",
+      "It forces all dependencies to be static.",
+      "Collaborators can be replaced by test doubles through the constructor."
+    ],
+    "answer": 3,
+    "explanation": "When behavior lives in collaborators referenced through interfaces, a test can supply a fake implementation. Hard-wired superclass behavior is harder to isolate.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-023",
+    "question": "Which statement best summarizes the guideline for reusing code?",
+    "options": [
+      "Extend a class whenever it has a method you need.",
+      "Reuse through has-a delegation by default; extend a class only when it is designed for it and is-a holds.",
+      "Copy and paste classes to avoid dependencies.",
+      "Make every field protected so subclasses can reuse them."
+    ],
+    "answer": 1,
+    "explanation": "Composition limits coupling to a public API. Inheritance exposes more internals and should be reserved for well-designed hierarchies.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-024",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class A {\n    void print() { System.out.print(\"A\"); }\n    void run() { print(); }\n}\n\nclass B extends A {\n    @Override\n    void print() { System.out.print(\"B\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new B().run();\n    }\n}",
+    "options": [
+      "A",
+      "AB",
+      "B",
+      "BA"
+    ],
+    "answer": 2,
+    "explanation": "run() is defined in A but calls print(), which is dispatched to the overriding method in B. So the subclass changes how an inherited method behaves. This self-use is hidden coupling between superclass and subclass.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-025",
+    "question": "Which expression completes the blank so the program prints 2?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.List;\n\nclass Playlist {\n    private final List<String> songs = new ArrayList<>();\n\n    void add(String s) { songs.add(s); }\n\n    int count() { return ____; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Playlist p = new Playlist();\n        p.add(\"a\");\n        p.add(\"b\");\n        System.out.println(p.count());\n    }\n}",
+    "options": [
+      "songs.length",
+      "songs.size()",
+      "songs.length()",
+      "this.count()"
+    ],
+    "answer": 1,
+    "explanation": "The playlist delegates to its List, and size() returns the number of elements. A List has no length field or length() method, and calling count() from itself would recurse endlessly.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-026",
+    "question": "Which modifier prevents a class from being extended?",
+    "options": [
+      "static",
+      "final",
+      "abstract",
+      "transient"
+    ],
+    "answer": 1,
+    "explanation": "A final class cannot have subclasses. abstract does the opposite, requiring subclasses, and static and transient do not control inheritance.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-027",
+    "question": "Which Java 17 feature limits a class to a known set of subclasses?",
+    "options": [
+      "Declaring the class static",
+      "Declaring the class sealed with a permits clause",
+      "Marking its constructors protected",
+      "Adding a @NoSubclass annotation"
+    ],
+    "answer": 1,
+    "explanation": "Sealed classes (final in Java 17) let you list exactly which classes may extend them, so inheritance stays under control.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-028",
+    "question": "Which implementation correctly uses composition so that a Logger can write to any java.io.Writer?",
+    "options": [
+      "class Logger { private final Writer out; Logger(Writer out) { this.out = out; } }",
+      "class Logger extends FileWriter { }",
+      "class Logger { Writer out = new FileWriter(\"log.txt\"); }",
+      "class Logger extends Writer, PrintStream { }"
+    ],
+    "answer": 0,
+    "explanation": "Accepting a Writer through the constructor works with any destination. Extending FileWriter or creating a fixed file writer limits flexibility, and extending two classes is illegal.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-029",
+    "question": "Which statement about composition and interfaces is correct?",
+    "options": [
+      "Composition is most flexible when collaborators are accessed through interfaces, so implementations can be swapped.",
+      "Composition is impossible with interfaces.",
+      "Interfaces are required to be implemented with extends.",
+      "Composition requires every collaborator to be a subclass."
+    ],
+    "answer": 0,
+    "explanation": "Typing fields as interfaces keeps the owning class independent of concrete implementations.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-030",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Engine {\n    int rpm;\n}\n\nclass Car {\n    final Engine engine;\n    Car(Engine e) { this.engine = e; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Engine e = new Engine();\n        Car a = new Car(e);\n        Car b = new Car(e);\n        a.engine.rpm = 3000;\n        System.out.println(b.engine.rpm);\n    }\n}",
+    "options": [
+      "0",
+      "NullPointerException",
+      "Compilation fails",
+      "3000"
+    ],
+    "answer": 3,
+    "explanation": "Both cars hold a reference to the same Engine object, so changing rpm through one car is visible through the other. Sharing a part is aggregation rather than strict composition.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-031",
+    "question": "In UML terms, what distinguishes composition from aggregation?",
+    "options": [
+      "Composition uses inheritance and aggregation does not.",
+      "Aggregation requires an interface and composition does not.",
+      "In composition the part's lifetime is bound to the owner; in aggregation the part can exist independently.",
+      "They are identical terms."
+    ],
+    "answer": 2,
+    "explanation": "Composition expresses strong ownership, such as a House and its Rooms. Aggregation is a weaker whole-part relationship where the parts may be shared or outlive the whole.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-032",
+    "question": "What is the cause of the exception thrown when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Engine {\n    void start() { System.out.println(\"started\"); }\n}\n\nclass Car {\n    private Engine engine;\n\n    Car() {\n        Engine engine = new Engine();\n    }\n\n    void start() { engine.start(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new Car().start();\n    }\n}",
+    "options": [
+      "The constructor declares a local variable that shadows the field, so the field stays null.",
+      "Engine has no default constructor.",
+      "start() must be declared static.",
+      "Private fields cannot be accessed inside their own class."
+    ],
+    "answer": 0,
+    "explanation": "In the constructor, Engine engine = new Engine() creates a new local variable and leaves the field unassigned. Calling start() then throws NullPointerException.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-033",
+    "question": "Which statement correctly compares coupling in inheritance and composition?",
+    "options": [
+      "Composition couples a class to every private member of the collaborator.",
+      "Inheritance couples a subclass to its superclass's implementation, while composition couples a class only to the collaborator's public API.",
+      "Inheritance couples classes only through interfaces.",
+      "Both create identical coupling in all cases."
+    ],
+    "answer": 1,
+    "explanation": "A subclass sees protected members and inherited behavior, so it is affected by internal changes. A composing class can only call public methods.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-034",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Engine {\n    Engine() { System.out.print(\"Engine\"); }\n}\n\nclass Car {\n    private final Engine engine = new Engine();\n\n    Car() { System.out.print(\"Car\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new Car();\n    }\n}",
+    "options": [
+      "EngineCar",
+      "CarEngine",
+      "Car",
+      "Engine"
+    ],
+    "answer": 0,
+    "explanation": "Instance field initializers run before the body of the constructor. The Engine is created first and prints Engine, then the Car constructor body prints Car.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-035",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Point {\n    final int x, y;\n\n    Point(int x, int y) { this.x = x; this.y = y; }\n\n    @Override\n    public boolean equals(Object o) {\n        if (!(o instanceof Point)) return false;\n        Point p = (Point) o;\n        return p.x == x && p.y == y;\n    }\n\n    @Override\n    public int hashCode() { return 31 * x + y; }\n}\n\nclass ColorPoint extends Point {\n    final String color;\n\n    ColorPoint(int x, int y, String color) {\n        super(x, y);\n        this.color = color;\n    }\n\n    @Override\n    public boolean equals(Object o) {\n        if (!(o instanceof ColorPoint)) return false;\n        return super.equals(o) && ((ColorPoint) o).color.equals(color);\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Point p = new Point(1, 2);\n        ColorPoint cp = new ColorPoint(1, 2, \"red\");\n        System.out.println(p.equals(cp) + \" \" + cp.equals(p));\n    }\n}",
+    "options": [
+      "true true",
+      "false true",
+      "true false",
+      "false false"
+    ],
+    "answer": 2,
+    "explanation": "p.equals(cp) is true because a ColorPoint is a Point with equal coordinates. cp.equals(p) is false because p is not a ColorPoint. Symmetry is broken, a well-known problem when a subclass adds state to a class with a value-based equals.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-036",
+    "question": "Which redesign fixes the equals symmetry problem between Point and ColorPoint?",
+    "options": [
+      "Make ColorPoint.equals() always return true.",
+      "Make ColorPoint a separate class that has a Point field and exposes it through a method, without extending Point.",
+      "Change Point.equals() to compare references with ==.",
+      "Remove equals() from Point only."
+    ],
+    "answer": 1,
+    "explanation": "You cannot extend an instantiable class with a value component and keep the equals contract. Composition avoids claiming that a ColorPoint is a Point.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-037",
+    "question": "A coffee shop has 3 base drinks and 4 optional add-ons that may be combined freely. If inheritance needs one subclass per distinct combination and decorators need one class per base and per add-on, how many classes does each approach need?",
+    "options": [
+      "12 subclasses with inheritance versus 7 classes with decorators",
+      "7 subclasses with inheritance versus 48 classes with decorators",
+      "48 subclasses with inheritance versus 7 classes with decorators",
+      "48 subclasses with inheritance versus 12 classes with decorators"
+    ],
+    "answer": 2,
+    "explanation": "Each base can have any subset of 4 add-ons: 3 * 2^4 = 48 combinations. Decorators need only 3 + 4 = 7 classes, combined at runtime. Composition avoids a combinatorial explosion of subclasses.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-038",
+    "question": "Which rule must a developer remember when deciding to use inheritance?",
+    "options": [
+      "Use it only when the subtype truly is-a supertype and can honor its full contract.",
+      "Use it whenever two classes share any method name.",
+      "Use it to avoid writing constructors.",
+      "Use it so protected fields can be shared freely."
+    ],
+    "answer": 0,
+    "explanation": "Inheritance is a strong commitment to a supertype contract. If the relationship is only code reuse, composition is the safer tool.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-039",
+    "question": "Which parameter type completes the blank so the program prints 400 200?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Engine {\n    int power();\n}\n\nclass V8 implements Engine {\n    public int power() { return 400; }\n}\n\nclass Electric implements Engine {\n    public int power() { return 200; }\n}\n\nclass Car {\n    private final Engine engine;\n\n    Car(____ engine) { this.engine = engine; }\n\n    int power() { return engine.power(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Car(new V8()).power() + \" \" + new Car(new Electric()).power());\n    }\n}",
+    "options": [
+      "V8",
+      "Object",
+      "Car",
+      "Engine"
+    ],
+    "answer": 3,
+    "explanation": "Declaring the parameter as the Engine interface accepts any implementation, so both V8 and Electric can be passed. A V8 parameter would reject Electric, Object cannot be assigned to an Engine field, and Car is unrelated.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-040",
+    "question": "Which statement about constructors and inheritance is correct?",
+    "options": [
+      "Constructors are inherited like methods.",
+      "A subclass constructor never calls a superclass constructor.",
+      "Constructors are not inherited; a subclass constructor must call a superclass constructor explicitly or implicitly.",
+      "Only abstract classes have constructors."
+    ],
+    "answer": 2,
+    "explanation": "Every constructor chain begins with a call to super(...) or this(...). Subclasses cannot reuse superclass constructors directly.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-041",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        List<String> base = new ArrayList<>(List.of(\"a\"));\n        List<String> view = Collections.unmodifiableList(base);\n        base.add(\"b\");\n        System.out.println(view.size());\n    }\n}",
+    "options": [
+      "2",
+      "1",
+      "UnsupportedOperationException",
+      "0"
+    ],
+    "answer": 0,
+    "explanation": "unmodifiableList wraps the original list and delegates reads to it, so it is a live read-only view. After base.add(\"b\") the view sees both elements. This is composition used to restrict access.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-042",
+    "question": "Which is a valid reason to prefer an interface plus delegation over an abstract base class?",
+    "options": [
+      "Interfaces can hold instance fields.",
+      "Abstract classes cannot have methods.",
+      "Interfaces are always faster at runtime.",
+      "A class can implement many interfaces but can extend only one class."
+    ],
+    "answer": 3,
+    "explanation": "Because Java allows only single class inheritance, using an interface and delegating keeps the class free to combine several capabilities.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-043",
+    "question": "A team wants to add logging to an existing service without changing it. Which approach follows the guideline?",
+    "options": [
+      "Subclass the service and override every method.",
+      "Edit the service to add logging calls.",
+      "Create a LoggingService that implements the same interface, wraps the original, and delegates after logging.",
+      "Make every service method static."
+    ],
+    "answer": 2,
+    "explanation": "A wrapper implementing the same interface adds behavior without touching the original or depending on its internals.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-044",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\ninterface Move { String go(); }\n\nclass Animal {\n    private final String name;\n    private final Move move;\n\n    Animal(String name, Move move) {\n        this.name = name;\n        this.move = move;\n    }\n\n    String act() { return name + \":\" + move.go(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        List<Animal> zoo = List.of(\n            new Animal(\"fish\", () -> \"swim\"),\n            new Animal(\"bird\", () -> \"fly\"),\n            new Animal(\"dog\", () -> \"walk\"));\n        StringBuilder sb = new StringBuilder();\n        for (Animal a : zoo) sb.append(a.act()).append(' ');\n        System.out.println(sb.toString().trim());\n    }\n}",
+    "options": [
+      "swim fly walk",
+      "fish bird dog",
+      "fish:swim bird:fly dog:walk",
+      "dog:walk bird:fly fish:swim"
+    ],
+    "answer": 2,
+    "explanation": "Each Animal is composed with a Move behavior and returns name:behavior. Iterating the list keeps its order. No subclasses of Animal are needed for different movement.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-045",
+    "question": "Which statement about records in Java 17 is correct?",
+    "options": [
+      "A record can extend any non-final class.",
+      "A record cannot implement interfaces.",
+      "A record can be extended by other records.",
+      "A record implicitly extends java.lang.Record, so it cannot extend another class but can implement interfaces."
+    ],
+    "answer": 3,
+    "explanation": "Records are implicitly final and already extend Record, so inheritance is not available. Interfaces and composition are the tools for reuse.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-046",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Parent {\n    private int v = 1;\n}\n\nclass Child extends Parent {\n    int get() { return v; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Child().get());\n    }\n}",
+    "options": [
+      "A subclass cannot have methods.",
+      "The field must be static.",
+      "The private field v is not accessible from the subclass.",
+      "int cannot be returned from a method."
+    ],
+    "answer": 2,
+    "explanation": "Private members are not inherited and cannot be accessed by subclasses. Inheritance gives access only to non-private members, so subclasses depend on what the superclass chooses to expose.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-047",
+    "question": "A class should expose only add() and size() of an underlying list. Which design is better?",
+    "options": [
+      "Extend ArrayList and rely on documentation to avoid other methods.",
+      "Make the list field public.",
+      "Keep a private List field and write add() and size() methods that delegate to it.",
+      "Extend ArrayList and override only add() and size()."
+    ],
+    "answer": 2,
+    "explanation": "Composition hides everything that is not explicitly forwarded. A subclass of ArrayList still exposes all its public methods.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-048",
+    "question": "How does Java 17 avoid the classic diamond problem of multiple inheritance?",
+    "options": [
+      "Interfaces cannot have any methods.",
+      "The compiler silently picks the first interface.",
+      "Multiple class inheritance is allowed if the classes are in different packages.",
+      "Classes extend only one class, and conflicting default methods must be resolved explicitly by the implementing class."
+    ],
+    "answer": 3,
+    "explanation": "Single class inheritance avoids state conflicts, and default-method conflicts produce a compile error until the class overrides the method.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-049",
+    "question": "Pseudocode convention: '+' concatenates strings and super.m() calls the parent class version of m. What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "class A: method m() returns \"A\"\nclass B extends A: method m() returns \"B\" + super.m()\nclass C extends B: method m() returns \"C\" + super.m()\nprint new C().m()",
+    "options": [
+      "ABC",
+      "C",
+      "CB",
+      "CBA"
+    ],
+    "answer": 3,
+    "explanation": "C.m() returns C plus B.m(), which returns B plus A.m(), which returns A. The result is CBA. Chains like this show how each level depends on the one above.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-prefer-composition-over-inheritance-050",
+    "question": "What is the result of compiling this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class A {\n    int count() { return 1; }\n}\n\nclass B extends A {\n    String count() { return \"one\"; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new B().count());\n    }\n}",
+    "options": [
+      "It prints one.",
+      "Compilation fails because B.count() is an incompatible override of A.count().",
+      "It prints 1.",
+      "It compiles and prints nothing."
+    ],
+    "answer": 1,
+    "explanation": "B declares count() with the same signature as A.count() but an incompatible return type (String is not a subtype of int), so it is not a valid override. This is the fragile base class problem: a superclass change can break existing subclasses.",
+    "subtopic": "Prefer composition over inheritance"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-001",
+    "question": "In the context of the Dependency Inversion Principle, what is a high-level module?",
+    "options": [
+      "The class with the most lines of code.",
+      "A class in the top-most package.",
+      "A module that contains business policy and should not depend on low-level details.",
+      "The first module loaded by the JVM."
+    ],
+    "answer": 2,
+    "explanation": "High-level modules express what the application does. Low-level modules handle details such as databases, files, and networks. DIP protects policy from changes in those details.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-002",
+    "question": "What is being inverted in the Dependency Inversion Principle?",
+    "options": [
+      "The source-code dependency now points toward an abstraction instead of from policy to a concrete detail.",
+      "The order in which constructors are called.",
+      "The inheritance direction between parent and child classes.",
+      "The order of method parameters."
+    ],
+    "answer": 0,
+    "explanation": "Without DIP, a high-level class depends directly on a low-level class. With DIP, the high-level class depends on an interface and the low-level class implements it, reversing the dependency arrow from the detail's side.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-003",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Gateway {\n    String charge(int amount);\n}\n\nclass FakeGateway implements Gateway {\n    public String charge(int amount) { return \"ok-\" + amount; }\n}\n\nclass Checkout {\n    private final Gateway gateway;\n\n    Checkout(Gateway gateway) { this.gateway = gateway; }\n\n    String pay(int amount) { return gateway.charge(amount); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Checkout(new FakeGateway()).pay(50));\n    }\n}",
+    "options": [
+      "50",
+      "FakeGateway",
+      "ok-50",
+      "Compilation fails"
+    ],
+    "answer": 2,
+    "explanation": "Checkout receives a Gateway through its constructor and calls charge on it. The fake returns ok- plus the amount. Checkout never refers to the concrete fake class.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-004",
+    "question": "What is the result of compiling this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Repository {\n    void save(String s);\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Repository r = new Repository();\n        r.save(\"x\");\n    }\n}",
+    "options": [
+      "Compilation fails because an interface cannot be instantiated with new.",
+      "It compiles and prints nothing.",
+      "It compiles but throws InstantiationException at runtime.",
+      "It compiles with a warning about raw types."
+    ],
+    "answer": 0,
+    "explanation": "An interface is an abstraction with no implementation, so new Repository() is illegal. You must instantiate a concrete class that implements it, usually in the composition root.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-005",
+    "question": "Which statement completes setLogger so the program prints q:hi?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Logger {\n    void log(String m);\n}\n\nclass ConsoleLogger implements Logger {\n    public void log(String m) { System.out.println(\"LOG:\" + m); }\n}\n\nclass QuietLogger implements Logger {\n    public void log(String m) { System.out.println(\"q:\" + m); }\n}\n\nclass Service {\n    private Logger logger;\n\n    void setLogger(Logger logger) {\n        ____\n    }\n\n    void run() { logger.log(\"hi\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Service s = new Service();\n        s.setLogger(new QuietLogger());\n        s.run();\n    }\n}",
+    "options": [
+      "this.logger = logger;",
+      "logger = logger;",
+      "this.logger = new ConsoleLogger();",
+      "this.logger == logger;"
+    ],
+    "answer": 0,
+    "explanation": "The field must be assigned from the parameter using this. Assigning the parameter to itself changes nothing and leaves the field null, creating a new ConsoleLogger ignores the caller's QuietLogger and prints LOG:hi, and == is not a statement.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-006",
+    "question": "Which is an advantage of constructor injection over setter injection?",
+    "options": [
+      "Dependencies can be swapped at any time after construction.",
+      "Required dependencies can be final, so the object is never left half-configured.",
+      "It removes the need for interfaces.",
+      "It makes the class depend on a DI container."
+    ],
+    "answer": 1,
+    "explanation": "With constructor injection the object cannot be created without its dependencies, and fields can be final. Setter injection allows partially configured objects.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-007",
+    "question": "What is a drawback of the Service Locator style compared with constructor injection?",
+    "options": [
+      "It always runs slower.",
+      "It can only locate interfaces.",
+      "It forbids the use of abstractions.",
+      "Dependencies are hidden inside the class instead of being visible in its constructor or API."
+    ],
+    "answer": 3,
+    "explanation": "With a service locator, a class pulls dependencies from a global registry, so what it needs is not obvious from its signature and tests must configure the locator.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-008",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.function.Supplier;\n\nclass Ticket {\n    private final Supplier<Integer> hour;\n\n    Ticket(Supplier<Integer> hour) { this.hour = hour; }\n\n    String label() { return hour.get() < 12 ? \"AM\" : \"PM\"; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Ticket(() -> 9).label() + \" \" + new Ticket(() -> 15).label());\n    }\n}",
+    "options": [
+      "AM AM",
+      "PM PM",
+      "PM AM",
+      "AM PM"
+    ],
+    "answer": 3,
+    "explanation": "The hour source is injected as a Supplier, so each Ticket works with its own value. 9 is before noon and gives AM, and 15 gives PM. The class never reads the real clock directly.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-009",
+    "question": "Which example is a clear DIP violation in a layered application?",
+    "options": [
+      "A business-layer class that depends on an interface it owns.",
+      "A business-layer class that imports and instantiates a JDBC-specific class.",
+      "A database class that implements a repository interface.",
+      "A main method that wires implementations together."
+    ],
+    "answer": 1,
+    "explanation": "Business policy should not depend on persistence technology. The persistence class should implement an abstraction required by the business layer.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class A {\n    B b = new B();\n}\n\nclass B {\n    A a = new A();\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        try {\n            new A();\n        } catch (StackOverflowError e) {\n            System.out.println(\"overflow\");\n        }\n    }\n}",
+    "options": [
+      "Compilation fails",
+      "NullPointerException",
+      "overflow",
+      "Nothing is printed and the program ends normally"
+    ],
+    "answer": 2,
+    "explanation": "Each class creates the other in its field initializer, so new A() creates a B, which creates an A, and so on until the stack overflows. Hard-wired creation of dependencies makes such cycles easy to introduce.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-011",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Button {\n    private final Runnable onClick;\n\n    Button(Runnable onClick) { this.onClick = onClick; }\n\n    void click() { onClick.run(); }\n}\n\npublic class Example {\n    static int count = 0;\n\n    public static void main(String[] args) {\n        Button b = new Button(() -> count++);\n        b.click();\n        b.click();\n        System.out.println(\"clicked \" + count);\n    }\n}",
+    "options": [
+      "clicked 2",
+      "clicked 0",
+      "clicked 1",
+      "Compilation fails"
+    ],
+    "answer": 0,
+    "explanation": "Button only knows it must run a Runnable, so it depends on an abstraction. The handler increments a static counter on each of the two clicks, giving 2.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-012",
+    "question": "Pseudocode convention: each edge is (from, to, kind of target). How many edges make a high-level class depend on a concrete class?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "edges = [\n  (Controller, ServiceImpl, concrete),\n  (ServiceImpl, Repository, interface),\n  (SqlRepository, Repository, interface),\n  (ServiceImpl, SmtpMailer, concrete),\n  (Controller, Validator, interface)\n]\ncount = 0\nfor each edge in edges:\n    if edge.targetKind == concrete:\n        count = count + 1\nprint count",
+    "options": [
+      "1",
+      "3",
+      "5",
+      "2"
+    ],
+    "answer": 3,
+    "explanation": "Only edges whose target kind is concrete count: Controller to ServiceImpl and ServiceImpl to SmtpMailer. Edges to interfaces follow DIP, so the answer is 2.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-013",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.function.Function;\n\nclass Printer {\n    private final Function<String, String> fmt;\n\n    Printer(Function<String, String> fmt) { this.fmt = fmt; }\n\n    String print(String s) { return fmt.apply(s); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        String a = new Printer(s -> \"<b>\" + s + \"</b>\").print(\"hi\");\n        String b = new Printer(String::toUpperCase).print(\"hi\");\n        System.out.println(a + b);\n    }\n}",
+    "options": [
+      "hi",
+      "<b>hi</b>HI",
+      "<b>hi</b>",
+      "HI<b>hi</b>"
+    ],
+    "answer": 1,
+    "explanation": "Printer receives its formatting behavior as a Function. The first instance wraps the text in bold tags and the second uppercases it. The class is configured from outside without modification.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-014",
+    "question": "What is a composition root?",
+    "options": [
+      "A single place near the application entry point where dependencies are created and wired together.",
+      "A class that every other class must extend.",
+      "The root package of a Java project.",
+      "A static field holding all objects."
+    ],
+    "answer": 0,
+    "explanation": "Concentrating object creation and wiring in one place, often main, lets the rest of the code depend only on abstractions.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-015",
+    "question": "OrderService needs an OrderRepository. In main, which wiring follows DIP?",
+    "options": [
+      "new OrderService()",
+      "new OrderService(MySqlOrderRepository.class)",
+      "new OrderService(\"mysql\")",
+      "new OrderService(new MySqlOrderRepository())"
+    ],
+    "answer": 3,
+    "explanation": "main, the composition root, chooses the concrete repository and hands it to the service, which only knows the interface. The other options hide the dependency or pass something that is not a repository.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Store {\n    String name();\n}\n\nclass MemStore implements Store {\n    public String name() { return \"mem\"; }\n}\n\nclass FileStore implements Store {\n    public String name() { return \"file\"; }\n}\n\nclass App {\n    private final Store store;\n\n    App(Store store) { this.store = store; }\n\n    String info() { return \"using \" + store.name(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        String cfg = \"mem\";\n        Store s = cfg.equals(\"mem\") ? new MemStore() : new FileStore();\n        System.out.println(new App(s).info());\n    }\n}",
+    "options": [
+      "using file",
+      "using",
+      "Compilation fails",
+      "using mem"
+    ],
+    "answer": 3,
+    "explanation": "The composition root picks a Store implementation from configuration, and App uses only the Store interface. Because cfg equals mem, MemStore is selected.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-017",
+    "question": "What problem does the Null Object pattern solve for a class that receives an optional dependency?",
+    "options": [
+      "It supplies a harmless do-nothing implementation so callers need no null checks.",
+      "It forces the dependency to be created lazily.",
+      "It makes the dependency static.",
+      "It prevents anyone from implementing the interface."
+    ],
+    "answer": 0,
+    "explanation": "A null object implements the same interface with neutral behavior, so the high-level code can call it uniformly.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-018",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Logger {\n    void log(String m);\n}\n\nclass NoopLogger implements Logger {\n    public void log(String m) { }\n}\n\nclass Service {\n    private final Logger logger;\n\n    Service(Logger logger) { this.logger = logger; }\n\n    String run() {\n        logger.log(\"start\");\n        return \"done\";\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Service(new NoopLogger()).run());\n    }\n}",
+    "options": [
+      "start",
+      "start done",
+      "done",
+      "NullPointerException"
+    ],
+    "answer": 2,
+    "explanation": "NoopLogger implements Logger but does nothing, so no log text is printed. The service returns done, which main prints.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-019",
+    "question": "Why is an interface usually preferred over an abstract class as the abstraction in DIP?",
+    "options": [
+      "Interfaces can store mutable instance state.",
+      "Abstract classes cannot declare methods.",
+      "Implementers can still extend another class, because Java allows only one superclass.",
+      "Interfaces execute faster than abstract classes."
+    ],
+    "answer": 2,
+    "explanation": "An interface imposes no inheritance constraint on implementers, so any class can adopt it. Abstract classes consume the single-inheritance slot.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-020",
+    "question": "Why is Report hard to test deterministically?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class SystemClock {\n    static long now() { return System.currentTimeMillis(); }\n}\n\nclass Report {\n    String stamp() { return \"T\" + SystemClock.now(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new Report().stamp().startsWith(\"T\"));\n    }\n}",
+    "options": [
+      "stamp() returns a String.",
+      "SystemClock is package-private.",
+      "It calls a static method on a concrete class, a hidden dependency that tests cannot replace.",
+      "Report has no constructor."
+    ],
+    "answer": 2,
+    "explanation": "The static call to SystemClock.now() binds Report to the real clock. Injecting a clock abstraction would allow a fixed time in tests.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-021",
+    "question": "Which dependency is the best candidate for an abstraction under DIP?",
+    "options": [
+      "An email-sending service whose provider may change.",
+      "java.lang.String used for names",
+      "A primitive int counter",
+      "java.lang.Math static helper methods"
+    ],
+    "answer": 0,
+    "explanation": "DIP is most valuable for volatile, detail-heavy dependencies such as I/O, vendors, and infrastructure. Stable platform types need no abstraction.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-022",
+    "question": "Which expression completes the blank so the program prints [a, cc, bbb]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\n\nclass Roster {\n    private final Comparator<String> order;\n\n    Roster(Comparator<String> order) { this.order = order; }\n\n    List<String> sorted(List<String> in) {\n        List<String> copy = new ArrayList<>(in);\n        copy.sort(order);\n        return copy;\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Roster r = new Roster(____);\n        System.out.println(r.sorted(List.of(\"bbb\", \"a\", \"cc\")));\n    }\n}",
+    "options": [
+      "Comparator.naturalOrder()",
+      "Comparator.reverseOrder()",
+      "Comparator.comparingInt(String::length)",
+      "Comparator.comparingInt(String::length).reversed()"
+    ],
+    "answer": 2,
+    "explanation": "The ordering strategy is injected into Roster. Sorting by length ascending gives a, cc, bbb. Natural order would give [a, bbb, cc], reverse order and reversed length would put the longest first.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-023",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Repo {\n    Repo() { System.out.print(\"Repo-\"); }\n}\n\nclass Service {\n    Service(Repo r) { System.out.println(\"Service\"); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new Service(new Repo());\n    }\n}",
+    "options": [
+      "Service-Repo",
+      "Repo-Service",
+      "Service",
+      "Repo"
+    ],
+    "answer": 1,
+    "explanation": "The argument new Repo() is evaluated before the Service constructor runs, so Repo- is printed first. A dependency must exist before it can be injected.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-024",
+    "question": "Which description shows the dependency direction after applying DIP to a service and its repository?",
+    "options": [
+      "Service depends on the repository implementation, which depends on the interface.",
+      "The repository interface depends on the service.",
+      "Neither depends on the interface.",
+      "Service depends on the Repository interface, and the repository implementation also depends on that interface."
+    ],
+    "answer": 3,
+    "explanation": "Both sides point to the abstraction. The detail conforms to the contract defined for the policy, so the service no longer references the implementation.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-025",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Repo {\n    void save(String s);\n}\n\nclass MemRepo implements Repo {\n    void save(String s) { System.out.println(\"saved \" + s); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new MemRepo().save(\"x\");\n    }\n}",
+    "options": [
+      "MemRepo must be declared abstract.",
+      "Implementing methods of an interface must be public, but save is package-private.",
+      "The interface method must be static.",
+      "void methods cannot implement interface methods."
+    ],
+    "answer": 1,
+    "explanation": "Interface methods are implicitly public, and an implementation cannot reduce access. The fix is to declare the method public.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-026",
+    "question": "How can you unit test OrderService without touching a real database?",
+    "options": [
+      "Pass an in-memory fake that implements OrderRepository.",
+      "Run the test against the production database.",
+      "Make the repository field static.",
+      "Remove the OrderRepository interface."
+    ],
+    "answer": 0,
+    "explanation": "Because the service depends on an interface, a fake can be injected to give fast, isolated, repeatable tests.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-027",
+    "question": "Which expression completes the blank so the program prints [b, a]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.List;\nimport java.util.function.Supplier;\n\nclass Collector {\n    private final Supplier<List<String>> factory;\n\n    Collector(Supplier<List<String>> factory) { this.factory = factory; }\n\n    List<String> collect(String... xs) {\n        List<String> out = factory.get();\n        for (String x : xs) out.add(x);\n        return out;\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Collector c = new Collector(____);\n        System.out.println(c.collect(\"b\", \"a\"));\n    }\n}",
+    "options": [
+      "new ArrayList<>()",
+      "HashSet::new",
+      "ArrayList::size",
+      "ArrayList::new"
+    ],
+    "answer": 3,
+    "explanation": "The constructor expects a Supplier of a List, so a constructor reference ArrayList::new fits. A plain new expression is not a Supplier, HashSet is not a List, and size is not a supplier of lists.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-028",
+    "question": "Which statement best distinguishes Inversion of Control from the Dependency Inversion Principle?",
+    "options": [
+      "They are the same concept with different names.",
+      "IoC is only about threading; DIP is only about generics.",
+      "DIP applies only to frameworks; IoC applies only to libraries.",
+      "IoC means a framework or caller controls flow or object creation; DIP is a rule about which direction source dependencies point."
+    ],
+    "answer": 3,
+    "explanation": "IoC is about who calls whom or who creates objects. DIP is about the direction of source-code dependencies. They often appear together but are different ideas.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-029",
+    "question": "Does using a framework that injects fields automatically guarantee DIP is satisfied?",
+    "options": [
+      "Yes, any injection satisfies DIP.",
+      "Yes, but only for private fields.",
+      "No; if the fields are typed to concrete classes, the code still depends on details.",
+      "No, because frameworks cannot inject interfaces."
+    ],
+    "answer": 2,
+    "explanation": "DIP concerns the types a class depends on, not whether a container injects them. Injecting a concrete class still couples high-level code to a detail.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-030",
+    "question": "Why does OrderService still violate DIP even though the repository is injected?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class MySqlRepo {\n    void save(String s) { System.out.println(\"saved \" + s); }\n}\n\nclass OrderService {\n    private final MySqlRepo repo;\n\n    OrderService(MySqlRepo repo) { this.repo = repo; }\n\n    void place(String s) { repo.save(s); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new OrderService(new MySqlRepo()).place(\"A\");\n    }\n}",
+    "options": [
+      "Because the field is final.",
+      "Because the constructor has a parameter.",
+      "Because place() is not static.",
+      "It depends on the concrete MySqlRepo type rather than on an abstraction."
+    ],
+    "answer": 3,
+    "explanation": "Injection is only a delivery mechanism. The declared type decides what the class depends on, so using MySqlRepo ties it to that implementation.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-031",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.HashMap;\nimport java.util.Map;\n\ninterface Repo {\n    String find(int id);\n}\n\nclass DbRepo implements Repo {\n    int calls = 0;\n\n    public String find(int id) {\n        calls++;\n        return \"u\" + id;\n    }\n}\n\nclass CachingRepo implements Repo {\n    private final Repo real;\n    private final Map<Integer, String> cache = new HashMap<>();\n\n    CachingRepo(Repo real) { this.real = real; }\n\n    public String find(int id) {\n        return cache.computeIfAbsent(id, real::find);\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        DbRepo db = new DbRepo();\n        Repo r = new CachingRepo(db);\n        r.find(1);\n        r.find(1);\n        r.find(2);\n        System.out.println(db.calls);\n    }\n}",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "0"
+    ],
+    "answer": 1,
+    "explanation": "CachingRepo wraps a Repo and caches by id. find(1) misses and calls the real repo, the second find(1) hits the cache, and find(2) misses, so the real repo is called twice. The decorator can be added without changing clients because both implement Repo.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-032",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Objects;\n\nclass Service {\n    private final Object repo;\n\n    Service(Object repo) {\n        this.repo = Objects.requireNonNull(repo, \"repo\");\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        try {\n            new Service(null);\n        } catch (NullPointerException e) {\n            System.out.println(\"fail: \" + e.getMessage());\n        }\n    }\n}",
+    "options": [
+      "fail: null",
+      "Nothing is printed",
+      "fail: repo",
+      "Compilation fails"
+    ],
+    "answer": 2,
+    "explanation": "Objects.requireNonNull throws NullPointerException with the given message when the argument is null, so the constructor fails fast with a clear message. Failing early avoids a confusing NullPointerException later.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-033",
+    "question": "Which phrase is most associated with Inversion of Control?",
+    "options": [
+      "Always call new yourself.",
+      "Don't call us, we'll call you.",
+      "Never call any method.",
+      "Call everything statically."
+    ],
+    "answer": 1,
+    "explanation": "With IoC, a framework or container calls your code and supplies collaborators, instead of your code controlling creation and flow.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-034",
+    "question": "Pseudocode convention: resolve(X) first resolves every dependency of X in order, and then creates X. In which order are objects created by resolve(Service)?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "Service needs Repo\nRepo needs Config\nConfig needs nothing\n\nresolve(X):\n    for each dependency D of X:\n        resolve(D)\n    create X\n\nresolve(Service)",
+    "options": [
+      "Service, Repo, Config",
+      "Repo, Config, Service",
+      "Config, Repo, Service",
+      "Config, Service, Repo"
+    ],
+    "answer": 2,
+    "explanation": "Service needs Repo, which needs Config. Config has no dependencies so it is created first, then Repo, then Service. This is how DI containers order creation.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-035",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\ninterface Validator {\n    boolean ok(String s);\n}\n\nclass Form {\n    private final List<Validator> rules;\n\n    Form(List<Validator> rules) { this.rules = rules; }\n\n    int failures(String s) {\n        int n = 0;\n        for (Validator v : rules) {\n            if (!v.ok(s)) n++;\n        }\n        return n;\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Form f = new Form(List.of(\n            s -> !s.isEmpty(),\n            s -> s.length() <= 3,\n            s -> s.startsWith(\"a\")));\n        System.out.println(f.failures(\"abcd\"));\n    }\n}",
+    "options": [
+      "1",
+      "0",
+      "2",
+      "3"
+    ],
+    "answer": 0,
+    "explanation": "The Form receives its rules as a list. For abcd, the non-empty rule and the starts-with-a rule pass, and only the length-at-most-3 rule fails, so one failure is counted. New rules can be added without editing Form.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-036",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Repo {\n    void save(String s);\n}\n\nclass Service {\n    private final Repo repo;\n\n    Service() { }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new Service();\n    }\n}",
+    "options": [
+      "Repo must be an abstract class.",
+      "The final field repo is never assigned in the constructor.",
+      "Service must declare a setRepo method.",
+      "Interfaces cannot be used as field types."
+    ],
+    "answer": 1,
+    "explanation": "A blank final field must be definitely assigned by the end of every constructor. A constructor that receives the dependency, rather than leaving it unset, solves this.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-037",
+    "question": "A high-level class needs to create short-lived dependency instances on demand without knowing the concrete class. Which approach follows DIP?",
+    "options": [
+      "Call new on the concrete class inside the method.",
+      "Store the instances in a static field.",
+      "Use reflection with a hard-coded class name.",
+      "Inject a factory such as Supplier<Dependency> and call it when needed."
+    ],
+    "answer": 3,
+    "explanation": "A factory abstraction lets the composition root decide which implementation is produced while the class depends only on the interface.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-038",
+    "question": "Which package dependency is consistent with DIP in a layered application?",
+    "options": [
+      "The domain package depends on the persistence package.",
+      "The persistence package depends on the domain package that holds the repository interface.",
+      "The domain package depends on the web package.",
+      "The domain package depends on the JDBC driver package."
+    ],
+    "answer": 1,
+    "explanation": "The core domain should not know about infrastructure. The infrastructure implements interfaces defined in the domain, so the arrow points inward.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-039",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.List;\n\ninterface Mailer {\n    void send(String to);\n}\n\nclass FakeMailer implements Mailer {\n    final List<String> sent = new ArrayList<>();\n\n    public void send(String to) { sent.add(to); }\n}\n\nclass Signup {\n    private final Mailer mailer;\n\n    Signup(Mailer mailer) { this.mailer = mailer; }\n\n    void register(String user) {\n        if (user.contains(\"@\")) mailer.send(user);\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        FakeMailer f = new FakeMailer();\n        Signup s = new Signup(f);\n        s.register(\"a@x.com\");\n        s.register(\"bob\");\n        s.register(\"c@y.org\");\n        System.out.println(f.sent);\n    }\n}",
+    "options": [
+      "[a@x.com, bob, c@y.org]",
+      "[a@x.com, c@y.org]",
+      "[bob]",
+      "[]"
+    ],
+    "answer": 1,
+    "explanation": "The fake mailer records recipients. Signup only sends when the user contains @, so bob is skipped. A fake lets a test verify behavior without sending real email.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-040",
+    "question": "Does DIP forbid using the new keyword anywhere in an application?",
+    "options": [
+      "No; creating simple value objects and wiring in the composition root is fine, and the concern is high-level code creating volatile low-level dependencies.",
+      "Yes, new must never be used.",
+      "Yes, except inside static methods.",
+      "No, but only inside interfaces."
+    ],
+    "answer": 0,
+    "explanation": "DIP does not ban object creation. It asks that policy classes not construct and depend on volatile details directly.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-041",
+    "question": "What is the output? (Java 17)",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.List;\n\ninterface Repository<T> {\n    void save(T t);\n    int count();\n}\n\nclass InMemoryRepository<T> implements Repository<T> {\n    private final List<T> items = new ArrayList<>();\n\n    public void save(T t) { items.add(t); }\n\n    public int count() { return items.size(); }\n}\n\nrecord User(String name) { }\n\npublic class Example {\n    public static void main(String[] args) {\n        Repository<User> r = new InMemoryRepository<>();\n        r.save(new User(\"a\"));\n        r.save(new User(\"a\"));\n        System.out.println(r.count());\n    }\n}",
+    "options": [
+      "2",
+      "1",
+      "0",
+      "Compilation fails"
+    ],
+    "answer": 0,
+    "explanation": "Records implement equals by value, but a List keeps duplicates, so saving two equal users yields a count of 2. The caller only uses the Repository interface.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-042",
+    "question": "Pseudocode convention: Design A creates a Connection inside run(); Design B receives one Connection in the Service constructor. After run() is called 4 times, how many Connection objects were created in Design A and Design B?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "Design A:\n    class Service:\n        run(): conn = new Connection(); conn.use()\n\nDesign B:\n    class Service:\n        constructor(conn): this.conn = conn\n        run(): this.conn.use()\n\ncontroller creates one Service and calls run() 4 times",
+    "options": [
+      "1 and 4",
+      "4 and 4",
+      "1 and 1",
+      "4 and 1"
+    ],
+    "answer": 3,
+    "explanation": "Design A creates a new Connection on every call, giving 4. Design B uses the single injected Connection, so only 1 exists. Injection also gives the composition root control over lifetime.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-043",
+    "question": "A class has constructor parameters for nine different collaborators. What does this most likely indicate?",
+    "options": [
+      "The class correctly follows DIP and needs no change.",
+      "Constructor injection cannot be used with that many fields.",
+      "The class probably has too many responsibilities and violates SRP.",
+      "The class must be made static."
+    ],
+    "answer": 2,
+    "explanation": "A long list of dependencies is a design smell. The class is likely doing too much and should be split.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-044",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Greeter {\n    String hi();\n\n    static Greeter of(String lang) {\n        return lang.equals(\"fr\") ? () -> \"Salut\" : () -> \"Hello\";\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(Greeter.of(\"fr\").hi() + \" \" + Greeter.of(\"de\").hi());\n    }\n}",
+    "options": [
+      "Salut Hello",
+      "Hello Salut",
+      "Salut Salut",
+      "Hello Hello"
+    ],
+    "answer": 0,
+    "explanation": "The static factory method returns an implementation chosen by language. Greeter.of(fr) gives the French lambda and any other code gives the English one, so the output is Salut Hello. Callers only see the Greeter interface.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Comparator;\nimport java.util.TreeSet;\n\npublic class Example {\n    public static void main(String[] args) {\n        TreeSet<String> set = new TreeSet<>(Comparator.comparingInt(String::length));\n        set.add(\"bb\");\n        set.add(\"a\");\n        set.add(\"cc\");\n        System.out.println(set);\n    }\n}",
+    "options": [
+      "[a, bb, cc]",
+      "[a, cc, bb]",
+      "[cc, bb, a]",
+      "[a, bb]"
+    ],
+    "answer": 3,
+    "explanation": "The injected comparator orders by length and TreeSet uses it to decide equality. bb and cc compare as equal, so cc is treated as a duplicate and is not added. An injected strategy can change not just ordering but also what counts as a duplicate.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-046",
+    "question": "What does java.util.ServiceLoader provide that supports DIP?",
+    "options": [
+      "It compiles interfaces into classes.",
+      "It discovers implementations of a service interface at runtime without the client naming the concrete class.",
+      "It forces all services to be singletons.",
+      "It replaces the need for any interface."
+    ],
+    "answer": 1,
+    "explanation": "ServiceLoader lets code depend only on a service interface while implementations are supplied by the runtime environment.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-047",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Repo {\n    void save(String s);\n}\n\nclass Service {\n    private final Repo repo = null;\n\n    void setRepo(Repo repo) { this.repo = repo; }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        new Service();\n    }\n}",
+    "options": [
+      "A final field cannot be reassigned outside construction, so it cannot be set through a setter.",
+      "Setter methods cannot be void.",
+      "Repo must be a class, not an interface.",
+      "The constructor is missing."
+    ],
+    "answer": 0,
+    "explanation": "Setter injection needs a non-final field. If the dependency is required, prefer constructor injection and keep the field final.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-048",
+    "question": "Which injection style fits an optional dependency best?",
+    "options": [
+      "Constructor injection that rejects null.",
+      "A static global variable.",
+      "Setter injection, because the object works without it.",
+      "A final field with no assignment."
+    ],
+    "answer": 2,
+    "explanation": "Optional collaborators can be provided later through a setter, whereas required ones should arrive through the constructor.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-049",
+    "question": "Which test double returns pre-programmed answers without verifying how it was called?",
+    "options": [
+      "Mock",
+      "Stub",
+      "Spy",
+      "Dummy"
+    ],
+    "answer": 1,
+    "explanation": "A stub supplies canned responses. A mock also verifies interactions, a spy wraps a real object and records calls, and a dummy is passed in but never used.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-dependency-inversion-050",
+    "question": "Which statement best summarizes how to apply DIP in Java?",
+    "options": [
+      "Use static factories everywhere.",
+      "Program to interfaces owned by the client, receive implementations from outside (usually via the constructor), and wire them in the composition root.",
+      "Create every dependency inside the class with new.",
+      "Make every class final and avoid interfaces."
+    ],
+    "answer": 1,
+    "explanation": "DIP is achieved by depending on abstractions, passing implementations in rather than creating them, and centralizing wiring.",
+    "subtopic": "Dependency inversion"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-001",
+    "question": "What is the primary intent of the Builder pattern?",
+    "options": [
+      "Provide a single global instance of a class.",
+      "Convert one interface into another.",
+      "Define a family of interchangeable algorithms.",
+      "Construct a complex object step by step, separating construction from the final representation."
+    ],
+    "answer": 3,
+    "explanation": "Builder lets you assemble an object from many parts or options in readable steps and produce the finished product at the end.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-002",
+    "question": "Which problem does the Builder pattern most directly address?",
+    "options": [
+      "Constructors with many parameters, many of them optional, that lead to unreadable telescoping calls.",
+      "Classes that cannot be subclassed.",
+      "Objects that must be shared between threads.",
+      "Methods that return null."
+    ],
+    "answer": 0,
+    "explanation": "A telescoping constructor such as new Pizza(12, true, false, true, false) is hard to read and easy to get wrong. A builder names each option.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-003",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Pizza {\n    private final int size;\n    private final boolean cheese;\n    private final boolean olives;\n\n    private Pizza(Builder b) {\n        this.size = b.size;\n        this.cheese = b.cheese;\n        this.olives = b.olives;\n    }\n\n    @Override\n    public String toString() {\n        return \"Pizza{size=\" + size + \", cheese=\" + cheese + \", olives=\" + olives + \"}\";\n    }\n\n    static class Builder {\n        private int size = 10;\n        private boolean cheese;\n        private boolean olives;\n\n        Builder size(int size) { this.size = size; return this; }\n        Builder cheese(boolean cheese) { this.cheese = cheese; return this; }\n        Builder olives(boolean olives) { this.olives = olives; return this; }\n        Pizza build() { return new Pizza(this); }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Pizza p = new Pizza.Builder().size(12).cheese(true).build();\n        System.out.println(p);\n    }\n}",
+    "options": [
+      "Pizza{size=10, cheese=true, olives=false}",
+      "Pizza{size=12, cheese=false, olives=false}",
+      "Pizza{size=12, cheese=true, olives=false}",
+      "Compilation fails"
+    ],
+    "answer": 2,
+    "explanation": "The builder starts with default size 10, then size(12) and cheese(true) change those values. olives keeps its default false. Each setter returns this, so the calls chain, and build() creates the Pizza from the builder state.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-004",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Config {\n    static class Builder {\n        private int port;\n        private String host;\n\n        void port(int port) { this.port = port; }\n\n        Builder host(String host) {\n            this.host = host;\n            return this;\n        }\n\n        Config build() { return new Config(); }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Config c = new Config.Builder().port(80).host(\"h\").build();\n    }\n}",
+    "options": [
+      "host must be declared static.",
+      "Builder must be a top-level class.",
+      "build() must return void.",
+      "port() returns void, so the chain cannot continue with .host(...)."
+    ],
+    "answer": 3,
+    "explanation": "A fluent builder requires each step to return the builder (usually this). Calling a method on a void result is a compile-time error.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-005",
+    "question": "Which statement completes the method so that the program prints a=5,b=7?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Settings {\n    final int a, b;\n\n    private Settings(int a, int b) {\n        this.a = a;\n        this.b = b;\n    }\n\n    static class Builder {\n        private int a, b;\n\n        Builder a(int a) {\n            this.a = a;\n            ____\n        }\n\n        Builder b(int b) {\n            this.b = b;\n            return this;\n        }\n\n        Settings build() { return new Settings(a, b); }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Settings s = new Settings.Builder().a(5).b(7).build();\n        System.out.println(\"a=\" + s.a + \",b=\" + s.b);\n    }\n}",
+    "options": [
+      "return this;",
+      "return null;",
+      "return new Builder();",
+      "return;"
+    ],
+    "answer": 0,
+    "explanation": "A fluent setter must return the same builder so earlier values are kept. Returning null causes a NullPointerException, a new Builder loses the stored a value, and a bare return does not compile in a method returning Builder.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-006",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class User {\n    private final String name;\n\n    private User(String name) { this.name = name; }\n\n    static class Builder {\n        private String name;\n\n        Builder name(String name) {\n            this.name = name;\n            return this;\n        }\n\n        User build() {\n            if (name == null || name.isBlank()) {\n                throw new IllegalStateException(\"name required\");\n            }\n            return new User(name);\n        }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        try {\n            new User.Builder().name(\" \").build();\n            System.out.println(\"built\");\n        } catch (IllegalStateException e) {\n            System.out.println(\"invalid: \" + e.getMessage());\n        }\n    }\n}",
+    "options": [
+      "built",
+      "invalid: null",
+      "Nothing is printed",
+      "invalid: name required"
+    ],
+    "answer": 3,
+    "explanation": "build() validates the collected state before creating the object. A blank name triggers IllegalStateException, which is caught and printed. Validating in build() prevents invalid objects from ever existing.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-007",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        String s = new StringBuilder()\n            .append(\"a\")\n            .append(1)\n            .append('b')\n            .reverse()\n            .toString();\n        System.out.println(s);\n    }\n}",
+    "options": [
+      "a1b",
+      "b1a",
+      "ab1",
+      "1ab"
+    ],
+    "answer": 1,
+    "explanation": "StringBuilder is a familiar builder: each append adds to the same buffer, giving a1b. reverse() then reverses it to b1a before toString() produces the final String.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-008",
+    "question": "Why do immutable classes often combine a private constructor with a nested Builder?",
+    "options": [
+      "It makes the class thread-hostile.",
+      "It allows fields to be modified after construction.",
+      "It removes the need for any validation.",
+      "The builder collects values, and the object is created fully initialized with final fields only through build()."
+    ],
+    "answer": 3,
+    "explanation": "Immutability needs all state set at construction. The builder gathers optional values in steps and hands them to the private constructor in one go.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-009",
+    "question": "Which statement correctly compares JavaBeans-style setters with the Builder pattern?",
+    "options": [
+      "Setters make objects immutable; builders do not.",
+      "A builder cannot validate input.",
+      "Setters can leave an object partially configured between calls, while a builder can validate everything in build().",
+      "Setters guarantee that all required fields are set."
+    ],
+    "answer": 2,
+    "explanation": "With setters the object exists in an inconsistent state until all calls are made. A builder keeps the object unavailable until it is complete and valid.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.List;\n\nclass Order {\n    private final List<String> items;\n\n    Order(List<String> items) { this.items = items; }\n\n    int size() { return items.size(); }\n}\n\nclass OrderBuilder {\n    private final List<String> items = new ArrayList<>();\n\n    OrderBuilder add(String s) {\n        items.add(s);\n        return this;\n    }\n\n    Order build() { return new Order(items); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        OrderBuilder b = new OrderBuilder().add(\"a\");\n        Order o = b.build();\n        b.add(\"b\");\n        System.out.println(o.size());\n    }\n}",
+    "options": [
+      "2",
+      "1",
+      "0",
+      "Compilation fails"
+    ],
+    "answer": 0,
+    "explanation": "build() passes the builder's own list reference to the Order without copying it. When the builder later adds b, the Order sees the change, so size() is 2. A builder must make a defensive copy of mutable state to keep the product immutable.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-011",
+    "question": "A Java 17 record has eight components, and callers often confuse the order of its arguments. Which approach best improves readability?",
+    "options": [
+      "Replace the record with a class that has public fields.",
+      "Make all components Object so order does not matter.",
+      "Provide a builder with named steps that calls the record's canonical constructor.",
+      "Add a second record with the same components."
+    ],
+    "answer": 2,
+    "explanation": "The positional canonical constructor is easy to misuse when many components share types. A builder gives each value a name while the record still keeps data immutable.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-012",
+    "question": "In the classic GoF Builder pattern, which participant orchestrates the order of the construction steps?",
+    "options": [
+      "Product",
+      "Adapter",
+      "Prototype",
+      "Director"
+    ],
+    "answer": 3,
+    "explanation": "The Director calls the Builder's steps in a particular sequence, while the Builder creates the parts and the Product is the result. Fluent builders in Java often merge the director's role into the caller.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-013",
+    "question": "What is the intent of the Factory Method pattern?",
+    "options": [
+      "Provide one shared instance of a class.",
+      "Attach extra behavior to an object dynamically.",
+      "Define an interface for creating an object but let subclasses decide which class to instantiate.",
+      "Break a request into a chain of handlers."
+    ],
+    "answer": 2,
+    "explanation": "Factory Method defers instantiation to subclasses, so the creator works against the product interface without knowing the concrete class.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Shape {\n    String name();\n}\n\nclass Circle implements Shape {\n    public String name() { return \"circle\"; }\n}\n\nclass Square implements Shape {\n    public String name() { return \"square\"; }\n}\n\nclass ShapeFactory {\n    static Shape create(String type) {\n        if (type.equals(\"circle\")) return new Circle();\n        return new Square();\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(ShapeFactory.create(\"circle\").name() + \" \" + ShapeFactory.create(\"other\").name());\n    }\n}",
+    "options": [
+      "circle circle",
+      "circle square",
+      "square square",
+      "square circle"
+    ],
+    "answer": 1,
+    "explanation": "create(circle) returns a Circle, and every other value, including other, falls through to Square. The factory hides the concrete classes from callers.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-015",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        Integer a = Integer.valueOf(127);\n        Integer b = Integer.valueOf(127);\n        Integer c = Integer.valueOf(128);\n        Integer d = Integer.valueOf(128);\n        System.out.println((a == b) + \" \" + (c == d));\n    }\n}",
+    "options": [
+      "true true",
+      "false false",
+      "false true",
+      "true false"
+    ],
+    "answer": 3,
+    "explanation": "Integer.valueOf is a static factory that caches instances for values from -128 to 127, so 127 returns the same object while 128 creates new ones. Comparing references with == therefore gives true and false. Use equals for value comparison.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Optional;\n\npublic class Example {\n    public static void main(String[] args) {\n        try {\n            Optional.of(null);\n        } catch (NullPointerException e) {\n            System.out.print(\"NPE \");\n        }\n        System.out.println(Optional.ofNullable(null).isPresent());\n    }\n}",
+    "options": [
+      "false",
+      "NPE false",
+      "NPE true",
+      "Compilation fails"
+    ],
+    "answer": 1,
+    "explanation": "Optional.of(null) throws NullPointerException because of its non-null contract, so NPE is printed. Optional.ofNullable(null) returns an empty Optional, so isPresent is false. Different factory methods express different contracts.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Button {\n    String label();\n}\n\nclass HtmlButton implements Button {\n    public String label() { return \"html\"; }\n}\n\nclass WinButton implements Button {\n    public String label() { return \"win\"; }\n}\n\nabstract class Dialog {\n    abstract Button createButton();\n\n    String render() { return \"[\" + createButton().label() + \"]\"; }\n}\n\nclass WebDialog extends Dialog {\n    Button createButton() { return new HtmlButton(); }\n}\n\nclass WinDialog extends Dialog {\n    Button createButton() { return new WinButton(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new WebDialog().render() + new WinDialog().render());\n    }\n}",
+    "options": [
+      "[win][html]",
+      "[html]",
+      "[html][win]",
+      "Compilation fails"
+    ],
+    "answer": 2,
+    "explanation": "render() in the base class calls the factory method createButton(), which each subclass overrides to return its own button type. WebDialog yields html and WinDialog yields win, in the order they are concatenated.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-018",
+    "question": "Which pattern creates families of related objects without specifying their concrete classes?",
+    "options": [
+      "Builder",
+      "Adapter",
+      "Strategy",
+      "Abstract Factory"
+    ],
+    "answer": 3,
+    "explanation": "An Abstract Factory provides an interface for creating a whole set of related products, such as a matching button and checkbox for one look and feel.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-019",
+    "question": "Which code completes the default branch so the program prints unknown tri?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Shape {\n    String name();\n}\n\nclass Circle implements Shape {\n    public String name() { return \"circle\"; }\n}\n\nclass Square implements Shape {\n    public String name() { return \"square\"; }\n}\n\npublic class Example {\n    static Shape create(String type) {\n        return switch (type) {\n            case \"circle\" -> new Circle();\n            case \"square\" -> new Square();\n            default -> ____;\n        };\n    }\n\n    public static void main(String[] args) {\n        try {\n            create(\"tri\").name();\n        } catch (IllegalArgumentException e) {\n            System.out.println(\"unknown \" + e.getMessage());\n        }\n    }\n}",
+    "options": [
+      "null",
+      "return null",
+      "throw new IllegalArgumentException(type)",
+      "new Circle()"
+    ],
+    "answer": 2,
+    "explanation": "An unknown type should be rejected, and a throw expression is allowed in a switch arm. Returning null would make name() fail with an uncaught NullPointerException, return is not allowed in a switch expression arm, and returning a Circle would silently hide the error.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-020",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "abstract class Shape {\n    abstract String name();\n}\n\nclass Circle extends Shape {\n    String name() { return \"circle\"; }\n}\n\nclass ShapeFactory {\n    static Shape create() {\n        return new Shape();\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(ShapeFactory.create().name());\n    }\n}",
+    "options": [
+      "Factory methods cannot be static.",
+      "The factory tries to instantiate the abstract class Shape instead of a concrete subclass.",
+      "Circle must be declared final.",
+      "name() must be public."
+    ],
+    "answer": 1,
+    "explanation": "An abstract class cannot be instantiated. A factory has to return an instance of a concrete subtype such as new Circle().",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-021",
+    "question": "When is a factory preferable to calling new directly?",
+    "options": [
+      "When the class has no constructors.",
+      "When the concrete type depends on runtime conditions or should be hidden from callers.",
+      "When performance is the only concern.",
+      "When the class is final and has no fields."
+    ],
+    "answer": 1,
+    "explanation": "Factories centralize creation logic, let you return different implementations, and keep callers dependent only on the abstraction.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-022",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Map;\nimport java.util.function.Supplier;\n\ninterface Shape {\n    String name();\n}\n\nclass Circle implements Shape {\n    public String name() { return \"circle\"; }\n}\n\nclass Square implements Shape {\n    public String name() { return \"square\"; }\n}\n\npublic class Example {\n    private static final Map<String, Supplier<Shape>> REGISTRY =\n        Map.of(\"c\", Circle::new, \"s\", Square::new);\n\n    static Shape create(String key) {\n        return REGISTRY.get(key).get();\n    }\n\n    public static void main(String[] args) {\n        System.out.println(create(\"s\").name());\n    }\n}",
+    "options": [
+      "circle",
+      "Compilation fails",
+      "square",
+      "NullPointerException"
+    ],
+    "answer": 2,
+    "explanation": "The registry maps keys to Suppliers, so create(s) looks up the Square supplier and calls get(), returning a new Square. New products can be added by registering a supplier without editing create().",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-023",
+    "question": "Why are constructors of a product class often made private or package-private when a factory exists?",
+    "options": [
+      "To make the class abstract.",
+      "To prevent the class from having methods.",
+      "To allow multiple inheritance.",
+      "To force callers to go through the factory so creation logic stays centralized."
+    ],
+    "answer": 3,
+    "explanation": "If anyone can call the constructor, they can bypass caching, validation, or subtype selection performed by the factory.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-024",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "enum Level {\n    LOW, HIGH;\n\n    static Level from(int score) {\n        return score < 5 ? LOW : HIGH;\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(Level.from(7) + \" \" + Level.from(2));\n    }\n}",
+    "options": [
+      "LOW HIGH",
+      "HIGH LOW",
+      "HIGH HIGH",
+      "LOW LOW"
+    ],
+    "answer": 1,
+    "explanation": "The static factory from() returns HIGH for scores of at least 5 and LOW otherwise, so 7 gives HIGH and 2 gives LOW. Enum constants are created once and shared.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-025",
+    "question": "What is the intent of the Strategy pattern?",
+    "options": [
+      "Provide a simplified interface to a complex subsystem.",
+      "Define a family of algorithms, encapsulate each one, and make them interchangeable.",
+      "Ensure a class has only one instance.",
+      "Create objects without specifying their class."
+    ],
+    "answer": 1,
+    "explanation": "Strategy lets a client choose or switch an algorithm at runtime by depending on a common interface.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-026",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.Comparator;\nimport java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        List<String> words = new ArrayList<>(List.of(\"pear\", \"fig\", \"apple\"));\n        words.sort(Comparator.comparingInt(String::length));\n        System.out.println(words);\n    }\n}",
+    "options": [
+      "[apple, fig, pear]",
+      "[pear, fig, apple]",
+      "[fig, pear, apple]",
+      "[apple, pear, fig]"
+    ],
+    "answer": 2,
+    "explanation": "The Comparator is a strategy passed to sort. Ordering by length ascending gives fig (3), pear (4), apple (5).",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-027",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Op {\n    int apply(int[] xs);\n}\n\nclass Sum implements Op {\n    public int apply(int[] xs) {\n        int t = 0;\n        for (int x : xs) t += x;\n        return t;\n    }\n}\n\nclass Product implements Op {\n    public int apply(int[] xs) {\n        int t = 1;\n        for (int x : xs) t *= x;\n        return t;\n    }\n}\n\nclass Calc {\n    private Op op;\n\n    Calc(Op op) { this.op = op; }\n\n    void setOp(Op op) { this.op = op; }\n\n    int run(int[] xs) { return op.apply(xs); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        int[] data = {1, 2, 3, 4};\n        Calc c = new Calc(new Sum());\n        int a = c.run(data);\n        c.setOp(new Product());\n        System.out.println(a + \" \" + c.run(data));\n    }\n}",
+    "options": [
+      "10 24",
+      "10 10",
+      "24 24",
+      "24 10"
+    ],
+    "answer": 0,
+    "explanation": "The first run uses Sum on 1, 2, 3, 4, giving 10. After setOp installs Product, the same Calc object computes 1*2*3*4 = 24. Swapping strategies changes behavior without changing Calc.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-028",
+    "question": "Which lambda completes the blank so the program prints 2?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.function.IntBinaryOperator;\n\nclass Calculator {\n    private final IntBinaryOperator op;\n\n    Calculator(IntBinaryOperator op) { this.op = op; }\n\n    int run(int a, int b) { return op.applyAsInt(a, b); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Calculator c = new Calculator(____);\n        System.out.println(c.run(6, 3));\n    }\n}",
+    "options": [
+      "(a, b) -> a % b",
+      "(a, b) -> a / b",
+      "(a, b) -> a - b",
+      "a -> a / 2"
+    ],
+    "answer": 1,
+    "explanation": "run(6, 3) must produce 2, which is integer division. Remainder gives 0, subtraction gives 3, and a one-parameter lambda does not match IntBinaryOperator, so it does not compile.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-029",
+    "question": "How does the State pattern differ from the Strategy pattern?",
+    "options": [
+      "State is only used with enums; Strategy is only used with interfaces.",
+      "Strategy changes the class of the object; State does not.",
+      "They are identical in structure and purpose.",
+      "In State, the object's behavior changes as its internal state changes, often with the states switching themselves; in Strategy the client selects the algorithm."
+    ],
+    "answer": 3,
+    "explanation": "Both use composition and look similar, but State models lifecycle transitions while Strategy models interchangeable algorithms chosen from outside.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-030",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Strategy {\n    int apply(int x);\n    String name();\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Strategy s = x -> x * 2;\n        System.out.println(s.apply(4));\n    }\n}",
+    "options": [
+      "Strategy has two abstract methods, so it is not a functional interface and a lambda cannot implement it.",
+      "Lambdas cannot return int.",
+      "The variable s must be declared final.",
+      "x * 2 is not a valid expression."
+    ],
+    "answer": 0,
+    "explanation": "A lambda can only target an interface with exactly one abstract method. A second abstract method makes the interface ineligible.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-031",
+    "question": "Pseudocode convention: each value uses the first matching strategy. What is the value printed for total?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "small(x) = x * 2        // used when x < 10\nlarge(x) = x - 5        // used otherwise\nvalues = [3, 12, 9, 20]\ntotal = 0\nfor v in values:\n    if v < 10:\n        total = total + small(v)\n    else:\n        total = total + large(v)\nprint total",
+    "options": [
+      "46",
+      "38",
+      "44",
+      "52"
+    ],
+    "answer": 0,
+    "explanation": "3 uses small: 6. 12 uses large: 7. 9 uses small: 18. 20 uses large: 15. The sum is 6 + 7 + 18 + 15 = 46.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-032",
+    "question": "Shipping cost must vary by carrier, and new carriers will be added often. Which design best fits?",
+    "options": [
+      "A ShippingStrategy interface with one implementation per carrier, injected into the order logic.",
+      "A single method with a long switch on a carrier code.",
+      "One class per carrier with duplicated order code.",
+      "A static final map of hard-coded prices."
+    ],
+    "answer": 0,
+    "explanation": "Strategy isolates each pricing rule behind a common interface, so adding a carrier means adding a class rather than editing existing logic.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-033",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.function.IntUnaryOperator;\n\nenum Discount implements IntUnaryOperator {\n    NONE {\n        public int applyAsInt(int p) { return p; }\n    },\n    HALF {\n        public int applyAsInt(int p) { return p / 2; }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(Discount.HALF.applyAsInt(80) + \" \" + Discount.NONE.applyAsInt(80));\n    }\n}",
+    "options": [
+      "40 80",
+      "80 40",
+      "40 40",
+      "80 80"
+    ],
+    "answer": 0,
+    "explanation": "Each enum constant provides its own implementation of applyAsInt, so Discount works as a set of strategies. HALF divides by two to give 40 and NONE returns 80 unchanged.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-034",
+    "question": "Which strategy implementation is safest to share between many contexts and threads?",
+    "options": [
+      "One that stores the last input in an instance field.",
+      "One that mutates a shared static counter.",
+      "One that holds a non-thread-safe cache.",
+      "A stateless implementation with no mutable fields."
+    ],
+    "answer": 3,
+    "explanation": "Strategies without mutable state have no hidden coupling between callers, so a single instance can be reused safely.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-035",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.Collections;\nimport java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        List<Integer> list = new ArrayList<>(List.of(3, 1, 2));\n        Collections.sort(list, Collections.reverseOrder());\n        System.out.println(list);\n    }\n}",
+    "options": [
+      "[1, 2, 3]",
+      "[2, 1, 3]",
+      "[3, 1, 2]",
+      "[3, 2, 1]"
+    ],
+    "answer": 3,
+    "explanation": "Collections.reverseOrder() is a Comparator strategy that reverses the natural ordering, so sort places the largest first.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-036",
+    "question": "How does Strategy differ from Template Method?",
+    "options": [
+      "Strategy swaps whole algorithms through composition, while Template Method fixes a skeleton in a base class and lets subclasses override steps.",
+      "Template Method uses composition and Strategy uses inheritance.",
+      "Both require abstract classes only.",
+      "Strategy changes the order of the steps in the skeleton."
+    ],
+    "answer": 0,
+    "explanation": "Template Method relies on inheritance with a fixed algorithm outline. Strategy relies on delegating to a separate interchangeable object.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-037",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Strategy {\n    int apply(int x);\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        int factor = 2;\n        factor = 3;\n        Strategy s = x -> x * factor;\n        System.out.println(s.apply(5));\n    }\n}",
+    "options": [
+      "A variable used inside a lambda must be final or effectively final, but factor is reassigned.",
+      "Lambdas cannot use local variables.",
+      "Strategy must be an abstract class.",
+      "x * factor is not a valid expression."
+    ],
+    "answer": 0,
+    "explanation": "Lambda bodies capture local variables by value, so the variable must not change after initialization. Reassigning factor makes it not effectively final.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-038",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.function.Function;\n\npublic class Example {\n    public static void main(String[] args) {\n        Function<Integer, Integer> f = x -> x + 1;\n        Function<Integer, Integer> g = x -> x * 2;\n        System.out.println(f.andThen(g).apply(3) + \" \" + f.compose(g).apply(3));\n    }\n}",
+    "options": [
+      "7 8",
+      "8 8",
+      "7 7",
+      "8 7"
+    ],
+    "answer": 3,
+    "explanation": "f.andThen(g) applies f first, then g: (3 + 1) * 2 = 8. f.compose(g) applies g first, then f: 3 * 2 + 1 = 7. Combining small strategies is a common functional style.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-039",
+    "question": "What is the intent of the Adapter pattern?",
+    "options": [
+      "Ensure a class has exactly one instance.",
+      "Convert the interface of an existing class into the interface that clients expect.",
+      "Add responsibilities to an object without changing its interface.",
+      "Provide a simplified entry point to a subsystem."
+    ],
+    "answer": 1,
+    "explanation": "An adapter lets classes with incompatible interfaces work together by translating calls from the expected interface to the existing one.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-040",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Printer {\n    void print(String s);\n}\n\nclass LegacyPrinter {\n    void printText(String t) { System.out.println(\"LEGACY:\" + t); }\n}\n\nclass PrinterAdapter implements Printer {\n    private final LegacyPrinter legacy;\n\n    PrinterAdapter(LegacyPrinter legacy) { this.legacy = legacy; }\n\n    public void print(String s) { legacy.printText(s); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Printer p = new PrinterAdapter(new LegacyPrinter());\n        p.print(\"hi\");\n    }\n}",
+    "options": [
+      "hi",
+      "LEGACY:",
+      "LEGACY:hi",
+      "Compilation fails"
+    ],
+    "answer": 2,
+    "explanation": "The client calls print on the Printer interface, and the adapter translates that call into printText on the legacy class, which adds its prefix.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-041",
+    "question": "Which statement correctly contrasts an object adapter with a class adapter in Java?",
+    "options": [
+      "A class adapter holds a reference, and an object adapter inherits.",
+      "Object adapters cannot implement the target interface.",
+      "An object adapter holds a reference to the adaptee and can work with its subclasses, while a class adapter inherits from the adaptee and Java allows only one superclass.",
+      "Both require multiple class inheritance."
+    ],
+    "answer": 2,
+    "explanation": "Object adapters use composition, which is the usual choice in Java. Class adapters rely on inheritance from the adaptee, which limits flexibility.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-042",
+    "question": "Which JDK class acts as an adapter between byte streams and character streams?",
+    "options": [
+      "java.io.BufferedInputStream",
+      "java.io.InputStreamReader",
+      "java.io.ByteArrayOutputStream",
+      "java.io.ObjectOutputStream"
+    ],
+    "answer": 1,
+    "explanation": "InputStreamReader adapts an InputStream, a byte-oriented source, to the Reader interface by decoding bytes into characters.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-043",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Arrays;\nimport java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        String[] arr = {\"a\", \"b\"};\n        List<String> list = Arrays.asList(arr);\n        list.set(0, \"z\");\n        System.out.print(arr[0] + \" \" + list.size());\n        try {\n            list.add(\"c\");\n        } catch (UnsupportedOperationException e) {\n            System.out.println(\" fixed\");\n        }\n    }\n}",
+    "options": [
+      "z 2 fixed",
+      "a 2 fixed",
+      "z 3",
+      "z 2"
+    ],
+    "answer": 0,
+    "explanation": "Arrays.asList returns a fixed-size list view backed by the array. set(0, z) writes through to the array, so arr[0] is z, and size is 2. add is unsupported because the size cannot change, so the exception is caught and fixed is printed.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-044",
+    "question": "Which expression completes the blank so the program prints ab?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Enumeration;\nimport java.util.Iterator;\nimport java.util.List;\nimport java.util.Vector;\n\nclass EnumerationIterator<T> implements Iterator<T> {\n    private final Enumeration<T> e;\n\n    EnumerationIterator(Enumeration<T> e) { this.e = e; }\n\n    public boolean hasNext() { return ____; }\n\n    public T next() { return e.nextElement(); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        Vector<String> v = new Vector<>(List.of(\"a\", \"b\"));\n        Iterator<String> it = new EnumerationIterator<>(v.elements());\n        while (it.hasNext()) {\n            System.out.print(it.next());\n        }\n    }\n}",
+    "options": [
+      "e.hasMoreElements()",
+      "e.hasNext()",
+      "!e.hasMoreElements()",
+      "e.nextElement() != null"
+    ],
+    "answer": 0,
+    "explanation": "The adapter translates Iterator.hasNext into Enumeration.hasMoreElements. Enumeration has no hasNext method, the negation ends the loop immediately, and calling nextElement inside hasNext would consume elements and eventually throw an exception.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Thermometer {\n    double celsius();\n}\n\nclass OldThermometer {\n    double fahrenheit() { return 212.0; }\n}\n\nclass ThermometerAdapter implements Thermometer {\n    private final OldThermometer old;\n\n    ThermometerAdapter(OldThermometer old) { this.old = old; }\n\n    public double celsius() { return (old.fahrenheit() - 32) * (5 / 9); }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        System.out.println(new ThermometerAdapter(new OldThermometer()).celsius());\n    }\n}",
+    "options": [
+      "100.0",
+      "0.0",
+      "Compilation fails",
+      "ArithmeticException"
+    ],
+    "answer": 1,
+    "explanation": "The expression 5 / 9 is integer division of two int literals, which gives 0, so the whole result is 180.0 * 0 = 0.0. The adapter should use 5.0 / 9 or multiply before dividing. Adapters must translate values correctly as well as signatures.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-046",
+    "question": "How does the Facade pattern differ from the Adapter pattern?",
+    "options": [
+      "Facade converts return types; Adapter hides subsystems.",
+      "Facade provides a new, simpler interface to a subsystem, while Adapter makes an existing interface match one a client already expects.",
+      "Adapter is always used for databases; Facade is always used for GUIs.",
+      "They are identical."
+    ],
+    "answer": 1,
+    "explanation": "A facade reduces complexity by offering convenient entry points. An adapter reconciles incompatible interfaces without necessarily simplifying anything.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-047",
+    "question": "A third-party PaymentSdk has makePayment(double amount), but your code expects PaymentGateway.charge(int cents). What is the best approach?",
+    "options": [
+      "Edit the third-party library source.",
+      "Change every caller to use PaymentSdk directly.",
+      "Create an adapter that implements PaymentGateway, holds a PaymentSdk, and converts cents to a double amount when delegating.",
+      "Make PaymentGateway extend PaymentSdk."
+    ],
+    "answer": 2,
+    "explanation": "The adapter keeps callers independent of the SDK and does not require modifying code you do not own.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-048",
+    "question": "Why does the Adapter pattern fit the Open/Closed and Dependency Inversion Principles?",
+    "options": [
+      "Because adapters make all classes final.",
+      "Because adapters remove the need for interfaces.",
+      "Clients depend on their own target interface, and new adaptees are supported by adding adapters rather than editing clients.",
+      "Because adapters force clients to use concrete adaptees."
+    ],
+    "answer": 2,
+    "explanation": "The client code stays unchanged, and integration with a new library only needs a new adapter class implementing the expected interface.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-049",
+    "question": "Which statement about java.awt.event.WindowAdapter is accurate?",
+    "options": [
+      "It is a convenience class with empty implementations of the WindowListener methods, so subclasses override only the ones they need.",
+      "It converts a WindowListener into a Runnable.",
+      "It is the only way to listen to window events.",
+      "It is a Facade over all AWT classes."
+    ],
+    "answer": 0,
+    "explanation": "Despite its name, WindowAdapter is not a structural adapter between two interfaces. It just provides default empty methods to reduce boilerplate.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  },
+  {
+    "id": "java-object-oriented-design-common-patterns-builder-factory-strategy-adapter-050",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.io.IOException;\nimport java.io.UncheckedIOException;\n\ninterface Source {\n    String read();\n}\n\nclass LegacyReader {\n    String read() throws IOException {\n        throw new IOException(\"disk\");\n    }\n}\n\nclass SourceAdapter implements Source {\n    private final LegacyReader legacy;\n\n    SourceAdapter(LegacyReader legacy) { this.legacy = legacy; }\n\n    public String read() {\n        try {\n            return legacy.read();\n        } catch (IOException e) {\n            throw new UncheckedIOException(e);\n        }\n    }\n}\n\npublic class Example {\n    public static void main(String[] args) {\n        try {\n            new SourceAdapter(new LegacyReader()).read();\n        } catch (UncheckedIOException e) {\n            System.out.println(\"wrapped:\" + e.getCause().getMessage());\n        }\n    }\n}",
+    "options": [
+      "disk",
+      "wrapped:disk",
+      "wrapped:null",
+      "Compilation fails"
+    ],
+    "answer": 1,
+    "explanation": "The adapter translates the checked IOException thrown by the legacy class into an unchecked UncheckedIOException, so it fits an interface that declares no exceptions. The caught exception's cause message is disk. Adapters often translate exceptions as well as method signatures.",
+    "subtopic": "Common patterns: Builder, Factory, Strategy, Adapter"
+  }
+]
