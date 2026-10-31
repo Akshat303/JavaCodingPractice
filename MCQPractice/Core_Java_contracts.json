@@ -1511,5 +1511,781 @@
     "answer": 3,
     "explanation": "The equals and hashCode contract is independent of toString. A readable toString is a convenience for logs and debuggers, not a requirement.",
     "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-001",
+    "question": "Which pair of method signatures is correct for Comparable<T> and Comparator<T>?",
+    "options": [
+      "boolean compareTo(T o) in Comparable and boolean compare(T a, T b) in Comparator",
+      "int compare(T o) in Comparable and int compareTo(T a, T b) in Comparator",
+      "int compareTo(T a, T b) in Comparable and int compare(T o) in Comparator",
+      "int compareTo(T o) in Comparable and int compare(T a, T b) in Comparator"
+    ],
+    "answer": 3,
+    "explanation": "Comparable compares this object with one argument and returns an int. Comparator compares two supplied objects, so it takes two parameters. Both return an int rather than a boolean.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-002",
+    "question": "Which statement correctly distinguishes Comparable from Comparator?",
+    "options": [
+      "Comparator must be implemented by the class being sorted, while Comparable is always a separate object",
+      "Comparable can define several orderings for one class at the same time",
+      "Comparator is used only for String and wrapper classes",
+      "Comparable is implemented by the class itself to define its natural order, while a Comparator is a separate object that defines another order"
+    ],
+    "answer": 3,
+    "explanation": "A class has one natural order through Comparable. A Comparator lives outside the class, so any number of different orderings can be supplied, including for classes you cannot modify.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-003",
+    "question": "x.compareTo(y) returns a negative number. What does this mean?",
+    "options": [
+      "x is ordered after y",
+      "x and y are equal",
+      "x is ordered before y",
+      "x is null"
+    ],
+    "answer": 2,
+    "explanation": "The sign of the result is what matters: negative means this object is smaller and comes first, zero means equal in ordering, and positive means it comes later.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>(List.of(\"banana\", \"apple\", \"cherry\"));\n        Collections.sort(list);\n        System.out.println(list);\n    }\n}",
+    "options": [
+      "[apple, banana, cherry]",
+      "[banana, apple, cherry]",
+      "[cherry, banana, apple]",
+      "[apple, cherry, banana]"
+    ],
+    "answer": 0,
+    "explanation": "String implements Comparable with lexicographic order, so Collections.sort arranges the strings alphabetically.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-005",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"apple\".compareTo(\"apricot\") + \" \" + \"abc\".compareTo(\"abcde\"));\n    }\n}",
+    "options": [
+      "-1 -1",
+      "-2 -2",
+      "-2 -1",
+      "2 2"
+    ],
+    "answer": 1,
+    "explanation": "String.compareTo returns the difference of the first differing characters ('p' minus 'r' is -2) or, when one string is a prefix, the difference in lengths (3 minus 5 is -2). Only the sign is guaranteed by the contract.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-006",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> a = new ArrayList<>(List.of(\"banana\", \"Cherry\", \"apple\"));\n        List<String> b = new ArrayList<>(a);\n        Collections.sort(a);\n        b.sort(String.CASE_INSENSITIVE_ORDER);\n        System.out.println(a + \" \" + b);\n    }\n}",
+    "options": [
+      "[Cherry, apple, banana] [apple, banana, Cherry]",
+      "[apple, banana, Cherry] [apple, banana, Cherry]",
+      "[apple, banana, Cherry] [Cherry, apple, banana]",
+      "[Cherry, apple, banana] [Cherry, apple, banana]"
+    ],
+    "answer": 0,
+    "explanation": "Natural String order compares character codes, so every upper-case letter sorts before lower-case letters. String.CASE_INSENSITIVE_ORDER ignores case and gives the dictionary order.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-007",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Person {\n        int age;\n        Person(int age) { this.age = age; }\n    }\n\n    public static void main(String[] args) {\n        Set<Person> set = new TreeSet<>();\n        set.add(new Person(1));\n        System.out.println(set.size());\n    }\n}",
+    "options": [
+      "It prints 1",
+      "It prints 0",
+      "It fails to compile",
+      "A ClassCastException is thrown"
+    ],
+    "answer": 3,
+    "explanation": "Person does not implement Comparable and no Comparator was given, so TreeSet cannot order the element. TreeSet.add compares the key with itself, which casts it to Comparable and fails at run time.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-008",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Person {\n        int age;\n    }\n\n    public static void main(String[] args) {\n        List<Person> list = new ArrayList<>();\n        Collections.sort(list);\n    }\n}",
+    "options": [
+      "It compiles and sorts by age",
+      "It compiles but throws ClassCastException at run time",
+      "It compiles and leaves the list unchanged",
+      "Compile-time error because List<Person> cannot be passed to Collections.sort"
+    ],
+    "answer": 3,
+    "explanation": "Collections.sort(List<T>) requires T extends Comparable<? super T>. Person does not satisfy that bound, so the compiler rejects the call, unlike TreeSet, which fails only at run time.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "import java.util.*;\n\nclass Person implements Comparable<Person> {\n    String name;\n    int age;\n    Person(String name, int age) { this.name = name; this.age = age; }\n\n    @Override\n    public int compareTo(Person o) { return Integer.compare(age, o.age); }\n\n    @Override\n    public String toString() { return name; }\n\n    public static void main(String[] args) {\n        List<Person> list = new ArrayList<>(List.of(new Person(\"Ann\", 30), new Person(\"Bob\", 20), new Person(\"Cy\", 25)));\n        Collections.sort(list);\n        System.out.println(list);\n    }\n}",
+    "options": [
+      "[Ann, Bob, Cy]",
+      "[Ann, Cy, Bob]",
+      "[Cy, Bob, Ann]",
+      "[Bob, Cy, Ann]"
+    ],
+    "answer": 3,
+    "explanation": "compareTo orders by age ascending, so Bob (20), Cy (25), and Ann (30) are the sorted order. The printed text is the name from toString.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Num.java",
+    "code": "class Num implements Comparable<Num> {\n    int v;\n    Num(int v) { this.v = v; }\n\n    @Override\n    public int compareTo(Num o) { return v - o.v; }\n\n    public static void main(String[] args) {\n        System.out.println(new Num(Integer.MAX_VALUE).compareTo(new Num(-1)) < 0);\n    }\n}",
+    "options": [
+      "false",
+      "An ArithmeticException is thrown",
+      "A compile-time error",
+      "true"
+    ],
+    "answer": 3,
+    "explanation": "The subtraction Integer.MAX_VALUE - (-1) overflows to a negative number, so compareTo wrongly says MAX_VALUE is smaller than -1. Use Integer.compare instead of subtracting.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-011",
+    "question": "Class Person has an int field age and implements Comparable<Person>. Which compareTo orders by age ascending correctly?",
+    "options": [
+      "public int compareTo(Person o) { return age > o.age; }",
+      "public int compareTo(Person o) { return Integer.compare(age, o.age); }",
+      "public int compareTo(Person o) { return age > o.age ? 1 : -1; }",
+      "public int compareTo(Person o) { return age / o.age; }"
+    ],
+    "answer": 1,
+    "explanation": "Integer.compare returns negative, zero, or positive without overflow. A boolean cannot be returned as an int, never returning 0 breaks the contract for equal ages, and division gives wrong results and can throw.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-012",
+    "question": "Which requirement is part of the Comparable contract?",
+    "options": [
+      "compareTo must return only -1, 0, or 1",
+      "sgn(x.compareTo(y)) equals -sgn(y.compareTo(x)) for all x and y",
+      "compareTo must never return 0",
+      "compareTo must be implemented using hashCode"
+    ],
+    "answer": 1,
+    "explanation": "The contract demands antisymmetry, transitivity, and consistent behavior for equal results. Only the sign matters, so any negative or positive value is allowed, and zero means equal ordering.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-013",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.math.BigDecimal;\nimport java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        BigDecimal a = new BigDecimal(\"1.0\");\n        BigDecimal b = new BigDecimal(\"1.00\");\n        System.out.println(a.equals(b) + \" \" + (a.compareTo(b) == 0) + \" \" + new HashSet<>(List.of(a, b)).size() + \" \" + new TreeSet<>(List.of(a, b)).size());\n    }\n}",
+    "options": [
+      "false true 2 1",
+      "true true 1 1",
+      "false false 2 2",
+      "true true 2 1"
+    ],
+    "answer": 0,
+    "explanation": "BigDecimal.equals compares value and scale, so 1.0 and 1.00 are not equal, but compareTo returns 0. HashSet relies on equals and keeps both, while TreeSet relies on compareTo and keeps one.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class P implements Comparable<P> {\n        String n;\n        int age;\n        P(String n, int age) { this.n = n; this.age = age; }\n\n        @Override\n        public int compareTo(P o) { return Integer.compare(age, o.age); }\n    }\n\n    public static void main(String[] args) {\n        Set<P> s = new TreeSet<>();\n        s.add(new P(\"Ann\", 30));\n        s.add(new P(\"Bob\", 30));\n        System.out.println(s.size() + \" \" + s.iterator().next().n);\n    }\n}",
+    "options": [
+      "2 Ann",
+      "1 Ann",
+      "1 Bob",
+      "2 Bob"
+    ],
+    "answer": 1,
+    "explanation": "TreeSet uses compareTo, not equals, to detect duplicates. The two people have the same age, so the second add is ignored and the first element stays.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-015",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(List.of(\"ccc\", \"a\", \"bb\"));\n        l.sort(Comparator.comparingInt(String::length));\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "[ccc, bb, a]",
+      "[bb, a, ccc]",
+      "[a, bb, ccc]",
+      "[a, ccc, bb]"
+    ],
+    "answer": 2,
+    "explanation": "comparingInt(String::length) orders the strings by their length ascending.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-016",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    record P(String name, int age) {}\n\n    public static void main(String[] args) {\n        List<P> l = new ArrayList<>(List.of(new P(\"Ann\", 30), new P(\"Bob\", 20), new P(\"Cy\", 25)));\n        l.sort(Comparator.comparing(P::name).reversed());\n        System.out.println(l.stream().map(P::name).toList());\n    }\n}",
+    "options": [
+      "[Ann, Bob, Cy]",
+      "[Bob, Cy, Ann]",
+      "[Cy, Bob, Ann]",
+      "[Ann, Cy, Bob]"
+    ],
+    "answer": 2,
+    "explanation": "Comparator.comparing(P::name) sorts by name ascending, and reversed() flips it to descending, giving Cy, Bob, Ann.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-017",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    record P(String name, int age) {}\n\n    public static void main(String[] args) {\n        List<P> l = new ArrayList<>(List.of(new P(\"Ann\", 30), new P(\"Bob\", 20), new P(\"Cy\", 30), new P(\"Al\", 20)));\n        l.sort(Comparator.comparingInt(P::age).thenComparing(P::name));\n        System.out.println(l.stream().map(P::name).toList());\n    }\n}",
+    "options": [
+      "[Al, Bob, Cy, Ann]",
+      "[Ann, Cy, Al, Bob]",
+      "[Ann, Al, Bob, Cy]",
+      "[Al, Bob, Ann, Cy]"
+    ],
+    "answer": 3,
+    "explanation": "The primary key is age ascending. Ties on age are broken by name ascending, so the 20-year-olds Al and Bob come first, followed by Ann and Cy.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-018",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(Arrays.asList(\"b\", null, \"a\"));\n        l.sort(Comparator.nullsFirst(Comparator.naturalOrder()));\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "[a, b, null]",
+      "[b, null, a]",
+      "[null, a, b]",
+      "A NullPointerException is thrown"
+    ],
+    "answer": 2,
+    "explanation": "Comparator.nullsFirst wraps another comparator and orders null before every non-null element, while the wrapped natural order sorts the rest.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-019",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(Arrays.asList(\"b\", null, \"a\"));\n        Collections.sort(l);\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "It prints [null, a, b]",
+      "It prints [a, b, null]",
+      "It fails to compile",
+      "A NullPointerException is thrown"
+    ],
+    "answer": 3,
+    "explanation": "Natural ordering calls compareTo on elements, and compareTo(null) throws NullPointerException. A null-aware comparator such as nullsFirst is needed.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-020",
+    "question": "Which argument completes the call so that the program prints [3, 2, 1]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Integer> list = new ArrayList<>(List.of(3, 1, 2));\n        list.sort(____);\n        System.out.println(list);\n    }\n}",
+    "options": [
+      "Comparator.reverseOrder()",
+      "Comparator.naturalOrder()",
+      "Collections.reverse()",
+      "Comparator.reverse()"
+    ],
+    "answer": 0,
+    "explanation": "Comparator.reverseOrder returns a comparator that sorts in descending natural order. naturalOrder gives ascending, and the other two do not exist in that form.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-021",
+    "question": "Which method completes the chain so strings are sorted by length and then alphabetically, printing [a, aa, bb, cc]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(List.of(\"bb\", \"a\", \"cc\", \"aa\"));\n        l.sort(Comparator.comparing(String::length).____(Comparator.naturalOrder()));\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "then",
+      "andThen",
+      "thenComparing",
+      "thenComparingInt"
+    ],
+    "answer": 2,
+    "explanation": "thenComparing(Comparator) supplies a tie-breaker. thenComparingInt expects a key extractor, andThen belongs to functional interfaces such as Function, and then does not exist.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-022",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Person {\n        int age;\n    }\n\n    public static void main(String[] args) {\n        List<Person> l = new ArrayList<>();\n        l.sort(Comparator.comparing(p -> p.age).reversed());\n    }\n}",
+    "options": [
+      "It compiles and sorts by age descending",
+      "It compiles but sorts ascending because reversed() is ignored",
+      "Compile-time error: the lambda parameter p is inferred as Object, so p.age cannot be found",
+      "It compiles but throws ClassCastException at run time"
+    ],
+    "answer": 2,
+    "explanation": "In a chain such as comparing(...).reversed(), the target type is not available for inference, so p becomes Object. A method reference like Person::getAge or an explicit parameter type fixes it.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-023",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        int[] a = {3, 1, 2};\n        Arrays.sort(a, Comparator.reverseOrder());\n        System.out.println(Arrays.toString(a));\n    }\n}",
+    "options": [
+      "It prints [3, 2, 1]",
+      "It prints [1, 2, 3]",
+      "It compiles but throws ClassCastException at run time",
+      "Compile-time error: Arrays.sort with a Comparator needs an object array such as Integer[]"
+    ],
+    "answer": 3,
+    "explanation": "Comparators work on objects, and primitive int arrays cannot be sorted with one. Use Integer[] or sort ascending and reverse manually.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-024",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        String[] a = {\"bb\", \"aa\", \"c\", \"dd\"};\n        Arrays.sort(a, Comparator.comparingInt(String::length));\n        System.out.println(Arrays.toString(a));\n    }\n}",
+    "options": [
+      "[c, aa, bb, dd]",
+      "[c, dd, aa, bb]",
+      "[c, bb, aa, dd]",
+      "[bb, aa, dd, c]"
+    ],
+    "answer": 2,
+    "explanation": "Sorting objects with Arrays.sort and a Comparator is stable. Elements with equal keys keep their original relative order, so bb, aa, dd stay in that order after c.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-025",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class P {\n        String n;\n        int age;\n        P(String n, int age) { this.n = n; this.age = age; }\n\n        @Override\n        public String toString() { return n; }\n    }\n\n    static class ByAge implements Comparator<P> {\n        @Override\n        public int compare(P a, P b) { return Integer.compare(a.age, b.age); }\n    }\n\n    public static void main(String[] args) {\n        Set<P> s = new TreeSet<>(new ByAge());\n        s.add(new P(\"Ann\", 30));\n        s.add(new P(\"Bob\", 20));\n        s.add(new P(\"Cy\", 30));\n        System.out.println(s);\n    }\n}",
+    "options": [
+      "[Bob, Ann, Cy]",
+      "[Ann, Bob, Cy]",
+      "[Bob, Cy]",
+      "[Bob, Ann]"
+    ],
+    "answer": 3,
+    "explanation": "The comparator orders by age, and Cy compares as 0 against Ann, so the TreeSet treats Cy as a duplicate and drops it. Bob (20) sorts before Ann (30).",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-026",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Map<String, Integer> m = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);\n        m.put(\"a\", 1);\n        m.put(\"A\", 2);\n        System.out.println(m);\n    }\n}",
+    "options": [
+      "{a=1, A=2}",
+      "{a=2}",
+      "{A=2}",
+      "{a=1}"
+    ],
+    "answer": 1,
+    "explanation": "With a case-insensitive comparator, a and A compare as equal. The second put keeps the original key a and replaces its value with 2.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-027",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = List.of(\"a\", \"ccc\", \"bb\");\n        Comparator<String> byLen = Comparator.comparingInt(String::length);\n        System.out.println(Collections.max(l, byLen) + \" \" + Collections.min(l, byLen));\n    }\n}",
+    "options": [
+      "ccc a",
+      "a ccc",
+      "bb bb",
+      "ccc bb"
+    ],
+    "answer": 0,
+    "explanation": "Collections.max returns the element ranked highest by the comparator, here the longest string, and min returns the shortest.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-028",
+    "question": "An Employee class has a natural order by id, but one report needs employees sorted by salary descending. What is the best approach?",
+    "options": [
+      "Change compareTo to sort by salary for this report and change it back later",
+      "Keep Comparable by id and pass a Comparator based on salary to the sort method",
+      "Create a subclass for every possible ordering",
+      "Implement a second overload of compareTo that takes a boolean"
+    ],
+    "answer": 1,
+    "explanation": "A class has one natural order, but any number of Comparators can be supplied from outside for specific sorts without changing the class.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-029",
+    "question": "Comparator declares both compare and equals(Object) as abstract-looking methods. Why can it still be implemented with a lambda?",
+    "options": [
+      "equals(Object) matches a public method of Object, so it does not count as an abstract method and only compare is abstract",
+      "Lambdas can implement any interface with two methods",
+      "The compiler ignores equals in every interface",
+      "Comparator has a default implementation of compare"
+    ],
+    "answer": 0,
+    "explanation": "A functional interface may redeclare public methods of Object without losing its single-abstract-method status. Comparator therefore has exactly one abstract method, compare.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-030",
+    "question": "In this pseudocode, a swap exchanges two neighbouring elements. How many swaps are performed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "compare(a, b) = a - b\narr = [4, 2, 3, 1]\nswaps = 0\nrepeat 3 times\n    for i from 0 to 2\n        if compare(arr[i], arr[i + 1]) > 0\n            swap arr[i] and arr[i + 1]\n            swaps = swaps + 1\nprint swaps",
+    "options": [
+      "3",
+      "5",
+      "4",
+      "6"
+    ],
+    "answer": 1,
+    "explanation": "Bubble sort swaps once per inversion, meaning once per pair that is out of order. The array 4, 2, 3, 1 has the inversions (4,2), (4,3), (4,1), (2,1), and (3,1), which makes five.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-031",
+    "question": "In this pseudocode a negative result from compare means that a goes before b. What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "compare(a, b) = b - a\narr = [3, 1, 2]\nsort arr so that for neighbours x, y: compare(x, y) <= 0\nprint arr",
+    "options": [
+      "[1, 2, 3]",
+      "[3, 2, 1]",
+      "[3, 1, 2]",
+      "[2, 1, 3]"
+    ],
+    "answer": 1,
+    "explanation": "compare(a, b) = b - a is negative when a is larger than b, so larger numbers are placed first. The array is therefore sorted in descending order.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-032",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(List.of(\"10\", \"9\", \"100\"));\n        Collections.sort(l);\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "[9, 10, 100]",
+      "[10, 100, 9]",
+      "[100, 10, 9]",
+      "[9, 100, 10]"
+    ],
+    "answer": 1,
+    "explanation": "The elements are Strings, so natural order is lexicographic. The character 1 is smaller than 9, so 10 and 100 come before 9.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-033",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(List.of(\"bb\", \"a\", \"cc\", \"dd\"));\n        l.sort(Comparator.comparingInt(String::length).thenComparing(Comparator.reverseOrder()));\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "[a, dd, cc, bb]",
+      "[a, bb, cc, dd]",
+      "[bb, cc, dd, a]",
+      "[dd, cc, bb, a]"
+    ],
+    "answer": 0,
+    "explanation": "The strings are ordered by length ascending first. The tie-breaker among the two-letter strings is reverse natural order, so dd comes before cc and bb.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-034",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Arrays.binarySearch(new int[]{10, 20, 30}, 25));\n    }\n}",
+    "options": [
+      "-3",
+      "-2",
+      "2",
+      "-1"
+    ],
+    "answer": 0,
+    "explanation": "For a missing key, Arrays.binarySearch returns -(insertion point) - 1. The value 25 would be inserted at index 2, so the result is -3.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-035",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Map<String, Integer> m = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));\n        m.put(null, 1);\n        m.put(\"a\", 2);\n        System.out.println(m);\n    }\n}",
+    "options": [
+      "{a=2, null=1}",
+      "A NullPointerException is thrown",
+      "{null=1, a=2}",
+      "{a=2}"
+    ],
+    "answer": 2,
+    "explanation": "A TreeMap with natural ordering rejects null keys, but this one has a null-aware comparator that places null first, so both entries are accepted.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Item.java",
+    "code": "import java.util.*;\n\nclass Item implements Comparable<Item> {\n    @Override\n    public int compareTo(Item o) { return 1; }\n\n    public static void main(String[] args) {\n        Set<Item> set = new TreeSet<>();\n        Item a = new Item();\n        System.out.println(set.add(a) + \" \" + set.add(a) + \" \" + set.size() + \" \" + set.contains(a));\n    }\n}",
+    "options": [
+      "true false 1 true",
+      "true true 1 true",
+      "true false 2 false",
+      "true true 2 false"
+    ],
+    "answer": 3,
+    "explanation": "compareTo never returns 0, so the tree never recognises the same object as a duplicate. The element is stored twice, and contains cannot find it, which shows why compareTo must return 0 for equal ordering.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-037",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    enum Size { S, M, L }\n\n    public static void main(String[] args) {\n        Set<Size> set = new TreeSet<>(List.of(Size.L, Size.S, Size.M));\n        System.out.println(set);\n    }\n}",
+    "options": [
+      "[L, M, S]",
+      "[M, L, S]",
+      "[S, M, L]",
+      "[S, L, M]"
+    ],
+    "answer": 2,
+    "explanation": "Enums implement Comparable, and their natural order is the order of declaration (ordinal), so a TreeSet sorts S, M, L regardless of insertion order.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-038",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    record V(int major, int minor) implements Comparable<V> {\n        @Override\n        public int compareTo(V o) {\n            int c = Integer.compare(major, o.major);\n            return c != 0 ? c : Integer.compare(minor, o.minor);\n        }\n\n        @Override\n        public String toString() { return major + \".\" + minor; }\n    }\n\n    public static void main(String[] args) {\n        List<V> l = new ArrayList<>(List.of(new V(1, 10), new V(1, 2), new V(0, 9)));\n        Collections.sort(l);\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "[0.9, 1.10, 1.2]",
+      "[0.9, 1.2, 1.10]",
+      "[1.10, 1.2, 0.9]",
+      "[1.2, 1.10, 0.9]"
+    ],
+    "answer": 1,
+    "explanation": "compareTo compares the major numbers first and then the minor numbers as integers, so 1.2 comes before 1.10. Comparing the text instead would give the opposite result.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-039",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person implements Comparable<Person> {\n    int age;\n\n    public int compareTo(Object o) { return age - ((Person) o).age; }\n\n    public static void main(String[] args) {\n        System.out.println(\"ok\");\n    }\n}",
+    "options": [
+      "It compiles and sorting uses compareTo(Object)",
+      "Compile-time error: Person does not implement compareTo(Person) required by Comparable<Person>",
+      "It compiles but throws ClassCastException when sorting",
+      "It compiles with only an unchecked warning"
+    ],
+    "answer": 1,
+    "explanation": "Comparable<Person> requires compareTo(Person). A method taking Object is a different signature that does not implement it, so the class is rejected as not abstract and missing the method.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-040",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Set<Object> s = new TreeSet<>();\n        s.add(1);\n        s.add(\"a\");\n        System.out.println(s);\n    }\n}",
+    "options": [
+      "It prints [1, a]",
+      "A ClassCastException is thrown while adding the second element",
+      "It prints [a, 1]",
+      "It fails to compile"
+    ],
+    "answer": 1,
+    "explanation": "A TreeSet of Object with natural ordering compares elements using compareTo. Integer.compareTo cannot accept a String, so the second add fails at run time.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-041",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Arrays.asList(\"pear\", \"fig\", \"apple\").stream()\n            .sorted(Comparator.comparing(String::length).reversed()).toList());\n    }\n}",
+    "options": [
+      "[apple, pear, fig]",
+      "[fig, pear, apple]",
+      "[pear, apple, fig]",
+      "[apple, fig, pear]"
+    ],
+    "answer": 0,
+    "explanation": "sorted with a length comparator ordered descending places the longest string first. toList collects the stream into a list.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-042",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.stream.Stream;\nimport java.util.Comparator;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Stream.of(\"pear\", \"fig\", \"apple\").min(Comparator.comparingInt(String::length)));\n    }\n}",
+    "options": [
+      "fig",
+      "Optional[apple]",
+      "Optional[fig]",
+      "Optional.empty"
+    ],
+    "answer": 2,
+    "explanation": "Stream.min returns an Optional holding the smallest element according to the comparator. Printing the Optional shows its wrapper text.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-043",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Arrays;\n\nclass Example {\n    public static void main(String[] args) {\n        double[] d = {0.0, Double.NaN, -0.0, 1.0};\n        Arrays.sort(d);\n        System.out.println(Arrays.toString(d));\n    }\n}",
+    "options": [
+      "[0.0, -0.0, 1.0, NaN]",
+      "[NaN, -0.0, 0.0, 1.0]",
+      "[-0.0, 0.0, 1.0, NaN]",
+      "[-0.0, 0.0, NaN, 1.0]"
+    ],
+    "answer": 2,
+    "explanation": "Arrays.sort on double[] uses a total order. Negative zero is less than positive zero, and NaN is greater than every other value.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-044",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println((0.0 == -0.0) + \" \" + Double.compare(0.0, -0.0) + \" \" + Double.valueOf(0.0).equals(-0.0));\n    }\n}",
+    "options": [
+      "true 0 true",
+      "false 1 false",
+      "true 1 true",
+      "true 1 false"
+    ],
+    "answer": 3,
+    "explanation": "The primitive == operator treats 0.0 and -0.0 as equal, but Double.compare and Double.equals distinguish them, with 0.0 ordered after -0.0.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        long a = 4294967296L;\n        long b = 0L;\n        System.out.println((int) (a - b) + \" \" + Long.compare(a, b));\n    }\n}",
+    "options": [
+      "1 1",
+      "0 0",
+      "0 1",
+      "4294967296 1"
+    ],
+    "answer": 2,
+    "explanation": "Casting the long difference to int keeps only the low 32 bits, and 2^32 becomes 0, so a subtraction-based comparator says the values are equal. Long.compare returns the correct sign.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-046",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Map<String, Integer> m = new LinkedHashMap<>();\n        m.put(\"a\", 3);\n        m.put(\"b\", 1);\n        m.put(\"c\", 2);\n        System.out.println(m.entrySet().stream()\n            .sorted(Map.Entry.comparingByValue()).map(Map.Entry::getKey).toList());\n    }\n}",
+    "options": [
+      "[a, b, c]",
+      "[b, c, a]",
+      "[a, c, b]",
+      "[c, b, a]"
+    ],
+    "answer": 1,
+    "explanation": "Map.Entry.comparingByValue orders the entries by their values ascending: b (1), c (2), a (3). The stream then maps each entry to its key.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-047",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>(List.of(\"b\", \"a\"));\n        l.sort(null);\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "[a, b]",
+      "[b, a]",
+      "A NullPointerException is thrown",
+      "A compile-time error"
+    ],
+    "answer": 0,
+    "explanation": "List.sort(null) is documented to use the elements' natural ordering, so passing a null Comparator is legal and sorts the strings alphabetically.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-048",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> l = List.of(\"b\", \"a\");\n        l.sort(null);\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "An UnsupportedOperationException is thrown",
+      "It prints [a, b]",
+      "It prints [b, a]",
+      "A NullPointerException is thrown"
+    ],
+    "answer": 0,
+    "explanation": "List.of returns an immutable list, and sort tries to modify it, which always throws UnsupportedOperationException. A copy in a new ArrayList can be sorted.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-049",
+    "question": "Assume Java 17 and record Employee(String dept, int salary). Which comparator sorts by dept ascending and, within each dept, by salary descending?",
+    "options": [
+      "Comparator.comparing(Employee::dept).thenComparing(Employee::salary, Comparator.reverseOrder())",
+      "Comparator.comparing(Employee::dept).thenComparing(Employee::salary).reversed()",
+      "Comparator.comparing(Employee::dept).reversed().thenComparing(Employee::salary)",
+      "Comparator.comparing(Employee::salary).thenComparing(Employee::dept)"
+    ],
+    "answer": 0,
+    "explanation": "The second key needs its own reversed order. Calling reversed on the whole chain flips both keys, reversing the first comparator makes dept descending, and starting with salary gives the wrong priority.",
+    "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-comparable-and-comparator-050",
+    "question": "Assume Java 17. What is the outcome?",
+    "codeLanguage": "java",
+    "codeFileName": "Manager.java",
+    "code": "import java.util.*;\n\nclass Employee implements Comparable<Employee> {\n    int id;\n    Employee(int id) { this.id = id; }\n\n    @Override\n    public int compareTo(Employee o) { return Integer.compare(id, o.id); }\n}\n\nclass Manager extends Employee {\n    Manager(int id) { super(id); }\n\n    @Override\n    public String toString() { return \"M\" + id; }\n\n    public static void main(String[] args) {\n        List<Manager> l = new ArrayList<>(List.of(new Manager(2), new Manager(1)));\n        Collections.sort(l);\n        System.out.println(l);\n    }\n}",
+    "options": [
+      "It compiles and prints the managers sorted by id",
+      "Compile-time error: Manager does not implement Comparable<Manager>",
+      "It compiles but throws ClassCastException",
+      "Compile-time error: List<Manager> is not a List<Employee>"
+    ],
+    "answer": 0,
+    "explanation": "Collections.sort accepts T extends Comparable<? super T>. Manager inherits Comparable<Employee>, which is a Comparable of a supertype, so the bound is satisfied.",
+    "subtopic": "Comparable and Comparator"
   }
 ]
