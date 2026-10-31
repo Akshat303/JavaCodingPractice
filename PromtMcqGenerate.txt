@@ -9,18 +9,19 @@ Create a high-quality, interview-focused MCQ question bank for the topic details
 ====================================================================
 
 MAIN TOPIC:
-[Generics]
+[Exceptions]
 
 SUBTOPICS:
 [
-Generic classes and methods,
-Type bounds,
-Wildcards and PECS,
-Type erasure
+Checked and unchecked exceptions,
+try, catch, finally, and try-with-resources,
+Throwing and propagating exceptions,
+Designing custom exceptions,
+Exception handling practices
 ]
 
 OPTIONAL SETTINGS (leave as-is or edit):
-- QUESTIONS PER SUBTOPIC: 50   (allowed range 45-50)
+- QUESTIONS PER SUBTOPIC: 60   (allowed range 55-60)
 - JAVA VERSION: 17             (use this version for every version-specific behavior)
 - OUTPUT LANGUAGE: English
 
