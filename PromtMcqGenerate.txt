@@ -9,14 +9,15 @@ Create a high-quality, interview-focused MCQ question bank for the topic details
 ====================================================================
 
 MAIN TOPIC:
-[Abstraction]
+[Inheritance and polymorphism]
 
 SUBTOPICS:
 [
-Abstract classes and methods,
-Interfaces as contracts,
-Abstract class vs interface,
-Hiding implementation details
+Extends and composition,
+Overriding and dynamic dispatch,
+Abstract classes,
+Interfaces and default methods,
+Upcasting, downcasting, and instanceof
 ]
 
 OPTIONAL SETTINGS (leave as-is or edit):
