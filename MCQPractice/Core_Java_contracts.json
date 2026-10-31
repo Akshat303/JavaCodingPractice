@@ -1,0 +1,1515 @@
+[
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-001",
+    "question": "Which statement describes the default implementation of Object.equals(Object)?",
+    "options": [
+      "It compares all instance fields one by one",
+      "It compares references, so it returns true only when both variables refer to the same object",
+      "It compares the hash codes of the two objects",
+      "It compares the class names of the two objects"
+    ],
+    "answer": 1,
+    "explanation": "Object.equals is defined as this == obj. Value-based equality exists only when a class overrides equals; the common trap is assuming two objects with identical field values are equal by default.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-002",
+    "question": "According to the equals and hashCode contract, what must be true when a.equals(b) returns true?",
+    "options": [
+      "a == b must also be true",
+      "a.hashCode() must return the same value as b.hashCode()",
+      "a.compareTo(b) must return 1",
+      "a and b must return different hash codes"
+    ],
+    "answer": 1,
+    "explanation": "Equal objects must produce equal hash codes. Equality does not require the same reference, and the contract says nothing about compareTo.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-003",
+    "question": "Two objects of the same class return the same hashCode. Which conclusion is correct?",
+    "options": [
+      "Nothing can be concluded; they may or may not be equal because hash collisions are allowed",
+      "They must be equal",
+      "They must be the same object",
+      "HashMap throws an exception when it stores them"
+    ],
+    "answer": 0,
+    "explanation": "The contract only runs one way: equal objects need equal hash codes. Unequal objects may share a hash code, and hash-based collections resolve such collisions by calling equals.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n    }\n\n    public static void main(String[] args) {\n        Point a = new Point(1, 2);\n        Point b = new Point(1, 2);\n        System.out.println(a.equals(b) + \" \" + (a == b));\n    }\n}",
+    "options": [
+      "true true",
+      "true false",
+      "false true",
+      "false false"
+    ],
+    "answer": 3,
+    "explanation": "Point does not override equals, so Object.equals is used and compares references. The two Point objects are distinct, so both comparisons are false.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-005",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Objects;\n\nclass Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override\n        public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false;\n            Point p = (Point) o;\n            return x == p.x && y == p.y;\n        }\n        @Override\n        public int hashCode() { return Objects.hash(x, y); }\n    }\n\n    public static void main(String[] args) {\n        Point a = new Point(1, 2);\n        Point b = new Point(1, 2);\n        System.out.println(a.equals(b) + \" \" + (a == b));\n    }\n}",
+    "options": [
+      "true true",
+      "false true",
+      "false false",
+      "true false"
+    ],
+    "answer": 3,
+    "explanation": "equals is overridden to compare x and y, so it returns true for the two Point objects. The == operator still compares references, and the objects are distinct, so it is false.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-006",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.HashSet;\nimport java.util.Set;\n\nclass Example {\n    static class Item {\n        int id, val;\n        Item(int id, int val) { this.id = id; this.val = val; }\n        @Override\n        public boolean equals(Object o) {\n            return o instanceof Item i && id == i.id;\n        }\n        @Override\n        public int hashCode() { return val; }\n    }\n\n    public static void main(String[] args) {\n        Set<Item> set = new HashSet<>();\n        set.add(new Item(1, 10));\n        set.add(new Item(1, 20));\n        System.out.println(set.size());\n    }\n}",
+    "options": [
+      "2",
+      "1",
+      "0",
+      "No output because a RuntimeException is thrown"
+    ],
+    "answer": 0,
+    "explanation": "The two Item objects are equal by equals, but their hashCode values (10 and 20) differ. HashSet compares hash values first, so equals is never consulted and both items are stored. This breaks the contract that equal objects need equal hash codes.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-007",
+    "question": "Which rule must a developer remember when overriding equals in a class used as a HashMap key?",
+    "options": [
+      "Override hashCode only if toString is also overridden",
+      "Override hashCode as well, using the same fields that equals uses",
+      "Make hashCode return a different value for every object",
+      "Override hashCode so that it never depends on any field"
+    ],
+    "answer": 1,
+    "explanation": "Hash-based collections rely on equal objects having equal hash codes. Deriving hashCode from the same fields as equals keeps the two methods consistent. Hash codes do not need to be unique.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-008",
+    "question": "Which of the following is NOT a requirement of the equals contract?",
+    "options": [
+      "All fields of the class must be final",
+      "It is reflexive",
+      "It is symmetric",
+      "It is transitive"
+    ],
+    "answer": 0,
+    "explanation": "The contract requires reflexivity, symmetry, transitivity, consistency, and false for null. Immutability is good practice for keys but is not part of the contract.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-009",
+    "question": "What must x.equals(null) return for a non-null reference x when equals follows the contract?",
+    "options": [
+      "true",
+      "It must throw NullPointerException",
+      "It depends on the fields of x",
+      "false"
+    ],
+    "answer": 3,
+    "explanation": "The contract requires equals to return false for a null argument. Throwing a NullPointerException from equals violates the contract.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-010",
+    "question": "Assume Java 17. A class Point has int fields x and y. Which equals implementation is correct and null-safe?",
+    "options": [
+      "public boolean equals(Point p) { return x == p.x && y == p.y; }",
+      "public boolean equals(Object o) { Point p = (Point) o; return x == p.x && y == p.y; }",
+      "public boolean equals(Object o) { if (this == o) return true; if (!(o instanceof Point p)) return false; return x == p.x && y == p.y; }",
+      "public boolean equals(Object o) { return x == ((Point) o).x; }"
+    ],
+    "answer": 2,
+    "explanation": "The correct version takes Object, handles null and foreign types through instanceof, and compares every significant field. The Point-parameter version only overloads equals, the unchecked casts can throw ClassCastException or NullPointerException, and ignoring y gives wrong equality.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-011",
+    "question": "Which expression completes hashCode so that it is consistent with equals?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "import java.util.Objects;\n\nclass Person {\n    String name;\n    int age;\n    Person(String name, int age) { this.name = name; this.age = age; }\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) return true;\n        if (!(o instanceof Person p)) return false;\n        return age == p.age && Objects.equals(name, p.name);\n    }\n    @Override\n    public int hashCode() {\n        return ____;\n    }\n    public static void main(String[] args) {\n        Person a = new Person(\"Ana\", 30);\n        Person b = new Person(\"Ana\", 30);\n        System.out.println(a.equals(b) && a.hashCode() == b.hashCode());\n    }\n}",
+    "options": [
+      "Objects.hash(name, age)",
+      "System.identityHashCode(this)",
+      "name.hashCode() + new java.util.Random().nextInt()",
+      "(int) System.nanoTime()"
+    ],
+    "answer": 0,
+    "explanation": "equals compares name and age, so hashCode must be derived from exactly those fields. Identity, random, or time-based values differ between equal objects and violate the contract.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-012",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public boolean equals(Person other) {\n        return name.equals(other.name);\n    }\n    public static void main(String[] args) {\n        System.out.println(new Person(\"A\").equals(new Person(\"A\")));\n    }\n}",
+    "options": [
+      "It compiles and prints true",
+      "It compiles and prints false",
+      "Compile-time error: the method does not override or implement a method from a supertype",
+      "It compiles and throws ClassCastException at run time"
+    ],
+    "answer": 2,
+    "explanation": "equals(Person) has a different parameter type from Object.equals(Object), so it is an overload, not an override. The @Override annotation makes the compiler reject it.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-013",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    public boolean equals(Person p) {\n        return name.equals(p.name);\n    }\n    public static void main(String[] args) {\n        Person a = new Person(\"A\");\n        Person b = new Person(\"A\");\n        Object c = b;\n        System.out.println(a.equals(b) + \" \" + a.equals(c));\n    }\n}",
+    "options": [
+      "true true",
+      "true false",
+      "false false",
+      "false true"
+    ],
+    "answer": 1,
+    "explanation": "The call a.equals(b) with static type Person selects the overload equals(Person), which compares names. The call a.equals(c) has static type Object, so overload resolution picks the inherited Object.equals, which compares references.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.HashMap;\nimport java.util.Map;\n\nclass Example {\n    static class Key {\n        int id;\n        Key(int id) { this.id = id; }\n        @Override\n        public boolean equals(Object o) { return o instanceof Key k && id == k.id; }\n        @Override\n        public int hashCode() { return id; }\n    }\n\n    public static void main(String[] args) {\n        Map<Key, String> map = new HashMap<>();\n        Key k = new Key(1);\n        map.put(k, \"A\");\n        k.id = 2;\n        System.out.println(map.get(k) + \" \" + map.containsKey(new Key(1)));\n    }\n}",
+    "options": [
+      "null false",
+      "A true",
+      "A false",
+      "null true"
+    ],
+    "answer": 0,
+    "explanation": "After the key is mutated, its hashCode changes from 1 to 2, so get(k) looks in the wrong bucket and finds nothing. containsKey(new Key(1)) reaches the original bucket, but equals compares against the mutated key (id 2) and fails. The entry is effectively lost.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-015",
+    "question": "In an equals method, how should a double field be compared to follow the general contract correctly, including NaN and -0.0?",
+    "options": [
+      "a.value == b.value",
+      "Math.round(a.value) == Math.round(b.value)",
+      "Double.compare(a.value, b.value) == 0",
+      "(int) a.value == (int) b.value"
+    ],
+    "answer": 2,
+    "explanation": "Double.compare treats NaN as equal to itself and distinguishes 0.0 from -0.0, matching Double.equals and Double.hashCode. The == operator makes NaN unequal to itself, which breaks reflexivity, and rounding or casting loses information.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String a = new String(\"java\");\n        String b = \"java\";\n        System.out.println(a.equals(b) + \" \" + (a == b));\n    }\n}",
+    "options": [
+      "true true",
+      "false false",
+      "true false",
+      "false true"
+    ],
+    "answer": 2,
+    "explanation": "String overrides equals to compare contents, so equals is true. The new keyword creates a separate object from the pooled literal, so == compares different references and is false.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Arrays;\n\nclass Example {\n    public static void main(String[] args) {\n        int[] a = {1, 2};\n        int[] b = {1, 2};\n        System.out.println(a.equals(b) + \" \" + Arrays.equals(a, b));\n    }\n}",
+    "options": [
+      "true true",
+      "false true",
+      "true false",
+      "false false"
+    ],
+    "answer": 1,
+    "explanation": "Arrays do not override equals, so a.equals(b) compares references and is false. Arrays.equals compares length and elements, so it is true.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-018",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Integer> a = new ArrayList<>(List.of(1, 2));\n        List<Integer> b = new LinkedList<>(List.of(1, 2));\n        Set<Integer> s1 = new HashSet<>(List.of(1, 2));\n        Set<Integer> s2 = new TreeSet<>(List.of(2, 1));\n        System.out.println(a.equals(b) + \" \" + s1.equals(s2));\n    }\n}",
+    "options": [
+      "true false",
+      "false true",
+      "false false",
+      "true true"
+    ],
+    "answer": 3,
+    "explanation": "List.equals compares elements in order regardless of the list implementation, and Set.equals compares membership regardless of the set implementation or order. Both are true.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-019",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    record Pt(int x, int y) {}\n\n    public static void main(String[] args) {\n        Pt a = new Pt(1, 2);\n        Pt b = new Pt(1, 2);\n        System.out.println(a.equals(b) + \" \" + (a.hashCode() == b.hashCode()));\n    }\n}",
+    "options": [
+      "true true",
+      "true false",
+      "false true",
+      "false false"
+    ],
+    "answer": 0,
+    "explanation": "A record automatically generates equals and hashCode from its components. Two records with equal components are equal and have equal hash codes.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-020",
+    "question": "Which part of the equals contract does CiString break?",
+    "codeLanguage": "java",
+    "codeFileName": "CiString.java",
+    "code": "final class CiString {\n    private final String s;\n    CiString(String s) { this.s = s; }\n    @Override\n    public boolean equals(Object o) {\n        if (o instanceof CiString c) return s.equalsIgnoreCase(c.s);\n        if (o instanceof String str) return s.equalsIgnoreCase(str);\n        return false;\n    }\n    @Override\n    public int hashCode() { return s.toLowerCase().hashCode(); }\n\n    public static void main(String[] args) {\n        CiString c = new CiString(\"java\");\n        System.out.println(c.equals(\"JAVA\") + \" \" + \"JAVA\".equals(c));\n    }\n}",
+    "options": [
+      "Reflexivity",
+      "Consistency",
+      "Symmetry",
+      "Non-nullity"
+    ],
+    "answer": 2,
+    "explanation": "c.equals(\"JAVA\") is true but \"JAVA\".equals(c) is false because String knows nothing about CiString. Interoperating with an unrelated class in equals is the classic way to break symmetry.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-021",
+    "question": "Which statement about equals in a non-final class is correct?",
+    "options": [
+      "Using instanceof in a non-final class is always safe when a subclass adds fields",
+      "If a subclass adds a value field, an instanceof-based equals in the parent can break symmetry or transitivity",
+      "Using getClass() in equals makes hashCode unnecessary",
+      "A subclass that adds a field can always call super.equals and keep the contract"
+    ],
+    "answer": 1,
+    "explanation": "A parent that treats any subclass instance as equal while the subclass compares extra fields gives a.equals(b) true but b.equals(a) false. This is why value classes are often final or use composition.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-022",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override\n        public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false;\n            Point p = (Point) o;\n            return x == p.x && y == p.y;\n        }\n        @Override\n        public int hashCode() { return Objects.hash(x, y); }\n    }\n\n    public static void main(String[] args) {\n        Map<Point, String> m = new HashMap<>();\n        m.put(new Point(1, 2), \"A\");\n        m.put(new Point(1, 2), \"B\");\n        System.out.print(m.size());\n        System.out.print(m.get(new Point(1, 2)));\n    }\n}",
+    "options": [
+      "2B",
+      "1A",
+      "2A",
+      "1B"
+    ],
+    "answer": 3,
+    "explanation": "Both Point keys are equal and have equal hash codes, so the second put replaces the value of the existing entry. The map has one entry and its value is B.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-023",
+    "question": "An Employee class has fields id, name, and salary. Its equals compares only id and name. Which hashCode implementation violates the contract?",
+    "options": [
+      "return Objects.hash(id, name);",
+      "return Objects.hash(id);",
+      "return 42;",
+      "return Objects.hash(id, name, salary);"
+    ],
+    "answer": 3,
+    "explanation": "Two employees that are equal by id and name but have different salaries would get different hash codes. A hashCode that uses fewer fields than equals, or even a constant, is legal because equal objects still get equal hashes.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-024",
+    "question": "A class has a correct equals method but hashCode always returns 42. What is the effect when its objects are used as HashMap keys?",
+    "options": [
+      "The code does not compile",
+      "The map still works correctly, but all keys collide, so lookups degrade in performance",
+      "The map throws an exception on the second put",
+      "Equal keys are no longer found"
+    ],
+    "answer": 1,
+    "explanation": "A constant hashCode is legal because equal objects share it. It sends every key to the same bucket, which makes lookups slow, while equals still finds the right key.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-025",
+    "question": "Which collection uses hashCode of its elements to locate them?",
+    "options": [
+      "ArrayList",
+      "LinkedList",
+      "ArrayDeque",
+      "HashSet"
+    ],
+    "answer": 3,
+    "explanation": "HashSet is backed by a hash table and uses hashCode to choose a bucket and then equals to confirm a match. The list and deque types search with equals only or by position.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-026",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override\n        public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false;\n            Point p = (Point) o;\n            return x == p.x && y == p.y;\n        }\n    }\n\n    public static void main(String[] args) {\n        List<Point> list = new ArrayList<>();\n        list.add(new Point(1, 2));\n        list.add(new Point(2, 3));\n        System.out.println(list.contains(new Point(1, 2)) + \" \" + list.indexOf(new Point(2, 3)));\n    }\n}",
+    "options": [
+      "false -1",
+      "true 1",
+      "true 0",
+      "false 0"
+    ],
+    "answer": 1,
+    "explanation": "ArrayList.contains and indexOf search linearly using equals, so hashCode is not needed. The equal Point is found, and the point (2, 3) is at index 1.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-027",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Objects;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Objects.equals(null, null) + \" \" + Objects.equals(\"a\", null));\n    }\n}",
+    "options": [
+      "true false",
+      "true true",
+      "false false",
+      "Runtime NullPointerException"
+    ],
+    "answer": 0,
+    "explanation": "Objects.equals returns true when both arguments are null and false when only one is null, without throwing an exception.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-028",
+    "question": "A String variable s may be null. Which expression compares it with the literal \"a\" without risking a NullPointerException?",
+    "options": [
+      "s.equals(\"a\")",
+      "s.hashCode() == \"a\".hashCode()",
+      "s.toString().equals(\"a\")",
+      "\"a\".equals(s)"
+    ],
+    "answer": 3,
+    "explanation": "Calling equals on the non-null literal safely returns false for null. The other expressions all dereference s and throw NullPointerException when it is null.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-029",
+    "question": "Assume default JVM settings on Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Integer a = 127, b = 127, c = 128, d = 128;\n        System.out.println((a == b) + \" \" + (c == d) + \" \" + c.equals(d));\n    }\n}",
+    "options": [
+      "true false true",
+      "true true true",
+      "false false true",
+      "true false false"
+    ],
+    "answer": 0,
+    "explanation": "Integer values from -128 to 127 are cached by autoboxing, so a == b compares the same object. 128 is outside the cache, so c and d are different objects and == is false, while equals compares values and is true.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-030",
+    "question": "Which statement correctly describes the consistency requirement of equals?",
+    "options": [
+      "equals must return the same result for objects of different classes",
+      "Repeated calls on unchanged objects must keep returning the same result",
+      "equals must return true whenever the hash codes match",
+      "equals must never read mutable fields"
+    ],
+    "answer": 1,
+    "explanation": "Consistency means that as long as the information used in comparisons does not change, equals keeps giving the same answer. It does not forbid mutable fields or relate equality to hash collisions.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-031",
+    "question": "Which expression completes the check so that equals returns false for a null argument or an object of a different class?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) return true;\n        if (o == null || ____) return false;\n        Person p = (Person) o;\n        return name.equals(p.name);\n    }\n    @Override\n    public int hashCode() { return name.hashCode(); }\n\n    public static void main(String[] args) {\n        System.out.println(new Person(\"A\").equals(\"A\"));\n    }\n}",
+    "options": [
+      "getClass() == o.getClass()",
+      "!(o instanceof Object)",
+      "getClass() != o.getClass()",
+      "o.getClass() == null"
+    ],
+    "answer": 2,
+    "explanation": "The condition must be true for a mismatch, so it uses != on the class objects. The reversed test would reject equal types, the instanceof Object test is false for any non-null reference and lets a foreign type reach the cast, and getClass never returns null.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-032",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public boolean equals(Object other) {\n        Person p = (Person) other;\n        return name.equals(p.name);\n    }\n    @Override\n    public int hashCode() { return name.hashCode(); }\n\n    public static void main(String[] args) {\n        Person p = new Person(\"A\");\n        Object o = \"A\";\n        System.out.println(p.equals(o));\n    }\n}",
+    "options": [
+      "It prints false",
+      "A ClassCastException is thrown",
+      "It prints true",
+      "It fails to compile"
+    ],
+    "answer": 1,
+    "explanation": "equals casts its argument to Person without checking its type. Passing a String triggers a ClassCastException at run time. A correct equals must use instanceof or getClass first and return false.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-033",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public boolean equals(Object o) {\n        return o instanceof Person p && name == p.name;\n    }\n    @Override\n    public int hashCode() { return name.hashCode(); }\n\n    public static void main(String[] args) {\n        Person a = new Person(new String(\"Ann\"));\n        Person b = new Person(new String(\"Ann\"));\n        Person c = new Person(\"Ann\");\n        Person d = new Person(\"Ann\");\n        System.out.println(a.equals(b) + \" \" + c.equals(d));\n    }\n}",
+    "options": [
+      "true true",
+      "false true",
+      "false false",
+      "true false"
+    ],
+    "answer": 1,
+    "explanation": "The equals method compares the name fields with ==, which checks references. Strings created with new String are distinct objects, while identical literals are the same pooled object. Use equals to compare String contents.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-034",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"Aa\".equals(\"BB\") + \" \" + (\"Aa\".hashCode() == \"BB\".hashCode()));\n    }\n}",
+    "options": [
+      "true true",
+      "false false",
+      "true false",
+      "false true"
+    ],
+    "answer": 3,
+    "explanation": "The strings \"Aa\" and \"BB\" have the same hashCode (2112), so equal hash codes do not imply equal objects. They are different strings, so equals is false.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-035",
+    "question": "Two different int[] objects a and b contain the same elements. Which expression is guaranteed to be true?",
+    "options": [
+      "a.equals(b)",
+      "Arrays.hashCode(a) == Arrays.hashCode(b)",
+      "a == b",
+      "a.hashCode() == b.hashCode()"
+    ],
+    "answer": 1,
+    "explanation": "Arrays.hashCode is computed from the contents, so equal contents give equal values. Array equals, ==, and the inherited hashCode are all based on identity.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.HashSet;\nimport java.util.Set;\n\nclass Example {\n    static class Key {\n        int id;\n        Key(int id) { this.id = id; }\n        @Override\n        public boolean equals(Object o) { return o instanceof Key k && id == k.id; }\n        @Override\n        public int hashCode() { return id; }\n    }\n\n    public static void main(String[] args) {\n        Set<Key> set = new HashSet<>();\n        Key k = new Key(1);\n        set.add(k);\n        k.id = 2;\n        System.out.println(set.remove(k) + \" \" + set.size());\n    }\n}",
+    "options": [
+      "true 1",
+      "true 0",
+      "false 0",
+      "false 1"
+    ],
+    "answer": 3,
+    "explanation": "Changing id after insertion changes the hash code, so remove(k) searches a different bucket and fails. The element stays in the set, which makes this a typical memory leak with mutable keys.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-037",
+    "question": "Which description of HashMap.get(key) is correct?",
+    "options": [
+      "It uses the key's hashCode to select a bucket, then uses equals to find the matching key among entries in that bucket",
+      "It scans every entry using only equals",
+      "It uses only hashCode, so equal hash codes mean the same key",
+      "It uses compareTo to locate the entry"
+    ],
+    "answer": 0,
+    "explanation": "hashCode narrows the search to a bucket and equals decides the actual match, which is why both methods must stay consistent. compareTo is used by sorted structures such as TreeMap, not by HashMap.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-038",
+    "question": "Which statement about enum constants and equals is correct?",
+    "options": [
+      "equals compares enum names, so == may fail",
+      "Every enum must override equals",
+      "equals is final and behaves like ==, so comparing enum constants with == is safe",
+      "equals can be overridden to compare ordinals"
+    ],
+    "answer": 2,
+    "explanation": "Each enum constant is a singleton and Enum.equals is final and returns this == other. Using == also avoids NullPointerException on the left side and is compile-time type checked.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-039",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    record R(int[] a) {}\n\n    public static void main(String[] args) {\n        System.out.println(new R(new int[]{1}).equals(new R(new int[]{1})));\n    }\n}",
+    "options": [
+      "true",
+      "A compile-time error",
+      "false",
+      "A ClassCastException"
+    ],
+    "answer": 2,
+    "explanation": "A record's equals compares components with their own equals, and arrays use identity equality. The two int[] components are different objects, so the records are not equal.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-040",
+    "question": "In this pseudocode, mod is the remainder operator and indexes start at 0. What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "buckets = 4\nfor each key in [5, 9, 4, 13, 8]\n    index = key mod buckets\n    add key to the list stored at buckets[index]\nprint size of the list stored at buckets[1]",
+    "options": [
+      "2",
+      "4",
+      "3",
+      "1"
+    ],
+    "answer": 2,
+    "explanation": "The keys map to indexes 5 mod 4 = 1, 9 mod 4 = 1, 4 mod 4 = 0, 13 mod 4 = 1, and 8 mod 4 = 0. Bucket 1 receives 5, 9, and 13, which is three keys. This is how colliding hash codes share a bucket.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-041",
+    "question": "In this pseudocode, mod is the remainder operator. It models a set whose equality means 'same remainder when divided by 5'. What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "set = empty\nfor each v in [3, 8, 13, 4, 9, 3]\n    if no element e in set has (e mod 5) equal to (v mod 5)\n        add v to set\nprint size of set",
+    "options": [
+      "3",
+      "4",
+      "2",
+      "6"
+    ],
+    "answer": 2,
+    "explanation": "Only 3 and 4 are added: 8 and 13 have the same remainder as 3, and 9 has the same remainder as 4. The second 3 is also a duplicate. The final set size is 2.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-042",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override\n        public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false;\n            Point p = (Point) o;\n            return x == p.x && y == p.y;\n        }\n        @Override\n        public int hashCode() { return Objects.hash(x, y); }\n    }\n\n    public static void main(String[] args) {\n        Map<Point, Integer> m = new HashMap<>();\n        m.merge(new Point(1, 1), 1, Integer::sum);\n        m.merge(new Point(2, 2), 1, Integer::sum);\n        m.merge(new Point(1, 1), 1, Integer::sum);\n        System.out.println(m.get(new Point(1, 1)) + \" \" + m.size());\n    }\n}",
+    "options": [
+      "2 2",
+      "1 3",
+      "2 3",
+      "3 2"
+    ],
+    "answer": 0,
+    "explanation": "The first and third Point are equal, so merge combines their counts into 2, and the map holds two distinct keys.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-043",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override\n        public boolean equals(Object o) {\n            return this == o || (o instanceof Point p && x == p.x && y == p.y);\n        }\n        @Override\n        public int hashCode() { return 31 * x + y; }\n    }\n\n    public static void main(String[] args) {\n        Point a = new Point(1, 2);\n        System.out.println(a.equals(new Point(1, 2)) + \" \" + a.equals(\"x\") + \" \" + a.equals(null));\n    }\n}",
+    "options": [
+      "true true false",
+      "true false false",
+      "true false true",
+      "false false false"
+    ],
+    "answer": 1,
+    "explanation": "The pattern-matching instanceof returns false for null and for a String, so only the comparison with an equal Point is true. The pattern variable p is in scope in the && chain.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-044",
+    "question": "Which method signature correctly overrides Object.equals?",
+    "options": [
+      "public boolean equals(Point obj)",
+      "public boolean equal(Object obj)",
+      "public boolean equals(Object obj)",
+      "public int equals(Object obj)"
+    ],
+    "answer": 2,
+    "explanation": "An override must keep the same name, parameter types, and return type. A different parameter type is an overload, a different name is a new method, and a different return type does not compile.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-045",
+    "question": "Why are immutable classes such as String well suited as HashMap keys?",
+    "options": [
+      "Their hashCode cannot change after insertion, so stored entries remain findable",
+      "They never need equals",
+      "They always have unique hash codes",
+      "HashMap rejects mutable keys at run time"
+    ],
+    "answer": 0,
+    "explanation": "A stable hash code keeps the entry in the bucket where it was stored. HashMap does not prevent mutable keys, and immutable classes still need correct equals and may have hash collisions.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-046",
+    "question": "A developer compares an int, an enum constant, and a String for content equality. Which combination is correct?",
+    "options": [
+      "== for the int, == for the enum constant, equals for the String",
+      "== for the int, equals for the enum constant, == for the String",
+      "equals for the int, == for the enum constant, == for the String",
+      "== for all three"
+    ],
+    "answer": 0,
+    "explanation": "Primitives are compared with ==, enum constants are singletons so == is safe, and Strings need equals to compare content because == compares references.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-047",
+    "question": "Can hashCode legally return a negative value?",
+    "options": [
+      "Yes, any int value is allowed",
+      "No, it must be zero or positive",
+      "No, HashMap throws an exception for negative values",
+      "Only for Integer and Long"
+    ],
+    "answer": 0,
+    "explanation": "The contract places no restriction on the sign of the int. Hash-based collections spread and mask the value internally, so negative values work.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-048",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class A {\n        int x;\n        A(int x) { this.x = x; }\n        @Override\n        public boolean equals(Object o) { return o instanceof A a && x == a.x; }\n        @Override\n        public int hashCode() { return x; }\n    }\n\n    static class B extends A {\n        int y;\n        B(int x, int y) { super(x); this.y = y; }\n        @Override\n        public boolean equals(Object o) { return o instanceof B b && x == b.x && y == b.y; }\n        @Override\n        public int hashCode() { return 31 * x + y; }\n    }\n\n    public static void main(String[] args) {\n        A a = new A(1);\n        B b = new B(1, 2);\n        System.out.println(a.equals(b) + \" \" + b.equals(a));\n    }\n}",
+    "options": [
+      "true true",
+      "false true",
+      "true false",
+      "false false"
+    ],
+    "answer": 2,
+    "explanation": "A.equals accepts any A, including a B with the same x, so a.equals(b) is true. B.equals requires a B instance, so b.equals(a) is false. This asymmetry is why mixing instanceof checks across a class hierarchy breaks the contract.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-049",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.HashSet;\nimport java.util.Set;\n\nclass Example {\n    static class Bad {\n        private int calls;\n        @Override\n        public boolean equals(Object o) { return this == o; }\n        @Override\n        public int hashCode() { return calls++; }\n    }\n\n    public static void main(String[] args) {\n        Set<Bad> set = new HashSet<>();\n        Bad b = new Bad();\n        set.add(b);\n        System.out.println(set.contains(b) + \" \" + set.size());\n    }\n}",
+    "options": [
+      "true 1",
+      "true 0",
+      "false 0",
+      "false 1"
+    ],
+    "answer": 3,
+    "explanation": "hashCode returns a different value on every call, so contains(b) searches a different bucket from the one used by add and fails. A hashCode must return the same value for an unchanged object in one execution.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-equals-and-hashcode-050",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Point {\n        int x, y;\n        Point(int x, int y) { this.x = x; this.y = y; }\n        @Override\n        public boolean equals(Object o) {\n            if (this == o) return true;\n            if (o == null || getClass() != o.getClass()) return false;\n            Point p = (Point) o;\n            return x == p.x && y == p.y;\n        }\n        @Override\n        public int hashCode() { return Objects.hash(x, y); }\n    }\n\n    public static void main(String[] args) {\n        Set<Point> set = new HashSet<>();\n        set.add(new Point(3, 4));\n        boolean removed = set.remove(new Point(3, 4));\n        System.out.println(removed + \" \" + set.size());\n    }\n}",
+    "options": [
+      "false 1",
+      "true 1",
+      "false 0",
+      "true 0"
+    ],
+    "answer": 3,
+    "explanation": "A different Point instance with the same coordinates is equal and has the same hash code, so remove finds and removes the stored element.",
+    "subtopic": "equals and hashCode"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-001",
+    "question": "Which text does the default Object.toString() produce?",
+    "options": [
+      "Only the simple class name",
+      "The fully qualified class name, an @ sign, and the hexadecimal hash code",
+      "The values of all instance fields",
+      "The memory address of the object in decimal"
+    ],
+    "answer": 1,
+    "explanation": "Object.toString returns getClass().getName() + \"@\" + Integer.toHexString(hashCode()). It does not print fields, which is why classes override it for readable output.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-002",
+    "question": "Which statement about System.out.println(Object x) is correct?",
+    "options": [
+      "It obtains the text with String.valueOf(x), which calls x.toString() when x is not null",
+      "It always prints the class name and hash code",
+      "It calls x.print() on the object",
+      "It throws NullPointerException when x is null"
+    ],
+    "answer": 0,
+    "explanation": "println(Object) converts its argument with String.valueOf, so an overridden toString is used and a null reference prints the text null.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-003",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public String toString() { return \"Person[\" + name + \"]\"; }\n\n    public static void main(String[] args) {\n        Person p = new Person(\"Ann\");\n        System.out.println(p);\n    }\n}",
+    "options": [
+      "Person[Ann]",
+      "Person@Ann",
+      "Ann",
+      "Person"
+    ],
+    "answer": 0,
+    "explanation": "println(Object) calls the overridden toString, which builds the text Person[Ann].",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public String toString() { return \"Person[\" + name + \"]\"; }\n\n    public static void main(String[] args) {\n        Person p = new Person(\"Ann\");\n        System.out.println(\"Hi \" + p + \"!\");\n    }\n}",
+    "options": [
+      "Hi Ann!",
+      "Hi Person[Ann]!",
+      "Hi Person!",
+      "Hi p!"
+    ],
+    "answer": 1,
+    "explanation": "In string concatenation, a non-String operand is converted with String.valueOf, which invokes the overridden toString.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-005",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public String toString() { return \"Person[\" + name + \"]\"; }\n\n    public static void main(String[] args) {\n        Person p = null;\n        System.out.println(\"p=\" + p);\n    }\n}",
+    "options": [
+      "p=null",
+      "p=",
+      "p=Person[null]",
+      "A NullPointerException is thrown"
+    ],
+    "answer": 0,
+    "explanation": "String concatenation converts a null reference to the text null without calling any method on it, so no exception occurs.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-006",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public String toString() { return \"Person[\" + name + \"]\"; }\n\n    public static void main(String[] args) {\n        Person p = null;\n        System.out.println(p.toString());\n    }\n}",
+    "options": [
+      "It prints null",
+      "It prints an empty line",
+      "A NullPointerException is thrown",
+      "It fails to compile"
+    ],
+    "answer": 2,
+    "explanation": "Calling toString() explicitly on a null reference dereferences null. Implicit conversion through println(Object) or + is null-safe, but an explicit method call is not.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-007",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Objects;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(String.valueOf((Object) null) + \" \" + Objects.toString(null) + \" \" + Objects.toString(null, \"none\"));\n    }\n}",
+    "options": [
+      "null  none",
+      "NullPointerException",
+      "null null none",
+      "null null null"
+    ],
+    "answer": 2,
+    "explanation": "String.valueOf((Object) null) returns the text null, Objects.toString(null) also returns null, and the two-argument Objects.toString returns the supplied default for a null object.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-008",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Box.java",
+    "code": "class Box {\n    int n = 1;\n\n    @Override\n    String toString() { return \"Box\" + n; }\n\n    public static void main(String[] args) {\n        System.out.println(new Box());\n    }\n}",
+    "options": [
+      "It prints Box1",
+      "It prints the default class name and hash form",
+      "Compile-time error: attempting to assign weaker access privileges",
+      "It compiles but throws an exception at run time"
+    ],
+    "answer": 2,
+    "explanation": "Object.toString is public, and an overriding method cannot reduce visibility. The method without a modifier has package access, which the compiler rejects.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "class Person {\n    public String toString(int x) { return \"Person\" + x; }\n\n    public static void main(String[] args) {\n        System.out.println(new Person().toString().startsWith(\"Person@\"));\n    }\n}",
+    "options": [
+      "false",
+      "Person[]",
+      "A compile-time error",
+      "true"
+    ],
+    "answer": 3,
+    "explanation": "toString(int) is an overload, not an override, so the inherited Object.toString() is still used. Its text starts with the class name followed by @.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Arrays;\n\nclass Example {\n    public static void main(String[] args) {\n        int[] a = {1, 2};\n        System.out.println(a.toString().startsWith(\"[I@\") + \" \" + Arrays.toString(a));\n    }\n}",
+    "options": [
+      "true [1, 2]",
+      "[1, 2] [1, 2]",
+      "true [I@1",
+      "false [1, 2]"
+    ],
+    "answer": 0,
+    "explanation": "Arrays inherit Object.toString, so a.toString() gives a type code and hash such as [I@... Arrays.toString formats the elements.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-011",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Arrays;\n\nclass Example {\n    public static void main(String[] args) {\n        int[][] m = {{1, 2}, {3}};\n        System.out.println(Arrays.toString(m).startsWith(\"[[I@\") + \" \" + Arrays.deepToString(m));\n    }\n}",
+    "options": [
+      "false [[1, 2], [3]]",
+      "true [[I@1, [I@2]",
+      "true [[1, 2], [3]]",
+      "[[1, 2], [3]] [[1, 2], [3]]"
+    ],
+    "answer": 2,
+    "explanation": "Arrays.toString prints elements with their own toString, so inner arrays appear as [I@... Arrays.deepToString walks nested arrays and formats their contents.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Map<String, Integer> m = new LinkedHashMap<>();\n        m.put(\"a\", 1);\n        m.put(\"b\", 2);\n        System.out.println(List.of(1, 2, 3) + \" \" + m);\n    }\n}",
+    "options": [
+      "[1,2,3] {a=1,b=2}",
+      "(1, 2, 3) [a=1, b=2]",
+      "[1, 2, 3] {a=1, b=2}",
+      "[1, 2, 3] {a:1, b:2}"
+    ],
+    "answer": 2,
+    "explanation": "Collections print elements inside square brackets separated by a comma and a space. Maps print key=value pairs inside braces.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-013",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Person.java",
+    "code": "import java.util.*;\n\nclass Person {\n    String name;\n    Person(String name) { this.name = name; }\n    @Override\n    public String toString() { return \"Person[\" + name + \"]\"; }\n\n    public static void main(String[] args) {\n        System.out.println(List.of(new Person(\"Ann\"), new Person(\"Bob\")));\n    }\n}",
+    "options": [
+      "[Ann, Bob]",
+      "[Person, Person]",
+      "Person[Ann, Bob]",
+      "[Person[Ann], Person[Bob]]"
+    ],
+    "answer": 3,
+    "explanation": "A list's toString calls toString on each element, so the overridden Person.toString shapes the text.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"\" + 'a' + 1 + \" \" + ('a' + 1 + \"\"));\n    }\n}",
+    "options": [
+      "a1 98",
+      "a1 a1",
+      "98 98",
+      "a1 b"
+    ],
+    "answer": 0,
+    "explanation": "Evaluation is left to right. In the first expression the empty String makes every + a concatenation, giving a1. In the second, 'a' + 1 is integer addition (98) before the String is appended.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-015",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        StringBuilder a = new StringBuilder(\"hi\");\n        StringBuilder b = new StringBuilder(\"hi\");\n        System.out.println(a.equals(b) + \" \" + a.toString().equals(b.toString()) + \" \" + (a.compareTo(b) == 0));\n    }\n}",
+    "options": [
+      "true true true",
+      "false false true",
+      "true false false",
+      "false true true"
+    ],
+    "answer": 3,
+    "explanation": "StringBuilder does not override equals, so equals compares references. Comparing the String contents is true, and since Java 11 StringBuilder implements Comparable, so compareTo of equal contents is 0.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-016",
+    "question": "Which statement about relying on the output of toString in program logic is correct?",
+    "options": [
+      "Its format is fixed by the Java Language Specification for every class",
+      "Programs should parse it to rebuild objects",
+      "It must be used as the implementation of equals",
+      "It is meant as human-readable text, so its format should not be parsed unless the class documents a stable format"
+    ],
+    "answer": 3,
+    "explanation": "toString is mainly for diagnostics and display. Its text can change when the class changes, so using it for logic creates fragile code unless the format is a documented contract.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-017",
+    "question": "Which content should a useful toString normally include?",
+    "options": [
+      "The significant state that helps identify and debug the object",
+      "Only the hash code",
+      "The values of every static field of every loaded class",
+      "Only the class name"
+    ],
+    "answer": 0,
+    "explanation": "A good toString is concise yet informative, showing the key fields that identify the object. Hash-only or class-only text adds little over the default.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-018",
+    "question": "Which argument list completes toString so that the program prints Point(1, 2)?",
+    "codeLanguage": "java",
+    "codeFileName": "Point.java",
+    "code": "class Point {\n    int x, y;\n    Point(int x, int y) { this.x = x; this.y = y; }\n\n    @Override\n    public String toString() {\n        return String.format(\"Point(%d, %d)\", ____);\n    }\n\n    public static void main(String[] args) {\n        System.out.println(new Point(1, 2));\n    }\n}",
+    "options": [
+      "y, x",
+      "x + y",
+      "x",
+      "x, y"
+    ],
+    "answer": 3,
+    "explanation": "The two %d specifiers consume x then y in order. Reversing them prints Point(2, 1), and a single argument throws MissingFormatArgumentException at run time.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-019",
+    "question": "Which expression completes toString so that the program prints Order[id=7]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class Order {\n        int id = 7;\n\n        @Override\n        public String toString() {\n            return ____ + \"[id=\" + id + \"]\";\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(new Order());\n    }\n}",
+    "options": [
+      "getClass().getName()",
+      "getClass().getSimpleName()",
+      "getClass()",
+      "super.toString()"
+    ],
+    "answer": 1,
+    "explanation": "getSimpleName returns just Order. getName includes the enclosing class (Example$Order), a bare Class object prints class Example$Order, and super.toString adds the class name and hash.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-020",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class Animal {\n        @Override\n        public String toString() { return \"Animal\"; }\n    }\n\n    static class Dog extends Animal {\n        @Override\n        public String toString() { return super.toString() + \"/Dog\"; }\n    }\n\n    public static void main(String[] args) {\n        Animal a = new Dog();\n        System.out.println(a);\n    }\n}",
+    "options": [
+      "Dog",
+      "Animal",
+      "Animal/Dog",
+      "Dog/Animal"
+    ],
+    "answer": 2,
+    "explanation": "The declared type is Animal, but the object is a Dog, so the overriding Dog.toString runs through dynamic dispatch. It calls super.toString and appends /Dog.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-021",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "P.java",
+    "code": "class P {\n    @Override\n    public String toString() { return \"P:\" + this; }\n\n    public static void main(String[] args) {\n        System.out.println(new P());\n    }\n}",
+    "options": [
+      "A StackOverflowError is thrown",
+      "It prints P:",
+      "It prints P:null",
+      "It fails to compile"
+    ],
+    "answer": 0,
+    "explanation": "Concatenating this inside toString converts this to a String, which calls toString again. The recursion never ends and overflows the stack.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-022",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Node.java",
+    "code": "class Node {\n    String name;\n    Node other;\n    Node(String name) { this.name = name; }\n\n    @Override\n    public String toString() { return name + \"->\" + other; }\n\n    public static void main(String[] args) {\n        Node a = new Node(\"a\");\n        Node b = new Node(\"b\");\n        a.other = b;\n        b.other = a;\n        System.out.println(a);\n    }\n}",
+    "options": [
+      "a->b->a",
+      "a->b->null",
+      "A StackOverflowError is thrown",
+      "a->b"
+    ],
+    "answer": 2,
+    "explanation": "Each node's toString includes the other node's toString, and the two references form a cycle. The mutual recursion exhausts the stack, so toString of bidirectional structures must print identifiers rather than whole neighbours.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-023",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "X.java",
+    "code": "class X {\n    @Override\n    public String toString() { return null; }\n\n    public static void main(String[] args) {\n        System.out.println(new X());\n    }\n}",
+    "options": [
+      "An empty line",
+      "A NullPointerException is thrown",
+      "null",
+      "X followed by @ and a hex value"
+    ],
+    "answer": 2,
+    "explanation": "println(Object) uses String.valueOf, which returns whatever toString returns. A null result is then printed as the text null, although calling a method on that result would throw.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-024",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    enum Level {\n        HIGH;\n\n        @Override\n        public String toString() { return name().toLowerCase(); }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(Level.HIGH + \" \" + Level.HIGH.name() + \" \" + Level.valueOf(\"HIGH\"));\n    }\n}",
+    "options": [
+      "HIGH HIGH HIGH",
+      "high HIGH high",
+      "high high high",
+      "HIGH high HIGH"
+    ],
+    "answer": 1,
+    "explanation": "The overridden toString changes only the displayed text. name() still returns the declared constant name, and valueOf looks constants up by that name, returning the same constant that prints as high.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-025",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    record Pt(int x, int y) {}\n\n    public static void main(String[] args) {\n        System.out.println(new Pt(1, 2));\n    }\n}",
+    "options": [
+      "Pt(1, 2)",
+      "Pt[x=1, y=2]",
+      "Pt{x=1, y=2}",
+      "Example$Pt@1"
+    ],
+    "answer": 1,
+    "explanation": "A record automatically gets a toString that prints the record name followed by each component name and value in brackets.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-026",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    record Pt(int x, int y) {\n        @Override\n        public String toString() { return x + \",\" + y; }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(new Pt(1, 2));\n    }\n}",
+    "options": [
+      "Pt[x=1, y=2]",
+      "Pt[1,2]",
+      "A compile-time error",
+      "1,2"
+    ],
+    "answer": 3,
+    "explanation": "A record may declare its own toString, and it must be public. The explicit version replaces the generated one.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-027",
+    "question": "Given Object o = Integer.valueOf(42); which expression produces the String 42 without any exception?",
+    "options": [
+      "(String) o",
+      "o.toString",
+      "String.valueOf(o)",
+      "new String(o)"
+    ],
+    "answer": 2,
+    "explanation": "String.valueOf(Object) calls toString safely. The cast compiles but throws ClassCastException because the object is an Integer, while o.toString without parentheses and new String(o) do not compile.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-028",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(1 + 2 + \"3\" + 4 + 5);\n    }\n}",
+    "options": [
+      "3345",
+      "12345",
+      "3 3 4 5",
+      "154"
+    ],
+    "answer": 0,
+    "explanation": "The expression is evaluated left to right. 1 + 2 is integer addition and gives 3, then + \"3\" starts string concatenation, so 4 and 5 are appended as text.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-029",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String s = null;\n        s += \"x\";\n        s += null;\n        System.out.println(s);\n    }\n}",
+    "options": [
+      "x",
+      "A NullPointerException is thrown",
+      "xnull",
+      "nullxnull"
+    ],
+    "answer": 3,
+    "explanation": "A null String is converted to the text null in concatenation, so s becomes nullx and then nullxnull. No method is called on the null reference.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-030",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        char[] c = {'a', 'b'};\n        System.out.print(c);\n        System.out.print(\" \");\n        System.out.print(String.valueOf(c));\n        System.out.println(\" \" + (\"x\" + c).startsWith(\"x[C@\"));\n    }\n}",
+    "options": [
+      "[C@1 ab false",
+      "ab [C@1 true",
+      "ab ab true",
+      "ab ab false"
+    ],
+    "answer": 2,
+    "explanation": "println and print have an overload for char[] that prints the characters, and String.valueOf(char[]) builds the text. Concatenation uses Object.toString, so the result begins with [C@.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-031",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println((0.1 + 0.2) + \" \" + 10 / 4 + \" \" + 10 / 4.0);\n    }\n}",
+    "options": [
+      "0.3 2 2.5",
+      "0.3 2.5 2.5",
+      "0.30000000000000004 2.5 2",
+      "0.30000000000000004 2 2.5"
+    ],
+    "answer": 3,
+    "explanation": "Double.toString prints the shortest decimal that identifies the binary value, so 0.1 + 0.2 shows rounding error. 10 / 4 is integer division giving 2, while 10 / 4.0 is floating-point division giving 2.5.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-032",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(String.format(\"%s|%5s|%-5s|\", \"ab\", \"cd\", \"ef\"));\n    }\n}",
+    "options": [
+      "ab|   cd|ef   |",
+      "ab|cd|ef|",
+      "ab|cd   |   ef|",
+      "ab|   cd|   ef|"
+    ],
+    "answer": 0,
+    "explanation": "The %s specifier uses String.valueOf for the argument. The width 5 pads on the left by default, and the - flag left-justifies and pads on the right.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-033",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(String.format(\"%s %S %b\", null, \"ab\", null));\n    }\n}",
+    "options": [
+      "null AB true",
+      "null AB false",
+      "A NullPointerException is thrown",
+      "ab ab false"
+    ],
+    "answer": 1,
+    "explanation": "%s prints null for a null argument, %S converts the text to upper case, and %b prints false for null. This formatting is null-safe.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-034",
+    "question": "A Person variable p may be null, and the text n/a should be used in that case. Which expression does this without risking a NullPointerException?",
+    "options": [
+      "Objects.toString(p, \"n/a\")",
+      "p.toString()",
+      "p + \"n/a\"",
+      "String.valueOf(p, \"n/a\")"
+    ],
+    "answer": 0,
+    "explanation": "Objects.toString(Object, String) returns the default for null and otherwise p.toString(). Calling p.toString() throws on null, p + \"n/a\" appends text, and String.valueOf has no two-argument Object overload.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-035",
+    "question": "A User class has id, name, and passwordHash fields. Which toString is best practice?",
+    "options": [
+      "return \"User[id=\" + id + \", name=\" + name + \", passwordHash=\" + passwordHash + \"]\";",
+      "return \"User[\" + passwordHash + \"]\";",
+      "return \"User[id=\" + id + \", name=\" + name + \", token=\" + sessionToken + \"]\";",
+      "return \"User[id=\" + id + \", name=\" + name + \"]\";"
+    ],
+    "answer": 3,
+    "explanation": "toString output often ends up in logs and error messages, so secrets such as password hashes and session tokens should be left out. Identifying, non-sensitive fields are enough for debugging.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Map<String, Integer> t = new TreeMap<>();\n        Map<String, Integer> l = new LinkedHashMap<>();\n        t.put(\"b\", 2); t.put(\"a\", 1);\n        l.put(\"b\", 2); l.put(\"a\", 1);\n        System.out.println(t + \" \" + l);\n    }\n}",
+    "options": [
+      "{a=1, b=2} {b=2, a=1}",
+      "{b=2, a=1} {a=1, b=2}",
+      "{a=1, b=2} {a=1, b=2}",
+      "{b=2, a=1} {b=2, a=1}"
+    ],
+    "answer": 0,
+    "explanation": "TreeMap iterates in sorted key order, while LinkedHashMap keeps insertion order. Both use the same key=value format in toString.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-037",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "C.java",
+    "code": "class C {\n    int n;\n\n    @Override\n    public String toString() { return \"C\" + (n++); }\n\n    public static void main(String[] args) {\n        C c = new C();\n        System.out.print(c);\n        System.out.print(\" \");\n        System.out.print(c);\n    }\n}",
+    "options": [
+      "C0 C0",
+      "C0 C1",
+      "C1 C2",
+      "C0 C1 C2"
+    ],
+    "answer": 1,
+    "explanation": "Each call increments n, so the two printed values differ even though the object was not meant to change. A toString method should be free of side effects.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-038",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Num.java",
+    "code": "class Num {\n    int n;\n\n    @Override\n    public String toString() {\n        if (n > 0) {\n            return \"pos\";\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(new Num());\n    }\n}",
+    "options": [
+      "Compile-time error: missing return statement",
+      "It prints pos",
+      "It prints null",
+      "It compiles and throws an exception at run time"
+    ],
+    "answer": 0,
+    "explanation": "If n is not positive, no return statement is reached, and the compiler rejects a non-void method that can complete normally.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-039",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(Integer.toString(255, 16) + \" \" + Integer.toBinaryString(5) + \" \" + Integer.toHexString(255));\n    }\n}",
+    "options": [
+      "255 5 255",
+      "ff 101 ff",
+      "ff 5 ff",
+      "11111111 101 ff"
+    ],
+    "answer": 1,
+    "explanation": "Integer.toString(255, 16) writes the value in radix 16, toBinaryString(5) gives 101, and toHexString(255) gives ff.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-040",
+    "question": "In this pseudocode the + operator joins text. What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "function str(node)\n    if node.next is null\n        return text of node.value\n    return text of node.value + \"->\" + str(node.next)\n\nlist = 1 -> 2 -> 3\nprint str(first node of list)",
+    "options": [
+      "3->2->1",
+      "1->2->3",
+      "1->2->3->null",
+      "1->2"
+    ],
+    "answer": 1,
+    "explanation": "The recursion returns the current value followed by the text of the rest of the list. The base case stops at the last node and does not add an arrow, so the result is 1->2->3.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-041",
+    "question": "Using the same function, how many times is str invoked in total, counting the first call, for a list with 4 nodes?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "function str(node)\n    if node.next is null\n        return text of node.value\n    return text of node.value + \"->\" + str(node.next)",
+    "options": [
+      "3",
+      "5",
+      "4",
+      "1"
+    ],
+    "answer": 2,
+    "explanation": "Each call handles one node and calls itself for the next node until the last node, so there is one call per node.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-042",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Arrays;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Arrays.asList(new String[]{\"a\", \"b\"}) + \" \" + Arrays.asList(new int[]{1, 2}).size());\n    }\n}",
+    "options": [
+      "[a, b] 2",
+      "[a, b] 1",
+      "[a, b] [I@1",
+      "[[a, b]] 1"
+    ],
+    "answer": 1,
+    "explanation": "Arrays.asList on a String[] uses the array as the elements. For an int[], the array is one object, so the list has a single element.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-043",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "H.java",
+    "code": "class H {\n    @Override\n    public int hashCode() { return 255; }\n\n    public static void main(String[] args) {\n        System.out.println(new H());\n    }\n}",
+    "options": [
+      "H@0",
+      "H@ff",
+      "H",
+      "H@255"
+    ],
+    "answer": 1,
+    "explanation": "Object.toString calls the virtual hashCode method, so an overridden hashCode changes the hex part of the default text. 255 in hexadecimal is ff.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-044",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String s = \"%s-%d\".formatted(\"a\", 1);\n        System.out.println(s);\n    }\n}",
+    "options": [
+      "a - 1",
+      "%s-%d",
+      "a-1",
+      "A compile-time error"
+    ],
+    "answer": 2,
+    "explanation": "String.formatted, available since Java 15, is an instance method equivalent to String.format with the String as the template.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.List;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(String.join(\",\", List.of(\"a\", \"b\")) + \" \" + List.of(\"a\", \"b\"));\n    }\n}",
+    "options": [
+      "a,b [a, b]",
+      "[a, b] a,b",
+      "a, b [a,b]",
+      "ab [ab]"
+    ],
+    "answer": 0,
+    "explanation": "String.join inserts only the given delimiter between elements. The list's toString uses brackets and a comma plus a space.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-046",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Impl.java",
+    "code": "interface Named {\n    default String toString() { return \"Named\"; }\n}\n\nclass Impl implements Named {\n    public static void main(String[] args) {\n        System.out.println(new Impl());\n    }\n}",
+    "options": [
+      "It compiles and every implementing class uses the interface toString",
+      "It compiles and the inherited Object.toString wins",
+      "It compiles but throws an exception at run time",
+      "Compile-time error: a default method cannot override a member of java.lang.Object"
+    ],
+    "answer": 3,
+    "explanation": "An interface cannot provide default implementations of public Object methods such as toString, equals, or hashCode, because class implementations from Object would always win.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-047",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Box.java",
+    "code": "class Box {\n    public static String toString() { return \"Box\"; }\n\n    public static void main(String[] args) {\n        System.out.println(\"start\");\n    }\n}",
+    "options": [
+      "It prints Box",
+      "Compile-time error: a static method cannot override the instance method toString of Object",
+      "It prints the default text with class name and hash code",
+      "It compiles but throws an exception at run time"
+    ],
+    "answer": 1,
+    "explanation": "A static method cannot hide an instance method with the same signature from a superclass, so declaring static toString() does not compile.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-048",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "abstract class Shape {\n    @Override\n    public abstract String toString();\n}\n\nclass Square extends Shape {\n}\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(new Square());\n    }\n}",
+    "options": [
+      "It compiles and Square uses Object.toString",
+      "It prints Square",
+      "It compiles but throws an exception at run time",
+      "Compile-time error: Square is not abstract and does not implement the abstract toString"
+    ],
+    "answer": 3,
+    "explanation": "An abstract class may redeclare toString as abstract. A concrete subclass then has to implement it, and the inherited Object version does not satisfy the abstract declaration.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-049",
+    "question": "Which condition completes the loop so that the program prints [1, 2, 3]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        StringBuilder sb = new StringBuilder(\"[\");\n        for (int i = 1; i <= 3; i++) {\n            if (____) sb.append(\", \");\n            sb.append(i);\n        }\n        sb.append(\"]\");\n        System.out.println(sb);\n    }\n}",
+    "options": [
+      "i < 3",
+      "i > 1",
+      "i == 1",
+      "i % 2 == 0"
+    ],
+    "answer": 1,
+    "explanation": "The separator belongs before every element except the first, so it must be added when i is greater than 1. Other conditions produce misplaced or missing separators.",
+    "subtopic": "toString"
+  },
+  {
+    "id": "java-core-java-contracts-tostring-050",
+    "question": "A developer overrides equals and hashCode in a class. Which statement about toString is correct?",
+    "options": [
+      "equals must call toString internally",
+      "hashCode must return toString().hashCode()",
+      "The class does not compile unless toString is overridden too",
+      "toString is not part of that contract; overriding it is optional but helps debugging and logging"
+    ],
+    "answer": 3,
+    "explanation": "The equals and hashCode contract is independent of toString. A readable toString is a convenience for logs and debuggers, not a requirement.",
+    "subtopic": "toString"
+  }
+]

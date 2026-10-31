@@ -1,0 +1,3010 @@
+[
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-001",
+    "question": "Which statement about an abstract class in Java is correct?",
+    "options": [
+      "It must declare at least one abstract method, otherwise it fails to compile.",
+      "It cannot declare constructors because it cannot be instantiated.",
+      "It can be declared final so that no subclass can leave a method unimplemented.",
+      "It can contain both abstract and concrete methods, and it cannot be instantiated directly with new."
+    ],
+    "answer": 3,
+    "explanation": "An abstract class may mix abstract and concrete members, and may have zero abstract methods. It has constructors (used through super()), but new on the abstract type itself is rejected. final and abstract contradict each other, since abstract requires a subclass.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-002",
+    "question": "What happens when this program is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = new Shape();\n        System.out.println(s.area());\n    }\n}\n\nabstract class Shape {\n    abstract double area();\n}",
+    "options": [
+      "It compiles and prints 0.0.",
+      "It compiles, but throws InstantiationException at runtime.",
+      "Compile-time error: Shape is abstract and cannot be instantiated.",
+      "It compiles, but throws NullPointerException at runtime."
+    ],
+    "answer": 2,
+    "explanation": "Using new on an abstract class is rejected by the compiler. This is a compile-time error, not a runtime exception.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-003",
+    "question": "Which method declaration is valid inside an abstract class?",
+    "options": [
+      "abstract void draw() { }",
+      "abstract final void draw();",
+      "abstract private void draw();",
+      "abstract void draw();"
+    ],
+    "answer": 3,
+    "explanation": "An abstract method ends with a semicolon and has no body. An empty body { } still counts as a body. abstract cannot be combined with final or private, because those prevent overriding.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Animal a = new Dog();\n        a.speak();\n    }\n}\n\nabstract class Animal {\n    abstract String sound();\n\n    void speak() {\n        System.out.println(sound());\n    }\n}\n\nclass Dog extends Animal {\n    String sound() {\n        return \"Woof\";\n    }\n}",
+    "options": [
+      "Woof",
+      "null",
+      "sound",
+      "The code does not compile."
+    ],
+    "answer": 0,
+    "explanation": "speak() is inherited from Animal and calls sound(). Dynamic dispatch selects Dog's implementation, which returns Woof.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-005",
+    "question": "Which statement about constructors in an abstract class is correct?",
+    "options": [
+      "An abstract class cannot have constructors, so fields must be initialized at declaration.",
+      "An abstract class constructor must itself be declared abstract.",
+      "An abstract class can have constructors; they run through super() when a concrete subclass object is created.",
+      "An abstract class constructor runs only if the class is instantiated with new."
+    ],
+    "answer": 2,
+    "explanation": "Abstract classes have constructors so that the state they declare can be initialized. Constructors are never abstract, and they run as part of the subclass construction chain.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-006",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Child();\n    }\n}\n\nabstract class Base {\n    Base() {\n        System.out.println(\"Base\");\n    }\n}\n\nclass Child extends Base {\n    Child() {\n        System.out.println(\"Child\");\n    }\n}",
+    "options": [
+      "Base, then Child",
+      "Child, then Base",
+      "Child only",
+      "The code does not compile."
+    ],
+    "answer": 0,
+    "explanation": "A subclass constructor first calls the superclass constructor, even when the superclass is abstract. So Base prints before Child.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-007",
+    "question": "A non-abstract class extends an abstract class and does not implement one of its abstract methods. What is the result?",
+    "options": [
+      "It compiles, and calling the method throws AbstractMethodError.",
+      "It compiles, and the method silently does nothing.",
+      "It compiles only if the abstract method is public.",
+      "Compile-time error, unless the subclass is also declared abstract."
+    ],
+    "answer": 3,
+    "explanation": "The first concrete class in a hierarchy must implement every inherited abstract method. Otherwise the subclass has to be declared abstract itself.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-008",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"start\");\n    }\n}\n\nabstract class A {\n    abstract void f();\n}\n\nclass B extends A {\n}",
+    "options": [
+      "Abstract classes cannot be extended.",
+      "The method f() must be declared public in A.",
+      "B must declare its own constructor.",
+      "B is concrete but does not implement the inherited abstract method f()."
+    ],
+    "answer": 3,
+    "explanation": "A concrete class must provide implementations for all inherited abstract methods. B neither does so nor is declared abstract.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-009",
+    "question": "Which modifier combination on a method is illegal?",
+    "options": [
+      "abstract static",
+      "public abstract",
+      "protected abstract",
+      "abstract with no access modifier"
+    ],
+    "answer": 0,
+    "explanation": "A static method belongs to the class and is not overridden, so it cannot be abstract. The other combinations are legal for abstract methods.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-010",
+    "question": "Which declaration causes a compile-time error?",
+    "options": [
+      "abstract class Tool { }",
+      "final abstract class Tool { }",
+      "public abstract class Tool { }",
+      "abstract class Tool { void run() { } }"
+    ],
+    "answer": 1,
+    "explanation": "A final class cannot be extended, while an abstract class exists only to be extended. The two modifiers contradict each other.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-011",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(Util.twice(4));\n    }\n}\n\nabstract class Util {\n    static int twice(int x) {\n        return 2 * x;\n    }\n}",
+    "options": [
+      "4",
+      "8",
+      "Compile-time error: an abstract class must have an abstract method.",
+      "Compile-time error: static methods are not allowed in abstract classes."
+    ],
+    "answer": 1,
+    "explanation": "An abstract class can contain static members and no abstract methods at all. Util.twice(4) returns 8, and no instance is needed.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = new Circle(2);\n        System.out.println(s.area());\n    }\n}\n\nabstract class Shape {\n    abstract int area();\n}\n\nclass Circle extends Shape {\n    private int r;\n\n    Circle(int r) {\n        this.r = r;\n    }\n\n    int area() {\n        return 3 * r * r;\n    }\n}",
+    "options": [
+      "0",
+      "6",
+      "The code does not compile.",
+      "12"
+    ],
+    "answer": 3,
+    "explanation": "The reference type is Shape, but the object is Circle, so Circle.area() runs: 3 * 2 * 2 = 12.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-013",
+    "question": "Assume the pseudocode below uses normal method-dispatch rules, and print adds no line break. What is printed when d.run() executes?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "abstract class Base\n    method run()\n        print \"A\"\n        step()\n        print \"C\"\n    abstract method step()\n\nclass Derived extends Base\n    method step()\n        print \"B\"\n\nd = new Derived()\nd.run()",
+    "options": [
+      "AC",
+      "ACB",
+      "ABC",
+      "BAC"
+    ],
+    "answer": 2,
+    "explanation": "run() is defined in Base and prints A, then calls step(), which dispatches to Derived.step() and prints B, then prints C.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Greeter g = new Greeter() {\n            void greet() {\n                System.out.println(\"Hi\");\n            }\n        };\n        g.greet();\n    }\n}\n\nabstract class Greeter {\n    abstract void greet();\n}",
+    "options": [
+      "Nothing is printed.",
+      "Hi",
+      "Compile-time error: an anonymous class cannot extend an abstract class.",
+      "Compile-time error: greet() has no body."
+    ],
+    "answer": 1,
+    "explanation": "An anonymous class can extend an abstract class if it implements every abstract method. The new Greeter() { ... } expression creates that anonymous subclass.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-015",
+    "question": "A concrete class declares abstract void log();. Which change fixes the compile error?",
+    "options": [
+      "Make log() static.",
+      "Add the final modifier to the class.",
+      "Declare the class abstract, or give log() a body and remove abstract.",
+      "Add a constructor to the class."
+    ],
+    "answer": 2,
+    "explanation": "Only an abstract class may contain abstract methods. Either the class becomes abstract, or the method becomes concrete.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Task t = new SimpleTask();\n        t.execute();\n        System.out.println(t.count);\n    }\n}\n\nabstract class Task {\n    protected int count = 5;\n\n    abstract void execute();\n}\n\nclass SimpleTask extends Task {\n    void execute() {\n        count += 3;\n    }\n}",
+    "options": [
+      "5",
+      "3",
+      "8",
+      "0"
+    ],
+    "answer": 2,
+    "explanation": "The abstract class has a protected field count initialized to 5 and a constructor-free setup. The subclass adds 3 to it, so the result is 8.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl();\n    }\n}\n\nabstract class Base {\n    Base() {\n        init();\n    }\n\n    abstract void init();\n}\n\nclass Impl extends Base {\n    int x = 10;\n\n    void init() {\n        System.out.println(x);\n    }\n}",
+    "options": [
+      "0",
+      "10",
+      "null",
+      "Compile-time error: init() cannot be called from a constructor."
+    ],
+    "answer": 0,
+    "explanation": "The Base constructor runs before Impl's field initializers. init() dispatches to Impl.init(), where x still has its default value 0. Calling overridable methods from constructors is a classic trap.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-018",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape[] arr = new Shape[3];\n        System.out.println(arr[0]);\n    }\n}\n\nabstract class Shape {\n    abstract double area();\n}",
+    "options": [
+      "Compile-time error: cannot create an array of an abstract type.",
+      "ArrayStoreException",
+      "Shape@1",
+      "null"
+    ],
+    "answer": 3,
+    "explanation": "Creating an array of an abstract type is legal because no Shape objects are created. The elements default to null.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-019",
+    "question": "Given the abstract class in the code, which subclass compiles?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"check\");\n    }\n}\n\nabstract class Holder {\n    abstract Number value();\n}",
+    "options": [
+      "class H1 extends Holder { Integer value() { return 1; } }",
+      "class H2 extends Holder { Object value() { return 1; } }",
+      "class H3 extends Holder { int value() { return 1; } }",
+      "class H4 extends Holder { void value() { } }"
+    ],
+    "answer": 0,
+    "explanation": "An overriding method must have the same return type or a covariant (subtype) reference return type. Integer is a subtype of Number. Object is wider, and int and void are not reference subtypes.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-020",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().run();\n    }\n}\n\nabstract class Job {\n    public abstract void run();\n}\n\nclass Impl extends Job {\n    void run() {\n        System.out.println(\"run\");\n    }\n}",
+    "options": [
+      "The overriding method has weaker access (package-private) than the public abstract method.",
+      "run() must be static in Job.",
+      "Job must be declared final.",
+      "An overriding method cannot return void."
+    ],
+    "answer": 0,
+    "explanation": "An overriding method cannot reduce visibility. The abstract method is public, so the implementation must also be public.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-021",
+    "question": "Fill in the blank so the code compiles.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Car().move();\n    }\n}\n\nabstract class Vehicle {\n    public abstract void move();\n}\n\nclass Car extends Vehicle {\n    ____ void move() {\n        System.out.println(\"Driving\");\n    }\n}",
+    "options": [
+      "private",
+      "public",
+      "protected",
+      "static"
+    ],
+    "answer": 1,
+    "explanation": "The abstract method is public, so the overriding method must be public as well. Narrower access is a compile-time error.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-022",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"ok\");\n    }\n}\n\nabstract class Task implements Runnable {\n}",
+    "options": [
+      "ok",
+      "Compile-time error: Task does not implement run().",
+      "Nothing is printed.",
+      "Runtime error: AbstractMethodError."
+    ],
+    "answer": 0,
+    "explanation": "An abstract class may leave inherited interface methods unimplemented. The first concrete subclass must implement them.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-023",
+    "question": "Assume Shape is abstract with the method abstract double area();. Which statement compiles?",
+    "options": [
+      "Shape s = new Shape();",
+      "Shape s = new Shape() { };",
+      "Shape s = new abstract Shape() { double area() { return 1; } };",
+      "Shape s = new Shape() { double area() { return 1; } };"
+    ],
+    "answer": 3,
+    "explanation": "An anonymous subclass is allowed only if it implements all abstract methods. The empty body leaves area() abstract, and new abstract is not valid syntax.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-024",
+    "question": "Which rule about abstract methods must a developer remember?",
+    "options": [
+      "An abstract method has a body that subclasses may optionally override.",
+      "An abstract method can only be called from within the same package.",
+      "An abstract method has no body and must be implemented by the first concrete subclass.",
+      "An abstract method is implemented by the JVM at runtime."
+    ],
+    "answer": 2,
+    "explanation": "An abstract method only declares a signature. Every concrete descendant has to supply an implementation.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-025",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Square().area());\n    }\n}\n\nabstract class Shape {\n    abstract int area();\n}\n\nclass Square extends Shape {\n    int area() {\n        return super.area() + 4;\n    }\n}",
+    "options": [
+      "area() must be static to be called with super.",
+      "Square must be declared abstract.",
+      "super.area() refers to an abstract method, which cannot be called directly.",
+      "super can only be used in constructors."
+    ],
+    "answer": 2,
+    "explanation": "Calling super.area() would invoke a method with no body. The compiler rejects direct calls to abstract methods through super.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-026",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = Shape.create();\n        System.out.println(s.name());\n    }\n}\n\nabstract class Shape {\n    abstract String name();\n\n    static Shape create() {\n        return new Circle();\n    }\n}\n\nclass Circle extends Shape {\n    String name() {\n        return \"Circle\";\n    }\n}",
+    "options": [
+      "Circle",
+      "Shape",
+      "null",
+      "The code does not compile."
+    ],
+    "answer": 0,
+    "explanation": "A static factory method in an abstract class can return an instance of a concrete subclass. The object's actual type is Circle.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-027",
+    "question": "Which class design correctly fixes the generate() steps while letting subclasses supply the body step?",
+    "options": [
+      "abstract class Report { abstract final void body(); }",
+      "abstract class Report { final void generate() { open(); body(); } abstract void body(); void open() { } }",
+      "class Report { abstract void body(); }",
+      "abstract class Report { abstract void body() { } }"
+    ],
+    "answer": 1,
+    "explanation": "The template method is final so it cannot be overridden, and body() is abstract so subclasses must supply it. An abstract final method, an abstract method in a concrete class, and an abstract method with a body are all errors.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-028",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "abstract class Example {\n    public static void main(String[] args) {\n        System.out.println(\"Run\");\n    }\n}",
+    "options": [
+      "Nothing is printed.",
+      "Compile-time error: an abstract class cannot contain main.",
+      "Run",
+      "Runtime error: cannot instantiate an abstract class."
+    ],
+    "answer": 2,
+    "explanation": "An abstract class can declare a static main method, and the JVM can launch it because no instance is required.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-029",
+    "question": "When is an abstract class a better choice than a concrete class?",
+    "options": [
+      "When subclasses should share state and partial implementation but must complete some behavior themselves.",
+      "When the class should never have any fields.",
+      "When objects must be created frequently and cheaply.",
+      "When all methods should be implemented in the base class."
+    ],
+    "answer": 0,
+    "explanation": "Abstract classes let a base class provide common state and behavior while forcing subclasses to supply the missing parts.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-030",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new B().show();\n    }\n}\n\nabstract class A {\n    void show() {\n        System.out.print(\"A\");\n    }\n}\n\nclass B extends A {\n    void show() {\n        super.show();\n        System.out.print(\"B\");\n    }\n}",
+    "options": [
+      "A",
+      "BA",
+      "AB",
+      "B"
+    ],
+    "answer": 2,
+    "explanation": "B.show() first calls super.show(), which prints A, and then prints B.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-031",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = new Circle();\n        System.out.println((s instanceof Circle) + \" \" + (s instanceof Shape));\n    }\n}\n\nabstract class Shape {\n}\n\nclass Circle extends Shape {\n}",
+    "options": [
+      "true false",
+      "true true",
+      "false true",
+      "The code does not compile."
+    ],
+    "answer": 1,
+    "explanation": "The object is a Circle, so instanceof is true for both Circle and its abstract superclass Shape.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-032",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new C();\n    }\n}\n\nabstract class P {\n    static {\n        System.out.print(\"S1\");\n    }\n}\n\nclass C extends P {\n    static {\n        System.out.print(\"S2\");\n    }\n}",
+    "options": [
+      "S2S1",
+      "S2",
+      "S1S2",
+      "Nothing is printed."
+    ],
+    "answer": 2,
+    "explanation": "Class initialization runs superclass static blocks first. Creating a Child triggers initialization of P and then C.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-033",
+    "question": "Which member declaration inside an abstract class Shape is illegal?",
+    "options": [
+      "Shape() { }",
+      "abstract Shape() { }",
+      "protected Shape(int x) { }",
+      "private Shape() { }"
+    ],
+    "answer": 1,
+    "explanation": "Constructors can never be abstract. Abstract classes may declare constructors with any access modifier.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-034",
+    "question": "Class A has abstract methods m1, m2 and m3. Class B extends A and implements m1. C extends B and implements m2. D extends C and implements m3. Which of these classes can be instantiated if none is declared abstract except as needed?",
+    "options": [
+      "B, C and D",
+      "Only D",
+      "C and D",
+      "All of A, B, C and D"
+    ],
+    "answer": 1,
+    "explanation": "A class is concrete only when every inherited abstract method is implemented. D is the first class that implements all three.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-035",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nabstract class X {\n    private abstract void f();\n}",
+    "options": [
+      "Abstract methods must always return void.",
+      "Private methods cannot be declared in abstract classes.",
+      "The method name f conflicts with a keyword.",
+      "A private method cannot be overridden, so it cannot be abstract."
+    ],
+    "answer": 3,
+    "explanation": "Abstract methods must be overridden in subclasses, but private methods are not inherited. The two modifiers are mutually exclusive.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape[] shapes = { new Circle(1), new Square(2) };\n        int total = 0;\n        for (Shape s : shapes) {\n            total += s.area();\n        }\n        System.out.println(total);\n    }\n}\n\nabstract class Shape {\n    abstract int area();\n}\n\nclass Circle extends Shape {\n    int r;\n\n    Circle(int r) {\n        this.r = r;\n    }\n\n    int area() {\n        return 3 * r * r;\n    }\n}\n\nclass Square extends Shape {\n    int s;\n\n    Square(int s) {\n        this.s = s;\n    }\n\n    int area() {\n        return s * s;\n    }\n}",
+    "options": [
+      "7",
+      "3",
+      "4",
+      "12"
+    ],
+    "answer": 0,
+    "explanation": "Each element's own area() runs: Circle(1) returns 3 and Square(2) returns 4, so the total is 7.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-037",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Leaf().run();\n    }\n}\n\nclass Base {\n    void run() {\n        System.out.println(\"run\");\n    }\n}\n\nabstract class Mid extends Base {\n    abstract void run();\n}\n\nclass Leaf extends Mid {\n    void run() {\n        System.out.println(\"leaf\");\n    }\n}",
+    "options": [
+      "run",
+      "Compile-time error: a concrete method cannot be redeclared abstract.",
+      "Compile-time error: Leaf must declare a constructor.",
+      "leaf"
+    ],
+    "answer": 3,
+    "explanation": "An abstract class may extend a concrete class and redeclare an inherited method as abstract. Leaf then has to implement it, so Leaf.run() runs.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-038",
+    "question": "Fill in the blank so the compiler verifies that the method really overrides a superclass method.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Sq().area());\n    }\n}\n\nabstract class Shape {\n    abstract double area();\n}\n\nclass Sq extends Shape {\n    ____\n    double area() {\n        return 9.0;\n    }\n}",
+    "options": [
+      "@Overload",
+      "@Override",
+      "@Abstract",
+      "@Implements"
+    ],
+    "answer": 1,
+    "explanation": "@Override makes the compiler check that the annotated method overrides or implements a supertype method. The other annotations do not exist in Java.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-039",
+    "question": "What is the cause of the compile error?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nabstract class Shape {\n    abstract double area();\n}\n\nabstract class Sq extends Shape {\n    @Override\n    double ares() {\n        return 1.0;\n    }\n}",
+    "options": [
+      "@Override reports that ares() does not override any superclass method.",
+      "Sq must be declared final.",
+      "Shape.area() must be public.",
+      "An abstract class cannot contain methods annotated with @Override."
+    ],
+    "answer": 0,
+    "explanation": "The method name is misspelled, so ares() overrides nothing. @Override turns this mistake into a compile-time error.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-040",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = null;\n        try {\n            s.area();\n        } catch (Exception e) {\n            System.out.println(e.getClass().getSimpleName());\n        }\n    }\n}\n\nabstract class Shape {\n    abstract double area();\n}",
+    "options": [
+      "AbstractMethodError",
+      "0.0",
+      "NullPointerException",
+      "The code does not compile."
+    ],
+    "answer": 2,
+    "explanation": "Calling a method on a null reference throws NullPointerException, regardless of whether the method is abstract.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-041",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Circle().sides());\n    }\n}\n\nabstract sealed class Shape permits Circle {\n    abstract int sides();\n}\n\nfinal class Circle extends Shape {\n    int sides() {\n        return 0;\n    }\n}",
+    "options": [
+      "Compile-time error: a sealed class cannot be abstract.",
+      "Compile-time error: Circle must be declared sealed or non-sealed.",
+      "3",
+      "0"
+    ],
+    "answer": 3,
+    "explanation": "A sealed class can be abstract. The permitted subclass Circle is final, which satisfies the rule that every permitted subclass must be final, sealed or non-sealed.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-042",
+    "question": "What advantage does an abstract method have over a concrete method that throws UnsupportedOperationException?",
+    "options": [
+      "The compiler forces every concrete subclass to implement it, so missing implementations are caught at compile time.",
+      "It makes the method run faster at runtime.",
+      "It allows the method to be called without an object.",
+      "It allows a subclass to ignore the method."
+    ],
+    "answer": 0,
+    "explanation": "An abstract method moves the contract check to compile time. A throwing default only reveals the missing implementation when the code runs.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-043",
+    "question": "Assume Loader declares abstract void load() throws IOException;. Which override compiles?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.io.IOException;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(\"check\");\n    }\n}\n\nabstract class Loader {\n    abstract void load() throws IOException;\n}",
+    "options": [
+      "void load() throws Exception { }",
+      "void load() throws InterruptedException { }",
+      "int load() throws IOException { return 0; }",
+      "void load() { }"
+    ],
+    "answer": 3,
+    "explanation": "An override may throw fewer or narrower checked exceptions, or none. It cannot throw broader or unrelated checked exceptions, and it cannot change the return type to int.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-044",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new A() {\n            void f() {\n            }\n        };\n    }\n}\n\nabstract class A {\n    A() {\n        System.out.print(\"A\");\n    }\n\n    abstract void f();\n}",
+    "options": [
+      "Nothing is printed.",
+      "Compile-time error: an anonymous class cannot call the abstract class constructor.",
+      "A",
+      "AB"
+    ],
+    "answer": 2,
+    "explanation": "Creating an anonymous subclass still runs the abstract class constructor first, which prints A.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Counter c = new Up();\n        c.tick();\n        c.tick();\n        System.out.println(c.n);\n    }\n}\n\nabstract class Counter {\n    protected int n;\n\n    Counter(int start) {\n        n = start;\n    }\n\n    abstract void tick();\n}\n\nclass Up extends Counter {\n    Up() {\n        super(5);\n    }\n\n    void tick() {\n        n++;\n    }\n}",
+    "options": [
+      "5",
+      "7",
+      "2",
+      "0"
+    ],
+    "answer": 1,
+    "explanation": "The subclass calls super(5), so n starts at 5. Each tick() adds 1, giving 7 after two calls.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-046",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new B().lock();\n    }\n}\n\nabstract class A {\n    final void lock() {\n    }\n}\n\nclass B extends A {\n    void lock() {\n    }\n}",
+    "options": [
+      "Abstract classes cannot declare final methods.",
+      "lock() is final in A and cannot be overridden.",
+      "lock() must be public to be overridden.",
+      "B must be declared abstract."
+    ],
+    "answer": 1,
+    "explanation": "A final method keeps its implementation in all subclasses. Overriding it is a compile-time error, even in an abstract superclass.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-047",
+    "question": "Which statement best summarizes when a class should be declared abstract?",
+    "options": [
+      "When it has no fields and only static methods.",
+      "When it should be instantiated only once.",
+      "When all of its methods should be inherited unchanged.",
+      "When it represents an incomplete concept that is meant to be extended and should not be instantiated on its own."
+    ],
+    "answer": 3,
+    "explanation": "Abstract is a design signal: the type is a partial abstraction whose completion is delegated to subclasses.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-048",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = new Circle();\n        System.out.println(s.getClass().getSimpleName());\n    }\n}\n\nabstract class Shape {\n}\n\nclass Circle extends Shape {\n}",
+    "options": [
+      "Circle",
+      "Shape",
+      "Example",
+      "The code does not compile."
+    ],
+    "answer": 0,
+    "explanation": "getClass() returns the runtime class of the object, which is Circle, regardless of the declared reference type.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-049",
+    "question": "Assume the pseudocode below. What is printed by d.run()?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "abstract class Base\n    method run()\n        for i from 1 to 3\n            print step(i) followed by a space\n    abstract method step(n)\n\nclass Derived extends Base\n    method step(n)\n        return n * n\n\nd = new Derived()\nd.run()",
+    "options": [
+      "1 2 3",
+      "1 4 9",
+      "1 2 4",
+      "3 6 9"
+    ],
+    "answer": 1,
+    "explanation": "run() loops from 1 to 3 and prints step(i). Derived.step(i) returns i * i, so the values are 1, 4 and 9.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-abstract-classes-and-methods-050",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        A a = new B();\n        System.out.println(a.name);\n    }\n}\n\nabstract class A {\n    String name = \"A\";\n}\n\nclass B extends A {\n    String name = \"B\";\n}",
+    "options": [
+      "B",
+      "A",
+      "AB",
+      "The code does not compile."
+    ],
+    "answer": 1,
+    "explanation": "Fields are not overridden. The reference type is A, so the field access a.name uses A's field, even though the object is a B.",
+    "subtopic": "Abstract classes and methods"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-001",
+    "question": "What does an interface primarily define in Java?",
+    "options": [
+      "The complete internal state of every implementing class.",
+      "A concrete implementation that cannot be changed.",
+      "A way to create objects without constructors.",
+      "A contract describing what implementing classes can do, without dictating how."
+    ],
+    "answer": 3,
+    "explanation": "An interface specifies the operations that implementers must support. How each class implements them is left to the class.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-002",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().run();\n    }\n}\n\ninterface Task {\n    void run();\n}\n\nclass Impl implements Task {\n    void run() {\n        System.out.println(\"run\");\n    }\n}",
+    "options": [
+      "Interfaces cannot be implemented by classes in the same file.",
+      "The method must be declared static.",
+      "The class must also extend Object explicitly.",
+      "The implementing method is package-private, but interface methods are implicitly public."
+    ],
+    "answer": 3,
+    "explanation": "Interface methods are implicitly public abstract. An implementation cannot reduce visibility, so it must be declared public.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-003",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Config.MAX = 20;\n        System.out.println(Config.MAX);\n    }\n}\n\ninterface Config {\n    int MAX = 10;\n}",
+    "options": [
+      "Interface fields are implicitly public static final, so MAX cannot be reassigned.",
+      "Interfaces cannot declare fields.",
+      "MAX must be initialized in a constructor.",
+      "The main method must be inside the interface."
+    ],
+    "answer": 0,
+    "explanation": "Fields declared in an interface are constants. Assigning to a final variable is a compile-time error.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-004",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Runnable r = new Runnable();\n        r.run();\n    }\n}",
+    "options": [
+      "Compile-time error: Runnable is abstract and cannot be instantiated.",
+      "It compiles and prints nothing.",
+      "It compiles but throws InstantiationException.",
+      "It compiles but throws NullPointerException."
+    ],
+    "answer": 0,
+    "explanation": "An interface cannot be instantiated with new unless an anonymous class body supplies the implementation.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-005",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Both b = new Both();\n        b.a();\n        b.b();\n    }\n}\n\ninterface First {\n    void a();\n}\n\ninterface Second {\n    void b();\n}\n\nclass Both implements First, Second {\n    public void a() {\n        System.out.print(\"A\");\n    }\n\n    public void b() {\n        System.out.print(\"B\");\n    }\n}",
+    "options": [
+      "A",
+      "AB",
+      "B",
+      "The code does not compile."
+    ],
+    "answer": 1,
+    "explanation": "A class can implement several interfaces. Both methods are implemented, so calling them in order prints A and then B.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-006",
+    "question": "Which statement about interface inheritance is correct?",
+    "options": [
+      "An interface can extend multiple classes.",
+      "An interface can implement other interfaces using implements.",
+      "An interface can extend multiple interfaces using the extends keyword.",
+      "An interface can extend only one other interface."
+    ],
+    "answer": 2,
+    "explanation": "Interfaces use extends, not implements, to inherit from other interfaces, and multiple interface inheritance is allowed.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-007",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().hello();\n    }\n}\n\ninterface Greeter {\n    default void hello() {\n        System.out.println(\"Hello\");\n    }\n}\n\nclass Impl implements Greeter {\n}",
+    "options": [
+      "Nothing is printed.",
+      "Compile-time error: interfaces cannot have method bodies.",
+      "Compile-time error: Impl must override hello().",
+      "Hello"
+    ],
+    "answer": 3,
+    "explanation": "Since Java 8, an interface can declare default methods with a body. Impl inherits hello() without overriding it.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-008",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().hello();\n    }\n}\n\ninterface A {\n    default void hello() {\n        System.out.println(\"A\");\n    }\n}\n\ninterface B {\n    default void hello() {\n        System.out.println(\"B\");\n    }\n}\n\nclass Impl implements A, B {\n}",
+    "options": [
+      "Default methods cannot have the same name.",
+      "A class cannot implement two interfaces.",
+      "hello() must be declared static.",
+      "Both interfaces provide a default hello(), so Impl must override it to resolve the conflict."
+    ],
+    "answer": 3,
+    "explanation": "When a class inherits two unrelated default methods with the same signature, the compiler requires an explicit override.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().hello();\n    }\n}\n\ninterface A {\n    default void hello() {\n        System.out.println(\"A\");\n    }\n}\n\ninterface B {\n    default void hello() {\n        System.out.println(\"B\");\n    }\n}\n\nclass Impl implements A, B {\n    public void hello() {\n        A.super.hello();\n    }\n}",
+    "options": [
+      "B",
+      "AB",
+      "A",
+      "The code does not compile."
+    ],
+    "answer": 2,
+    "explanation": "Interface.super.method() selects a specific inherited default implementation. Impl chooses A's version.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-010",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Util u = new Impl();\n        u.helper();\n    }\n}\n\ninterface Util {\n    static void helper() {\n        System.out.println(\"help\");\n    }\n}\n\nclass Impl implements Util {\n}",
+    "options": [
+      "Static methods are not allowed in interfaces.",
+      "A static interface method must be called through the interface name, not through an instance.",
+      "The interface method must be public.",
+      "Impl must implement helper()."
+    ],
+    "answer": 1,
+    "explanation": "Static interface methods belong to the interface and are not inherited by implementing classes or instances. They must be called as Util.helper().",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-011",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Impl().total());\n    }\n}\n\ninterface Calc {\n    default String total() {\n        return \"Total: \" + (twice(1) + twice(2));\n    }\n\n    private int twice(int x) {\n        return x * 2;\n    }\n}\n\nclass Impl implements Calc {\n}",
+    "options": [
+      "Total: 3",
+      "Compile-time error: interfaces cannot have private methods.",
+      "Total: 6",
+      "Compile-time error: private methods in interfaces must be static."
+    ],
+    "answer": 2,
+    "explanation": "Since Java 9, interfaces can declare private methods to share code between default methods. Both calls use the private helper.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Calc c = (a, b) -> a + b;\n        System.out.println(c.apply(2, 3));\n    }\n}\n\n@FunctionalInterface\ninterface Calc {\n    int apply(int a, int b);\n}",
+    "options": [
+      "Compile-time error: lambda cannot implement an interface.",
+      "5",
+      "Compile-time error: the interface has two abstract methods.",
+      "0"
+    ],
+    "answer": 1,
+    "explanation": "An interface with exactly one abstract method is a functional interface, so a lambda can implement it.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-013",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Child().who();\n    }\n}\n\ninterface Talker {\n    default void who() {\n        System.out.println(\"Interface\");\n    }\n}\n\nclass Parent {\n    public void who() {\n        System.out.println(\"Class\");\n    }\n}\n\nclass Child extends Parent implements Talker {\n}",
+    "options": [
+      "Class",
+      "Interface",
+      "Compile-time error: ambiguous method call.",
+      "Nothing is printed."
+    ],
+    "answer": 0,
+    "explanation": "The class-wins rule: a method inherited from a superclass takes priority over a default method from an interface.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(Config.MAX);\n    }\n}\n\ninterface Config {\n    int MAX = 10;\n}",
+    "options": [
+      "0",
+      "10",
+      "Compile-time error: interfaces cannot declare variables.",
+      "Compile-time error: MAX is not static."
+    ],
+    "answer": 1,
+    "explanation": "MAX is implicitly public static final. It can be accessed through the interface name.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-015",
+    "question": "What is a marker interface such as java.io.Serializable?",
+    "options": [
+      "An interface with only static methods.",
+      "An interface that cannot be implemented by classes.",
+      "An interface that must be implemented by every class.",
+      "An interface with no methods that signals a capability or property of the implementing class."
+    ],
+    "answer": 3,
+    "explanation": "Marker interfaces declare no members. Their presence is used by APIs (for example serialization) to decide how to treat objects.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Payment p = new CardPayment();\n        System.out.println(p.pay(50));\n    }\n}\n\ninterface Payment {\n    String pay(int amount);\n}\n\nclass CardPayment implements Payment {\n    public String pay(int amount) {\n        return \"Card payment of \" + amount;\n    }\n}",
+    "options": [
+      "Card payment of 50",
+      "Payment of 50",
+      "Compile-time error: Payment cannot refer to CardPayment.",
+      "Card payment of 0"
+    ],
+    "answer": 0,
+    "explanation": "The reference type is the interface, but the call dispatches to the implementation of the actual object, CardPayment.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-017",
+    "question": "Which declaration best follows the principle of programming to an interface?",
+    "options": [
+      "ArrayList<String> names = new ArrayList<>();",
+      "List<String> names = new ArrayList<>();",
+      "Object names = new ArrayList<String>();",
+      "Collection<String> names = new LinkedList<String>() { };"
+    ],
+    "answer": 1,
+    "explanation": "Declaring the variable with the interface type keeps client code independent of the implementation, while still allowing List operations. Object loses the contract, and the anonymous subclass is unrelated to the principle.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-018",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Task {\n    void run() {\n        System.out.println(\"run\");\n    }\n}",
+    "options": [
+      "Interfaces cannot declare methods.",
+      "The method must return void.",
+      "The interface must be declared abstract.",
+      "A non-default, non-static, non-private interface method cannot have a body."
+    ],
+    "answer": 3,
+    "explanation": "In an interface, a method with a body must be marked default, static or private. Otherwise it must be abstract with no body.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-019",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Named {\n    default String toString() {\n        return \"Named\";\n    }\n}",
+    "options": [
+      "A default method cannot override a method of java.lang.Object such as toString().",
+      "Default methods cannot return String.",
+      "toString() must be static.",
+      "The interface must declare a constructor."
+    ],
+    "answer": 0,
+    "explanation": "Interfaces cannot provide default implementations for methods of Object. A class always inherits Object's version, which wins.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-020",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Item> list = new ArrayList<>();\n        list.add(new Item(\"ABCD\"));\n        list.add(new Item(\"Ab\"));\n        list.add(new Item(\"abc\"));\n        Collections.sort(list);\n        System.out.println(list);\n    }\n}\n\nclass Item implements Comparable<Item> {\n    String text;\n\n    Item(String text) {\n        this.text = text;\n    }\n\n    public int compareTo(Item other) {\n        return text.length() - other.text.length();\n    }\n\n    public String toString() {\n        return text;\n    }\n}",
+    "options": [
+      "[ABCD, Ab, abc]",
+      "[Ab, abc, ABCD]",
+      "[Ab, ABCD, abc]",
+      "Runtime error: ClassCastException."
+    ],
+    "answer": 1,
+    "explanation": "Item implements Comparable<Item> and compares by length. Collections.sort uses compareTo, giving lengths 2, 3 and 4 in order.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-021",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>(List.of(\"a\", \"bb\", \"ccc\"));\n        list.sort((x, y) -> Integer.compare(y.length(), x.length()));\n        System.out.println(list);\n    }\n}",
+    "options": [
+      "[ccc, bb, a]",
+      "[a, bb, ccc]",
+      "[bb, a, ccc]",
+      "[ccc, a, bb]"
+    ],
+    "answer": 0,
+    "explanation": "Comparator is a functional interface, so a lambda can implement compare(). Comparing y's length to x's length reverses the natural length order, giving the longest string first.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-022",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Object o = new ArrayList<String>();\n        System.out.println(o instanceof List);\n    }\n}",
+    "options": [
+      "false",
+      "Compile-time error: an interface cannot appear in instanceof.",
+      "Runtime error: ClassCastException.",
+      "true"
+    ],
+    "answer": 3,
+    "explanation": "ArrayList implements List, so an ArrayList object is an instance of the List interface.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-023",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String name = \"Bob\";\n        Greeter g = new Greeter() {\n            public String greet() {\n                return \"Hi \" + name;\n            }\n        };\n        System.out.println(g.greet());\n    }\n}\n\ninterface Greeter {\n    String greet();\n}",
+    "options": [
+      "Hi null",
+      "Hi",
+      "Hi Bob",
+      "Compile-time error: the anonymous class cannot implement the interface."
+    ],
+    "answer": 2,
+    "explanation": "An anonymous class can implement an interface directly by supplying all abstract methods. It captures the effectively final variable name.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-024",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Impl().message());\n    }\n}\n\ninterface Message {\n    String name();\n\n    default String message() {\n        return \"Hello, \" + name() + \"!\";\n    }\n}\n\nclass Impl implements Message {\n    public String name() {\n        return \"World\";\n    }\n}",
+    "options": [
+      "Hello, ",
+      "Hello, null!",
+      "Compile-time error: default method cannot call an abstract method.",
+      "Hello, World!"
+    ],
+    "answer": 3,
+    "explanation": "A default method can call the interface's abstract methods, which resolve to the implementing class's code at runtime.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-025",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface First {\n    void a();\n}\n\ninterface Second extends First {\n    void b();\n}\n\nclass Impl implements Second {\n    public void b() {\n    }\n}",
+    "options": [
+      "Interface Second cannot extend interface First.",
+      "The interface methods must be static.",
+      "Impl does not implement the abstract method b() inherited from the sub-interface.",
+      "Impl must be declared final."
+    ],
+    "answer": 2,
+    "explanation": "A class implementing an interface must implement every inherited abstract method, including those from super-interfaces.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-026",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Object o = new Object();\n        try {\n            Flyable f = (Flyable) o;\n            f.fly();\n        } catch (Exception e) {\n            System.out.println(e.getClass().getSimpleName());\n        }\n    }\n}\n\ninterface Flyable {\n    void fly();\n}",
+    "options": [
+      "Compile-time error: incompatible types.",
+      "NullPointerException",
+      "Nothing is printed.",
+      "ClassCastException"
+    ],
+    "answer": 3,
+    "explanation": "The cast to an interface type compiles because Object is not final and a subclass could implement Flyable. The actual object does not implement it, so the cast fails at runtime.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-027",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String s = \"text\";\n        Runnable r = (Runnable) s;\n    }\n}",
+    "options": [
+      "It compiles and throws ClassCastException at runtime.",
+      "Compile-time error: String is final and does not implement Runnable, so the cast is rejected.",
+      "It compiles and prints nothing.",
+      "It compiles and prints false."
+    ],
+    "answer": 1,
+    "explanation": "A cast from a final class to an interface it does not implement can never succeed, so the compiler rejects it. A non-final class would produce a runtime check instead.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-028",
+    "question": "Which keyword completes the class declaration so that Dog fulfils the Animal contract?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Dog().sound());\n    }\n}\n\ninterface Animal {\n    String sound();\n}\n\nclass Dog ____ Animal {\n    public String sound() {\n        return \"Woof\";\n    }\n}",
+    "options": [
+      "implements",
+      "extends",
+      "inherits",
+      "contract"
+    ],
+    "answer": 0,
+    "explanation": "A class uses implements to promise the methods of an interface. extends is used for class-to-class inheritance.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-029",
+    "question": "Fill in the blank so a lambda implements the interface.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = ____;\n        System.out.println(s.area());\n    }\n}\n\ninterface Shape {\n    double area();\n}",
+    "options": [
+      "-> 5.0",
+      "(x) -> 5.0",
+      "() => 5.0",
+      "() -> 5.0"
+    ],
+    "answer": 3,
+    "explanation": "The abstract method takes no parameters, so the lambda needs an empty parameter list. Java uses -> and not =>.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-030",
+    "question": "Fill in the blank so Logger provides an instance method with a body that implementing classes inherit.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Console().log(\"hi\");\n    }\n}\n\ninterface Logger {\n    ____ void log(String m) {\n        System.out.println(m);\n    }\n}\n\nclass Console implements Logger {\n}",
+    "options": [
+      "abstract",
+      "final",
+      "default",
+      "implements"
+    ],
+    "answer": 2,
+    "explanation": "default marks an interface instance method that has a body and is inherited by implementing classes. abstract forbids a body, and final is not allowed on interface methods.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-031",
+    "question": "A method needs to process payments using any current or future payment provider. Which signature best expresses this requirement?",
+    "options": [
+      "void checkout(CardProvider provider)  where CardProvider is a concrete class",
+      "void checkout(PaymentProvider provider)  where PaymentProvider is an interface",
+      "void checkout(Object provider)",
+      "void checkout(String providerName)  with a switch on the name inside"
+    ],
+    "answer": 1,
+    "explanation": "Depending on an interface lets any implementation be passed in without changing checkout. A concrete class, Object or a string-switch ties the method to specific providers or loses type safety.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-032",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = new Rect(3.0, 4.0);\n        System.out.println(s.area());\n    }\n}\n\ninterface Shape {\n    double area();\n}\n\nrecord Rect(double w, double h) implements Shape {\n    public double area() {\n        return w * h;\n    }\n}",
+    "options": [
+      "12.0",
+      "3.0",
+      "Compile-time error: a record cannot implement an interface.",
+      "0.0"
+    ],
+    "answer": 0,
+    "explanation": "A record can implement an interface. Rect supplies the area() contract, and 3.0 * 4.0 equals 12.0.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-033",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Labeled l = Op.ADD;\n        System.out.println(l.label());\n    }\n}\n\ninterface Labeled {\n    String label();\n}\n\nenum Op implements Labeled {\n    ADD, SUB;\n\n    public String label() {\n        return name().toUpperCase();\n    }\n}",
+    "options": [
+      "ADD",
+      "Add",
+      "add",
+      "Compile-time error: an enum cannot implement an interface."
+    ],
+    "answer": 0,
+    "explanation": "An enum can implement an interface. Each constant supplies behavior, and label() returns the constant name in upper case.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-034",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Converter<String, Integer> c = s -> s.length();\n        System.out.println(c.convert(\"abcde\"));\n    }\n}\n\ninterface Converter<T, R> {\n    R convert(T t);\n}",
+    "options": [
+      "5",
+      "abcde",
+      "Compile-time error: generic interfaces need a class.",
+      "0"
+    ],
+    "answer": 0,
+    "explanation": "The generic interface Converter<T, R> is implemented with a lambda that converts a String to its length.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-035",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Impl.helper();\n    }\n}\n\ninterface Util {\n    static void helper() {\n        System.out.println(\"help\");\n    }\n}\n\nclass Impl implements Util {\n}",
+    "options": [
+      "Static interface methods are not inherited, so Impl.helper() cannot be called.",
+      "helper() must be public in Impl.",
+      "Static methods cannot be called without an object.",
+      "Util must be a class."
+    ],
+    "answer": 0,
+    "explanation": "A static method declared in an interface is not a member of implementing classes. It can only be called through the interface name.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-036",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().run();\n    }\n}\n\ninterface Task {\n    private void helper() {\n        System.out.println(\"help\");\n    }\n\n    default void start() {\n        helper();\n    }\n}\n\nclass Impl implements Task {\n    void run() {\n        helper();\n    }\n}",
+    "options": [
+      "Private methods must be static.",
+      "A private interface method can only be used inside the interface itself.",
+      "Impl must declare a private method with the same name.",
+      "The interface must be abstract."
+    ],
+    "answer": 1,
+    "explanation": "Private interface methods are helpers for default and static methods of the same interface. Implementing classes cannot call them.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-037",
+    "question": "Which statement best compares marker, functional and ordinary interfaces?",
+    "options": [
+      "A marker interface has exactly one abstract method, and a functional interface has none.",
+      "A marker interface has no methods, a functional interface has exactly one abstract method, and an ordinary interface can have several.",
+      "All three kinds must have exactly one abstract method.",
+      "Functional interfaces cannot have default methods."
+    ],
+    "answer": 1,
+    "explanation": "The categories differ by the number of abstract methods. Functional interfaces may still have default and static methods.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-038",
+    "question": "Assume the pseudocode below. In what order is text printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "interface Speaker\n    method speak()\n\nclass Cat implements Speaker : speak() prints \"Meow\"\nclass Dog implements Speaker : speak() prints \"Woof\"\nclass Bird implements Speaker : speak() prints \"Tweet\"\n\nlist = [Cat, Dog, Bird]\nfor each s in list\n    s.speak()\n    print \" \" ",
+    "options": [
+      "Woof Meow Tweet",
+      "Tweet Woof Meow",
+      "Meow Tweet Woof",
+      "Meow Woof Tweet"
+    ],
+    "answer": 3,
+    "explanation": "The loop visits the list in order, and each object's speak() runs through the interface reference. The order of list items is Cat, Dog, Bird.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-039",
+    "question": "An interface declares three abstract methods. A class implements it and provides only two of them. What is required for the class to compile?",
+    "options": [
+      "Nothing, the third method is optional.",
+      "The class must be declared final.",
+      "The class must be declared abstract, or it must implement the third method.",
+      "The class must override toString()."
+    ],
+    "answer": 2,
+    "explanation": "A concrete class must implement every abstract method of its interfaces. Declaring the class abstract postpones the obligation to subclasses.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-040",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(Impl.MAX);\n    }\n}\n\ninterface Config {\n    int MAX = 10;\n}\n\nclass Impl implements Config {\n}",
+    "options": [
+      "Compile-time error: MAX is not accessible through Impl.",
+      "0",
+      "10",
+      "Compile-time error: Impl must define MAX."
+    ],
+    "answer": 2,
+    "explanation": "Interface constants are inherited by implementing classes and can be referenced through the class name.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-041",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().show();\n    }\n}\n\ninterface A {\n    int X = 1;\n}\n\ninterface B {\n    int X = 2;\n}\n\nclass Impl implements A, B {\n    void show() {\n        System.out.println(X);\n    }\n}",
+    "options": [
+      "Interface constants cannot be read inside a class.",
+      "Impl must declare its own X.",
+      "The simple name X is ambiguous because both interfaces declare a constant X.",
+      "X must be declared static."
+    ],
+    "answer": 2,
+    "explanation": "When a class inherits the same field name from two interfaces, using the simple name is ambiguous. It has to be qualified, for example A.X.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-042",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        for (int n : new Counter()) {\n            System.out.print(n);\n        }\n    }\n}\n\nclass Counter implements Iterable<Integer> {\n    public Iterator<Integer> iterator() {\n        return new Iterator<Integer>() {\n            int i = 0;\n\n            public boolean hasNext() {\n                return i < 3;\n            }\n\n            public Integer next() {\n                return ++i;\n            }\n        };\n    }\n}",
+    "options": [
+      "321",
+      "123",
+      "Compile-time error: Counter must implement Iterator.",
+      "Runtime error: ClassCastException."
+    ],
+    "answer": 1,
+    "explanation": "A class that implements Iterable can be used in the enhanced for loop. The loop calls iterator(), hasNext() and next() from the contract.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-043",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().hello();\n    }\n}\n\ninterface Base {\n    default void hello() {\n        System.out.println(\"Base\");\n    }\n}\n\ninterface Sub extends Base {\n    void hello();\n}\n\nclass Impl implements Sub {\n}",
+    "options": [
+      "Sub redeclares hello() as abstract, so Impl must implement it.",
+      "A sub-interface cannot redeclare a method.",
+      "Default methods cannot be inherited.",
+      "hello() must be static."
+    ],
+    "answer": 0,
+    "explanation": "A sub-interface can re-abstract an inherited default method. Impl then has no implementation and must provide one.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-044",
+    "question": "What is the main benefit of depending on an interface contract instead of a concrete class in client code?",
+    "options": [
+      "The client code runs faster at runtime.",
+      "The client no longer needs to be compiled.",
+      "The implementation can be replaced without changing the client, as long as the contract is respected.",
+      "The implementation gains access to the client's private fields."
+    ],
+    "answer": 2,
+    "explanation": "A contract decouples callers from implementations, which supports substitution, testing and independent evolution.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-045",
+    "question": "Which rule must an implementing class remember about interface method visibility?",
+    "options": [
+      "Implementations may use any access modifier.",
+      "Implementations must be declared protected.",
+      "Implementations must be declared private.",
+      "Implementations of interface methods must be declared public."
+    ],
+    "answer": 3,
+    "explanation": "Interface methods are implicitly public, and an overriding method cannot have weaker access.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-046",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.function.Supplier;\n\nclass Example {\n    public static void main(String[] args) {\n        Supplier<String> s = () -> \"Mercedes\";\n        System.out.println(s.get());\n    }\n}",
+    "options": [
+      "Car",
+      "Mercedes",
+      "null",
+      "Compile-time error: the lambda cannot return a String."
+    ],
+    "answer": 1,
+    "explanation": "The Supplier interface has a single abstract method, get(). The lambda supplies a String result.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-047",
+    "question": "Which statement about a sealed interface in Java 17 is correct?",
+    "options": [
+      "Any class can implement it as long as it is public.",
+      "It cannot have any implementations.",
+      "Only the classes listed in its permits clause (or in the same compilation unit when permits is omitted) may implement it.",
+      "It can only be implemented by enums."
+    ],
+    "answer": 2,
+    "explanation": "Sealed interfaces restrict their direct implementers to a known set. Each permitted subtype must itself be final, sealed or non-sealed.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-048",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(MathUtil.square(4));\n    }\n}\n\ninterface MathUtil {\n    static int square(int x) {\n        return x * x;\n    }\n}",
+    "options": [
+      "8",
+      "Compile-time error: interface methods cannot be static.",
+      "16",
+      "0"
+    ],
+    "answer": 2,
+    "explanation": "A static interface method is called through the interface name, so MathUtil.square(4) returns 16.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-049",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Sink {\n    void accept(int value);\n}\n\nclass Impl implements Sink {\n    public void accept(long value) {\n    }\n}",
+    "options": [
+      "The class method has a different parameter type, so it does not implement the interface method.",
+      "Interface methods cannot take parameters.",
+      "The class must declare the method static.",
+      "The interface must declare the method default."
+    ],
+    "answer": 0,
+    "explanation": "Implementing requires the same signature. A method taking a long is only an overload, so Impl still lacks an implementation for accept(int).",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-interfaces-as-contracts-050",
+    "question": "Why were default methods added to interfaces in Java 8?",
+    "options": [
+      "To allow interfaces to hold instance fields.",
+      "To add new methods to an existing interface without breaking classes that already implement it.",
+      "To let interfaces be instantiated with new.",
+      "To remove the need for abstract classes entirely."
+    ],
+    "answer": 1,
+    "explanation": "A default method provides an implementation that existing implementers inherit automatically, so published interfaces can evolve compatibly.",
+    "subtopic": "Interfaces as contracts"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-001",
+    "question": "Which statement about state (instance fields) is correct?",
+    "options": [
+      "An abstract class can declare instance fields, while an interface can declare only constants.",
+      "An interface can declare instance fields, but an abstract class cannot.",
+      "Neither an abstract class nor an interface can declare fields.",
+      "Both can declare ordinary mutable instance fields."
+    ],
+    "answer": 0,
+    "explanation": "Fields in an interface are implicitly public static final. Abstract classes can hold per-object state in normal instance fields.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-002",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nabstract class A {\n}\n\nabstract class B {\n}\n\nclass C extends A, B {\n}",
+    "options": [
+      "Abstract classes cannot be extended.",
+      "C must be declared abstract.",
+      "The abstract classes must have constructors.",
+      "A class can extend only one class, even if the classes are abstract."
+    ],
+    "answer": 3,
+    "explanation": "Java does not support multiple class inheritance. Multiple inheritance of type is available only through interfaces.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-003",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Printer p = new Printer();\n        p.power();\n        p.print();\n    }\n}\n\nabstract class Machine {\n    void power() {\n        System.out.print(\"Power \");\n    }\n}\n\ninterface Printable {\n    default void print() {\n        System.out.println(\"Print\");\n    }\n}\n\nclass Printer extends Machine implements Printable {\n}",
+    "options": [
+      "Power",
+      "Print",
+      "Compile-time error: a class cannot combine extends and implements.",
+      "Power Print"
+    ],
+    "answer": 3,
+    "explanation": "A class can extend one class and implement any number of interfaces. Printer inherits power() from the abstract class and print() as a default method.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-004",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Shape {\n    Shape() {\n    }\n}",
+    "options": [
+      "Interfaces cannot declare constructors.",
+      "The constructor must be public.",
+      "Constructors are allowed only in abstract classes.",
+      "An interface constructor must call super()."
+    ],
+    "answer": 0,
+    "explanation": "An interface cannot be instantiated and holds no instance state, so it has no constructors. Only classes can declare them.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-005",
+    "question": "Which statement about member access modifiers is correct?",
+    "options": [
+      "An abstract class can declare protected and private members, while abstract interface methods are always public.",
+      "An interface can declare protected abstract methods.",
+      "An abstract class can declare only public members.",
+      "Abstract interface methods can be package-private."
+    ],
+    "answer": 0,
+    "explanation": "Abstract classes allow all four access levels for their members. Abstract methods in an interface are implicitly public, and protected is not allowed there.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-006",
+    "question": "A library adds a new abstract method to a widely used abstract class. What is the likely effect on existing concrete subclasses?",
+    "options": [
+      "They keep working because the JVM supplies a default body.",
+      "They keep working, and the method throws at runtime.",
+      "They fail to compile until they implement the new method.",
+      "They are converted to abstract classes automatically."
+    ],
+    "answer": 2,
+    "explanation": "A new abstract method is a new obligation for every concrete subclass. A default method in an interface avoids that break, which is why default methods exist.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-007",
+    "question": "Bird and Airplane are unrelated classes that both need a fly() capability. Which design is most appropriate?",
+    "options": [
+      "Declare a Flyable interface and implement it in both classes.",
+      "Make Airplane extend Bird.",
+      "Create a concrete class FlyingThing and make both extend it.",
+      "Declare fly() in Object."
+    ],
+    "answer": 0,
+    "explanation": "An interface expresses a capability that unrelated types can share. Inheritance would force an unnatural is-a relationship.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-008",
+    "question": "Several account types share a balance field, a constructor that sets it, and a deposit() method, but each computes fees differently. Which design is most appropriate?",
+    "options": [
+      "An interface Account holding a mutable balance field.",
+      "An abstract class Account with the shared state and deposit(), plus an abstract fee() method.",
+      "A final class Account with a switch on type.",
+      "A marker interface Account with no methods."
+    ],
+    "answer": 1,
+    "explanation": "Shared mutable state and constructor logic belong in a class, and the varying behavior is declared abstract. Interface fields would be constants, not per-object state.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Book();\n        new Book();\n        System.out.println(Item.count);\n    }\n}\n\nabstract class Item {\n    static int count;\n\n    Item() {\n        count++;\n    }\n}\n\nclass Book extends Item {\n}",
+    "options": [
+      "0",
+      "1",
+      "Compile-time error: abstract classes cannot have static fields.",
+      "2"
+    ],
+    "answer": 3,
+    "explanation": "The abstract superclass constructor runs for every subclass instance, incrementing the shared static counter. Two objects were created.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-010",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Config {\n    int x;\n}",
+    "options": [
+      "Interfaces cannot contain fields.",
+      "x must be declared static explicitly.",
+      "x must be declared private.",
+      "A field in an interface must be initialized because it is a constant."
+    ],
+    "answer": 3,
+    "explanation": "Interface fields are implicitly public static final, so they must be assigned at the point of declaration.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-011",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Child().who();\n    }\n}\n\nabstract class Base {\n    public abstract void who();\n}\n\ninterface Talk {\n    default void who() {\n        System.out.println(\"Talk\");\n    }\n}\n\nclass Child extends Base implements Talk {\n}",
+    "options": [
+      "Interfaces cannot declare default methods named who.",
+      "The abstract method in the superclass takes priority over the interface default, so Child must implement who().",
+      "Child must be declared final.",
+      "Child must override who() with a protected method."
+    ],
+    "answer": 1,
+    "explanation": "A class-declared method (even abstract) wins over an interface default method. Since it is abstract, the concrete subclass must implement it.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Square().describe());\n    }\n}\n\ninterface Shape {\n    double area();\n}\n\nabstract class AbstractShape implements Shape {\n    public String describe() {\n        return \"Area=\" + area();\n    }\n}\n\nclass Square extends AbstractShape {\n    double s = 3.0;\n\n    public double area() {\n        return s * s;\n    }\n}",
+    "options": [
+      "Area=0.0",
+      "Area=9.0",
+      "Area=3.0",
+      "Compile-time error: AbstractShape does not implement area()."
+    ],
+    "answer": 1,
+    "explanation": "The abstract class implements the interface partially and adds describe(). Square supplies area(), and the dispatch uses it.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-013",
+    "question": "Which of these types in the JDK is an abstract class rather than an interface?",
+    "options": [
+      "java.lang.Comparable",
+      "java.lang.Runnable",
+      "java.lang.Number",
+      "java.util.List"
+    ],
+    "answer": 2,
+    "explanation": "Number is an abstract class, which Integer, Double and others extend. Comparable, Runnable and List are interfaces.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-014",
+    "question": "What is the idea behind a skeletal implementation such as AbstractList for the List interface?",
+    "options": [
+      "It replaces the interface so the interface can be removed.",
+      "An abstract class implements most of an interface, so concrete classes only fill in the essential methods.",
+      "It forces all list classes to extend one concrete class.",
+      "It stops the interface from being implemented directly."
+    ],
+    "answer": 1,
+    "explanation": "The interface defines the contract, and the abstract class reduces the effort of implementing it. Classes remain free to implement the interface directly.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-015",
+    "question": "Assume the pseudocode below. How many methods must Concrete implement itself for instances to be created?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "abstract class A\n    abstract method m1()\n    method m2() { ... }     // has a body\n\ninterface I\n    abstract method m3()\n    default method m4() { ... }     // has a body\n\ninterface J\n    abstract method m5()\n\nclass Concrete extends A implements I, J",
+    "options": [
+      "5",
+      "3",
+      "4",
+      "2"
+    ],
+    "answer": 1,
+    "explanation": "Only the abstract methods need implementations: m1 (abstract class), m3 and m5 (interfaces). m2 and m4 already have bodies.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-016",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Greeter g = new Greeter() {\n            void greet() {\n                System.out.print(\"Hi \");\n            }\n        };\n        Speaker s = new Speaker() {\n            public void speak() {\n                System.out.println(\"Hello\");\n            }\n        };\n        g.greet();\n        s.speak();\n    }\n}\n\nabstract class Greeter {\n    abstract void greet();\n}\n\ninterface Speaker {\n    void speak();\n}",
+    "options": [
+      "Hi Hello",
+      "Hi",
+      "Hello",
+      "Compile-time error: only interfaces can be implemented anonymously."
+    ],
+    "answer": 0,
+    "explanation": "Anonymous classes can extend an abstract class or implement an interface. Both forms are legal here.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-017",
+    "question": "Which capability is available only with an abstract class and not with an interface?",
+    "options": [
+      "Declaring a constructor that initializes shared instance state.",
+      "Declaring abstract methods.",
+      "Being used as a variable type.",
+      "Being implemented by several classes."
+    ],
+    "answer": 0,
+    "explanation": "Interfaces have no constructors or instance state. The other capabilities are available to both.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-018",
+    "question": "A class Manager already extends the concrete class Employee and now needs a Printable capability. What is the best approach?",
+    "options": [
+      "Make Printable an abstract class and have Manager also extend it.",
+      "Declare Printable as an interface and have Manager implement it.",
+      "Make Employee extend Printable.",
+      "Copy the Printable code into Employee."
+    ],
+    "answer": 1,
+    "explanation": "A class can extend only one class, so an additional capability has to come through an interface.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-019",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nabstract class Shape {\n}\n\nclass Circle implements Shape {\n}",
+    "options": [
+      "A class cannot use implements with an abstract class, because implements requires an interface.",
+      "Shape needs a public constructor.",
+      "Circle must be abstract.",
+      "implements is allowed only with sealed types."
+    ],
+    "answer": 0,
+    "explanation": "A class extends a class and implements an interface. Using implements with an abstract class is a compile-time error.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-020",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nabstract class Shape {\n}\n\ninterface Drawable extends Shape {\n}",
+    "options": [
+      "Interfaces cannot have names starting with I.",
+      "The abstract class must be public.",
+      "An interface cannot extend a class, even an abstract one.",
+      "Interfaces can extend only one type."
+    ],
+    "answer": 2,
+    "explanation": "An interface may extend only other interfaces. Extending a class is a compile-time error.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-021",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(C.hi());\n    }\n}\n\nabstract class A {\n    static String hi() {\n        return \"A.hi\";\n    }\n}\n\ninterface I {\n    static String hi() {\n        return \"I.hi\";\n    }\n}\n\nclass C extends A implements I {\n}",
+    "options": [
+      "I.hi",
+      "Compile-time error: ambiguous method call.",
+      "Compile-time error: static methods cannot be inherited.",
+      "A.hi"
+    ],
+    "answer": 3,
+    "explanation": "A static method of a superclass is inherited by subclasses, but a static method of an interface is not. So C.hi() resolves only to A.hi().",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-022",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nabstract class Vehicle {\n}\n\ninterface Drivable {\n}\n\nclass Car implements Drivable extends Vehicle {\n}",
+    "options": [
+      "A class cannot implement an interface and extend a class together.",
+      "Vehicle must be an interface.",
+      "Drivable must be an abstract class.",
+      "The extends clause must come before the implements clause."
+    ],
+    "answer": 3,
+    "explanation": "The class header order is extends first, then implements. Reversing the clauses is a syntax error.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-023",
+    "question": "Fill in the blank so the abstract class can call the interface method.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Dog().tag());\n    }\n}\n\ninterface Named {\n    String name();\n}\n\nabstract class Base implements Named {\n    public String tag() {\n        return \"[\" + ____ + \"]\";\n    }\n}\n\nclass Dog extends Base {\n    public String name() {\n        return \"Rex\";\n    }\n}",
+    "options": [
+      "name",
+      "name()",
+      "Named.name()",
+      "super.name()"
+    ],
+    "answer": 1,
+    "explanation": "name() is an abstract interface method inherited by the abstract class, so it can be invoked directly on this. Named.name() would require a static method, and super.name() has no implementation to call.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-024",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Drawable {\n}\n\nabstract class Shape extends Drawable {\n}",
+    "options": [
+      "Abstract classes cannot be extended.",
+      "The interface must be declared public.",
+      "An abstract class uses extends only with another class. It cannot extend an interface.",
+      "extends is allowed only for final classes."
+    ],
+    "answer": 2,
+    "explanation": "A class can implement an interface but not extend it. Use implements for interfaces.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-025",
+    "question": "Which statement correctly summarizes the differences in Java 17?",
+    "options": [
+      "Interfaces can have constructors, but abstract classes cannot.",
+      "Interfaces can have default, static and private methods but no constructors or instance state; abstract classes can have constructors and instance state.",
+      "Abstract classes cannot have concrete methods.",
+      "Interfaces cannot have any method with a body."
+    ],
+    "answer": 1,
+    "explanation": "Since Java 8 and 9, interfaces can contain method bodies in default, static and private methods. They still cannot hold instance state or constructors.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-026",
+    "question": "Which situation is the strongest reason to choose an interface?",
+    "options": [
+      "Subclasses need to share a mutable field.",
+      "Unrelated classes must share a capability, and a class may need several such capabilities.",
+      "A base constructor must validate its arguments.",
+      "Subclasses must inherit protected helper methods."
+    ],
+    "answer": 1,
+    "explanation": "Interfaces define capabilities that any class can adopt, and a class can implement many. State, constructors and protected helpers belong in a class.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-027",
+    "question": "Which situation is the strongest reason to choose an abstract class?",
+    "options": [
+      "Unrelated classes must share a method signature.",
+      "Closely related classes share state, constructor logic and partial behavior.",
+      "A class must implement several contracts at once.",
+      "A lambda must implement the type."
+    ],
+    "answer": 1,
+    "explanation": "An abstract class provides a common base with state and shared code. Interfaces suit unrelated types and lambdas.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-028",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Account a = new Savings();\n        a.addInterest();\n        System.out.println(a.balance);\n    }\n}\n\nabstract class Account {\n    protected double balance;\n\n    Account(double balance) {\n        this.balance = balance;\n    }\n\n    abstract double rate();\n\n    void addInterest() {\n        balance += balance * rate();\n    }\n}\n\nclass Savings extends Account {\n    Savings() {\n        super(100);\n    }\n\n    double rate() {\n        return 0.5;\n    }\n}",
+    "options": [
+      "150.0",
+      "100.0",
+      "50.0",
+      "Compile-time error: balance cannot be modified in an abstract class."
+    ],
+    "answer": 0,
+    "explanation": "The abstract class stores balance and defines addInterest(), which uses the abstract rate(). With a starting balance of 100 and a rate of 0.5, the balance becomes 150.0.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-029",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Sq sq = new Sq();\n        Shape a = sq;\n        Printable p = sq;\n        System.out.print(a.area() + \" \");\n        p.print();\n    }\n}\n\nabstract class Shape {\n    abstract double area();\n}\n\ninterface Printable {\n    void print();\n}\n\nclass Sq extends Shape implements Printable {\n    double area() {\n        return 9.0;\n    }\n\n    public void print() {\n        System.out.println(\"Sq\");\n    }\n}",
+    "options": [
+      "9.0 Sq",
+      "9.0",
+      "Sq",
+      "Compile-time error: one object cannot be treated as two types."
+    ],
+    "answer": 0,
+    "explanation": "The same Sq object can be referenced as its abstract superclass and as its interface type. Each reference exposes its own methods.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-030",
+    "question": "Using the classes in the code, which statement compiles?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"check\");\n    }\n}\n\nabstract class A {\n    int v;\n}\n\ninterface I {\n    int C = 1;\n}\n\nclass Sub extends A implements I {\n}",
+    "options": [
+      "I.C = 5;",
+      "Sub.C = 5;",
+      "new Sub().C++;",
+      "new Sub().v = 5;"
+    ],
+    "answer": 3,
+    "explanation": "An instance field of an abstract class can be modified. Interface fields are constants, so any assignment or increment of C is a compile-time error.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-031",
+    "question": "Why does Java not allow a class to extend two classes?",
+    "options": [
+      "Because classes cannot have constructors.",
+      "Because multiple classes would slow compilation.",
+      "To avoid ambiguity in inherited state and constructor chaining.",
+      "Because interfaces already exist."
+    ],
+    "answer": 2,
+    "explanation": "Inheriting state and implementation from several classes causes conflicts. Interfaces avoid this because they have no instance state and the rules for default methods are explicit.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-032",
+    "question": "Which declaration is illegal?",
+    "options": [
+      "final interface I { }",
+      "abstract interface I { }",
+      "public interface I { }",
+      "interface I { }"
+    ],
+    "answer": 0,
+    "explanation": "An interface exists to be implemented, so it cannot be final. The abstract modifier is redundant but allowed.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-033",
+    "question": "Which statement about testability is most accurate?",
+    "options": [
+      "Abstract classes are easier to mock because they have constructors.",
+      "Interfaces make it easy to substitute test doubles, because any class can implement them regardless of its own hierarchy.",
+      "Interfaces cannot be mocked.",
+      "Test doubles must always extend the production class."
+    ],
+    "answer": 1,
+    "explanation": "A test class can implement an interface without inheriting production behavior or state. A class-based dependency forces inheritance.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-034",
+    "question": "Which statement matches the template-method and strategy patterns?",
+    "options": [
+      "Template method usually relies on an abstract class and inheritance, while strategy usually relies on an interface and composition.",
+      "Both require an abstract class.",
+      "Template method requires an interface, and strategy requires a final class.",
+      "Neither can be implemented in Java."
+    ],
+    "answer": 0,
+    "explanation": "A template method fixes an algorithm in a base class and lets subclasses fill steps. A strategy passes behavior in through an interface.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-035",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(apply((x, y) -> x * y, 3, 4));\n    }\n\n    static int apply(IntOp op, int a, int b) {\n        return op.run(a, b);\n    }\n}\n\ninterface IntOp {\n    int run(int a, int b);\n}",
+    "options": [
+      "7",
+      "0",
+      "12",
+      "Compile-time error: a lambda cannot be passed as an argument."
+    ],
+    "answer": 2,
+    "explanation": "IntOp is a functional interface. The lambda multiplies the arguments, so the result for 3 and 4 is 12.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Impl().base + Impl.LIMIT);\n    }\n}\n\nabstract class Base {\n    int base = 5;\n}\n\ninterface Limits {\n    int LIMIT = 3;\n}\n\nclass Impl extends Base implements Limits {\n}",
+    "options": [
+      "5",
+      "8",
+      "3",
+      "Compile-time error: Impl cannot use inherited constants and fields together."
+    ],
+    "answer": 1,
+    "explanation": "Impl inherits the instance field base (5) from the abstract class and the constant LIMIT (3) from the interface, so 5 + 3 = 8.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-037",
+    "question": "Assume the pseudocode below, where log(msg) prints msg followed by a hyphen. What is printed by r.execute()?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "interface Logger\n    method log(msg)        // prints msg followed by \"-\"\n\nabstract class Job\n    field logger\n    method execute()\n        logger.log(\"start\")\n        work()\n        logger.log(\"end\")\n    abstract method work()\n\nclass Report extends Job\n    method work()\n        logger.log(\"working\")\n\nr = new Report(logger)\nr.execute()",
+    "options": [
+      "working-",
+      "start-end-",
+      "start-working-end-",
+      "end-working-start-"
+    ],
+    "answer": 2,
+    "explanation": "execute() is a fixed template: it logs start, calls work() (implemented by Report), then logs end. work() logs working in between.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-038",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Config {\n    int X = 1;\n\n    static {\n        System.out.println(\"init\");\n    }\n}",
+    "options": [
+      "Interfaces cannot contain static initializer blocks.",
+      "Static blocks must be public.",
+      "Interfaces cannot declare constants.",
+      "The block must be declared default."
+    ],
+    "answer": 0,
+    "explanation": "Initializer blocks (static or instance) are not allowed in interfaces. They are allowed in classes, including abstract classes.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-039",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\ninterface Task {\n    protected void run();\n}",
+    "options": [
+      "Interface methods must be static.",
+      "The interface needs a constructor.",
+      "protected is allowed only on fields.",
+      "Interface methods cannot be protected."
+    ],
+    "answer": 3,
+    "explanation": "Interface methods are public, or private for helpers. protected is not allowed in an interface method declaration.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-040",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Impl().run();\n    }\n}\n\nclass Base {\n    public void run() {\n        System.out.println(\"Base run\");\n    }\n}\n\ninterface Task {\n    void run();\n}\n\nclass Impl extends Base implements Task {\n}",
+    "options": [
+      "Compile-time error: Impl must implement run().",
+      "Nothing is printed.",
+      "Base run",
+      "Runtime error: AbstractMethodError."
+    ],
+    "answer": 2,
+    "explanation": "A concrete method inherited from the superclass can satisfy an interface method with the same signature, so Impl needs no extra code.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-041",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "interface Example {\n    static void main(String[] args) {\n        System.out.println(\"interface main\");\n    }\n}",
+    "options": [
+      "interface main",
+      "Nothing is printed.",
+      "Compile-time error: an interface cannot contain main.",
+      "Runtime error: main must be in a class."
+    ],
+    "answer": 0,
+    "explanation": "An interface can declare static methods, including main, so the JVM can launch it. This is a known interview trap.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-042",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Animal> list = new ArrayList<>();\n        list.add(new Dog());\n        list.add(new Cat());\n        Collections.sort(list);\n        System.out.println(list.get(0).name + \" \" + list.get(1).name);\n    }\n}\n\nabstract class Animal implements Comparable<Animal> {\n    String name;\n    int weight;\n\n    Animal(String name, int weight) {\n        this.name = name;\n        this.weight = weight;\n    }\n\n    public int compareTo(Animal o) {\n        return Integer.compare(weight, o.weight);\n    }\n}\n\nclass Dog extends Animal {\n    Dog() {\n        super(\"Dog\", 10);\n    }\n}\n\nclass Cat extends Animal {\n    Cat() {\n        super(\"Cat\", 5);\n    }\n}",
+    "options": [
+      "Dog Cat",
+      "Compile-time error: an abstract class cannot implement Comparable.",
+      "Runtime error: ClassCastException.",
+      "Cat Dog"
+    ],
+    "answer": 3,
+    "explanation": "The abstract class implements Comparable and compares by weight. Cat (5) sorts before Dog (10).",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-043",
+    "question": "Fill in the blank so that Shape can implement only part of the interface.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Circle().draw();\n    }\n}\n\ninterface Drawable {\n    void draw();\n}\n\n____ class Shape implements Drawable {\n}\n\nclass Circle extends Shape {\n    public void draw() {\n        System.out.println(\"Circle draw\");\n    }\n}",
+    "options": [
+      "final",
+      "private",
+      "abstract",
+      "default"
+    ],
+    "answer": 2,
+    "explanation": "A class that leaves interface methods unimplemented must be abstract. final prevents subclasses, private is not allowed on a top-level class, and default is not a class modifier.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-044",
+    "question": "Which implementation lets two repository classes share a table name set by a constructor?",
+    "options": [
+      "interface Repo { String table; Repo(String t) { } }",
+      "interface Repo { protected String table; }",
+      "abstract class BaseRepo implements Repo { protected final String table; BaseRepo(String t) { table = t; } }",
+      "class BaseRepo implements abstract Repo { String table; }"
+    ],
+    "answer": 2,
+    "explanation": "Shared per-object state initialized by a constructor belongs in a class. Interfaces cannot have constructors or instance fields, and implements abstract is not valid Java syntax.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-045",
+    "question": "Which statement about the declaration abstract interface Foo is correct?",
+    "options": [
+      "It is a compile-time error because interfaces cannot be abstract.",
+      "It makes all methods in Foo static.",
+      "It makes Foo instantiable.",
+      "It is legal, but abstract is redundant because every interface is implicitly abstract."
+    ],
+    "answer": 3,
+    "explanation": "Interfaces are implicitly abstract, so the modifier is allowed but unnecessary.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-046",
+    "question": "Which type can be the target of a lambda expression?",
+    "options": [
+      "An abstract class with exactly one abstract method.",
+      "Any abstract class.",
+      "An interface with exactly one abstract method.",
+      "A final class."
+    ],
+    "answer": 2,
+    "explanation": "Lambdas target functional interfaces only. An abstract class cannot be implemented by a lambda, even with a single abstract method.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-047",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = () -> 5;\n        System.out.println(s.area());\n    }\n}\n\nabstract class Shape {\n    abstract int area();\n}",
+    "options": [
+      "The lambda must have parameters.",
+      "area() must be declared static.",
+      "A lambda cannot implement an abstract class, only a functional interface.",
+      "Shape must have a constructor."
+    ],
+    "answer": 2,
+    "explanation": "A lambda needs a functional interface target. Shape is a class, so an anonymous subclass would be required instead.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-048",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Object o = new Dog();\n        System.out.println((o instanceof Animal) + \" \" + (o instanceof Pet));\n    }\n}\n\nabstract class Animal {\n}\n\ninterface Pet {\n}\n\nclass Dog extends Animal implements Pet {\n}",
+    "options": [
+      "true false",
+      "false true",
+      "false false",
+      "true true"
+    ],
+    "answer": 3,
+    "explanation": "Dog extends the abstract class Animal and implements Pet, so an instance is a subtype of both.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-049",
+    "question": "A default method in an interface must remember a value between calls. What is the correct design?",
+    "options": [
+      "Declare a normal instance field in the interface.",
+      "Declare a private non-static field in the interface.",
+      "Declare a constructor in the interface that stores the value.",
+      "Declare abstract accessor methods in the interface, and store the value in a field of the implementing class."
+    ],
+    "answer": 3,
+    "explanation": "Interfaces have no instance state. Per-object data lives in implementers, and the interface reaches it through abstract methods.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-abstract-class-vs-interface-050",
+    "question": "Which rule best summarizes the choice between an abstract class and an interface?",
+    "options": [
+      "Always use an abstract class, because it is more powerful.",
+      "Use an interface to define a contract any class can adopt, and an abstract class to share state and implementation among related classes.",
+      "Always use an interface, because abstract classes are deprecated.",
+      "Use an interface only when a class has no methods."
+    ],
+    "answer": 1,
+    "explanation": "Neither construct replaces the other. The choice depends on whether the goal is a shared capability or a shared base with state and code.",
+    "subtopic": "Abstract class vs interface"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-001",
+    "question": "What does hiding implementation details mean in Java?",
+    "options": [
+      "Making every method static so that no object is needed.",
+      "Declaring all classes final so they cannot be extended.",
+      "Exposing a stable public interface while keeping internal fields and helper logic inaccessible to callers.",
+      "Removing all comments from the source code."
+    ],
+    "answer": 2,
+    "explanation": "Hiding implementation details restricts how callers interact with a class, usually through private members and public methods or interfaces. Callers depend on the contract, not on the internals.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-002",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Account a = new Account();\n        System.out.println(a.balance);\n    }\n}\n\nclass Account {\n    private double balance = 10;\n}",
+    "options": [
+      "balance is private to Account and cannot be accessed from Example.",
+      "balance must be declared static.",
+      "Account must be declared public.",
+      "balance needs a getter named balance()."
+    ],
+    "answer": 0,
+    "explanation": "A private member is accessible only inside its own top-level class. Code in another class must use a public or otherwise accessible method.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-003",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Person p = new Person();\n        p.setAge(20);\n        p.setAge(-5);\n        System.out.println(p.getAge());\n    }\n}\n\nclass Person {\n    private int age;\n\n    void setAge(int age) {\n        if (age >= 0) {\n            this.age = age;\n        }\n    }\n\n    int getAge() {\n        return age;\n    }\n}",
+    "options": [
+      "-5",
+      "0",
+      "20",
+      "Compile-time error: the setter cannot ignore a value."
+    ],
+    "answer": 2,
+    "explanation": "The setter validates its argument and ignores negative ages, so the invariant is protected. The second call has no effect.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = ShapeFactory.create(\"circle\");\n        System.out.println(s.area());\n    }\n}\n\ninterface Shape {\n    double area();\n}\n\nclass ShapeFactory {\n    static Shape create(String type) {\n        if (type.equals(\"circle\")) {\n            return new Circle();\n        }\n        return new Square();\n    }\n}\n\nclass Circle implements Shape {\n    public double area() {\n        return 3.0;\n    }\n}\n\nclass Square implements Shape {\n    public double area() {\n        return 4.0;\n    }\n}",
+    "options": [
+      "3.0",
+      "0.0",
+      "Compile-time error: the Circle class is not accessible.",
+      "Runtime error: ClassCastException."
+    ],
+    "answer": 0,
+    "explanation": "The caller works only with the Shape interface. The factory chooses and hides the concrete class, and the call dispatches to it.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-005",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Greeter g = Maker.make();\n        System.out.println(\"[\" + g.getClass().getSimpleName() + \"]\");\n    }\n}\n\ninterface Greeter {\n    String greet();\n}\n\nclass Maker {\n    static Greeter make() {\n        return new Greeter() {\n            public String greet() {\n                return \"Hi\";\n            }\n        };\n    }\n}",
+    "options": [
+      "[]",
+      "[Greeter]",
+      "[Maker$1]",
+      "[null]"
+    ],
+    "answer": 0,
+    "explanation": "The factory returns an anonymous class instance. An anonymous class has an empty simple name, so getSimpleName() returns an empty string.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-006",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Scores s = new Scores();\n        s.get()[0] = 99;\n        System.out.println(s.first());\n    }\n}\n\nclass Scores {\n    private int[] data = {1, 2, 3};\n\n    int[] get() {\n        return data;\n    }\n\n    int first() {\n        return data[0];\n    }\n}",
+    "options": [
+      "1",
+      "99",
+      "Runtime error: ArrayIndexOutOfBoundsException.",
+      "Compile-time error: the array is private."
+    ],
+    "answer": 1,
+    "explanation": "The getter returns the internal array itself, so the caller changes the object's private state. This is a leak of the implementation.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-007",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Basket b = new Basket();\n        List<String> copy = b.getItems();\n        copy.add(\"x\");\n        System.out.println(b.getItems().size());\n    }\n}\n\nclass Basket {\n    private final List<String> items = new ArrayList<>(List.of(\"a\", \"b\"));\n\n    List<String> getItems() {\n        return new ArrayList<>(items);\n    }\n}",
+    "options": [
+      "3",
+      "0",
+      "Runtime error: UnsupportedOperationException.",
+      "2"
+    ],
+    "answer": 3,
+    "explanation": "The getter returns a defensive copy. Adding to the copy does not change the internal list, which still has 2 elements.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-008",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> list = Collections.unmodifiableList(new ArrayList<>(List.of(\"a\")));\n        try {\n            list.add(\"b\");\n        } catch (Exception e) {\n            System.out.println(e.getClass().getSimpleName());\n        }\n    }\n}",
+    "options": [
+      "IllegalStateException",
+      "[a, b]",
+      "Compile-time error: add is not available on this type.",
+      "UnsupportedOperationException"
+    ],
+    "answer": 3,
+    "explanation": "Collections.unmodifiableList returns a read-only view. Any modification attempt throws UnsupportedOperationException at runtime.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Integer> list = List.of(1, 2);\n        try {\n            System.out.println(list.contains(null));\n        } catch (Exception e) {\n            System.out.println(e.getClass().getSimpleName());\n        }\n    }\n}",
+    "options": [
+      "false",
+      "NullPointerException",
+      "true",
+      "Compile-time error: null cannot be passed to contains."
+    ],
+    "answer": 1,
+    "explanation": "Immutable collections created with List.of do not allow null, and contains(null) throws NullPointerException. This differs from ArrayList, which returns false.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> base = new ArrayList<>(List.of(\"a\"));\n        List<String> view = Collections.unmodifiableList(base);\n        base.add(\"b\");\n        System.out.println(view);\n    }\n}",
+    "options": [
+      "[a]",
+      "UnsupportedOperationException",
+      "[a, b]",
+      "[b]"
+    ],
+    "answer": 2,
+    "explanation": "unmodifiableList is a read-only view of the original, not a copy. Changes made through the original list are visible in the view.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-011",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> base = new ArrayList<>(List.of(\"a\"));\n        List<String> copy = List.copyOf(base);\n        base.add(\"b\");\n        System.out.println(copy);\n    }\n}",
+    "options": [
+      "[a]",
+      "[a, b]",
+      "[b]",
+      "UnsupportedOperationException"
+    ],
+    "answer": 0,
+    "explanation": "List.copyOf creates an independent immutable copy. Later changes to the source list do not affect it.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Outer().read());\n    }\n}\n\nclass Outer {\n    private static class Node {\n        private int v = 7;\n    }\n\n    int read() {\n        Node n = new Node();\n        return n.v;\n    }\n}",
+    "options": [
+      "0",
+      "Compile-time error: a private member of a nested class cannot be accessed.",
+      "Runtime error: IllegalAccessError.",
+      "7"
+    ],
+    "answer": 3,
+    "explanation": "The enclosing class can access private members of its nested classes. The private modifier restricts access to outside the top-level class.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-013",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Config c = new Config();\n        System.out.println(c);\n    }\n}\n\nclass Config {\n    private Config() {\n    }\n\n    static Config get() {\n        return new Config();\n    }\n}",
+    "options": [
+      "Config must be abstract.",
+      "The constructor is private, so Example cannot call new Config().",
+      "The get() method must be public.",
+      "Constructors cannot be private."
+    ],
+    "answer": 1,
+    "explanation": "A private constructor can be used only inside the class. Callers must use the provided static factory method.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-014",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(Single.get() == Single.get());\n    }\n}\n\nclass Single {\n    private static final Single INSTANCE = new Single();\n\n    private Single() {\n    }\n\n    static Single get() {\n        return INSTANCE;\n    }\n}",
+    "options": [
+      "true",
+      "false",
+      "Compile-time error: a singleton cannot have a static method.",
+      "Runtime error: StackOverflowError."
+    ],
+    "answer": 0,
+    "explanation": "The private constructor prevents outside instantiation, and the static field holds one shared instance. Both calls return the same object.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-015",
+    "question": "Class Helper is declared in package a without any access modifier. Code in package b tries to use it. What is the result?",
+    "options": [
+      "It compiles, because classes are always visible.",
+      "It compiles, but throws IllegalAccessError at runtime.",
+      "It compiles if the code in b is in a subclass.",
+      "Compile-time error, because package-private classes are visible only inside their own package."
+    ],
+    "answer": 3,
+    "explanation": "A top-level class with no modifier has package-private access. Other packages cannot reference it, even from subclasses.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-016",
+    "question": "Which access modifier allows access from the same package and from subclasses in other packages?",
+    "options": [
+      "private",
+      "public",
+      "no modifier (package-private)",
+      "protected"
+    ],
+    "answer": 3,
+    "explanation": "protected combines package access with access through inheritance. public would be broader, and private and package-private do not allow subclasses in other packages.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-017",
+    "question": "Which statement about the default access level is correct?",
+    "options": [
+      "A member with no access modifier is accessible only within its own package.",
+      "It is accessible from every package.",
+      "It is accessible only within its own class.",
+      "It is accessible from subclasses in any package."
+    ],
+    "answer": 0,
+    "explanation": "No modifier means package-private. It is broader than private but narrower than protected.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-018",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Money(5).same(new Money(5)));\n    }\n}\n\nclass Money {\n    private int cents;\n\n    Money(int cents) {\n        this.cents = cents;\n    }\n\n    boolean same(Money other) {\n        return cents == other.cents;\n    }\n}",
+    "options": [
+      "false",
+      "Compile-time error: other.cents is private.",
+      "true",
+      "Runtime error: IllegalAccessException."
+    ],
+    "answer": 2,
+    "explanation": "Access control in Java is class-based, not object-based. A method can read the private fields of another instance of the same class.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-019",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(\"x\");\n    }\n}\n\nclass Person {\n    private final String name;\n\n    Person(String name) {\n        this.name = name;\n    }\n\n    void rename(String newName) {\n        name = newName;\n    }\n}",
+    "options": [
+      "Constructors cannot assign final fields.",
+      "name must be public.",
+      "name is final, so it cannot be assigned again in rename().",
+      "rename() must be static."
+    ],
+    "answer": 2,
+    "explanation": "A final field can be assigned only once, in an initializer or constructor. This is how immutable classes hide mutation.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-020",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        Team t = new Team();\n        t.members().add(\"B\");\n        System.out.println(t.size());\n    }\n}\n\nclass Team {\n    private final List<String> members = new ArrayList<>();\n\n    Team() {\n        members.add(\"A\");\n    }\n\n    List<String> members() {\n        return members;\n    }\n\n    int size() {\n        return members.size();\n    }\n}",
+    "options": [
+      "1",
+      "Compile-time error: members() returns a final field.",
+      "2",
+      "Runtime error: UnsupportedOperationException."
+    ],
+    "answer": 2,
+    "explanation": "The field reference is final, but the list object is mutable. Returning it directly lets callers change the team's internal state.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-021",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Counter c = Counters.create();\n        c.next();\n        System.out.println(c.next());\n    }\n}\n\ninterface Counter {\n    int next();\n}\n\nclass Counters {\n    static Counter create() {\n        return new Impl();\n    }\n\n    private static class Impl implements Counter {\n        private int n;\n\n        public int next() {\n            return ++n;\n        }\n    }\n}",
+    "options": [
+      "2",
+      "1",
+      "0",
+      "Compile-time error: Impl is private and cannot be returned."
+    ],
+    "answer": 0,
+    "explanation": "The caller sees only the Counter interface. The private nested class is hidden but can still be returned as an instance of the interface.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-022",
+    "question": "Which design best hides how discounts are calculated from callers?",
+    "options": [
+      "Make the discount fields public so callers can compute the price themselves.",
+      "Return the internal list of discount rules from a public getter.",
+      "Expose a public method price(Order) through an interface, and keep the calculation in a package-private class.",
+      "Declare the calculation as a public static method in every class that needs it."
+    ],
+    "answer": 2,
+    "explanation": "Callers should depend only on the contract. Public fields, leaked internal collections and duplicated public logic all expose the internals.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-023",
+    "question": "Fill in the blank so that code outside the class cannot read or write balance directly.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Account a = new Account();\n        System.out.println(a.balance());\n    }\n}\n\nclass Account {\n    ____ double balance = 10;\n\n    double balance() {\n        return balance;\n    }\n}",
+    "options": [
+      "public",
+      "private",
+      "static",
+      "final"
+    ],
+    "answer": 1,
+    "explanation": "private restricts the field to its own class. public exposes it, static changes its ownership but not its visibility, and final only prevents reassignment.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-024",
+    "question": "Fill in the blank so callers cannot change the internal array through the returned reference.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Data data = new Data();\n        data.get()[0] = 99;\n        System.out.println(data.first());\n    }\n}\n\nclass Data {\n    private int[] d = {1, 2};\n\n    int[] get() {\n        return ____;\n    }\n\n    int first() {\n        return d[0];\n    }\n}",
+    "options": [
+      "d",
+      "this.d",
+      "d.length",
+      "d.clone()"
+    ],
+    "answer": 3,
+    "explanation": "Returning a clone hands the caller a separate array. Returning d or this.d would leak the internal array, and d.length is an int, not an array.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-025",
+    "question": "The class below has a public field balance that other classes modify directly, sometimes setting it to negative values. Which change best fixes the problem?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Account {\n    public double balance;\n}",
+    "options": [
+      "Make balance static so there is only one copy.",
+      "Make balance private and provide a method such as withdraw(double) that validates the amount.",
+      "Make balance final so it cannot change.",
+      "Rename balance to a longer name."
+    ],
+    "answer": 1,
+    "explanation": "Encapsulation lets the class enforce its rules in one place. Static, final or renaming do not control how outside code changes the value.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-026",
+    "question": "In Java 17, a public class in package com.app.internal is not exported by its module. What is the effect for code in other modules?",
+    "options": [
+      "The package is not accessible to other modules at compile time or runtime, even though the class is public.",
+      "The class is accessible because it is public.",
+      "The class is accessible only through reflection by default.",
+      "The class is accessible only from subclasses."
+    ],
+    "answer": 0,
+    "explanation": "Modules add a layer above access modifiers. A public type is accessible to other modules only if its package is exported.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-027",
+    "question": "Which module-info.java exposes only the com.app.api package of module app to other modules?",
+    "options": [
+      "module app { exports com.app.api; exports com.app.internal; }",
+      "module app { exports com.app.internal; }",
+      "module app { requires com.app.api; requires com.app.internal; }",
+      "module app { exports com.app.api; }"
+    ],
+    "answer": 3,
+    "explanation": "Only packages named in exports are visible to other modules. requires declares a dependency on another module and does not export anything.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-028",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.lang.reflect.Field;\n\nclass Example {\n    public static void main(String[] args) throws Exception {\n        Secret s = new Secret();\n        Field f = Secret.class.getDeclaredField(\"code\");\n        f.setAccessible(true);\n        f.set(s, 99);\n        System.out.println(s.code());\n    }\n}\n\nclass Secret {\n    private int code = 1;\n\n    int code() {\n        return code;\n    }\n}",
+    "options": [
+      "1",
+      "Compile-time error: the private field cannot be referenced.",
+      "Runtime error: the JVM always blocks the access.",
+      "99"
+    ],
+    "answer": 3,
+    "explanation": "Reflection with setAccessible(true) can bypass private on classes in the unnamed module. Private is an access-control tool for good design, not a security boundary.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-029",
+    "question": "Why is it better to make fields private and give subclasses protected methods rather than protected fields?",
+    "options": [
+      "Private fields execute faster than protected fields.",
+      "Protected fields cannot be read by subclasses.",
+      "The superclass can change or validate its internal state without breaking subclasses that depend on field names.",
+      "Protected fields are not allowed in abstract classes."
+    ],
+    "answer": 2,
+    "explanation": "A protected field becomes part of the class's public API for subclasses. Accessors keep the representation private while still supporting extension.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-030",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new B().call();\n    }\n}\n\nclass A {\n    private String who() {\n        return \"A\";\n    }\n\n    void call() {\n        System.out.println(who());\n    }\n}\n\nclass B extends A {\n    String who() {\n        return \"B\";\n    }\n}",
+    "options": [
+      "B",
+      "AB",
+      "Compile-time error: who() cannot be redefined in B.",
+      "A"
+    ],
+    "answer": 3,
+    "explanation": "A private method is not overridden. The call inside A.call() binds to A's private who(), and B.who() is a different, unrelated method.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-031",
+    "question": "A class stores its data in an ArrayList. The internal list is private, and callers use only public methods. What does this allow?",
+    "options": [
+      "The class can no longer be tested.",
+      "The class can switch to a LinkedList or an array later without changing client code.",
+      "The class automatically becomes thread-safe.",
+      "The class can be instantiated without a constructor."
+    ],
+    "answer": 1,
+    "explanation": "When clients rely only on the public contract, the internal data structure can change freely.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-032",
+    "question": "Which is NOT a benefit of hiding implementation details?",
+    "options": [
+      "Internals can change without breaking callers.",
+      "Lower coupling between classes.",
+      "Guaranteed faster execution of every method.",
+      "Invariants can be enforced in one place."
+    ],
+    "answer": 2,
+    "explanation": "Hiding details improves maintainability, safety and flexibility. It does not guarantee performance.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-033",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        new Helper().secret();\n    }\n}\n\nclass Helper {\n    private void secret() {\n        System.out.println(\"secret\");\n    }\n}",
+    "options": [
+      "secret() must return a value.",
+      "secret() is private to Helper and cannot be called from Example.",
+      "Helper must be declared abstract.",
+      "Helper must be declared final."
+    ],
+    "answer": 1,
+    "explanation": "A private method is available only inside its declaring class. Callers need a method with wider access.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-034",
+    "question": "Which statement about protected is correct?",
+    "options": [
+      "A protected member is accessible only inside its own class.",
+      "A protected member is accessible from every class in any package.",
+      "A protected member is accessible within its package and in subclasses, even in other packages.",
+      "A protected member is accessible only from classes in other packages."
+    ],
+    "answer": 2,
+    "explanation": "protected extends package access with access for subclasses.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-035",
+    "question": "Which feature of Java 9 and later lets an interface hide helper code that its default methods share?",
+    "options": [
+      "Private interface methods",
+      "Protected interface methods",
+      "Interface constructors",
+      "Final interface methods"
+    ],
+    "answer": 0,
+    "explanation": "A private method in an interface can be called only by other methods of that interface. Interfaces still cannot have constructors, and protected and final are not allowed on interface methods.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Pizza p = new Pizza.Builder().size(12).cheese().build();\n        System.out.println(p);\n    }\n}\n\nclass Pizza {\n    private final int size;\n    private final boolean cheese;\n\n    private Pizza(Builder b) {\n        this.size = b.size;\n        this.cheese = b.cheese;\n    }\n\n    public String toString() {\n        return \"Pizza[\" + size + \", cheese=\" + cheese + \"]\";\n    }\n\n    static class Builder {\n        private int size;\n        private boolean cheese;\n\n        Builder size(int s) {\n            size = s;\n            return this;\n        }\n\n        Builder cheese() {\n            cheese = true;\n            return this;\n        }\n\n        Pizza build() {\n            return new Pizza(this);\n        }\n    }\n}",
+    "options": [
+      "Pizza[0, cheese=false]",
+      "Pizza[12, cheese=true]",
+      "Compile-time error: the constructor is private.",
+      "Pizza[12, cheese=false]"
+    ],
+    "answer": 1,
+    "explanation": "The private constructor is reachable from the nested Builder. Callers use the builder to configure the object without knowing how it is built.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-037",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        try {\n            new Account(-1);\n        } catch (IllegalArgumentException e) {\n            System.out.println(e.getMessage());\n        }\n    }\n}\n\nclass Account {\n    private final int balance;\n\n    Account(int balance) {\n        if (balance < 0) {\n            throw new IllegalArgumentException(\"Negative\");\n        }\n        this.balance = balance;\n    }\n}",
+    "options": [
+      "0",
+      "Nothing is printed.",
+      "Compile-time error: constructors cannot throw exceptions.",
+      "Negative"
+    ],
+    "answer": 3,
+    "explanation": "Validating in the constructor guarantees that an invalid object never exists. The constructor throws IllegalArgumentException, which the caller catches.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-038",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new B().get());\n    }\n}\n\nclass A {\n    private int x = 1;\n}\n\nclass B extends A {\n    int get() {\n        return x;\n    }\n}",
+    "options": [
+      "x must be static.",
+      "Private members are not inherited, so B cannot access x directly.",
+      "B must be abstract.",
+      "get() must be declared in A."
+    ],
+    "answer": 1,
+    "explanation": "A subclass cannot refer to the private fields of its superclass. The superclass must expose a protected or public accessor.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-039",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        for (String s : new Names()) {\n            System.out.print(s);\n        }\n    }\n}\n\nclass Names implements Iterable<String> {\n    private final List<String> list = List.of(\"a\", \"b\");\n\n    public Iterator<String> iterator() {\n        return list.iterator();\n    }\n}",
+    "options": [
+      "[a, b]",
+      "ab",
+      "Compile-time error: the list field is private.",
+      "Runtime error: UnsupportedOperationException."
+    ],
+    "answer": 1,
+    "explanation": "The class exposes only Iterable, so callers can traverse the names without knowing that a List is used inside.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-040",
+    "question": "Assume the pseudocode below. What is printed by the last line?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "class Stack\n    private array items\n    private integer size = 0\n    method push(x): items[size] = x ; size = size + 1\n    method pop(): size = size - 1 ; return items[size]\n    method size(): return size\n\ns = new Stack()\ns.push(1) ; s.push(2) ; s.push(3)\ns.pop() ; s.pop()\ns.push(4)\nprint s.pop() and then \" \" and then s.size()",
+    "options": [
+      "4 1",
+      "3 2",
+      "4 3",
+      "2 1"
+    ],
+    "answer": 0,
+    "explanation": "After pushes 1, 2, 3 and two pops (3 and 2), the stack holds [1]. push(4) gives [1, 4]. pop() returns 4, leaving size 1.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-041",
+    "question": "Which rule must a developer remember when a class exposes mutable internal data through getters?",
+    "options": [
+      "Return a defensive copy or an unmodifiable view, so callers cannot modify the internal state.",
+      "Return the internal object directly for speed.",
+      "Make the getter static.",
+      "Declare the getter protected so that it cannot be misused."
+    ],
+    "answer": 0,
+    "explanation": "Returning the internal mutable object breaks encapsulation even when the field is private.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-042",
+    "question": "Which statement best summarizes the link between abstraction and hiding implementation details?",
+    "options": [
+      "Abstraction means making all members public.",
+      "Hiding implementation details means removing methods.",
+      "They are unrelated concepts in Java.",
+      "Abstraction defines what a type offers, and hiding implementation details keeps how it works private behind that contract."
+    ],
+    "answer": 3,
+    "explanation": "Abstraction presents an essential contract. Information hiding uses access control and interfaces so that the internals can change freely.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-043",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Util u = new Util();\n        System.out.println(Util.max(1, 2));\n    }\n}\n\nclass Util {\n    private Util() {\n    }\n\n    static int max(int a, int b) {\n        return a > b ? a : b;\n    }\n}",
+    "options": [
+      "Util must be abstract.",
+      "max() must not be static.",
+      "The constructor of Util is private, so it cannot be called from outside, which is how utility classes prevent instantiation.",
+      "Private constructors are not allowed in Java."
+    ],
+    "answer": 2,
+    "explanation": "A private constructor stops outside code from creating instances. This is a common way to hide a class that only offers static helpers.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-044",
+    "question": "Which method modifier best hides a helper method from subclasses and from all other classes?",
+    "options": [
+      "private",
+      "protected",
+      "public",
+      "no modifier (package-private)"
+    ],
+    "answer": 0,
+    "explanation": "Only private limits a method to its own class. protected and package-private still allow access from other classes in the package or from subclasses.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-045",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Point p = new Point(3, 4);\n        p.x = 5;\n        System.out.println(p.x());\n    }\n}\n\nrecord Point(int x, int y) {\n}",
+    "options": [
+      "Records cannot have fields.",
+      "x must be declared static.",
+      "The record needs a constructor.",
+      "A record's fields are private and final, so p.x cannot be assigned."
+    ],
+    "answer": 3,
+    "explanation": "Record components become private final fields. Assignment from outside is rejected, and the values are read through accessor methods such as x().",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-046",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        System.out.println(new Person().fullName());\n    }\n}\n\nclass Person {\n    private String first = \"Ada\";\n    private String last = \"Lovelace\";\n\n    String fullName() {\n        return first + \" \" + last;\n    }\n}",
+    "options": [
+      "Ada",
+      "Ada Lovelace",
+      "Lovelace Ada",
+      "Compile-time error: first and last are private."
+    ],
+    "answer": 1,
+    "explanation": "Callers use only fullName(). The class stores two separate fields internally, and that representation could change later without affecting callers.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-047",
+    "question": "A class declares public static List<String> NAMES = new ArrayList<>();. Which change best hides this implementation detail?",
+    "options": [
+      "Make the field private and expose an unmodifiable view or a read-only accessor method.",
+      "Make the field final.",
+      "Make the field volatile.",
+      "Move the field into an interface."
+    ],
+    "answer": 0,
+    "explanation": "A public mutable collection allows any code to change it. final does not make the list immutable, and the other changes do not restrict access.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-048",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Lazy l = new Lazy();\n        System.out.println(l.value() + \" \" + l.value());\n    }\n}\n\nclass Lazy {\n    private Integer cache;\n\n    int value() {\n        if (cache == null) {\n            System.out.print(\"computing \");\n            cache = 42;\n        }\n        return cache;\n    }\n}",
+    "options": [
+      "42 42",
+      "computing computing 42 42",
+      "computing 42 42",
+      "computing 42"
+    ],
+    "answer": 2,
+    "explanation": "The value is computed lazily and cached internally. The first call prints computing, and the second call reuses the cached value. Callers cannot see the caching.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-049",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Shape s = new Circle();\n        System.out.println(s.radius());\n    }\n}\n\ninterface Shape {\n    double area();\n}\n\nclass Circle implements Shape {\n    double radius() {\n        return 2;\n    }\n\n    public double area() {\n        return 12.0;\n    }\n}",
+    "options": [
+      "radius() must be static.",
+      "The Shape reference type exposes only area(), so radius() is not visible through it.",
+      "Circle must be abstract.",
+      "Shape must declare radius() as default."
+    ],
+    "answer": 1,
+    "explanation": "The reference type limits which members are visible. Using an interface type hides implementation-specific methods from callers.",
+    "subtopic": "Hiding implementation details"
+  },
+  {
+    "id": "java-abstraction-hiding-implementation-details-050",
+    "question": "Why is a class that is meant to be immutable usually declared final?",
+    "options": [
+      "Final classes execute faster than all other classes.",
+      "Otherwise a subclass could add mutable state or override methods and break the immutability guarantee.",
+      "Final classes are the only classes that can have private fields.",
+      "Final classes cannot be used as method arguments."
+    ],
+    "answer": 1,
+    "explanation": "Immutability depends on controlling all state and behavior. Preventing subclassing keeps callers from receiving a mutable subtype through the immutable type.",
+    "subtopic": "Hiding implementation details"
+  }
+]
