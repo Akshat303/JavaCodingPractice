@@ -2287,5 +2287,772 @@
     "answer": 0,
     "explanation": "Collections.sort accepts T extends Comparable<? super T>. Manager inherits Comparable<Employee>, which is a Comparable of a supertype, so the bound is satisfied.",
     "subtopic": "Comparable and Comparator"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-001",
+    "question": "Which set of rules is the standard recipe for an immutable class?",
+    "options": [
+      "Declare the class final, make fields private and final, provide no setters, and copy mutable components",
+      "Make all fields public so callers can read them directly",
+      "Keep fields private and provide validating setters",
+      "Use only static fields and no constructor"
+    ],
+    "answer": 0,
+    "explanation": "An immutable object's state is fixed at construction. The class is final so no subclass can add mutability, fields are private final, there are no mutators, and any mutable component is copied on the way in and out.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-002",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        final List<String> l = new ArrayList<>();\n        l.add(\"x\");\n        System.out.println(l.size());\n    }\n}",
+    "options": [
+      "0",
+      "1",
+      "A compile-time error",
+      "An UnsupportedOperationException is thrown"
+    ],
+    "answer": 1,
+    "explanation": "The final modifier fixes the reference, not the object. The ArrayList can still be modified through that reference.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-003",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        final int x = 1;\n        x = 2;\n        System.out.println(x);\n    }\n}",
+    "options": [
+      "It prints 2",
+      "It prints 1",
+      "It compiles but throws an exception at run time",
+      "Compile-time error: cannot assign a value to final variable x"
+    ],
+    "answer": 3,
+    "explanation": "A final local variable can be assigned only once. A second assignment is rejected at compile time.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String s = \"a\";\n        s.concat(\"b\");\n        String t = s.concat(\"b\");\n        System.out.println(s + \" \" + t);\n    }\n}",
+    "options": [
+      "ab ab",
+      "a a",
+      "a ab",
+      "ab a"
+    ],
+    "answer": 2,
+    "explanation": "String is immutable, so concat does not change s and returns a new String. Only the variable t holds the new value.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-005",
+    "question": "Which is a real benefit of String being immutable?",
+    "options": [
+      "Its hash code can be cached and instances can be shared safely between threads",
+      "Its characters can be changed in place faster than in a StringBuilder",
+      "The == operator compares String contents",
+      "It does not need equals or hashCode"
+    ],
+    "answer": 0,
+    "explanation": "Because the contents never change, a String's hash code is computed once and the object can be shared, pooled, and used as a map key safely. == still compares references.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-006",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        StringBuilder sb1 = new StringBuilder(\"a\");\n        StringBuilder sb2 = sb1;\n        sb2.append(\"x\");\n        System.out.println(sb1);\n    }\n}",
+    "options": [
+      "a",
+      "ax",
+      "x",
+      "aax"
+    ],
+    "answer": 1,
+    "explanation": "Both variables refer to the same mutable StringBuilder, so appending through one is visible through the other.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-007",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Integer a = 1;\n        Integer b = a;\n        a++;\n        System.out.println(a + \" \" + b);\n    }\n}",
+    "options": [
+      "2 2",
+      "1 1",
+      "2 1",
+      "1 2"
+    ],
+    "answer": 2,
+    "explanation": "Integer is immutable. The expression a++ creates a new Integer and assigns it to a, while b still refers to the old object.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-008",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static final class Team {\n        private final List<String> members;\n        Team(List<String> members) { this.members = members; }\n        List<String> getMembers() { return members; }\n    }\n\n    public static void main(String[] args) {\n        List<String> src = new ArrayList<>(List.of(\"a\"));\n        Team t = new Team(src);\n        src.add(\"b\");\n        System.out.println(t.getMembers());\n    }\n}",
+    "options": [
+      "[a]",
+      "[b]",
+      "[a, b]",
+      "An UnsupportedOperationException is thrown"
+    ],
+    "answer": 2,
+    "explanation": "The constructor stores the caller's list without copying it, so later changes to src are visible inside Team. The class is only apparently immutable because its final field refers to a shared mutable list.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static final class Team {\n        private final List<String> members;\n        Team(List<String> members) { this.members = new ArrayList<>(members); }\n        List<String> getMembers() { return members; }\n    }\n\n    public static void main(String[] args) {\n        List<String> src = new ArrayList<>(List.of(\"a\"));\n        Team t = new Team(src);\n        src.add(\"b\");\n        System.out.println(t.getMembers());\n    }\n}",
+    "options": [
+      "[a, b]",
+      "[b]",
+      "[a]",
+      "[]"
+    ],
+    "answer": 2,
+    "explanation": "The constructor makes a defensive copy of the incoming list, so later changes to src do not affect Team.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static final class Team {\n        private final List<String> members;\n        Team(List<String> members) { this.members = new ArrayList<>(members); }\n        List<String> getMembers() { return members; }\n    }\n\n    public static void main(String[] args) {\n        Team t = new Team(List.of(\"a\"));\n        t.getMembers().clear();\n        System.out.println(t.getMembers().size());\n    }\n}",
+    "options": [
+      "1",
+      "0",
+      "An UnsupportedOperationException is thrown",
+      "A compile-time error"
+    ],
+    "answer": 1,
+    "explanation": "The constructor copies the input, but the getter returns the internal list. A caller can clear it, which destroys the object's state. Defensive copying is needed on the way out as well.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-011",
+    "question": "A class stores a private final List<String> members that was copied in the constructor. Which getter keeps the object immutable?",
+    "options": [
+      "return members;",
+      "return members.subList(0, members.size());",
+      "return (List<String>) members.clone();",
+      "return List.copyOf(members);"
+    ],
+    "answer": 3,
+    "explanation": "List.copyOf returns an independent unmodifiable list. Returning the field or a subList view exposes mutable state, and List has no public clone method, so the last option does not compile.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-012",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> base = new ArrayList<>(List.of(\"a\"));\n        List<String> view = Collections.unmodifiableList(base);\n        List<String> copy = List.copyOf(base);\n        base.add(\"b\");\n        System.out.println(view + \" \" + copy);\n    }\n}",
+    "options": [
+      "[a] [a, b]",
+      "[a, b] [a]",
+      "[a] [a]",
+      "[a, b] [a, b]"
+    ],
+    "answer": 1,
+    "explanation": "Collections.unmodifiableList is a read-only view of the original, so later changes to the underlying list show through. List.copyOf creates a snapshot that does not change.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-013",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> ro = Collections.unmodifiableList(new ArrayList<>(List.of(\"a\")));\n        ro.add(\"b\");\n        System.out.println(ro);\n    }\n}",
+    "options": [
+      "It prints [a, b]",
+      "An UnsupportedOperationException is thrown",
+      "It silently ignores the add and prints [a]",
+      "A ConcurrentModificationException is thrown"
+    ],
+    "answer": 1,
+    "explanation": "An unmodifiable wrapper rejects every mutating method with UnsupportedOperationException rather than ignoring it.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-014",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Arrays.asList(\"a\", null));\n        System.out.println(List.of(\"a\", null));\n    }\n}",
+    "options": [
+      "It prints [a, null] twice",
+      "It prints [a, null], then a NullPointerException is thrown",
+      "It throws a NullPointerException before printing anything",
+      "It prints [a, null] and then [a]"
+    ],
+    "answer": 1,
+    "explanation": "Arrays.asList accepts null elements, but the immutable collection factories such as List.of reject them with NullPointerException.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-015",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        String[] arr = {\"a\", \"b\"};\n        List<String> l = Arrays.asList(arr);\n        l.set(0, \"z\");\n        System.out.println(arr[0]);\n    }\n}",
+    "options": [
+      "a",
+      "z",
+      "An UnsupportedOperationException is thrown",
+      "An ArrayStoreException is thrown"
+    ],
+    "answer": 1,
+    "explanation": "Arrays.asList returns a fixed-size list backed by the array, so set writes through to the array. Only structural changes such as add or remove are rejected.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-016",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<String> a = List.of(\"x\");\n        System.out.println(List.copyOf(a) == a);\n    }\n}",
+    "options": [
+      "false",
+      "A compile-time error",
+      "An UnsupportedOperationException is thrown",
+      "true"
+    ],
+    "answer": 3,
+    "explanation": "List.copyOf returns the argument itself when it is already an unmodifiable list created by List.of, because no copy is needed to guarantee immutability.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Date;\n\nclass Example {\n    static class Event {\n        private final Date when;\n        Event(Date when) { this.when = when; }\n        Date getWhen() { return when; }\n    }\n\n    public static void main(String[] args) {\n        Date d = new Date(0L);\n        Event e = new Event(d);\n        d.setTime(1000L);\n        System.out.println(e.getWhen().getTime());\n    }\n}",
+    "options": [
+      "0",
+      "A compile-time error",
+      "An exception is thrown",
+      "1000"
+    ],
+    "answer": 3,
+    "explanation": "java.util.Date is mutable. Event stores the caller's Date object, so changing it after construction changes the supposedly immutable Event.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-018",
+    "question": "Which expression completes the constructor so that Event stays unchanged after the caller modifies the Date?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.Date;\n\nclass Example {\n    static class Event {\n        private final Date when;\n        Event(Date when) { this.when = ____; }\n        Date getWhen() { return new Date(when.getTime()); }\n    }\n\n    public static void main(String[] args) {\n        Date d = new Date(0L);\n        Event e = new Event(d);\n        d.setTime(1000L);\n        System.out.println(e.getWhen().getTime());\n    }\n}",
+    "options": [
+      "new Date(when.getTime())",
+      "when",
+      "(Date) when",
+      "when.clone()"
+    ],
+    "answer": 0,
+    "explanation": "A defensive copy creates a new Date with the same time. Assigning the parameter or casting it keeps the same object, and clone returns Object, so assigning it to a Date does not compile.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-019",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.time.LocalDate;\n\nclass Example {\n    public static void main(String[] args) {\n        LocalDate d = LocalDate.of(2026, 1, 31);\n        d.plusDays(1);\n        System.out.println(d + \" \" + d.plusDays(1));\n    }\n}",
+    "options": [
+      "2026-02-01 2026-02-01",
+      "2026-01-31 2026-01-31",
+      "2026-01-31 2026-02-01",
+      "2026-02-01 2026-01-31"
+    ],
+    "answer": 2,
+    "explanation": "The java.time classes are immutable. plusDays returns a new LocalDate and leaves the original unchanged.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-020",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class Holder {\n        private final int[] data;\n        Holder(int[] d) { this.data = d; }\n        int get(int i) { return data[i]; }\n    }\n\n    public static void main(String[] args) {\n        int[] a = {1, 2};\n        Holder h = new Holder(a);\n        a[0] = 99;\n        System.out.println(h.get(0));\n    }\n}",
+    "options": [
+      "99",
+      "1",
+      "An ArrayIndexOutOfBoundsException is thrown",
+      "A compile-time error"
+    ],
+    "answer": 0,
+    "explanation": "The Holder keeps the caller's array, so a later change through a is visible in the object. Arrays are always mutable, even in a class with final fields.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-021",
+    "question": "Which expression completes the constructor so that the program prints 1?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class Holder {\n        private final int[] data;\n        Holder(int[] d) { this.data = ____; }\n        int get(int i) { return data[i]; }\n    }\n\n    public static void main(String[] args) {\n        int[] a = {1, 2};\n        Holder h = new Holder(a);\n        a[0] = 99;\n        System.out.println(h.get(0));\n    }\n}",
+    "options": [
+      "d",
+      "d.clone()",
+      "new int[d.length]",
+      "d.length"
+    ],
+    "answer": 1,
+    "explanation": "Calling clone on an int array creates an independent copy with the same elements. Assigning d shares the array, new int[d.length] copies only the size and yields zeros, and d.length does not compile because it is an int.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-022",
+    "question": "Which statement about the final keyword is correct?",
+    "options": [
+      "final makes the referenced object deeply immutable",
+      "final fields cannot be assigned even in constructors",
+      "A final class cannot be instantiated",
+      "final on a reference variable prevents reassigning the variable but does not stop changes to the object it refers to"
+    ],
+    "answer": 3,
+    "explanation": "final protects the variable or field binding only. A final field with a mutable object needs additional care such as defensive copies.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-023",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    record R(List<String> items) {}\n\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>();\n        R r = new R(l);\n        l.add(\"a\");\n        System.out.println(r.items());\n    }\n}",
+    "options": [
+      "[a]",
+      "[]",
+      "A compile-time error",
+      "An UnsupportedOperationException is thrown"
+    ],
+    "answer": 0,
+    "explanation": "A record is shallowly immutable. Its components are final, but the list inside is the caller's mutable list, so the later add is visible.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-024",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    record R(List<String> items) {\n        R {\n            items = List.copyOf(items);\n        }\n    }\n\n    public static void main(String[] args) {\n        List<String> l = new ArrayList<>();\n        R r = new R(l);\n        l.add(\"a\");\n        System.out.println(r.items());\n    }\n}",
+    "options": [
+      "[a]",
+      "A compile-time error",
+      "[]",
+      "A NullPointerException is thrown"
+    ],
+    "answer": 2,
+    "explanation": "The compact constructor reassigns the parameter before the field is set, so the record stores an immutable copy of the list. Later changes to the original list are not visible.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-025",
+    "question": "Assume Java 17. What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    record R(int x) {}\n\n    public static void main(String[] args) {\n        R r = new R(1);\n        r.x = 2;\n        System.out.println(r.x());\n    }\n}",
+    "options": [
+      "It prints 2",
+      "It prints 1",
+      "Compile-time error: cannot assign a value to final variable x",
+      "It compiles but throws an exception at run time"
+    ],
+    "answer": 2,
+    "explanation": "The fields of a record are implicitly private and final, so they cannot be assigned after construction.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-026",
+    "question": "Why should an immutable class be declared final?",
+    "options": [
+      "Final classes run faster in every case",
+      "A subclass could add mutable state or override methods and break the immutability guarantee",
+      "Final classes cannot have private fields",
+      "Immutability is not possible without the final keyword on the fields only"
+    ],
+    "answer": 1,
+    "explanation": "Code that receives a reference of the immutable type could actually hold a mutable subclass instance. Making the class final, or its constructors private, prevents this.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-027",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        Point p = new Hacked();\n        System.out.println(p.getX() + \" \" + p.getX());\n    }\n\n    static class Point {\n        private final int x;\n        Point(int x) { this.x = x; }\n        int getX() { return x; }\n    }\n\n    static class Hacked extends Point {\n        int c;\n        Hacked() { super(1); }\n        @Override\n        int getX() { return ++c; }\n    }\n}",
+    "options": [
+      "1 1",
+      "2 3",
+      "1 2",
+      "1 3"
+    ],
+    "answer": 2,
+    "explanation": "Point is not final, so a subclass can override getX to return changing values. Callers using the Point type therefore cannot rely on its immutability.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-028",
+    "question": "Why can immutable objects be shared between threads without extra synchronization?",
+    "options": [
+      "The JVM locks every immutable object automatically",
+      "Immutable objects are always stored in thread-local memory",
+      "They are copied each time a thread reads them",
+      "Their state cannot change after construction, so no thread can observe an inconsistent update"
+    ],
+    "answer": 3,
+    "explanation": "With no mutation after construction (and a safe publication such as final fields), every thread sees the same consistent state, so there are no data races on it.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-029",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Integer> l = new ArrayList<>(List.of(1));\n        Set<List<Integer>> s = new HashSet<>();\n        s.add(l);\n        l.add(2);\n        System.out.println(s.contains(l) + \" \" + s.size());\n    }\n}",
+    "options": [
+      "true 1",
+      "true 0",
+      "false 1",
+      "false 0"
+    ],
+    "answer": 2,
+    "explanation": "Adding an element changes the list's hashCode while it is stored in the HashSet. contains then searches the wrong bucket and fails, even though the element is still in the set.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-030",
+    "question": "What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "a = list [1, 2]\nb = a\nadd 3 to b\nc = new list containing the elements of a\nadd 4 to c\nprint size of a, size of c",
+    "options": [
+      "2 3",
+      "3 3",
+      "3 4",
+      "2 4"
+    ],
+    "answer": 2,
+    "explanation": "a and b refer to the same list, so adding 3 through b makes a hold three elements. c is a separate copy of a made afterwards, so adding 4 affects only c, which then has four elements.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-031",
+    "question": "In this pseudocode, assigning an object variable copies the reference, while copy of p creates a new object. What is printed?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "p = new Point(x = 1, y = 2)\nq = p\nq.x = 9\nr = copy of p\nr.x = 5\nprint p.x, q.x, r.x",
+    "options": [
+      "1 9 5",
+      "9 1 5",
+      "9 9 5",
+      "1 1 5"
+    ],
+    "answer": 2,
+    "explanation": "q refers to the same object as p, so setting q.x changes p.x too. r is an independent copy, so changing r.x does not affect them.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-032",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String s = \"banana\";\n        s.replace('a', 'o');\n        System.out.println(s + \" \" + s.replace('a', 'o'));\n    }\n}",
+    "options": [
+      "bonono bonono",
+      "banana banana",
+      "bonono banana",
+      "banana bonono"
+    ],
+    "answer": 3,
+    "explanation": "String.replace returns a new String. The first statement discards its result, so s remains banana.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-033",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static void change(String s, StringBuilder sb) {\n        s += \"x\";\n        sb.append(\"x\");\n    }\n\n    public static void main(String[] args) {\n        String s = \"a\";\n        StringBuilder sb = new StringBuilder(\"a\");\n        change(s, sb);\n        System.out.println(s + \" \" + sb);\n    }\n}",
+    "options": [
+      "a ax",
+      "a a",
+      "ax ax",
+      "ax a"
+    ],
+    "answer": 0,
+    "explanation": "Java passes references by value. Reassigning the String parameter inside change creates a new local String, while append mutates the shared StringBuilder.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-034",
+    "question": "What happens when this program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        System.out.println(Set.of(\"a\", \"a\"));\n    }\n}",
+    "options": [
+      "It prints [a]",
+      "An IllegalArgumentException is thrown for the duplicate element",
+      "It prints [a, a]",
+      "A NullPointerException is thrown"
+    ],
+    "answer": 1,
+    "explanation": "Set.of rejects duplicate elements at creation time instead of silently dropping them, which is another trap of the immutable factory methods.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-035",
+    "question": "Assume Java 17. What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\nimport java.util.stream.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<Integer> a = Stream.of(1, 2).collect(Collectors.toList());\n        a.add(3);\n        System.out.print(a + \" \");\n        List<Integer> b = Stream.of(1, 2).toList();\n        try {\n            b.add(3);\n        } catch (UnsupportedOperationException e) {\n            System.out.println(\"UOE\");\n        }\n    }\n}",
+    "options": [
+      "[1, 2, 3] UOE",
+      "[1, 2] UOE",
+      "[1, 2, 3] [1, 2, 3]",
+      "UOE UOE"
+    ],
+    "answer": 0,
+    "explanation": "Collectors.toList gives a mutable list (an ArrayList in practice), so add succeeds. Stream.toList, added in Java 16, returns an unmodifiable list and add throws UnsupportedOperationException.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-036",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<StringBuilder> a = new ArrayList<>();\n        a.add(new StringBuilder(\"a\"));\n        List<StringBuilder> b = new ArrayList<>(a);\n        b.get(0).append(\"x\");\n        System.out.println(a);\n    }\n}",
+    "options": [
+      "[a]",
+      "[x]",
+      "[aax]",
+      "[ax]"
+    ],
+    "answer": 3,
+    "explanation": "new ArrayList<>(a) is a shallow copy. It has its own array of references, but both lists contain the same StringBuilder objects, so a change through b is visible in a.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-037",
+    "question": "Which expression completes the loop so that the program prints [a]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        List<StringBuilder> a = new ArrayList<>();\n        a.add(new StringBuilder(\"a\"));\n        List<StringBuilder> b = new ArrayList<>();\n        for (StringBuilder sb : a) {\n            b.add(____);\n        }\n        b.get(0).append(\"x\");\n        System.out.println(a);\n    }\n}",
+    "options": [
+      "sb",
+      "(StringBuilder) sb",
+      "sb.append(\"\")",
+      "new StringBuilder(sb)"
+    ],
+    "answer": 3,
+    "explanation": "A deep copy needs new element objects. The constructor copies the characters of sb into a new StringBuilder. Adding sb itself, a cast, or the result of append (which returns the same object) still shares the original elements.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-038",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        int[][] a = {{1}, {2}};\n        int[][] b = a.clone();\n        b[0][0] = 9;\n        System.out.println((a[0] == b[0]) + \" \" + a[0][0]);\n    }\n}",
+    "options": [
+      "true 9",
+      "false 9",
+      "true 1",
+      "false 1"
+    ],
+    "answer": 0,
+    "explanation": "Array clone is shallow. The outer arrays are different, but the inner int arrays are shared, so a[0] and b[0] are the same object and the change is visible through both.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-039",
+    "question": "A constructor receives a mutable Date and must reject dates in the past. Which order is correct?",
+    "options": [
+      "Copy the date first, then validate the copy and store it",
+      "Validate the original, then store a copy",
+      "Validate the original and store it without copying",
+      "Store the original, then validate it later in a getter"
+    ],
+    "answer": 0,
+    "explanation": "If the original is validated first, another thread or the caller can change it between the check and the copy (time-of-check to time-of-use). Validating the private copy closes that gap.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-040",
+    "question": "A class has a private final int[] data field. Which accessor is safe for an immutable class?",
+    "options": [
+      "public int[] data() { return data.clone(); }",
+      "public int[] data() { return data; }",
+      "public final int[] data() { return data; }",
+      "public int[] data() { return data.length == 0 ? null : data; }"
+    ],
+    "answer": 0,
+    "explanation": "Returning a clone gives the caller its own array. The other versions return the internal array, which the caller can modify, and a final accessor method does not make the array immutable.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-041",
+    "question": "Which expression completes the constructor so that the program prints [a]?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    static class Box {\n        private final List<String> items;\n        Box(List<String> items) { this.items = ____; }\n        List<String> items() { return items; }\n    }\n\n    public static void main(String[] args) {\n        List<String> src = new ArrayList<>(List.of(\"a\"));\n        Box b = new Box(src);\n        src.add(\"b\");\n        System.out.println(b.items());\n    }\n}",
+    "options": [
+      "items",
+      "List.copyOf(items)",
+      "Collections.unmodifiableList(items)",
+      "items.subList(0, items.size())"
+    ],
+    "answer": 1,
+    "explanation": "List.copyOf takes a snapshot that is independent of the source. An unmodifiable wrapper or a subList is still a view of the original list, so later additions to src would show through.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-042",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    static class A {\n        private final int x;\n        A(int x) { this.x = x; }\n        void set(int v) { this.x = v; }\n    }\n\n    public static void main(String[] args) {\n        A a = new A(1);\n        a.set(2);\n        System.out.println(\"done\");\n    }\n}",
+    "options": [
+      "It prints 1",
+      "It prints 2",
+      "It compiles but throws an exception at run time",
+      "Compile-time error: cannot assign a value to final variable x"
+    ],
+    "answer": 3,
+    "explanation": "A final field may be assigned only during construction. Assigning it in an ordinary method is rejected, which is why immutable classes have no setters.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-043",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "A.java",
+    "code": "class A {\n    final int x;\n\n    A() {\n    }\n\n    public static void main(String[] args) {\n        System.out.println(new A().x);\n    }\n}",
+    "options": [
+      "Compile-time error: the final field x might not have been initialized",
+      "It prints 0",
+      "It compiles with only a warning",
+      "It compiles but throws an exception at run time"
+    ],
+    "answer": 0,
+    "explanation": "A final field has no default value that can be used. Every constructor must assign it exactly once, otherwise compilation fails.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-044",
+    "question": "Which Java 17 construct generates a final class with private final fields, accessors, equals, hashCode, and toString?",
+    "options": [
+      "record",
+      "enum",
+      "sealed class",
+      "interface with default methods"
+    ],
+    "answer": 0,
+    "explanation": "A record declares an immutable data carrier whose members are generated from its component list. Its immutability is shallow, so mutable components still need defensive copies.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.*;\n\nclass Example {\n    public static void main(String[] args) {\n        String[] arr = {\"a\"};\n        List<String> a = List.of(arr);\n        List<String> b = Arrays.asList(arr);\n        arr[0] = \"z\";\n        System.out.println(a + \" \" + b);\n    }\n}",
+    "options": [
+      "[z] [z]",
+      "[a] [a]",
+      "[z] [a]",
+      "[a] [z]"
+    ],
+    "answer": 3,
+    "explanation": "List.of copies the elements into an immutable list, so later changes to the array are not visible. Arrays.asList is a view backed by the array.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-046",
+    "question": "Can an immutable class have a field that refers to a mutable object?",
+    "options": [
+      "Yes, if that object is copied on the way in and out and is never exposed or modified",
+      "No, any mutable field makes the class mutable by definition",
+      "Yes, if the field is declared volatile",
+      "Yes, if the field is declared static"
+    ],
+    "answer": 0,
+    "explanation": "Immutability is about the observable state of the object. A private mutable component that is never shared or changed is allowed, which is exactly what defensive copying ensures.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-047",
+    "question": "What happens when this code is compiled?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        int x = 1;\n        x++;\n        Runnable r = () -> System.out.println(x);\n        r.run();\n    }\n}",
+    "options": [
+      "It prints 2",
+      "It prints 1",
+      "It compiles but throws an exception at run time",
+      "Compile-time error: local variables referenced from a lambda must be final or effectively final"
+    ],
+    "answer": 3,
+    "explanation": "The variable x is modified by x++, so it is no longer effectively final. A lambda may capture only local variables that are never reassigned.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-048",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "class Example {\n    public static void main(String[] args) {\n        String a = \"hi\";\n        String b = \"h\" + \"i\";\n        String h = \"h\";\n        String c = h + \"i\";\n        final String fh = \"h\";\n        String d = fh + \"i\";\n        System.out.println((a == b) + \" \" + (a == c) + \" \" + (a == d));\n    }\n}",
+    "options": [
+      "true true true",
+      "false false true",
+      "true false true",
+      "true false false"
+    ],
+    "answer": 2,
+    "explanation": "A concatenation of literals is a compile-time constant and is interned, so a == b is true. Concatenating with a non-final variable happens at run time and creates a new String, but a final String variable with a constant value is also a constant expression.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-049",
+    "question": "Which statement best summarizes defensive copying?",
+    "options": [
+      "Copy only in getters because constructors are always safe",
+      "Copy mutable arguments when storing them and copy mutable fields (or return read-only views) when handing them out",
+      "Make every field public final so no copy is needed",
+      "Synchronize every method of the class instead of copying"
+    ],
+    "answer": 1,
+    "explanation": "Both directions matter. Storing a caller's object lets the caller modify your state later, and returning your internal object lets callers modify it directly.",
+    "subtopic": "Immutability and defensive copying"
+  },
+  {
+    "id": "java-core-java-contracts-immutability-and-defensive-copying-050",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.math.BigDecimal;\n\nclass Example {\n    public static void main(String[] args) {\n        BigDecimal a = new BigDecimal(\"1\");\n        a.add(BigDecimal.ONE);\n        BigDecimal before = a;\n        a = a.add(BigDecimal.ONE);\n        System.out.println(before + \" \" + a);\n    }\n}",
+    "options": [
+      "2 2",
+      "1 2",
+      "1 1",
+      "2 1"
+    ],
+    "answer": 1,
+    "explanation": "BigDecimal is immutable, so add returns a new object and the first call changes nothing. Only the reassigned variable holds the sum.",
+    "subtopic": "Immutability and defensive copying"
   }
 ]
