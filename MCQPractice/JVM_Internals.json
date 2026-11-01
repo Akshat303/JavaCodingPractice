@@ -1,0 +1,3034 @@
+[
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-001",
+    "question": "Which sequence correctly lists the lifecycle steps a class goes through before its static initializer runs?",
+    "options": [
+      "Initialization, loading, linking",
+      "Loading, linking, initialization",
+      "Linking, loading, initialization",
+      "Loading, initialization, linking"
+    ],
+    "answer": 1,
+    "explanation": "A class is first loaded (the binary form is found and a Class object is created), then linked (verification, preparation, resolution), and finally initialized when it is first actively used. Initialization always comes last.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-002",
+    "question": "Which three steps make up the linking phase of a class in the JVM?",
+    "options": [
+      "Loading, verification, initialization",
+      "Verification, initialization, resolution",
+      "Preparation, resolution, initialization",
+      "Verification, preparation, resolution"
+    ],
+    "answer": 3,
+    "explanation": "Linking consists of verification (checking the bytecode is valid), preparation (allocating static fields with default values) and resolution (turning symbolic references into direct references). Loading comes before linking and initialization comes after it.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-003",
+    "question": "In Java 17, which class loader is responsible for loading core classes such as java.lang.String from the java.base module?",
+    "options": [
+      "The bootstrap class loader",
+      "The platform class loader",
+      "The application class loader",
+      "The extension class loader"
+    ],
+    "answer": 0,
+    "explanation": "The bootstrap class loader is built into the JVM and loads java.base and other core modules. The extension class loader existed only up to Java 8; since Java 9 the platform class loader takes its role for some other JDK modules.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-004",
+    "question": "What is the output when the program is run on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(String.class.getClassLoader());\n    }\n}",
+    "options": ["java.base", "bootstrap", "null", "NullPointerException"],
+    "answer": 2,
+    "explanation": "Classes loaded by the bootstrap loader report null from getClassLoader(), because the bootstrap loader is not represented by a Java object. Printing null with println is fine and does not throw an exception.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-005",
+    "question": "What does the parent delegation model require when a class loader receives a request to load a class?",
+    "options": [
+      "The loader first tries to define the class itself and falls back to its parent",
+      "The loader queries sibling loaders before anything else",
+      "The loader first delegates to its parent and only searches its own sources if the parent fails",
+      "The loader always delegates directly to the bootstrap loader and never searches its own sources"
+    ],
+    "answer": 2,
+    "explanation": "With parent delegation, loadClass first asks the parent (recursively up to the bootstrap loader). Only when the parent cannot find the class does the loader call findClass to search its own sources.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-006",
+    "question": "A class Helper existed at compile time but its .class file is missing at run time. Which error is thrown when the already-running code executes new Helper()?",
+    "options": [
+      "NoClassDefFoundError",
+      "ClassNotFoundException",
+      "InstantiationException",
+      "ClassFormatError"
+    ],
+    "answer": 0,
+    "explanation": "When the JVM implicitly loads a class because of a new expression and cannot find it, it throws NoClassDefFoundError, which is a LinkageError. ClassNotFoundException is thrown by explicit by-name loading such as Class.forName.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-007",
+    "question": "What is the output? Assume Java 17 and that no class com.missing.Foo exists.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        try {\n            Class.forName(\"com.missing.Foo\");\n        } catch (ClassNotFoundException e) {\n            System.out.println(\"CNFE\");\n        } catch (Throwable t) {\n            System.out.println(\"OTHER\");\n        }\n    }\n}",
+    "options": ["OTHER", "NoClassDefFoundError", "No output", "CNFE"],
+    "answer": 3,
+    "explanation": "Class.forName performs explicit by-name loading and signals a missing class with the checked ClassNotFoundException, which the first catch block handles. The more general Throwable block is never reached.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-008",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class A {\n        static {\n            System.out.println(\"A init\");\n        }\n        static void hi() {\n            System.out.println(\"hi\");\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(\"start\");\n        A.hi();\n    }\n}",
+    "options": [
+      "A init, start, hi",
+      "start, A init, hi",
+      "start, hi, A init",
+      "start, hi"
+    ],
+    "answer": 1,
+    "explanation": "Class A is initialized lazily, at the first active use. Invoking the static method A.hi() triggers initialization, so the static block runs after start is printed and before hi.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Config {\n        static final int MAX = 10;\n        static {\n            System.out.println(\"Config init\");\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(Config.MAX);\n    }\n}",
+    "options": [
+      "10",
+      "Config init, 10",
+      "10, Config init",
+      "Compile-time error"
+    ],
+    "answer": 0,
+    "explanation": "MAX is a compile-time constant (static final primitive with a constant initializer), so the compiler inlines the value 10 into main. Reading it does not trigger initialization of Config, and the static block never runs.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-010",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class A {\n        static {\n            System.out.println(\"A init\");\n        }\n    }\n\n    public static void main(String[] args) {\n        A[] arr = new A[3];\n        System.out.println(arr.length);\n    }\n}",
+    "options": ["A init, 3", "3, A init", "3", "NullPointerException"],
+    "answer": 2,
+    "explanation": "Creating an array of A does not create any A instance and does not initialize class A. Only the array class is created, so the static block never runs and only 3 is printed.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-011",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Parent {\n        static {\n            System.out.println(\"Parent\");\n        }\n    }\n\n    static class Child extends Parent {\n        static {\n            System.out.println(\"Child\");\n        }\n    }\n\n    public static void main(String[] args) {\n        new Child();\n    }\n}",
+    "options": ["Child, Parent", "Parent, Child", "Child", "Parent"],
+    "answer": 1,
+    "explanation": "Before a class is initialized, its direct superclass must be initialized first. Creating a Child therefore runs the Parent static block and then the Child static block.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-012",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Parent {\n        static int x = 5;\n        static {\n            System.out.println(\"Parent\");\n        }\n    }\n\n    static class Child extends Parent {\n        static {\n            System.out.println(\"Child\");\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(Child.x);\n    }\n}",
+    "options": [
+      "Child, Parent, 5",
+      "Parent, Child, 5",
+      "Child, 5",
+      "Parent, 5"
+    ],
+    "answer": 3,
+    "explanation": "Accessing a static field initializes only the class that actually declares it. Child.x refers to the field declared in Parent, so only Parent is initialized and the Child static block does not run.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-013",
+    "question": "What is printed when the program runs from the classpath on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Probe {\n        static {\n            System.out.println(\"init\");\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        ClassLoader cl = Example.class.getClassLoader();\n        cl.loadClass(\"Example$Probe\");\n        System.out.println(\"loaded\");\n    }\n}",
+    "options": [
+      "init, loaded",
+      "loaded, init",
+      "ClassNotFoundException",
+      "loaded"
+    ],
+    "answer": 3,
+    "explanation": "ClassLoader.loadClass only loads the class and does not initialize it. The static block of Probe is not run, so only loaded is printed.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-014",
+    "question": "Which statement loads class Foo through the class loader of Foo itself but does NOT run its static initializer?",
+    "options": [
+      "Class.forName(\"Foo\")",
+      "Class.forName(\"Foo\", false, Foo.class.getClassLoader())",
+      "Foo.run();  // a static method of Foo",
+      "new Foo()"
+    ],
+    "answer": 1,
+    "explanation": "The three-argument forName takes an initialize flag; passing false loads the class without initialization. The one-argument forName, a static method call and the new expression all initialize the class.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-015",
+    "question": "Two classes with the same fully qualified name are loaded by two different class loaders. How does the JVM treat them?",
+    "options": [
+      "As the same runtime class because the names match",
+      "As the same class but with separate copies of static fields",
+      "As distinct runtime classes, so casting an instance of one to the other throws ClassCastException",
+      "As the same class when their bytecode is byte-for-byte identical"
+    ],
+    "answer": 2,
+    "explanation": "The runtime identity of a class is its name together with its defining class loader. Classes from different loaders are different types even with identical bytes, which is a classic cause of surprising ClassCastException messages.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-016",
+    "question": "What is printed when this program runs from the classpath on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        ClassLoader app = ClassLoader.getSystemClassLoader();\n        System.out.println(app.getParent().getName());\n    }\n}",
+    "options": ["platform", "app", "bootstrap", "null"],
+    "answer": 0,
+    "explanation": "Since Java 9 the application class loader (named app) has the platform class loader (named platform) as its parent. The platform loader's own parent is the bootstrap loader, which is represented as null.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static int a = read();\n    static int b = 7;\n\n    static int read() {\n        return b;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(a + \" \" + b);\n    }\n}",
+    "options": ["7 7", "0 7", "0 0", "Compile-time error"],
+    "answer": 1,
+    "explanation": "Preparation gives b its default value 0 before any initializer runs. During initialization a is assigned first, so read() returns the still-default 0, and only afterwards b becomes 7.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-018",
+    "question": "What is the purpose of the verification step during linking?",
+    "options": [
+      "To execute static initializers in textual order",
+      "To allocate memory for static fields",
+      "To locate the referenced classes of every symbolic reference",
+      "To check that the class file is structurally correct and its bytecode is type-safe"
+    ],
+    "answer": 3,
+    "explanation": "Verification protects the JVM by rejecting malformed or unsafe bytecode, for example stack misuse or wrong types. Failures are reported as VerifyError, which is a LinkageError.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-019",
+    "question": "Which statement about resolution of symbolic references in HotSpot is correct?",
+    "options": [
+      "References are typically resolved lazily, the first time the instruction using them executes",
+      "All references of a class are resolved eagerly when the class is loaded",
+      "Resolution always completes before verification starts",
+      "Resolution converts bytecode into machine code"
+    ],
+    "answer": 0,
+    "explanation": "The JVM specification permits eager or lazy resolution, and HotSpot resolves a symbolic reference when an instruction that uses it first runs. Compiling bytecode to machine code is the job of the JIT compiler, not of resolution.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-020",
+    "question": "What is printed when the program runs?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Bad {\n        static int v = 1 / Integer.parseInt(\"0\");\n    }\n\n    public static void main(String[] args) {\n        try {\n            System.out.println(Bad.v);\n        } catch (Throwable t) {\n            System.out.println(t.getClass().getSimpleName());\n        }\n    }\n}",
+    "options": [
+      "ArithmeticException",
+      "NoClassDefFoundError",
+      "ExceptionInInitializerError",
+      "0"
+    ],
+    "answer": 2,
+    "explanation": "An exception thrown by a static initializer is wrapped in ExceptionInInitializerError when class initialization fails. The original ArithmeticException is available through getCause().",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-021",
+    "question": "What is printed, line by line? The options list the two lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Bad {\n        static int v = Integer.parseInt(\"x\");\n    }\n\n    public static void main(String[] args) {\n        for (int i = 0; i < 2; i++) {\n            try {\n                System.out.println(Bad.v);\n            } catch (Throwable t) {\n                System.out.println(t.getClass().getSimpleName());\n            }\n        }\n    }\n}",
+    "options": [
+      "NumberFormatException, NumberFormatException",
+      "ExceptionInInitializerError, ExceptionInInitializerError",
+      "ExceptionInInitializerError, NoClassDefFoundError",
+      "NumberFormatException, NoClassDefFoundError"
+    ],
+    "answer": 2,
+    "explanation": "The first access fails initialization and reports ExceptionInInitializerError. The class is then marked erroneous, so every later use throws NoClassDefFoundError (Could not initialize class) without running the initializer again.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-022",
+    "question": "Which ClassLoader method should a custom loader override to keep the standard parent delegation behavior?",
+    "options": ["findClass", "loadClass", "defineClass", "resolveClass"],
+    "answer": 0,
+    "explanation": "The default loadClass implementation checks the cache and the parent first, then calls findClass. Overriding findClass supplies the loader's own lookup logic while preserving delegation. defineClass is final and only turns bytes into a Class.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-023",
+    "question": "A custom ClassLoader overrides loadClass and always reads class bytes itself without ever calling the parent. What is the main risk?",
+    "options": [
+      "Loading simply becomes slower and nothing else changes",
+      "java.lang.Object can no longer be used by any class",
+      "The JVM refuses to start the application",
+      "Classes that should be shared may be defined again by this loader, producing distinct types and ClassCastException"
+    ],
+    "answer": 3,
+    "explanation": "Skipping delegation breaks the guarantee that a class name maps to one class for all loaders sharing a parent. Application types can be duplicated, and instances from different loaders will not be assignable to each other.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-024",
+    "question": "The program is launched with java Example from the directory containing Example.class (plain classpath, Java 17). What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(Example.class.getClassLoader() == ClassLoader.getSystemClassLoader());\n    }\n}",
+    "options": ["false", "true", "null", "Compile-time error"],
+    "answer": 1,
+    "explanation": "Classes found on the classpath are defined by the application (system) class loader. getSystemClassLoader() returns that same loader instance, so the comparison is true.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-025",
+    "question": "Why do frameworks such as ServiceLoader and JNDI consult the thread context class loader?",
+    "options": [
+      "Code loaded by a parent loader can then load implementation classes that are visible only to a child loader",
+      "It bypasses bytecode verification",
+      "It makes class loading faster than parent delegation",
+      "It unloads classes that are no longer used"
+    ],
+    "answer": 0,
+    "explanation": "Delegation only goes upward, so a library loaded by a parent loader cannot see classes in a child loader. The context class loader lets the caller supply the loader that can see the implementations.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-026",
+    "question": "Assume Java 17 on Linux. Which command logs every class as it is loaded, using unified logging?",
+    "options": [
+      "java -verbose:gc Example",
+      "java -Xlog:gc Example",
+      "java -Xlog:class+load Example",
+      "java -Xshare:dump Example"
+    ],
+    "answer": 2,
+    "explanation": "The unified logging tags class and load together produce one log line per loaded class. The gc options log garbage collection, and -Xshare:dump creates a class data sharing archive instead of logging.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-027",
+    "question": "What happens if a custom class loader calls defineClass twice for the same class name within the same loader?",
+    "options": [
+      "ClassCastException",
+      "A LinkageError for the duplicate class definition",
+      "ClassNotFoundException",
+      "The second call silently replaces the first class"
+    ],
+    "answer": 1,
+    "explanation": "A loader may define a given name only once. A second attempt throws LinkageError (attempted duplicate class definition); classes are never replaced in place.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-028",
+    "question": "Which of the following does NOT trigger initialization of class Foo?",
+    "options": [
+      "Invoking a static method Foo.m()",
+      "Executing new Foo()",
+      "Reading a non-constant static field Foo.x",
+      "Evaluating the class literal Foo.class"
+    ],
+    "answer": 3,
+    "explanation": "Initialization is triggered by active use: instance creation, static method invocation and non-constant static field access. A class literal only refers to the Class object and does not initialize the class.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-029",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    interface Greeter {\n        int V = Example.init(\"Greeter\");\n    }\n\n    static class Impl implements Greeter {\n        static {\n            System.out.println(\"Impl\");\n        }\n    }\n\n    static int init(String s) {\n        System.out.println(s);\n        return 1;\n    }\n\n    public static void main(String[] args) {\n        new Impl();\n    }\n}",
+    "options": ["Greeter, Impl", "Impl, Greeter", "Greeter", "Impl"],
+    "answer": 3,
+    "explanation": "Initializing a class does not initialize the interfaces it implements unless those interfaces declare default methods. Greeter has none and its field is never read, so only the Impl static block runs.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-030",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    interface Greeter {\n        int V = Example.init(\"Greeter\");\n\n        default void hi() {\n        }\n    }\n\n    static class Impl implements Greeter {\n        static {\n            System.out.println(\"Impl\");\n        }\n    }\n\n    static int init(String s) {\n        System.out.println(s);\n        return 1;\n    }\n\n    public static void main(String[] args) {\n        new Impl();\n    }\n}",
+    "options": ["Impl", "Greeter, Impl", "Impl, Greeter", "Greeter"],
+    "answer": 1,
+    "explanation": "When a class is initialized, superinterfaces that declare default methods are initialized first. Because Greeter declares a default method, its field initializer runs before the Impl static block.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-031",
+    "question": "Which statement best summarizes class initialization?",
+    "options": [
+      "It happens as soon as the class bytes are read from disk",
+      "It happens for every class on the classpath at JVM startup",
+      "It runs static initializers and static field assignments in textual order the first time the class is actively used",
+      "It only gives static fields their default values"
+    ],
+    "answer": 2,
+    "explanation": "Initialization is lazy and happens once, on first active use. Default values are assigned earlier, in preparation; initialization then executes static initializer code in the order it appears in the source.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-032",
+    "question": "Which expression completes the code so that it loads java.util.ArrayList by name at run time and prints ArrayList?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) throws Exception {\n        Class<?> c = ____;\n        System.out.println(c.getSimpleName());\n    }\n}",
+    "options": [
+      "Class.forName(\"java.util.ArrayList\")",
+      "Class.forName(java.util.ArrayList)",
+      "ClassLoader.loadClass(\"java.util.ArrayList\")",
+      "new Class(\"java.util.ArrayList\")"
+    ],
+    "answer": 0,
+    "explanation": "Class.forName takes the binary name as a String. loadClass is an instance method and cannot be called statically, the second option is not a valid argument, and Class has no public constructor.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-033",
+    "question": "A program compiles fine but fails at run time with NoClassDefFoundError: com/acme/Util. What is the most likely cause?",
+    "options": [
+      "Util has a syntax error that the compiler ignored",
+      "Util was available at compile time but is not on the run-time classpath",
+      "Util is declared final",
+      "The main class must be declared public"
+    ],
+    "answer": 1,
+    "explanation": "NoClassDefFoundError usually means a class present during compilation cannot be found when the JVM needs it at run time, typically because of a missing jar or wrong classpath. A syntax error would have stopped compilation.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-034",
+    "question": "On Linux the file /work/classes/com/acme/App.class contains the main class com.acme.App. Which command runs it?",
+    "options": [
+      "java /work/classes/com/acme/App.class",
+      "java -cp /work/classes com/acme/App.class",
+      "java -cp /work/classes/com/acme App",
+      "java -cp /work/classes com.acme.App"
+    ],
+    "answer": 3,
+    "explanation": "The classpath entry must be the root directory of the package tree, and the class is named with its fully qualified name using dots and no .class extension.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-035",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Lazy {\n        static {\n            System.out.println(\"Lazy init\");\n        }\n    }\n\n    public static void main(String[] args) {\n        boolean flag = false;\n        if (flag) {\n            new Lazy();\n        }\n        System.out.println(\"done\");\n    }\n}",
+    "options": [
+      "done",
+      "Lazy init, done",
+      "done, Lazy init",
+      "NoClassDefFoundError"
+    ],
+    "answer": 0,
+    "explanation": "Initialization happens only when new Lazy() actually executes. The branch is never taken, so the static block never runs and only done is printed.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-036",
+    "question": "Why is the initialization-on-demand holder idiom both lazy and thread-safe without explicit synchronization?",
+    "options": [
+      "The compiler wraps getInstance in a synchronized block",
+      "The holder class is initialized at JVM startup together with the outer class",
+      "The JVM runs a class's static initialization at most once under an internal lock, and the holder is initialized only on first access",
+      "The JVM declares all static fields volatile"
+    ],
+    "answer": 2,
+    "explanation": "Class initialization is guaranteed to be performed once and is protected by a per-class initialization lock. The nested holder is not initialized until the first call that uses it, which makes the instance creation lazy and safe.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-037",
+    "question": "The pseudocode below follows Java class initialization rules. How many lines does it print in total?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "class P\n    static initializer: print \"P\"\n\nclass C extends P\n    static initializer: print \"C\"\n    static x = 4\n\nmain:\n    print C.x\n    print C.x\n    c = new C()\n    print \"end\"",
+    "options": ["3", "4", "5", "7"],
+    "answer": 2,
+    "explanation": "The first C.x access initializes C, which first initializes P, printing P and C. Then 4 is printed twice and end once. Initialization happens only once, so new C() prints nothing extra: P, C, 4, 4, end is five lines.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-038",
+    "question": "Which pairing of class loader and the classes it typically loads is correct on Java 17?",
+    "options": [
+      "Application class loader: classes from the classpath",
+      "Bootstrap class loader: classes from the classpath",
+      "Platform class loader: classes from the application's -cp directories",
+      "Application class loader: the java.base module"
+    ],
+    "answer": 0,
+    "explanation": "The application loader reads the classpath (and some JDK tool modules). The bootstrap loader handles java.base and other core modules, while the platform loader handles certain other JDK modules, not user classpath classes.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-039",
+    "question": "What is printed when the program is run from the classpath on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) throws Exception {\n        ClassLoader a = new ClassLoader(null) {\n        };\n        try {\n            Class.forName(\"Example\", true, a);\n        } catch (ClassNotFoundException e) {\n            System.out.println(\"not found\");\n        }\n    }\n}",
+    "options": [
+      "Example",
+      "Nothing is printed",
+      "NoClassDefFoundError",
+      "not found"
+    ],
+    "answer": 3,
+    "explanation": "A null parent means the loader delegates only to the bootstrap loader, which cannot see classpath classes. The default findClass throws ClassNotFoundException, so the catch block prints not found.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-040",
+    "question": "Under which condition can a loaded class be unloaded?",
+    "options": [
+      "As soon as its static initializer finishes",
+      "When its defining class loader, the class and all its instances become unreachable and are garbage collected",
+      "When System.gc() is called",
+      "When the last instance of the class is garbage collected"
+    ],
+    "answer": 1,
+    "explanation": "A class is unloaded only together with its defining class loader once nothing references the loader, the Class object or its instances. Classes loaded by the bootstrap, platform and application loaders effectively live for the whole run.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-041",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) throws Exception {\n        Class<?> c = Class.forName(\"[I\");\n        System.out.println(c.getName() + \" \" + c.getComponentType());\n    }\n}",
+    "options": ["[I int", "int[] int", "[I null", "ClassNotFoundException"],
+    "answer": 0,
+    "explanation": "Array classes are looked up by their JVM descriptor-style name, and [I is the name of int[]. getName returns that same string and the component type of int[] is int.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-042",
+    "question": "Which error is thrown when a loaded class contains bytecode that violates type-safety rules?",
+    "options": [
+      "ClassFormatError",
+      "NoSuchMethodError",
+      "VerifyError",
+      "UnsatisfiedLinkError"
+    ],
+    "answer": 2,
+    "explanation": "The verifier rejects invalid bytecode with VerifyError. ClassFormatError is for a malformed class file structure, which is detected earlier during loading.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-043",
+    "question": "An application compiled against library v1 calls Lib.compute(int). At run time library v2 is used, in which the method was renamed. Which error is thrown when the call is resolved?",
+    "options": [
+      "VerifyError",
+      "NoSuchMethodError",
+      "ClassCastException",
+      "ClassNotFoundException"
+    ],
+    "answer": 1,
+    "explanation": "The call site holds a symbolic reference to a method that no longer exists, so resolution fails with NoSuchMethodError. It is a binary incompatibility that the compiler could not detect because the application was not recompiled.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-044",
+    "question": "Inside a method declared throws Exception, which snippet loads class com.plugin.Main from the jar file referenced by the java.io.File variable jar, using a child loader of the application loader?",
+    "options": [
+      "ClassLoader.getSystemClassLoader().loadClass(\"com.plugin.Main\")",
+      "new URLClassLoader(new URL[] { jar }).loadClass(\"com.plugin.Main\")",
+      "Class.forName(jar.getName())",
+      "new URLClassLoader(new URL[] { jar.toURI().toURL() }, Example.class.getClassLoader()).loadClass(\"com.plugin.Main\")"
+    ],
+    "answer": 3,
+    "explanation": "URLClassLoader needs URL objects, and the second constructor argument sets the parent so the new loader is a child of the application loader. The system loader cannot see the extra jar, and passing a File where a URL is expected does not compile.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-045",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class A {\n        static int x = B.y + 1;\n    }\n\n    static class B {\n        static int y = A.x + 1;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(A.x + \" \" + B.y);\n    }\n}",
+    "options": ["1 2", "2 3", "StackOverflowError", "2 1"],
+    "answer": 3,
+    "explanation": "A.x starts initializing A, which needs B.y and so starts initializing B. B reads A.x while A is already being initialized by the same thread, so it sees the default 0 and y becomes 1. Back in A, x becomes 2, giving 2 1.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-046",
+    "question": "What is printed? Ignore trailing whitespace.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Base {\n        static {\n            System.out.print(\"S1 \");\n        }\n        {\n            System.out.print(\"I1 \");\n        }\n        Base() {\n            System.out.print(\"C1 \");\n        }\n    }\n\n    static class Derived extends Base {\n        static {\n            System.out.print(\"S2 \");\n        }\n        {\n            System.out.print(\"I2 \");\n        }\n        Derived() {\n            System.out.print(\"C2 \");\n        }\n    }\n\n    public static void main(String[] args) {\n        new Derived();\n        new Derived();\n    }\n}",
+    "options": [
+      "S1 S2 I1 C1 I2 C2 S1 S2 I1 C1 I2 C2",
+      "S1 S2 I1 C1 I2 C2 I1 C1 I2 C2",
+      "S1 I1 C1 S2 I2 C2 I1 C1 I2 C2",
+      "I1 C1 I2 C2 S1 S2 I1 C1 I2 C2"
+    ],
+    "answer": 1,
+    "explanation": "Static initializers run once per class, superclass first, when the class is first used. Each object creation then runs the superclass instance initializer and constructor, followed by the subclass ones, so the static part appears only once.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-047",
+    "question": "What is the purpose of the default class data sharing (CDS) archive that ships with the JDK in Java 17?",
+    "options": [
+      "It compiles frequently used methods ahead of time into machine code",
+      "It disables garbage collection for core classes",
+      "It stores pre-processed metadata of core JDK classes in a memory-mapped file to speed up startup and reduce footprint",
+      "It verifies jar files for tampering"
+    ],
+    "answer": 2,
+    "explanation": "CDS maps an archive of already parsed class metadata into memory, so the JVM can skip much of the parsing and verification work for common classes and can share the memory between processes.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-048",
+    "question": "When is Class.forName(name, true, loader) preferable to Class.forName(name)?",
+    "options": [
+      "When the class must be looked up through a specific class loader instead of the caller's defining loader",
+      "When static initialization must be skipped",
+      "When the requested class is an array type",
+      "When the class should be unloaded after use"
+    ],
+    "answer": 0,
+    "explanation": "The one-argument form uses the class loader of the calling class. The three-argument form lets you choose the loader explicitly, which matters in plugin and container environments. Passing true still initializes the class.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-049",
+    "question": "Why does this code fail to compile?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    enum Level {\n        LOW, HIGH;\n\n        static int count = 0;\n\n        Level() {\n            count++;\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(Level.LOW);\n    }\n}",
+    "options": [
+      "An enum constructor cannot be declared without an access modifier",
+      "Enum constants are created before the static fields are initialized, so constructors may not refer to non-constant static fields",
+      "count must be final to be incremented",
+      "Enums cannot declare static fields"
+    ],
+    "answer": 1,
+    "explanation": "Enum constants are initialized first, as part of the enum's static initialization, before later static fields. To prevent reading uninitialized state, the language forbids constructors from referencing non-constant static fields of the enum.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-050",
+    "question": "Which is a key benefit of parent-first class loading delegation?",
+    "options": [
+      "Faster scanning of the classpath",
+      "It allows applications to override java.lang.String",
+      "It removes the need for bytecode verification",
+      "Core classes cannot be replaced by untrusted code and the same class is not loaded twice by different loaders"
+    ],
+    "answer": 3,
+    "explanation": "Because requests go to the parent first, core types always come from the trusted bootstrap loader, and shared classes have a single definition. This protects both security and type consistency.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-051",
+    "question": "What is printed when the program is run from the classpath on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(int[].class.getClassLoader() + \" \"\n                + (Example[].class.getClassLoader() == Example.class.getClassLoader()));\n    }\n}",
+    "options": ["null true", "null false", "true true", "NullPointerException"],
+    "answer": 0,
+    "explanation": "An array class reports the class loader of its element type. A primitive element type has no loader, so int[] gives null, while Example[] shares the loader of Example, making the comparison true.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-052",
+    "question": "On Linux, module com.app (main class com.app.Main) is in the directory mods. Which command runs it as a module on Java 17?",
+    "options": [
+      "java -cp mods -m com.app/com.app.Main",
+      "java --module-path mods --class-path com.app com.app.Main",
+      "java --module-path mods --module com.app/com.app.Main",
+      "java -p mods com.app.Main"
+    ],
+    "answer": 2,
+    "explanation": "Module mode needs the module on the module path and the module/main-class pair given with --module (or -m). Without --module, the last option treats com.app.Main as an ordinary class on the classpath and cannot find it.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-053",
+    "question": "A server must reload plugin classes without restarting the JVM. Which mechanism makes this possible?",
+    "options": [
+      "Call Class.forName again with the same name and the same loader",
+      "Call System.gc() to force a reload",
+      "Create a new class loader instance for each reload and discard the old one",
+      "Overwrite the .class file and the JVM reloads it automatically"
+    ],
+    "answer": 2,
+    "explanation": "A loader defines each class name only once, so new versions need a fresh loader. Dropping the old loader also lets the old classes be unloaded once nothing refers to them.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-054",
+    "question": "Thread 1 starts initializing class A, whose static initializer needs class B. At the same time thread 2 starts initializing B, whose static initializer needs A. What can happen?",
+    "options": [
+      "A deadlock, because each thread holds one class's initialization lock while waiting for the other",
+      "The JVM detects the cycle and throws an Error in one thread",
+      "One thread always proceeds because initialization locks are reentrant for all threads",
+      "Nothing special, because initialization locks do not exist"
+    ],
+    "answer": 0,
+    "explanation": "Each class has an initialization lock that other threads wait on. Circular static dependencies across two threads can therefore deadlock; the JVM does not resolve this, and reentrancy only helps the thread that already holds the lock.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-055",
+    "question": "Which method name completes the code so that it obtains the thread context class loader?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        ClassLoader cl = Thread.currentThread().____();\n        System.out.println(cl != null);\n    }\n}",
+    "options": [
+      "getClassLoader",
+      "getSystemClassLoader",
+      "getParent",
+      "getContextClassLoader"
+    ],
+    "answer": 3,
+    "explanation": "Thread declares getContextClassLoader (and setContextClassLoader). The other names do not exist on Thread; getSystemClassLoader is a static method of ClassLoader.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-056",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Inner {\n    }\n\n    public static void main(String[] args) {\n        try {\n            Class.forName(\"Example.Inner\");\n            System.out.println(\"found\");\n        } catch (ClassNotFoundException e) {\n            System.out.println(\"missing\");\n        }\n    }\n}",
+    "options": [
+      "found",
+      "missing",
+      "NoClassDefFoundError",
+      "Compile-time error"
+    ],
+    "answer": 1,
+    "explanation": "Class.forName needs the binary name, and nested classes use $ as separator, so the correct name is Example$Inner. The source-style name with a dot does not match any class, which yields ClassNotFoundException.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-057",
+    "question": "Which command displays the constant pool and other detailed information of the compiled class Example.class?",
+    "options": [
+      "javap -v Example",
+      "java -v Example",
+      "javac -p Example",
+      "jar -tf Example"
+    ],
+    "answer": 0,
+    "explanation": "javap is the class file disassembler, and -v prints verbose details including the constant pool where symbolic references are stored. The other commands do not inspect class files this way.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-058",
+    "question": "Class Settings declares public static final String NAME = \"v1\"; and class App prints Settings.NAME. After changing the value to \"v2\" and recompiling only Settings, App still prints v1. Why?",
+    "options": [
+      "The class loader caches the old Settings class",
+      "The JVM refuses to relink a changed class",
+      "Compile-time constants are copied into the bytecode of the using class, so App must be recompiled",
+      "Static fields are initialized only once per JVM installation"
+    ],
+    "answer": 2,
+    "explanation": "A static final String initialized with a literal is a compile-time constant and javac inlines its value into every class that uses it. Changing the declaring class has no effect until the users are recompiled.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-059",
+    "question": "What is printed, line by line? The options list the lines in order.",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Driver {\n        static {\n            System.out.println(\"registered\");\n        }\n    }\n\n    public static void main(String[] args) throws Exception {\n        Class<?> c = Class.forName(\"Example$Driver\", false, Example.class.getClassLoader());\n        System.out.println(\"loaded\");\n        c.getDeclaredConstructor().newInstance();\n        System.out.println(\"created\");\n    }\n}",
+    "options": [
+      "registered, loaded, created",
+      "loaded, registered, created",
+      "loaded, created, registered",
+      "registered, loaded"
+    ],
+    "answer": 1,
+    "explanation": "Passing false loads the class without initializing it, so loaded appears first. Creating the instance through reflection then triggers initialization, which prints registered before created.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-class-loading-and-linking-060",
+    "question": "A class compiled with a Java 21 compiler (default target) is run on a Java 17 JVM. Which error is reported?",
+    "options": [
+      "ClassFormatError",
+      "VerifyError",
+      "NoClassDefFoundError",
+      "UnsupportedClassVersionError"
+    ],
+    "answer": 3,
+    "explanation": "A JVM refuses class files whose major version is newer than it supports. The error is UnsupportedClassVersionError, a subclass of ClassFormatError, and it is raised while the class is being loaded.",
+    "subtopic": "Class loading and linking"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-001",
+    "question": "What does the javac compiler produce from Java source files?",
+    "options": [
+      "Native machine code for the current CPU",
+      "Platform-independent bytecode stored in .class files",
+      "Assembly source files for each platform",
+      "Tokenized source text that the JVM parses at start-up"
+    ],
+    "answer": 1,
+    "explanation": "javac translates source code into platform-independent bytecode packaged in class files. Native machine code is produced later, at run time, by the JVM's JIT compiler for the specific CPU.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-002",
+    "question": "Which four-byte magic number starts every valid class file?",
+    "options": ["0xDEADBEEF", "0xCAFED00D", "0xFEEDFACE", "0xCAFEBABE"],
+    "answer": 3,
+    "explanation": "Every class file begins with the magic number 0xCAFEBABE, which the JVM checks first when loading. A file without it is rejected with a ClassFormatError.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-003",
+    "question": "Which class file major version number corresponds to Java 17?",
+    "options": ["61", "55", "52", "65"],
+    "answer": 0,
+    "explanation": "Major versions grow by one per Java release starting from 45 for Java 1.1: Java 8 is 52, Java 11 is 55 and Java 17 is 61. Java 21 is 65.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-004",
+    "question": "Which statement best describes the architecture of the JVM instruction set?",
+    "options": [
+      "Register-based with 16 general-purpose registers",
+      "Register-based with unlimited virtual registers",
+      "Stack-based, where most instructions work on an operand stack",
+      "Memory-to-memory, with no stack involved"
+    ],
+    "answer": 2,
+    "explanation": "JVM bytecode is stack-based: instructions push operands on the operand stack, pop them and push results back. This keeps the bytecode compact and independent of the number of CPU registers.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-005",
+    "question": "The pseudocode runs on an operand stack. push n pushes the integer n, sub pops b, then a, and pushes a - b, and mul pops two values and pushes their product. What value is on top of the stack at the end?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "push 10\npush 4\nsub\npush 3\nmul",
+    "options": ["6", "42", "18", "7"],
+    "answer": 2,
+    "explanation": "10 and 4 are pushed and sub leaves 10 - 4 = 6. After pushing 3, mul computes 6 * 3 = 18. The order of operands for sub matters: the first pushed value is the left operand.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-006",
+    "question": "Which bytecode sequence does javac generate for the body of the static method add?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static int add(int a, int b) {\n        return a + b;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(add(1, 2));\n    }\n}",
+    "options": [
+      "iload_0, iload_1, iadd, ireturn",
+      "iload_1, iload_2, iadd, ireturn",
+      "aload_0, aload_1, iadd, ireturn",
+      "iconst_0, iconst_1, iadd, ireturn"
+    ],
+    "answer": 0,
+    "explanation": "In a static method the parameters occupy local variable slots starting at 0, so a is slot 0 and b is slot 1. They are loaded with iload, added with iadd and returned with ireturn.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-007",
+    "question": "Which bytecode sequence does javac generate for the body of the instance method add?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    int add(int a, int b) {\n        return a + b;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(new Example().add(1, 2));\n    }\n}",
+    "options": [
+      "iload_0, iload_1, iadd, ireturn",
+      "aload_0, iload_1, iadd, ireturn",
+      "iload_2, iload_3, iadd, ireturn",
+      "iload_1, iload_2, iadd, ireturn"
+    ],
+    "answer": 3,
+    "explanation": "In an instance method, local variable slot 0 holds this, so the parameters a and b live in slots 1 and 2. The method loads them with iload_1 and iload_2 before adding.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-008",
+    "question": "With javac 17 targeting Java 17, which mechanism does the compiler typically use to implement the String concatenation in the code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        String a = args.length > 0 ? args[0] : \"x\";\n        String b = \"y\";\n        String s = a + b;\n        System.out.println(s);\n    }\n}",
+    "options": [
+      "A hard-coded chain of StringBuilder.append calls",
+      "An invokedynamic instruction that links to StringConcatFactory",
+      "The invokestatic instruction on String.concat",
+      "A dedicated string-concat opcode"
+    ],
+    "answer": 1,
+    "explanation": "Since Java 9 (JEP 280), javac emits invokedynamic for string concatenation and lets StringConcatFactory choose the strategy at run time. The StringBuilder chain was the Java 8 approach, and the JVM has no string-concat opcode.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-009",
+    "question": "Which invoke instruction does javac use to call a constructor?",
+    "options": [
+      "invokespecial",
+      "invokevirtual",
+      "invokestatic",
+      "invokedynamic"
+    ],
+    "answer": 0,
+    "explanation": "Constructors (<init> methods), private methods of a class in older class file versions and super calls use invokespecial because the target does not depend on the runtime type. Virtual dispatch is not needed.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-010",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        final int a = 2;\n        final int b = 3;\n        String s = \"v\" + (a + b);\n        System.out.println(s == \"v5\");\n    }\n}",
+    "options": ["false", "Compile-time error", "true", "v5"],
+    "answer": 2,
+    "explanation": "a and b are constant variables, so the whole expression is a compile-time constant that javac folds into the literal \"v5\". Identical constant strings share one interned instance, so == is true.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-011",
+    "question": "Which instruction does javac typically emit for the statement i++ in the code, where i is a local int?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        int i = 0;\n        i++;\n        System.out.println(i);\n    }\n}",
+    "options": [
+      "iload, iconst_1, iadd, istore always",
+      "iinc",
+      "incr",
+      "iload followed by dup only"
+    ],
+    "answer": 1,
+    "explanation": "The JVM has a dedicated iinc instruction that adds a constant directly to a local int variable without using the operand stack. javac uses it for i++, i-- and i += constant on locals.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-012",
+    "question": "What does javac insert to implement the autoboxing in the code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        Integer x = 5;\n        System.out.println(x);\n    }\n}",
+    "options": [
+      "A call to the constructor new Integer(5)",
+      "A checkcast to Integer",
+      "Nothing, because int and Integer share the same representation",
+      "A call to Integer.valueOf(5)"
+    ],
+    "answer": 3,
+    "explanation": "Autoboxing is a compiler feature that translates to a call to the static valueOf method of the wrapper. Unboxing similarly becomes a call such as intValue(). This is also why small values are cached.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-013",
+    "question": "How does javac compile a switch statement on a String?",
+    "options": [
+      "By comparing object references with if_acmpeq",
+      "By converting the string to a char array and using tableswitch",
+      "By using a dedicated string-switch opcode",
+      "By switching on hashCode() and then confirming with equals()"
+    ],
+    "answer": 3,
+    "explanation": "javac computes the hash code of the selector, uses a lookupswitch on it and then verifies the match with equals to handle hash collisions. A second switch on an index then runs the matching case body.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-014",
+    "question": "How many class files, besides Example.class, does javac 17 generate for this source file?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        Runnable r1 = new Runnable() {\n            public void run() {\n            }\n        };\n        Runnable r2 = () -> {\n        };\n        r1.run();\n        r2.run();\n    }\n}",
+    "options": ["0", "1", "2", "3"],
+    "answer": 1,
+    "explanation": "The anonymous class becomes Example$1.class. The lambda is compiled to a private synthetic method in Example and linked through invokedynamic, so it produces no extra class file at compile time.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-015",
+    "question": "What happens when the bytecode of a single method would exceed 65535 bytes?",
+    "options": [
+      "The JIT refuses to compile it, but javac accepts it",
+      "A StackOverflowError is thrown at run time",
+      "javac reports a \"code too large\" compile-time error",
+      "The method is split automatically by javac"
+    ],
+    "answer": 2,
+    "explanation": "The class file format limits the code array of one method to 65535 bytes. javac reports the error at compile time and does not split methods automatically.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-016",
+    "question": "By default, HotSpot does not JIT-compile a method whose bytecode is larger than which size?",
+    "options": ["8000 bytes", "1000 bytes", "65535 bytes", "325 bytes"],
+    "answer": 0,
+    "explanation": "HugeMethodLimit defaults to 8000 bytes and DontCompileHugeMethods is on, so such methods stay interpreted. Splitting a very large method can therefore improve performance.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-017",
+    "question": "What is the main purpose of the JIT compiler in the JVM?",
+    "options": [
+      "To translate Java source code into bytecode",
+      "To compile frequently executed bytecode into native machine code at run time",
+      "To verify class files before they are loaded",
+      "To reclaim unused objects from the heap"
+    ],
+    "answer": 1,
+    "explanation": "The JIT compiler translates hot bytecode into optimized machine code while the program runs. Translating source is javac's job, verification is done by the verifier and memory reclamation by the garbage collector.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-018",
+    "question": "Which statement best summarizes the default HotSpot execution strategy?",
+    "options": [
+      "All bytecode is compiled to machine code before main starts",
+      "Bytecode is always interpreted and never compiled",
+      "Every method is compiled on its first call",
+      "Code starts in the interpreter, and hot methods are profiled and compiled to optimized machine code"
+    ],
+    "answer": 3,
+    "explanation": "HotSpot begins interpreting for quick start-up, collects execution profiles and compiles the methods that run frequently. Cold code may remain interpreted for the whole run.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-019",
+    "question": "What does tiered compilation in HotSpot combine?",
+    "options": [
+      "C1 for fast, lightly optimized code and C2 for highly optimized code",
+      "Two instances of C2 with different heap sizes",
+      "The javac compiler and the interpreter",
+      "C2 and the garbage collector"
+    ],
+    "answer": 0,
+    "explanation": "Tiered compilation uses the C1 compiler to get compiled code quickly and gather profiles, then the C2 compiler recompiles the hottest methods with aggressive optimizations. It has been the default since Java 8.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-020",
+    "question": "In tiered compilation, which level corresponds to code compiled by C2?",
+    "options": ["Level 0", "Level 3", "Level 4", "Level 1"],
+    "answer": 2,
+    "explanation": "Level 0 is the interpreter, levels 1 to 3 are C1 variants with increasing amounts of profiling, and level 4 is C2. Level 3 (full profiling) normally precedes level 4.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-021",
+    "question": "Assume Java 17 on Linux. Which command restricts HotSpot to the C1 compiler only?",
+    "options": [
+      "java -Xint Example",
+      "java -XX:-TieredCompilation Example",
+      "java -XX:TieredStopAtLevel=1 Example",
+      "java -Xcomp Example"
+    ],
+    "answer": 2,
+    "explanation": "TieredStopAtLevel=1 stops tiered compilation at C1 without profiling. -Xint disables the JIT completely, -XX:-TieredCompilation leaves only C2, and -Xcomp changes when methods are compiled.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-022",
+    "question": "Which JVM option prints a line each time a method is compiled by the JIT?",
+    "options": [
+      "-XX:+PrintCompilation",
+      "-verbose:jni",
+      "-XX:+PrintGC",
+      "-Xshare:auto"
+    ],
+    "answer": 0,
+    "explanation": "-XX:+PrintCompilation logs compilation events with the tier and method name. The other options relate to native interface logging, garbage collection logging and class data sharing.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-023",
+    "question": "Which statement about JIT optimizations and program behavior is correct?",
+    "options": [
+      "They may change the output of single-threaded code if it becomes faster",
+      "They are only applied to code that never throws exceptions",
+      "They may skip throwing an exception when the exception object is never used",
+      "They must preserve the observable behavior defined by the Java Language Specification"
+    ],
+    "answer": 3,
+    "explanation": "Optimizations are allowed only when the program's observable behavior stays as specified. An exception that the language requires must still be thrown, so JIT speedups are transparent apart from timing.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-024",
+    "question": "What is on-stack replacement (OSR)?",
+    "options": [
+      "Replacing a class file on disk while the JVM runs",
+      "Switching a running method from interpreted to compiled code in the middle of a long-running loop",
+      "Moving stack frames to the heap when memory is low",
+      "Re-verifying stack frames after an exception"
+    ],
+    "answer": 1,
+    "explanation": "OSR lets the JVM transfer a currently executing frame to a freshly compiled version. It matters for a method such as main that contains a hot loop but is invoked only once.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-025",
+    "question": "Which counters does HotSpot mainly use to decide that a method is hot?",
+    "options": [
+      "The invocation counter and the back-edge (loop) counter",
+      "The heap counter and the GC counter",
+      "The thread counter and the class counter",
+      "The exception counter and the lock counter"
+    ],
+    "answer": 0,
+    "explanation": "The interpreter counts method invocations and loop back-edges. When these counters cross thresholds, the method, or the loop via OSR, is queued for compilation.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-026",
+    "question": "Where does HotSpot store the machine code generated by the JIT compiler?",
+    "options": [
+      "In the Java heap",
+      "In metaspace",
+      "In the code cache",
+      "In the thread stack"
+    ],
+    "answer": 2,
+    "explanation": "Compiled methods (nmethods) live in a dedicated native memory area called the code cache. The heap holds objects and metaspace holds class metadata.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-027",
+    "question": "What typically happens when the code cache is full and cannot be freed (default settings)?",
+    "options": [
+      "The JVM crashes with OutOfMemoryError: Java heap space",
+      "The JIT stops compiling new methods and uncompiled code keeps running in the interpreter",
+      "The JVM exits immediately with a fatal error",
+      "The garbage collector grows the code cache automatically"
+    ],
+    "answer": 1,
+    "explanation": "HotSpot logs a warning that the code cache is full and the compiler has been disabled. The program continues, but newly hot methods are not compiled, so performance degrades.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-028",
+    "question": "Which JVM option sets the maximum (reserved) size of the code cache to 256 MB?",
+    "options": [
+      "-Xmx256m",
+      "-XX:MaxMetaspaceSize=256m",
+      "-XX:CodeCacheSize=256m",
+      "-XX:ReservedCodeCacheSize=256m"
+    ],
+    "answer": 3,
+    "explanation": "ReservedCodeCacheSize controls the total reserved size of the code cache. -Xmx limits the Java heap and MaxMetaspaceSize limits class metadata; CodeCacheSize is not a valid option.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-029",
+    "question": "Which JIT optimization replaces a method call with the body of the called method and often enables further optimizations?",
+    "options": [
+      "Loop unrolling",
+      "Dead code elimination",
+      "Constant pooling",
+      "Method inlining"
+    ],
+    "answer": 3,
+    "explanation": "Inlining removes call overhead and exposes the callee's code to the caller's context, which allows constant propagation, escape analysis and more. It is considered one of the most important JIT optimizations.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-030",
+    "question": "Which pair of defaults is correct for HotSpot's MaxInlineSize and FreqInlineSize (bytecode bytes)?",
+    "options": ["325 and 35", "35 and 325", "100 and 1000", "8000 and 35"],
+    "answer": 1,
+    "explanation": "Ordinary methods are inlined when their bytecode is smaller than MaxInlineSize (35 bytes), while frequently executed hot methods may be inlined up to FreqInlineSize (325 bytes).",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-031",
+    "question": "What can the C2 compiler do with an object that escape analysis proves never leaves the method?",
+    "options": [
+      "Move it into metaspace",
+      "Make it immutable",
+      "Eliminate the heap allocation through scalar replacement",
+      "Serialize it to disk"
+    ],
+    "answer": 2,
+    "explanation": "If an object does not escape, C2 can replace it by its fields held in registers or on the stack and skip the heap allocation entirely. This reduces garbage collection pressure.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-032",
+    "question": "What may C2 do with a synchronized block whose lock object never escapes the current thread?",
+    "options": [
+      "Remove (elide) the synchronization",
+      "Convert it into a distributed lock",
+      "Throw IllegalMonitorStateException",
+      "Hold the lock for a longer time"
+    ],
+    "answer": 0,
+    "explanation": "If escape analysis proves no other thread can ever see the lock object, locking has no observable effect, so the JIT can elide it. This is known as lock elision.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-033",
+    "question": "Why can a loop whose result is never used appear to run in almost zero time in a naive benchmark?",
+    "options": [
+      "Loops are automatically executed in parallel",
+      "The JIT compiler can remove code that has no observable effect (dead code elimination)",
+      "The bytecode is cached on disk",
+      "System.nanoTime is inaccurate for loops"
+    ],
+    "answer": 1,
+    "explanation": "If computed values are never used, the optimizer may delete the computation. Benchmark frameworks such as JMH consume results through a Blackhole to prevent this.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-034",
+    "question": "Why do reliable Java benchmarks include warm-up iterations?",
+    "options": [
+      "To fill the heap before measuring",
+      "To initialize the operating system cache",
+      "To trigger a garbage collection",
+      "So the hot code is already compiled and optimized by the JIT when measurement starts"
+    ],
+    "answer": 3,
+    "explanation": "Early iterations run in the interpreter or lightly optimized code. Measuring them mixes start-up cost with steady-state performance, so warm-up is needed to measure the optimized code.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-035",
+    "question": "What is deoptimization in HotSpot?",
+    "options": [
+      "Discarding compiled code and continuing in the interpreter when an optimistic assumption proves wrong",
+      "Removing unused classes from metaspace",
+      "Turning off inlining with a command-line flag",
+      "Recompiling every method with C1 only"
+    ],
+    "answer": 0,
+    "explanation": "The JIT compiles with speculative assumptions, for example about types seen at a call site. If an assumption is invalidated, execution safely falls back to the interpreter and the method may be recompiled later.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-036",
+    "question": "What can the JIT do at an interface call site that has only ever seen one receiver type?",
+    "options": [
+      "It must always keep the full dispatch table lookup",
+      "It rewrites the source code of the caller",
+      "It devirtualizes the call and inlines the target behind a cheap type check",
+      "It converts the callee to a static method in the class file"
+    ],
+    "answer": 2,
+    "explanation": "Profile data showing a monomorphic call site lets the JIT guess the receiver type, inline the target and guard it with a type check. If another type ever appears, the code is deoptimized.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-037",
+    "question": "What are JIT intrinsics?",
+    "options": [
+      "Methods that exist only in bytecode and have no source",
+      "Private JDK methods that cannot be called",
+      "Well-known methods such as Math.sqrt or System.arraycopy that the JIT replaces with hand-tuned machine code sequences",
+      "Native methods that can never be inlined"
+    ],
+    "answer": 2,
+    "explanation": "For selected JDK methods HotSpot has specialized implementations, often using CPU instructions, that replace the normal compiled body. This gives performance that plain compiled Java code would not reach.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-038",
+    "question": "Which statement correctly compares the C1 and C2 compilers?",
+    "options": [
+      "C1 compiles quickly with modest optimization, while C2 compiles slower but applies aggressive, profile-based optimization",
+      "C1 applies more aggressive optimizations than C2",
+      "C2 compiles only during JVM start-up",
+      "C1 and C2 are the same compiler with different names"
+    ],
+    "answer": 0,
+    "explanation": "C1 is designed for fast compilation and quick warm-up, while C2 spends more time to produce faster steady-state code, using the profile information gathered earlier.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-039",
+    "question": "Which statement is true for the experimental jaotc ahead-of-time compiler in Java 17?",
+    "options": [
+      "It is enabled by default",
+      "It replaces the C2 compiler",
+      "It is used by default to precompile java.base",
+      "It was removed from the JDK (JEP 410)"
+    ],
+    "answer": 3,
+    "explanation": "JEP 410 removed the experimental AOT compiler (jaotc) and the experimental Graal-based JIT integration in Java 17 because of low usage and maintenance cost.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-040",
+    "question": "In the pseudocode a method call is counted and the method is compiled once the counter reaches the threshold. At which call number is compileCallNumber set?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "threshold = 5\ncounter = 0\ncompiled = false\nfor call = 1 to 8:\n    counter = counter + 1\n    if counter >= threshold and compiled == false:\n        compiled = true\n        compileCallNumber = call\nprint compileCallNumber",
+    "options": ["4", "5", "6", "8"],
+    "answer": 1,
+    "explanation": "The counter equals the call number. It first reaches the threshold 5 on call 5, which sets compiled to true; the condition is then false for the remaining calls.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-041",
+    "question": "The pseudocode shows JVM-style stack instructions of a static method. Local slot 0 holds 3 and slot 1 holds 4; iload_n pushes slot n, imul and iadd pop two values and push the result, and istore_2 pops into slot 2. What value does slot 2 hold afterwards?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "iload_0\niload_1\nimul\niload_0\niadd\nistore_2",
+    "options": ["15", "21", "7", "12"],
+    "answer": 0,
+    "explanation": "The first three instructions compute 3 * 4 = 12. Then 3 is pushed again and iadd gives 12 + 3 = 15, which istore_2 stores in slot 2.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-042",
+    "question": "Which javap option disassembles the bytecode of method bodies in Example.class?",
+    "options": [
+      "javap -p Example",
+      "javap -s Example",
+      "javap -c Example",
+      "javac -c Example"
+    ],
+    "answer": 2,
+    "explanation": "javap -c prints the disassembled code of each method. -p only includes private members in the listing, -s prints type descriptors, and javac has no -c option for disassembly.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-043",
+    "question": "Assume Java 17 on Linux. Which command runs Example in interpreter-only mode?",
+    "options": [
+      "java -Xmixed Example",
+      "java -Xint Example",
+      "java -XX:+UseSerialGC Example",
+      "java -Xshare:off Example"
+    ],
+    "answer": 1,
+    "explanation": "-Xint disables the JIT compilers so all bytecode is interpreted. -Xmixed is the default mode that combines interpretation and compilation, and the other options concern garbage collection and class data sharing.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-044",
+    "question": "A long-running service logs \"CodeCache is full. Compiler has been disabled.\" What is the most appropriate first action?",
+    "options": [
+      "Increase the heap with -Xmx",
+      "Rewrite the service in a native language",
+      "Add -Xint to the command line",
+      "Increase -XX:ReservedCodeCacheSize and check for unnecessarily generated code"
+    ],
+    "answer": 3,
+    "explanation": "The message relates to the code cache, not the heap. Increasing the code cache size gives the JIT room again, and reducing dynamically generated classes or huge amounts of compiled code treats the cause.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-045",
+    "question": "Which argument completes the code so that it prints the class file version 61.0 when run on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        System.out.println(System.getProperty(____));\n    }\n}",
+    "options": [
+      "\"java.version\"",
+      "\"java.vm.version\"",
+      "\"java.compiler\"",
+      "\"java.class.version\""
+    ],
+    "answer": 3,
+    "explanation": "The system property java.class.version reports the highest class file version supported by the running JVM, which is 61.0 on Java 17. java.version reports the release such as 17.0.x.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-046",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        int i = 1;\n        i = i++ + ++i;\n        System.out.println(i);\n    }\n}",
+    "options": ["3", "4", "5", "2"],
+    "answer": 1,
+    "explanation": "i++ pushes the old value 1 and increments i to 2. ++i then increments to 3 and pushes 3. The sum 1 + 3 = 4 is stored back into i, overwriting the increments.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-047",
+    "question": "How many local variable slots do the parameters of method m occupy?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static void m(long a, int b, double c) {\n    }\n\n    public static void main(String[] args) {\n        m(1L, 2, 3.0);\n    }\n}",
+    "options": ["3", "4", "5", "6"],
+    "answer": 2,
+    "explanation": "In a static method slots start at 0. The long and double values each take two slots and the int takes one, so 2 + 1 + 2 = 5 slots are used.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-048",
+    "question": "How are try-catch blocks represented in a compiled class file?",
+    "options": [
+      "In the exception table of the method's Code attribute, mapping bytecode ranges to handler addresses",
+      "As special try and catch opcodes",
+      "As separate synthetic methods",
+      "As run-time checks inserted after every instruction"
+    ],
+    "answer": 0,
+    "explanation": "The JVM has no try/catch instructions. Each method carries an exception table listing the protected bytecode range, the handler start and the caught type; when an exception is thrown the JVM searches this table.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-049",
+    "question": "How does modern javac implement a finally block?",
+    "options": [
+      "With jsr and ret subroutine instructions",
+      "By copying the finally code into every exit path of the try and catch blocks and adding a catch-any handler",
+      "By running the finally block in a separate thread",
+      "By converting it into a try-with-resources statement"
+    ],
+    "answer": 1,
+    "explanation": "The jsr/ret instructions are no longer generated. javac duplicates the finally body on the normal and return paths and adds a handler for any exception that runs it and rethrows.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-050",
+    "question": "Which statement correctly compares interpreted and JIT-compiled execution?",
+    "options": [
+      "The interpreter is faster than compiled code for long-running loops",
+      "Compiled code cannot access object fields",
+      "Compiled code is generated for every method before main runs",
+      "Interpretation starts immediately but is slower in steady state, while compilation costs time and produces faster code"
+    ],
+    "answer": 3,
+    "explanation": "The interpreter has no compilation delay, which is good for start-up and rarely used code. Compilation adds up-front work but hot code then runs much faster.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-051",
+    "question": "What does the JVM option -Xcomp do?",
+    "options": [
+      "Forces methods to be compiled on their first invocation, usually slowing start-up",
+      "Disables the JIT compiler",
+      "Compresses class files in memory",
+      "Compares bytecode of two classes"
+    ],
+    "answer": 0,
+    "explanation": "-Xcomp compiles every method before it runs for the first time. Compiling without profile data and compiling cold code makes start-up slow and can yield less optimal code.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-052",
+    "question": "A short-lived command-line tool runs for only about a second. Which setting is a reasonable way to reduce JIT warm-up overhead?",
+    "options": [
+      "-XX:+UseParallelGC",
+      "-Xcomp",
+      "-XX:TieredStopAtLevel=1",
+      "-XX:-UseCodeCacheFlushing"
+    ],
+    "answer": 2,
+    "explanation": "For very short runs, C2 rarely pays off. Limiting compilation to C1 gives quick compiled code with less compilation overhead. -Xcomp tends to slow start-up and the other options do not address warm-up.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-053",
+    "question": "Which statement about whether a particular method gets JIT-compiled is correct?",
+    "options": [
+      "Every method is compiled before its first call",
+      "A method is compiled only if it carries a special annotation",
+      "Compilation depends on run-time profiles and thresholds, cold methods may never be compiled, and standard Java code cannot force it",
+      "Calling System.gc() forces compilation of all hot methods"
+    ],
+    "answer": 2,
+    "explanation": "The JVM decides from counters and profiles which methods to compile. Standard Java offers no API to force compilation, and garbage collection is unrelated to the JIT.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-054",
+    "question": "Which optimization lets the JIT remove array bounds checks inside a loop when it can prove the index stays in range?",
+    "options": [
+      "Range check elimination",
+      "Constant folding",
+      "String interning",
+      "Class unloading"
+    ],
+    "answer": 0,
+    "explanation": "Range check elimination proves that loop indices cannot fall outside the array, so the explicit check can be dropped or hoisted out of the loop. The program still behaves as if the check were present.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-055",
+    "question": "What does loop unrolling do?",
+    "options": [
+      "Replaces loops with recursion",
+      "Turns finite loops into infinite loops",
+      "Moves the loop body into another thread",
+      "Repeats the loop body several times per iteration to reduce loop overhead and enable further optimizations"
+    ],
+    "answer": 3,
+    "explanation": "Unrolling executes several logical iterations in one pass of the loop, reducing branch and counter overhead and creating chances for vectorization and instruction scheduling.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-056",
+    "question": "Which Java 17 language feature is compiled into an invokedynamic instruction that bootstraps through LambdaMetafactory?",
+    "options": [
+      "Anonymous inner classes",
+      "Lambda expressions",
+      "Enhanced for loops",
+      "try-with-resources"
+    ],
+    "answer": 1,
+    "explanation": "A lambda is compiled into a private synthetic method and an invokedynamic call site, which links at run time via LambdaMetafactory. Anonymous classes, in contrast, are ordinary compiled classes.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-057",
+    "question": "A method is inlined by the JIT compiler. What does an exception stack trace show for it?",
+    "options": [
+      "The trace still lists the method as if it had not been inlined",
+      "The method disappears from the trace",
+      "Only the topmost frame is kept",
+      "The stack trace is empty"
+    ],
+    "answer": 0,
+    "explanation": "HotSpot records debug information that lets it reconstruct the logical frames of inlined methods. Stack traces therefore still show the original call chain.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-058",
+    "question": "Code was compiled with javac --release 11 and is run on a Java 17 JVM. What happens?",
+    "options": [
+      "It fails with UnsupportedClassVersionError because the versions differ",
+      "It must be recompiled with --release 17 first",
+      "It runs, because a JVM accepts class files of its own and earlier versions",
+      "It runs only with -Xverify:none"
+    ],
+    "answer": 2,
+    "explanation": "JVMs are backward compatible with older class file versions. The error only occurs the other way round, when the class file version is newer than what the JVM supports.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-059",
+    "question": "Which tool is designed for writing reliable Java microbenchmarks that account for JIT effects?",
+    "options": [
+      "Manual loops with System.currentTimeMillis",
+      "JMH (Java Microbenchmark Harness)",
+      "javap",
+      "jstack"
+    ],
+    "answer": 1,
+    "explanation": "JMH handles warm-up, forks, dead-code elimination protection and statistics. Hand-written timing loops are easily distorted by JIT optimizations.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-bytecode-and-jit-compilation-060",
+    "question": "Why may C2 compile a branch that has never been taken as an uncommon trap?",
+    "options": [
+      "To reduce heap usage",
+      "Because bytecode verification requires it",
+      "To avoid garbage collection",
+      "Profiles show the branch never runs, so C2 omits its code and deoptimizes if execution ever reaches it"
+    ],
+    "answer": 3,
+    "explanation": "Leaving out never-executed paths makes the compiled code smaller and faster. If the assumption turns out wrong, the uncommon trap triggers deoptimization and execution continues correctly in the interpreter.",
+    "subtopic": "Bytecode and JIT compilation"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-001",
+    "question": "Which memory area is shared by all threads and holds objects and arrays in HotSpot?",
+    "options": [
+      "The thread stack",
+      "The Java heap",
+      "Metaspace",
+      "The program counter register"
+    ],
+    "answer": 1,
+    "explanation": "All objects and arrays are allocated on the Java heap, which every thread can access and which the garbage collector manages. Thread stacks are private to each thread and metaspace holds class metadata.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-002",
+    "question": "Which memory area is private to each thread and stores one frame per method invocation?",
+    "options": [
+      "The Java heap",
+      "Metaspace",
+      "The code cache",
+      "The Java thread stack"
+    ],
+    "answer": 3,
+    "explanation": "Every thread gets its own stack. A frame is pushed when a method is invoked and popped when it returns, and it holds local variables, the operand stack and frame data.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-003",
+    "question": "Where does HotSpot in Java 17 store class metadata such as method data and runtime constant pools?",
+    "options": [
+      "Metaspace",
+      "The old generation of the heap",
+      "The young generation of the heap",
+      "The code cache"
+    ],
+    "answer": 0,
+    "explanation": "Since Java 8 class metadata lives in metaspace, which is allocated from native memory. The code cache holds JIT-compiled machine code and the heap holds objects.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-004",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static void change(int[] arr, int n) {\n        arr[0] = 99;\n        n = 99;\n        arr = new int[] {7};\n    }\n\n    public static void main(String[] args) {\n        int[] a = {1};\n        int n = 1;\n        change(a, n);\n        System.out.println(a[0] + \" \" + n);\n    }\n}",
+    "options": ["1 1", "99 99", "99 1", "7 1"],
+    "answer": 2,
+    "explanation": "Java passes copies of values. The array reference is copied, so arr[0] = 99 changes the shared heap array, while reassigning arr only changes the local copy. The int n is a copy and stays 1 in main.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-005",
+    "question": "Which situation most commonly causes a StackOverflowError?",
+    "options": [
+      "Allocating a very large array",
+      "Loading too many classes",
+      "Unbounded or very deep recursion",
+      "Keeping too many objects in a static list"
+    ],
+    "answer": 2,
+    "explanation": "Each method call consumes stack space for a frame, and recursion without a proper base case keeps adding frames until the thread stack is exhausted. Heap-related problems cause OutOfMemoryError instead.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-006",
+    "question": "Which JVM option sets the stack size of new threads (for example 512 KB)?",
+    "options": [
+      "-Xss512k",
+      "-Xms512k",
+      "-Xmx512k",
+      "-XX:MaxMetaspaceSize=512k"
+    ],
+    "answer": 0,
+    "explanation": "-Xss controls the thread stack size. -Xms and -Xmx set the initial and maximum heap size, and MaxMetaspaceSize limits class metadata.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-007",
+    "question": "What do the options -Xms and -Xmx set, respectively?",
+    "options": [
+      "Maximum and initial heap size",
+      "Minimum and maximum thread stack size",
+      "Initial and maximum metaspace size",
+      "Initial and maximum heap size"
+    ],
+    "answer": 3,
+    "explanation": "-Xms is the initial heap size and -Xmx is the maximum heap size. The heap can grow from the first to the second value as needed.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-008",
+    "question": "What is the output on a standard HotSpot JVM?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        try {\n            int[] a = new int[Integer.MAX_VALUE];\n            System.out.println(a.length);\n        } catch (OutOfMemoryError e) {\n            System.out.println(\"OOM\");\n        }\n    }\n}",
+    "options": [
+      "2147483647",
+      "OOM",
+      "NegativeArraySizeException",
+      "Compile-time error"
+    ],
+    "answer": 1,
+    "explanation": "HotSpot cannot allocate an array of that length, because it exceeds the maximum array size of the VM and the heap. It throws OutOfMemoryError (Requested array size exceeds VM limit), which the catch block handles.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-009",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        try {\n            int[] a = new int[-1];\n            System.out.println(a.length);\n        } catch (NegativeArraySizeException e) {\n            System.out.println(\"negative\");\n        } catch (OutOfMemoryError e) {\n            System.out.println(\"oom\");\n        }\n    }\n}",
+    "options": [
+      "negative",
+      "oom",
+      "ArrayIndexOutOfBoundsException",
+      "No output"
+    ],
+    "answer": 0,
+    "explanation": "A negative array size is not a memory problem; it throws NegativeArraySizeException at run time. The code compiles because the size is just an int expression.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-010",
+    "question": "Which OutOfMemoryError message indicates that the area holding class metadata is exhausted?",
+    "options": [
+      "Java heap space",
+      "GC overhead limit exceeded",
+      "Metaspace",
+      "unable to create native thread"
+    ],
+    "answer": 2,
+    "explanation": "OutOfMemoryError: Metaspace is thrown when metaspace cannot grow, typically because of a MaxMetaspaceSize limit or because too many classes are loaded.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-011",
+    "question": "A server throws OutOfMemoryError: unable to create native thread while its heap is mostly empty. What is the most likely cause?",
+    "options": [
+      "The heap is too small",
+      "The operating system or process cannot provide more native memory or threads for new thread stacks",
+      "Metaspace is exhausted",
+      "The code cache is full"
+    ],
+    "answer": 1,
+    "explanation": "Each Java thread needs a native stack and OS resources. When the process or OS limit on threads or native memory is reached, thread creation fails, regardless of how much heap is free.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-012",
+    "question": "What does OutOfMemoryError: GC overhead limit exceeded indicate?",
+    "options": [
+      "The heap is completely empty",
+      "Too many GC threads were configured",
+      "Classes are unloaded too often",
+      "The JVM spends almost all of its time in garbage collection while recovering very little memory"
+    ],
+    "answer": 3,
+    "explanation": "The collector concluded that the application is making almost no progress because nearly all time goes to GC and little memory is freed. It is a signal that the live data set does not fit the heap.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-013",
+    "question": "In a generational heap, where are new objects normally allocated?",
+    "options": [
+      "The old generation",
+      "Metaspace",
+      "A survivor space",
+      "Eden space"
+    ],
+    "answer": 3,
+    "explanation": "New objects are normally created in eden, part of the young generation. Survivors of young collections are copied to a survivor space and eventually promoted to the old generation.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-014",
+    "question": "What happens to an object in eden that is still reachable during a young collection?",
+    "options": [
+      "It is deleted and saved to disk",
+      "It is copied to a survivor space and promoted to the old generation after surviving enough collections",
+      "It is moved to metaspace",
+      "It stays in eden forever"
+    ],
+    "answer": 1,
+    "explanation": "Young collections copy live objects into a survivor space and increase their age. Once the age reaches the tenuring threshold, or the survivor space is too small, the object is promoted to the old generation.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-015",
+    "question": "Which garbage collector is the default on a server-class machine in Java 17?",
+    "options": ["Serial GC", "Parallel GC", "G1 GC", "ZGC"],
+    "answer": 2,
+    "explanation": "G1 has been the default collector since Java 9 on server-class machines. Serial GC is chosen only on small machines (fewer than 2 CPUs or less than about 1792 MB of memory).",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-016",
+    "question": "Which statement best summarizes where Java data lives?",
+    "options": [
+      "Objects and arrays live on the heap; local variables, including references, live in stack frames",
+      "Everything lives on the stack",
+      "Objects live in metaspace and classes live on the heap",
+      "Local primitives live on the heap and objects live on the stack"
+    ],
+    "answer": 0,
+    "explanation": "A local variable of reference type is stored in the frame, but the object it refers to is on the heap. Primitive locals are stored in the frame itself.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        String a = \"hi\";\n        String b = \"hi\";\n        String c = new String(\"hi\");\n        System.out.println((a == b) + \" \" + (a == c) + \" \" + (a == c.intern()));\n    }\n}",
+    "options": [
+      "true true true",
+      "true false true",
+      "false false true",
+      "true false false"
+    ],
+    "answer": 1,
+    "explanation": "Literals with the same content share one pooled instance, so a == b is true. new String creates a separate heap object, so a == c is false, and intern() returns the pooled instance, making the last comparison true.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-018",
+    "question": "Since which Java version are interned strings (the string pool) stored in the Java heap instead of the permanent generation?",
+    "options": ["Java 5", "Java 6", "Java 8", "Java 7"],
+    "answer": 3,
+    "explanation": "Java 7 moved the string table into the heap, so pooled strings can be garbage collected like other objects. Java 8 later removed the permanent generation completely.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-019",
+    "question": "In which Java version was the permanent generation (PermGen) replaced by metaspace?",
+    "options": ["Java 8", "Java 7", "Java 11", "Java 6"],
+    "answer": 0,
+    "explanation": "JEP 122 removed PermGen in Java 8 and moved class metadata to metaspace in native memory. Interned strings had already moved to the heap in Java 7.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-020",
+    "question": "What is the default upper limit of metaspace in HotSpot?",
+    "options": [
+      "64 MB",
+      "256 MB",
+      "Unlimited, bounded only by available native memory",
+      "The same as -Xmx"
+    ],
+    "answer": 2,
+    "explanation": "If MaxMetaspaceSize is not set, metaspace can grow until the operating system or container runs out of memory. Setting a limit is advisable to catch class loader leaks early.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-021",
+    "question": "Assume Java 17 on Linux. Which option sets a hard maximum of 256 MB for metaspace?",
+    "options": [
+      "-XX:MetaspaceSize=256m",
+      "-Xmx256m",
+      "-XX:MaxMetaspaceSize=256m",
+      "-XX:PermSize=256m"
+    ],
+    "answer": 2,
+    "explanation": "MaxMetaspaceSize is the hard cap. MetaspaceSize only sets the threshold at which the first collection for class unloading is triggered, and PermSize no longer exists.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-022",
+    "question": "What does -XX:MetaspaceSize control?",
+    "options": [
+      "The metaspace usage level that triggers the first garbage collection for class unloading",
+      "The hard maximum size of metaspace",
+      "The size of each thread stack",
+      "The size of the code cache"
+    ],
+    "answer": 0,
+    "explanation": "MetaspaceSize is a high-water mark, not a limit. When usage crosses it, the JVM triggers a collection to unload classes and then adjusts the threshold.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-023",
+    "question": "After repeated redeployments an application server throws OutOfMemoryError: Metaspace. What is the most plausible cause?",
+    "options": [
+      "Large byte arrays are allocated",
+      "Methods recurse too deeply",
+      "Too many threads are created",
+      "Old class loaders remain reachable, so their classes are never unloaded"
+    ],
+    "answer": 3,
+    "explanation": "Classes can be unloaded only when their class loader becomes unreachable. A leaked reference to an old loader, for example from a static field or thread-local, keeps all of its classes in metaspace.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-024",
+    "question": "Where are java.lang.Class objects (the mirrors that code obtains with Foo.class) stored in HotSpot 17?",
+    "options": [
+      "In metaspace",
+      "In the Java heap",
+      "In the code cache",
+      "On the thread stack"
+    ],
+    "answer": 1,
+    "explanation": "The Class object is an ordinary heap object. The detailed class metadata it represents lives in metaspace, and the two are linked to each other.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-025",
+    "question": "What is the compressed class space?",
+    "options": [
+      "A separate part of the metaspace reserved for class structures when compressed class pointers are used",
+      "A part of the Java heap for compressed strings",
+      "The area that stores the string pool",
+      "Another name for the code cache"
+    ],
+    "answer": 0,
+    "explanation": "With compressed class pointers, class metadata (Klass structures) is placed in a contiguous region of native memory that can be addressed with 32-bit pointers. Its size is limited by CompressedClassSpaceSize.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-026",
+    "question": "Why do heaps below roughly 32 GB often perform better on 64-bit HotSpot?",
+    "options": [
+      "Garbage collection cannot run on larger heaps",
+      "The stack grows larger on small heaps",
+      "Compressed ordinary object pointers can be used, which store references in 32 bits",
+      "Metaspace shrinks automatically"
+    ],
+    "answer": 2,
+    "explanation": "For heaps up to about 32 GB, the JVM can use compressed oops: 32-bit references scaled by object alignment. This saves memory and improves cache usage, and the benefit is lost above that size.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-027",
+    "question": "Where is the memory of a buffer created with ByteBuffer.allocateDirect allocated?",
+    "options": [
+      "In the Java heap",
+      "In native memory outside the Java heap",
+      "In metaspace",
+      "On the thread stack"
+    ],
+    "answer": 1,
+    "explanation": "Direct buffers use native memory, which avoids a copy during I/O. The small ByteBuffer object is on the heap, but its data is not, so -Xmx does not limit it.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-028",
+    "question": "Which option limits the total memory of direct byte buffers?",
+    "options": [
+      "-Xmx",
+      "-XX:MaxMetaspaceSize",
+      "-Xss",
+      "-XX:MaxDirectMemorySize"
+    ],
+    "answer": 3,
+    "explanation": "MaxDirectMemorySize caps the native memory used for direct buffers. If unset, the limit defaults to roughly the maximum heap size.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-029",
+    "question": "Which option turns on Native Memory Tracking with summary-level detail?",
+    "options": [
+      "-XX:+PrintNMT",
+      "-verbose:memory",
+      "-Xnmt",
+      "-XX:NativeMemoryTracking=summary"
+    ],
+    "answer": 3,
+    "explanation": "NativeMemoryTracking accepts off, summary or detail. Tracking adds some overhead, so it is off by default.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-030",
+    "question": "A JVM with process id 1234 was started with Native Memory Tracking enabled. Which command prints the native memory summary?",
+    "options": [
+      "jcmd 1234 GC.heap_dump",
+      "jcmd 1234 VM.native_memory summary",
+      "jmap -histo 1234",
+      "jstack 1234"
+    ],
+    "answer": 1,
+    "explanation": "jcmd with VM.native_memory summary prints the tracked native memory by category, including heap, class, thread, code and internal. The other commands show heap dumps, object histograms and thread stacks.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-031",
+    "question": "Which option makes the JVM write a heap dump when an OutOfMemoryError occurs?",
+    "options": [
+      "-XX:+PrintHeapAtGC",
+      "-XX:+DumpOnExit",
+      "-XX:+HeapDumpOnOutOfMemoryError",
+      "-Xdump:heap"
+    ],
+    "answer": 2,
+    "explanation": "HeapDumpOnOutOfMemoryError writes an .hprof file that can be analyzed afterwards, and HeapDumpPath chooses its location. The other flags are not HotSpot options for this purpose.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-032",
+    "question": "Which JDK tool prints the stack traces of all threads of a running JVM?",
+    "options": ["jstack", "javap", "jar", "jlink"],
+    "answer": 0,
+    "explanation": "jstack attaches to a running JVM and prints the thread stacks, including lock information, which is useful for diagnosing deadlocks and hangs.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-033",
+    "question": "Which command prints a histogram of live objects by class for the JVM with process id 1234?",
+    "options": [
+      "jstack -histo 1234",
+      "jmap -histo:live 1234",
+      "javap -histo 1234",
+      "jar -histo 1234"
+    ],
+    "answer": 1,
+    "explanation": "jmap -histo:live forces a collection and lists instance counts and sizes per class, which helps to find what fills the heap. jstack, javap and jar do not provide such a histogram.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-034",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        Runtime rt = Runtime.getRuntime();\n        System.out.println(rt.totalMemory() <= rt.maxMemory());\n    }\n}",
+    "options": ["false", "Compile-time error", "NullPointerException", "true"],
+    "answer": 3,
+    "explanation": "totalMemory is the heap currently reserved by the JVM and maxMemory is the largest heap it may use, so the first cannot exceed the second.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-035",
+    "question": "If -Xmx is not specified, what is the default maximum heap size of HotSpot on a machine with plenty of memory?",
+    "options": [
+      "One quarter of the physical memory",
+      "One half of the physical memory",
+      "A fixed 256 MB",
+      "Unlimited"
+    ],
+    "answer": 0,
+    "explanation": "The default maximum heap is 1/4 of the available physical memory (MaxRAMPercentage defaults to 25). In a container, the container limit is used as the available memory.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-036",
+    "question": "In a container-aware Java 17 JVM, which option sets the maximum heap to 75% of the available memory?",
+    "options": [
+      "-Xss75",
+      "-XX:MaxMetaspaceSize=75%",
+      "-XX:MaxRAMPercentage=75",
+      "-XX:InitialRAMFraction=75"
+    ],
+    "answer": 2,
+    "explanation": "MaxRAMPercentage expresses the maximum heap as a percentage of memory available to the JVM, which is the container limit when one is set. It scales automatically when the limit changes.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-037",
+    "question": "Which statement about stack allocation of objects in HotSpot is correct?",
+    "options": [
+      "Objects created with new in a method are always allocated on the stack",
+      "The JVM never optimizes allocations",
+      "HotSpot does not place objects on the stack, but escape analysis can eliminate an allocation through scalar replacement",
+      "new always allocates objects in metaspace"
+    ],
+    "answer": 2,
+    "explanation": "Objects are logically on the heap. When the JIT proves an object does not escape, it may replace it with its fields, so no allocation occurs, but this is an optimization and not a language guarantee.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-038",
+    "question": "Which of the following is a garbage collection root?",
+    "options": [
+      "A local variable in an active stack frame",
+      "An unreferenced object in eden",
+      "An object in the old generation that nothing refers to",
+      "Garbage in a survivor space"
+    ],
+    "answer": 0,
+    "explanation": "GC roots include local variables and parameters in active frames, static fields, active threads and JNI references. Objects reachable from roots stay alive; unreferenced objects are collectable wherever they are.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-039",
+    "question": "Which is a classic cause of a memory leak in Java?",
+    "options": [
+      "A local variable that goes out of scope",
+      "Calling System.gc() often",
+      "Declaring variables final",
+      "A static collection that keeps receiving objects that are never removed"
+    ],
+    "answer": 3,
+    "explanation": "Objects stay reachable through the static field for the lifetime of the class, so the collector can never free them. Such unintended retention is what a leak means in a garbage-collected language.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-040",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.lang.ref.WeakReference;\n\npublic class Example {\n    public static void main(String[] args) {\n        Object o = new Object();\n        WeakReference<Object> w = new WeakReference<>(o);\n        System.gc();\n        System.out.println(w.get() == o);\n    }\n}",
+    "options": ["false", "true", "null", "Compile-time error"],
+    "answer": 1,
+    "explanation": "The object is still strongly referenced by o, which is used after the gc call. A weak reference is cleared only when no strong reference remains, so w.get() still returns the same object.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-041",
+    "question": "Which components make up a JVM stack frame?",
+    "options": [
+      "A local variable array, an operand stack and frame data such as a reference to the runtime constant pool",
+      "Eden, survivor spaces and the old generation",
+      "The code cache and metaspace",
+      "The heap and native memory"
+    ],
+    "answer": 0,
+    "explanation": "Each frame has local variables (parameters and locals), an operand stack for intermediate values and frame data used for constant pool access, return values and exception dispatch.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-042",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static int depth = 0;\n\n    static void recurse() {\n        depth++;\n        recurse();\n    }\n\n    public static void main(String[] args) {\n        try {\n            recurse();\n        } catch (StackOverflowError e) {\n            System.out.println(depth > 0);\n        }\n    }\n}",
+    "options": [
+      "false",
+      "The JVM crashes with a fatal error",
+      "true",
+      "No output"
+    ],
+    "answer": 2,
+    "explanation": "StackOverflowError is an Error that can be caught. By the time the stack is exhausted, many calls have run, so depth is greater than 0 and true is printed. The exact depth varies between runs.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-043",
+    "question": "What is the effect of increasing -Xss?",
+    "options": [
+      "It increases the heap capacity",
+      "It allows deeper recursion per thread but uses more native memory for each thread",
+      "It increases the metaspace limit",
+      "It reduces garbage collection pauses"
+    ],
+    "answer": 1,
+    "explanation": "A larger thread stack lets a thread hold more frames, but every thread reserves that much memory, so many threads can exhaust native memory sooner.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-044",
+    "question": "The pseudocode uses integer division for /. NewRatio means old = newRatio * young. What does it print?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "heap = 600\nnewRatio = 2\nyoung = heap / (newRatio + 1)\nold = heap - young\nprint young, old",
+    "options": ["300 300", "400 200", "150 450", "200 400"],
+    "answer": 3,
+    "explanation": "With NewRatio = 2 the old generation is twice the young generation, so young is one third of 600, which is 200, and old is the remaining 400.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-045",
+    "question": "The pseudocode uses integer division for /. SurvivorRatio means eden = survivorRatio * one survivor space, and the young generation has two survivor spaces. What does it print?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "young = 200\nsurvivorRatio = 8\nsurvivor = young / (survivorRatio + 2)\neden = survivorRatio * survivor\nprint eden, survivor",
+    "options": ["200 20", "180 20", "100 50", "160 20"],
+    "answer": 3,
+    "explanation": "Eden and two survivors split the young generation in the ratio 8:1:1, so one survivor space is 200 / 10 = 20 and eden is 8 * 20 = 160.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-046",
+    "question": "Which method name completes the code so that the buffer is allocated outside the Java heap and the program prints true?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.nio.ByteBuffer;\n\npublic class Example {\n    public static void main(String[] args) {\n        ByteBuffer buf = ByteBuffer.____(1024);\n        System.out.println(buf.isDirect());\n    }\n}",
+    "options": ["allocate", "allocateDirect", "wrap", "slice"],
+    "answer": 1,
+    "explanation": "allocateDirect creates a direct buffer in native memory. allocate creates a heap buffer, wrap needs an existing array, and slice is an instance method that cannot be called statically.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-047",
+    "question": "In the G1 collector, what is an object called that is at least half the size of a heap region?",
+    "options": [
+      "Tenured object",
+      "Survivor object",
+      "Humongous object",
+      "Pinned object"
+    ],
+    "answer": 2,
+    "explanation": "Humongous objects are allocated directly in contiguous regions treated as old generation, and they can cause fragmentation or extra collection work if they are created frequently.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-048",
+    "question": "Why is catching OutOfMemoryError and simply continuing normal processing considered risky?",
+    "options": [
+      "The JVM may be unable to allocate memory even for recovery, and the application state may be inconsistent",
+      "It is a compile-time error to catch it",
+      "It disables garbage collection permanently",
+      "An OutOfMemoryError can only be caught once"
+    ],
+    "answer": 0,
+    "explanation": "The error can be thrown at any allocation, leaving half-finished operations behind. Recovery code may itself fail to allocate, so a controlled shutdown or restart is usually safer.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-049",
+    "question": "Which statement correctly compares stack and heap memory management?",
+    "options": [
+      "The heap is private to each thread",
+      "Stack memory is released when the method returns, while unreachable heap objects are reclaimed by the garbage collector",
+      "Stack memory is reclaimed by the garbage collector",
+      "The stack stores all objects"
+    ],
+    "answer": 1,
+    "explanation": "Frames are popped automatically on return, so their memory needs no collection. The heap is shared and its objects are freed only after the collector finds them unreachable.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-050",
+    "question": "Which java command sets an initial heap of 512 MB, a maximum heap of 2 GB and a thread stack size of 1 MB?",
+    "options": [
+      "java -Xmx512m -Xms2g -Xss1m Example",
+      "java -Xms2g -Xmx512m -Xss1m Example",
+      "java -Xmn512m -Xmx2g -Xss1m Example",
+      "java -Xms512m -Xmx2g -Xss1m Example"
+    ],
+    "answer": 3,
+    "explanation": "-Xms sets the initial heap and -Xmx the maximum, so the initial value must not exceed the maximum. -Xmn would set the young generation size, which is a different setting.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-051",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Node {\n        int v;\n        Node next;\n    }\n\n    public static void main(String[] args) {\n        Node n = new Node();\n        System.out.println(n.v + \" \" + n.next);\n    }\n}",
+    "options": ["0 null", "null null", "0 0", "Compile-time error"],
+    "answer": 0,
+    "explanation": "Fields of heap objects are given default values when the object is created: 0 for int and null for references. Unlike local variables, they need no explicit initialization.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-052",
+    "question": "What is the output? Assume default JVM settings (Java 17).",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        Integer a = 127;\n        Integer b = 127;\n        Integer c = 1000;\n        Integer d = 1000;\n        System.out.println((a == b) + \" \" + (c == d));\n    }\n}",
+    "options": ["true true", "false false", "true false", "false true"],
+    "answer": 2,
+    "explanation": "Autoboxing uses Integer.valueOf, which returns cached shared objects for values from -128 to 127. 1000 is outside the cache, so two separate heap objects are created and == compares different references.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-053",
+    "question": "Why can a JVM process use significantly more memory than the -Xmx value?",
+    "options": [
+      "Because -Xmx limits only the thread stacks",
+      "Because the operating system ignores -Xmx",
+      "Because the heap is only one part: metaspace, thread stacks, the code cache, direct buffers and GC structures also use native memory",
+      "Because the JIT doubles the heap while compiling"
+    ],
+    "answer": 2,
+    "explanation": "-Xmx bounds only the Java heap. The resident size of the process also includes class metadata, thread stacks, compiled code, direct buffers, GC data structures and native libraries.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-054",
+    "question": "Which method name completes the code so that it computes the maximum heap size the JVM will try to use, in megabytes?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        long maxMb = Runtime.getRuntime().____() / (1024 * 1024);\n        System.out.println(maxMb > 0);\n    }\n}",
+    "options": [
+      "maxMemory",
+      "freeMemory",
+      "totalMemory",
+      "availableProcessors"
+    ],
+    "answer": 0,
+    "explanation": "maxMemory returns the upper limit of the heap (related to -Xmx). freeMemory and totalMemory describe the currently committed heap, and availableProcessors returns a CPU count.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-055",
+    "question": "Which command prints heap utilization percentages and GC counters for JVM 1234 every second?",
+    "options": [
+      "jstack 1234",
+      "javap 1234",
+      "jmap -dump 1234",
+      "jstat -gcutil 1234 1000"
+    ],
+    "answer": 3,
+    "explanation": "jstat -gcutil reports the percentage usage of the heap spaces and metaspace together with collection counts and times. The last argument is the sampling interval in milliseconds.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-056",
+    "question": "Does calling System.gc() guarantee that all unreachable objects are freed immediately?",
+    "options": [
+      "Yes, always",
+      "No, it is only a request, and the JVM may ignore it, for example with -XX:+DisableExplicitGC",
+      "Yes, but only for the young generation",
+      "Yes, and it also compacts metaspace"
+    ],
+    "answer": 1,
+    "explanation": "System.gc() suggests a collection, and HotSpot normally performs a full GC but is allowed to ignore it. Application correctness must never depend on it.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-057",
+    "question": "Which OutOfMemoryError message points to exhausted direct buffer memory?",
+    "options": [
+      "Direct buffer memory",
+      "Java heap space",
+      "Metaspace",
+      "unable to create native thread"
+    ],
+    "answer": 0,
+    "explanation": "The message Direct buffer memory is thrown when allocations of direct buffers exceed MaxDirectMemorySize. Heap size settings do not fix it.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-058",
+    "question": "What is a TLAB in HotSpot?",
+    "options": [
+      "A table listing all loaded classes",
+      "A per-thread region of metaspace",
+      "A thread-private chunk of eden that lets a thread allocate objects quickly without synchronization",
+      "A tenured-generation allocation barrier"
+    ],
+    "answer": 2,
+    "explanation": "A thread-local allocation buffer lets each thread bump a pointer within its own part of eden instead of competing for shared allocation. When it fills up, the thread requests a new one.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-059",
+    "question": "Why can ThreadLocal values cause a memory leak in a thread pool when remove() is never called?",
+    "options": [
+      "ThreadLocal values are stored in metaspace",
+      "Pooled threads live for a long time, and their thread-local map keeps strong references to the values",
+      "ThreadLocal disables garbage collection",
+      "ThreadLocal copies the whole heap per thread"
+    ],
+    "answer": 1,
+    "explanation": "The values are held by the Thread object. In a pool the thread never dies, so stale values (and possibly their class loaders) stay reachable unless the code calls remove().",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-heap-stack-metaspace-and-native-memory-060",
+    "question": "Which pairing of OutOfMemoryError message and exhausted resource is correct?",
+    "options": [
+      "Java heap space: thread stack",
+      "Metaspace: Java heap",
+      "unable to create native thread: code cache",
+      "Metaspace: native memory used for class metadata"
+    ],
+    "answer": 3,
+    "explanation": "Metaspace reports that the native memory region for class metadata is full or capped. The heap message refers to the heap, and the native thread message refers to operating system or native memory limits for threads.",
+    "subtopic": "Heap, stack, metaspace, and native memory"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-001",
+    "question": "Which runtime data areas does the JVM create separately for each thread?",
+    "options": [
+      "The heap and the method area",
+      "The PC register, the JVM stack and the native method stack",
+      "The heap and the JVM stack",
+      "The method area and the runtime constant pool"
+    ],
+    "answer": 1,
+    "explanation": "Execution state is private to a thread: its program counter, its JVM stack of frames and, where used, its native method stack. The heap and the method area are shared by all threads.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-002",
+    "question": "Which runtime data areas are shared by all threads of a JVM?",
+    "options": [
+      "The PC register and the JVM stack",
+      "The JVM stack and the native method stack",
+      "The PC register and the native method stack",
+      "The heap and the method area"
+    ],
+    "answer": 3,
+    "explanation": "The heap (objects and arrays) and the method area (class-level data) are created at JVM start-up and are visible to every thread. This is why shared objects need proper synchronization.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-003",
+    "question": "What does the PC register of a thread hold while the thread executes a Java (non-native) method?",
+    "options": [
+      "The address of the JVM instruction currently being executed",
+      "The address of the next object to be allocated",
+      "The size of the thread's stack",
+      "The current top of the heap"
+    ],
+    "answer": 0,
+    "explanation": "Each thread has its own program counter that records which bytecode instruction of the current method is executing. After a context switch, this is how the thread resumes at the right place.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-004",
+    "question": "What does the JVM specification say about the value of the PC register while a thread executes a native method?",
+    "options": [
+      "It holds the address of the native function",
+      "It is always zero",
+      "It is undefined",
+      "It holds the address of the caller's bytecode"
+    ],
+    "answer": 2,
+    "explanation": "The PC register is meaningful only for Java methods. While a native method runs, its value is undefined, because the native code is not executing JVM instructions.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-005",
+    "question": "When is a new frame created on a thread's JVM stack?",
+    "options": [
+      "When a class is loaded",
+      "Once when the thread is created, and reused for all methods",
+      "Each time a method is invoked, and it is removed when the invocation completes normally or abruptly",
+      "Each time a local variable is declared"
+    ],
+    "answer": 2,
+    "explanation": "One frame exists per method invocation. It is pushed at the call and popped when the method returns or terminates with an uncaught exception.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-006",
+    "question": "Which of the following belongs to a JVM stack frame?",
+    "options": [
+      "A reference to the runtime constant pool of the current method's class",
+      "Eden space",
+      "The string table",
+      "The code cache"
+    ],
+    "answer": 0,
+    "explanation": "A frame consists of a local variable array, an operand stack and frame data, which includes a reference to the runtime constant pool used for dynamic linking. Eden, the string table and the code cache are separate areas.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-007",
+    "question": "Why are the local variables of a method inherently thread-safe?",
+    "options": [
+      "Because they are always declared final",
+      "Because the JVM synchronizes every method call",
+      "Because the compiler converts them to static fields",
+      "Because they live in the frame on the executing thread's own stack, which no other thread can access"
+    ],
+    "answer": 3,
+    "explanation": "Each thread has a private JVM stack, so a local variable exists separately for every invocation. Thread-safety problems arise only from shared state on the heap, not from locals themselves.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-008",
+    "question": "Which runtime data area stores per-class structures such as the runtime constant pool, field and method data, and the code of methods and constructors?",
+    "options": [
+      "The heap",
+      "The method area",
+      "The JVM stack",
+      "The PC register"
+    ],
+    "answer": 1,
+    "explanation": "The method area is shared by all threads and holds class-level data. Instances and arrays are in the heap, not in this area.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-009",
+    "question": "How does HotSpot in Java 17 implement the method area?",
+    "options": [
+      "As metaspace in native memory",
+      "As the permanent generation inside the Java heap",
+      "As part of each thread stack",
+      "As the code cache"
+    ],
+    "answer": 0,
+    "explanation": "Since Java 8 the permanent generation no longer exists, and HotSpot keeps class metadata in metaspace, which uses native memory. The JVM specification only defines the method area logically.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-010",
+    "question": "What does the runtime constant pool of a class contain?",
+    "options": [
+      "Only the string literals of the class",
+      "Only the machine code generated by the JIT",
+      "Numeric literals and symbolic references from the class file's constant pool, which can be resolved at run time",
+      "Only the static fields of the class"
+    ],
+    "answer": 2,
+    "explanation": "The runtime constant pool is a per-class run-time representation of the class file constant pool. It holds literals as well as symbolic references to classes, fields and methods that are resolved when needed.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-011",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        int[] a = new int[0];\n        int[] b = new int[0];\n        System.out.println((a == b) + \" \" + (a.getClass() == b.getClass()));\n    }\n}",
+    "options": ["true true", "false true", "false false", "true false"],
+    "answer": 1,
+    "explanation": "Each new expression creates a separate array object on the heap, so the references differ. Both objects are instances of the same class int[], whose single Class object is shared.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-012",
+    "question": "Which part of a frame holds the intermediate values produced while an expression is evaluated?",
+    "options": [
+      "The local variable array",
+      "The heap",
+      "The runtime constant pool",
+      "The operand stack"
+    ],
+    "answer": 3,
+    "explanation": "Most bytecode instructions pop their operands from the operand stack and push results back onto it. The local variable array holds parameters and local variables, not temporary results.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-013",
+    "question": "The pseudocode shows a recursive function. At the deepest point of the call, how many frames are on the stack, counting the frame of main?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "function f(n):\n    if n == 0:\n        return 0\n    return 1 + f(n - 1)\n\nmain:\n    print f(3)",
+    "options": ["3", "4", "6", "5"],
+    "answer": 3,
+    "explanation": "The calls f(3), f(2), f(1) and f(0) are all active at the deepest point, which makes four frames. Together with the frame of main, there are five.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-014",
+    "question": "What is the native method stack used for?",
+    "options": [
+      "Storing Java local variables",
+      "Supporting the execution of native (non-Java) methods",
+      "Storing class metadata",
+      "Holding the string pool"
+    ],
+    "answer": 1,
+    "explanation": "When a thread calls a native method, for example through JNI, the native code needs a conventional stack. The JVM specification calls it the native method stack, and some implementations combine it with the Java stack.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-015",
+    "question": "Which statement about the failure modes of a JVM stack is correct?",
+    "options": [
+      "Both cases throw StackOverflowError",
+      "Exceeding a fixed size throws OutOfMemoryError, while failing to expand throws StackOverflowError",
+      "Exceeding the permitted size throws StackOverflowError, while failing to obtain memory for expansion or for a new thread's stack throws OutOfMemoryError",
+      "Both cases throw ClassFormatError"
+    ],
+    "answer": 2,
+    "explanation": "The specification distinguishes between a computation that needs a deeper stack than allowed (StackOverflowError) and a lack of memory to extend the stack or create one for a new thread (OutOfMemoryError).",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-016",
+    "question": "Which runtime data area is created at JVM start-up and is the place where class instances and arrays are allocated?",
+    "options": [
+      "The heap",
+      "The method area",
+      "The PC register",
+      "The native method stack"
+    ],
+    "answer": 0,
+    "explanation": "The heap is the run-time data area shared by all threads from which memory for all objects and arrays is allocated, and it is reclaimed by the garbage collector.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-017",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        StringBuilder a = new StringBuilder(\"x\");\n        StringBuilder b = a;\n        b.append(\"y\");\n        a = new StringBuilder(\"z\");\n        System.out.println(a + \" \" + b);\n    }\n}",
+    "options": ["xy xy", "z xy", "z z", "x xy"],
+    "answer": 1,
+    "explanation": "Both variables first refer to the same heap object, so appending through b changes it to xy. Assigning a new object to a only redirects the variable a, while b keeps the old object.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-018",
+    "question": "What is the purpose of the reference to the runtime constant pool in a frame (dynamic linking)?",
+    "options": [
+      "To store the objects created by the method",
+      "To keep a copy of the heap",
+      "To hold the priority of the thread",
+      "To support resolving symbolic references in the method's bytecode into direct references"
+    ],
+    "answer": 3,
+    "explanation": "Bytecode refers to classes, fields and methods symbolically. The frame's link to the runtime constant pool lets the JVM resolve those references when an instruction first needs them.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-019",
+    "question": "What happens to the frame of a method that completes abruptly because of an uncaught exception?",
+    "options": [
+      "It is discarded and the exception propagates to the frame of the invoker",
+      "It is kept on the stack until the next garbage collection",
+      "It is moved to the heap for later analysis",
+      "It stays on the stack until the thread ends"
+    ],
+    "answer": 0,
+    "explanation": "On abrupt completion the frame is popped, and the JVM looks for a handler in the invoker's frame, continuing down the stack until one is found or the thread terminates.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-020",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static int f() {\n        int x = 1;\n        try {\n            return x;\n        } finally {\n            x = 2;\n        }\n    }\n\n    public static void main(String[] args) {\n        System.out.println(f());\n    }\n}",
+    "options": ["2", "3", "1", "Compile-time error"],
+    "answer": 2,
+    "explanation": "The value of x is read for the return before the finally block runs, so 1 is already saved as the result. The assignment in finally changes only the local variable, not the saved return value.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-021",
+    "question": "Assume Java 17 on Linux with a Bash shell. Which command shows the default value of the thread stack size (ThreadStackSize) used by the JVM?",
+    "options": [
+      "java -Xlog:flags -version",
+      "java -XX:+PrintVMOptions -version",
+      "java -XX:+PrintFlagsFinal -version | grep ThreadStackSize",
+      "java -verbose:stack -version"
+    ],
+    "answer": 2,
+    "explanation": "PrintFlagsFinal lists all flags with their final values, and grep selects the one needed. PrintVMOptions shows only options given on the command line, and the other options do not print flag values.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-022",
+    "question": "Which statement correctly compares the heap and the method area?",
+    "options": [
+      "Both are shared by all threads: the heap holds instances and arrays, while the method area holds class-level data",
+      "The heap is private to each thread, while the method area is shared",
+      "Both are private to each thread",
+      "The method area holds objects, while the heap holds class metadata"
+    ],
+    "answer": 0,
+    "explanation": "Both areas are created at JVM start-up and are shared. Instances and arrays are in the heap, while class structures, the runtime constant pool and method code are associated with the method area.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-023",
+    "question": "The program is run with java -Xmx16m Example. What is the result?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Example {\n    public static void main(String[] args) {\n        List<byte[]> list = new ArrayList<>();\n        try {\n            while (true) {\n                list.add(new byte[1024 * 1024]);\n            }\n        } catch (OutOfMemoryError e) {\n            list = null;\n            System.out.println(\"heap full\");\n        }\n    }\n}",
+    "options": [
+      "No output; the program runs forever",
+      "StackOverflowError is printed",
+      "Compile-time error",
+      "heap full"
+    ],
+    "answer": 3,
+    "explanation": "The list keeps every 1 MB array reachable, so the 16 MB heap is soon exhausted and OutOfMemoryError is thrown. The catch block handles it and prints heap full, and the loop does not run forever.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-024",
+    "question": "Which error does the JVM specification prescribe when the method area cannot satisfy an allocation request?",
+    "options": [
+      "StackOverflowError",
+      "OutOfMemoryError",
+      "VerifyError",
+      "IllegalStateException"
+    ],
+    "answer": 1,
+    "explanation": "If the method area (metaspace in HotSpot) cannot be extended to satisfy a request, the JVM throws OutOfMemoryError. The other types describe unrelated problems.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-025",
+    "question": "Which statement best summarizes how data is divided among the runtime data areas?",
+    "options": [
+      "Execution state such as the PC register and frames is private to each thread, while objects and class-level data are shared",
+      "Everything is shared by all threads",
+      "Everything is private to each thread",
+      "Objects are private to each thread, while frames are shared"
+    ],
+    "answer": 0,
+    "explanation": "Threads have private PC registers and stacks, which makes method calls independent. Objects and class data are shared, which is why the heap and method area are the focus of concurrency and memory management.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-026",
+    "question": "Which method name completes the code so that it prints 1 when run on Java 17?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        StackTraceElement[] st = new Throwable().____();\n        System.out.println(st.length);\n    }\n}",
+    "options": ["getTrace", "getFrames", "getStackTrace", "printStackTrace"],
+    "answer": 2,
+    "explanation": "Throwable.getStackTrace returns the frames of the stack at the time the throwable was created. In main there is only the main frame, so the length is 1. printStackTrace returns void and cannot be assigned.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-027",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static int depth(int n) {\n        return n == 0 ? new Throwable().getStackTrace().length : depth(n - 1);\n    }\n\n    public static void main(String[] args) {\n        System.out.println(depth(2));\n    }\n}",
+    "options": ["3", "4", "5", "2"],
+    "answer": 1,
+    "explanation": "When the throwable is created, the active frames are depth(0), depth(1), depth(2) and main. The JVM does not eliminate the recursive calls, so the stack trace length is 4.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-028",
+    "question": "After a context switch, what allows a thread to continue exactly where it stopped?",
+    "options": [
+      "The shared heap",
+      "The method area",
+      "The garbage collector",
+      "Its own PC register and JVM stack"
+    ],
+    "answer": 3,
+    "explanation": "The PC register records the current instruction, and the thread's own stack holds its frames with local variables and operand stacks. Together they describe the full execution state of that thread.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-029",
+    "question": "Which JVM instruction duplicates the value on top of the operand stack?",
+    "options": ["pop", "swap", "ldc", "dup"],
+    "answer": 3,
+    "explanation": "dup pushes a copy of the top operand stack value. pop discards it, swap exchanges the top two values, and ldc pushes a constant from the runtime constant pool.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-030",
+    "question": "What does the max_stack item of a method's Code attribute specify?",
+    "options": [
+      "The maximum number of frames allowed per thread",
+      "The maximum depth of the method's operand stack",
+      "The maximum size of the heap",
+      "The maximum number of local variables"
+    ],
+    "answer": 1,
+    "explanation": "The compiler computes how many values the operand stack can hold at once in this method and records it in max_stack, so the JVM can size the frame when the method is invoked.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-031",
+    "question": "Which item of a method's Code attribute determines the size of the frame's local variable array?",
+    "options": ["max_stack", "code_length", "max_locals", "attributes_count"],
+    "answer": 2,
+    "explanation": "max_locals gives the number of local variable slots needed, including parameters. max_stack sizes the operand stack instead.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-032",
+    "question": "Assume the default thread stack size. Which implementation of long sum(int n), the sum of 1..n, is safe from StackOverflowError for n = 1_000_000?",
+    "options": [
+      "long s = 0; for (int i = 1; i <= n; i++) { s += i; } return s;",
+      "return n == 0 ? 0 : n + sum(n - 1);",
+      "if (n == 0) return 0; return n + sum(n - 1);",
+      "return n <= 1 ? n : n + sum(n - 1) + 0;"
+    ],
+    "answer": 0,
+    "explanation": "The loop uses one frame regardless of n. Each recursive variant needs about a million frames, and Java does not guarantee tail-call elimination, so they would very likely overflow the stack.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-033",
+    "question": "In the pseudocode, dup pushes a copy of the top value, mul and add pop two values and push the result. What is on top of the operand stack at the end?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "push 2\ndup\nmul\npush 5\nadd",
+    "options": ["7", "9", "12", "10"],
+    "answer": 1,
+    "explanation": "After push 2 and dup the stack holds 2 and 2, and mul replaces them by 4. Then 5 is pushed and add yields 4 + 5 = 9.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-034",
+    "question": "What is the result of compiling and running this code?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        int x;\n        System.out.println(x);\n    }\n}",
+    "options": ["0", "null", "A runtime exception", "A compile-time error"],
+    "answer": 3,
+    "explanation": "Local variables live in the frame and receive no default value, so the compiler requires definite assignment before use. Fields of objects on the heap, in contrast, are given default values.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-035",
+    "question": "Which modifier marks a method whose implementation is written outside Java and runs using the native method stack?",
+    "options": ["native", "abstract", "transient", "strictfp"],
+    "answer": 0,
+    "explanation": "A method declared native has no Java body; the JVM links it to a function in a native library, typically through JNI.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-036",
+    "question": "How is the size of a thread's JVM stack determined in HotSpot?",
+    "options": [
+      "It expands dynamically up to the size of the heap",
+      "It is shared with all other threads",
+      "It is fixed when the thread is created, by default according to -Xss (ThreadStackSize)",
+      "It is always 1 GB"
+    ],
+    "answer": 2,
+    "explanation": "HotSpot reserves a stack of a fixed size for each thread, taken from the default setting or from a stack size requested for the thread. Deep recursion therefore fails once that size is used up.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-037",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) throws Exception {\n        Thread t = new Thread(() -> {\n            boolean seesMain = false;\n            for (StackTraceElement e : new Throwable().getStackTrace()) {\n                if (e.getMethodName().equals(\"main\")) {\n                    seesMain = true;\n                }\n            }\n            System.out.println(seesMain);\n        });\n        t.start();\n        t.join();\n    }\n}",
+    "options": ["true", "NullPointerException", "false", "Compile-time error"],
+    "answer": 2,
+    "explanation": "A new thread has its own JVM stack that starts with its own run method, so frames of the main thread are not part of it. The stack trace of the new thread therefore never contains main.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-038",
+    "question": "Which statement about the method area is correct according to the JVM specification?",
+    "options": [
+      "It is logically part of the heap, although implementations may choose not to collect or compact it",
+      "It is private to each thread",
+      "It stores the local variables of running methods",
+      "It must be located in native memory outside the heap"
+    ],
+    "answer": 0,
+    "explanation": "The specification describes the method area as logically part of the heap but leaves its implementation open. HotSpot uses native memory (metaspace) today, though the specification does not require it.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-039",
+    "question": "Which statement about the current frame is correct?",
+    "options": [
+      "It is shared by all threads",
+      "It is stored in the heap",
+      "Its local variable array is garbage collected independently",
+      "Only the frame at the top of a thread's stack belongs to the currently executing method"
+    ],
+    "answer": 3,
+    "explanation": "Frames below the top belong to methods that are waiting for a call to return. Only the top frame is active, and its operand stack and local variables are the ones the executing instructions use.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-040",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static void a() {\n        try {\n            b();\n        } finally {\n            System.out.print(\"a \");\n        }\n    }\n\n    static void b() {\n        try {\n            c();\n        } finally {\n            System.out.print(\"b \");\n        }\n    }\n\n    static void c() {\n        throw new RuntimeException();\n    }\n\n    public static void main(String[] args) {\n        try {\n            a();\n        } catch (RuntimeException e) {\n            System.out.println(\"caught\");\n        }\n    }\n}",
+    "options": ["a b caught", "b a caught", "caught b a", "caught"],
+    "answer": 1,
+    "explanation": "The exception unwinds the stack one frame at a time, from c to b to a. The finally block of each frame runs while its frame is being left, so b comes first, then a, and finally the handler in main.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-041",
+    "question": "The pseudocode uses call by value, as Java does for primitives. What does it print?",
+    "codeLanguage": "pseudocode",
+    "codeFileName": "Pseudocode.txt",
+    "code": "function inc(x):\n    x = x + 1\n    return x\n\nmain:\n    x = 5\n    y = inc(x)\n    print x, y",
+    "options": ["5 6", "6 6", "5 5", "6 5"],
+    "answer": 0,
+    "explanation": "The callee works on a copy of the argument in its own frame, so the x in main stays 5. The incremented copy is returned and stored in y, which is 6.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-042",
+    "question": "Which runtime data area is managed by the garbage collector?",
+    "options": [
+      "The JVM stack",
+      "The PC register",
+      "The heap",
+      "The native method stack"
+    ],
+    "answer": 2,
+    "explanation": "Unreachable objects and arrays on the heap are reclaimed automatically. Stack frames are released by popping them, and the PC register needs no memory management.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-043",
+    "question": "Which of the following is NOT a runtime data area defined by the JVM specification?",
+    "options": ["Heap", "Code cache", "Method area", "Run-time constant pool"],
+    "answer": 1,
+    "explanation": "The code cache, where HotSpot keeps JIT-compiled code, is an implementation detail and not part of the specification. The heap, the method area and the run-time constant pool are specified areas.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-044",
+    "question": "Which statement describes a correct trade-off between frame data and heap objects?",
+    "options": [
+      "Frame data lives longer than the method call",
+      "Heap objects are freed automatically when the creating method returns",
+      "Stack memory can grow without any limit",
+      "Frame data is cheap to create and discard but lives only for the call, whereas heap objects can outlive the method but must be garbage collected"
+    ],
+    "answer": 3,
+    "explanation": "Popping a frame frees its memory immediately with no collector involved. Heap objects have flexible lifetimes, for example when returned or stored in fields, at the price of garbage collection.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-045",
+    "question": "A tail-recursive method recurses one million times. What is the most likely outcome on HotSpot?",
+    "options": [
+      "javac converts it into a loop",
+      "The JVM guarantees constant stack usage for tail calls",
+      "An OutOfMemoryError for the heap",
+      "StackOverflowError, because Java does not guarantee tail-call elimination"
+    ],
+    "answer": 3,
+    "explanation": "Neither javac nor the JVM specification requires tail-call optimization, so each call still adds a frame. With a default stack size, such deep recursion usually overflows.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-046",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) {\n        final String x = \"ja\";\n        String y = \"ja\";\n        String a = x + \"va\";\n        String b = y + \"va\";\n        String c = \"java\";\n        System.out.println((a == c) + \" \" + (b == c));\n    }\n}",
+    "options": ["true true", "true false", "false true", "false false"],
+    "answer": 1,
+    "explanation": "Because x is a constant variable, x + \"va\" is a compile-time constant that becomes the pooled literal \"java\". y is not constant, so b is built at run time as a new heap string.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-047",
+    "question": "Which expression completes the code so that the new thread is requested with a stack size of 1 MB?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) throws Exception {\n        Thread t = new Thread(null, () -> System.out.println(\"ok\"), \"worker\", ____);\n        t.start();\n        t.join();\n    }\n}",
+    "options": ["\"1m\"", "-Xss1m", "1024 * 1024L", "new Stack(1024)"],
+    "answer": 2,
+    "explanation": "The fourth parameter of this Thread constructor is the requested stack size in bytes, a long. -Xss1m is a command-line option and not a Java expression, and the stack size cannot be given as a String.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-048",
+    "question": "Thread A stores a reference to a new object in a static field, and thread B later reads it. Where do both threads access the object's data?",
+    "options": [
+      "In the shared heap",
+      "In the stack of thread A",
+      "In the stack of thread B",
+      "In the PC register"
+    ],
+    "answer": 0,
+    "explanation": "Objects always live on the heap, which both threads can reach through the reference. Sharing data this way requires correct synchronization or safe publication.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-049",
+    "question": "Which command lists the VM flags in effect for the running JVM with process id 1234?",
+    "options": [
+      "jstack -flags 1234",
+      "jcmd 1234 VM.flags",
+      "jmap -flags 1234",
+      "java -flags 1234"
+    ],
+    "answer": 1,
+    "explanation": "jcmd sends diagnostic commands to a running JVM, and VM.flags prints the flags it uses. The other commands either do not have such an option or do not attach to running processes.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-050",
+    "question": "Which rule should a developer remember about variables and threads?",
+    "options": [
+      "Every variable in Java is thread-safe",
+      "Instance and static fields are confined to one thread",
+      "Arrays are thread-safe because they are stored on the stack",
+      "Local variables are confined to their thread, but the objects they refer to may be shared through the heap"
+    ],
+    "answer": 3,
+    "explanation": "A local reference lives in the thread's own frame, but the object it points to is on the shared heap and can be reached by other threads if the reference escapes. Thread safety must be ensured for those objects.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-051",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    public static void main(String[] args) throws Exception {\n        int[] counter = {0};\n        Thread t = new Thread(() -> counter[0] = 42);\n        t.start();\n        t.join();\n        System.out.println(counter[0]);\n    }\n}",
+    "options": ["42", "0", "Compile-time error", "IllegalStateException"],
+    "answer": 0,
+    "explanation": "The array lives on the heap and both threads use the same object through copies of the reference. join() guarantees that the write of the other thread is visible, so 42 is printed.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-052",
+    "question": "What is printed?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "public class Example {\n    static class Item {\n        public String toString() {\n            return \"Item:\" + this;\n        }\n    }\n\n    public static void main(String[] args) {\n        try {\n            new Item().toString();\n        } catch (StackOverflowError e) {\n            System.out.println(\"SOE\");\n        }\n    }\n}",
+    "options": [
+      "Item:Item",
+      "NullPointerException",
+      "SOE",
+      "Compile-time error"
+    ],
+    "answer": 2,
+    "explanation": "Concatenating this with a String calls this.toString(), which concatenates again, and so on. The unlimited recursion exhausts the thread stack and ends in StackOverflowError, which is caught.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-053",
+    "question": "Tasks in a thread pool legitimately recurse very deeply and sometimes fail with StackOverflowError while the heap is mostly free. Which change is appropriate?",
+    "options": [
+      "Increase -Xmx",
+      "Increase -XX:MaxMetaspaceSize",
+      "Increase the stack size of those threads or refactor the recursion into iteration",
+      "Call System.gc() before each task"
+    ],
+    "answer": 2,
+    "explanation": "The error concerns the thread's stack, not the heap or metaspace. Giving threads larger stacks or removing deep recursion addresses the cause.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-054",
+    "question": "A method declares int[] data = new int[100000]. How much of the frame's local variable array does data occupy?",
+    "options": [
+      "One slot for the reference, while the array itself is on the heap",
+      "About 400000 bytes",
+      "100000 slots",
+      "None, because the variable is not stored"
+    ],
+    "answer": 0,
+    "explanation": "The local variable holds only a reference. The array object with its 100000 elements is allocated on the heap, so the frame stays small.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-055",
+    "question": "Which instruction stores a reference from the operand stack into local variable slot 1?",
+    "options": ["aload_1", "istore_1", "aconst_null", "astore_1"],
+    "answer": 3,
+    "explanation": "astore_1 pops a reference and stores it in slot 1. aload_1 does the opposite, istore_1 is for ints, and aconst_null pushes a null reference.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-056",
+    "question": "Which instruction allocates a new object of a class on the heap, before its constructor is invoked?",
+    "options": ["invokespecial", "new", "anewarray", "putfield"],
+    "answer": 1,
+    "explanation": "The new instruction creates an uninitialized instance and pushes its reference. A following invokespecial call to the constructor initializes it. anewarray creates arrays instead.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-057",
+    "question": "Which instruction pushes an entry of the runtime constant pool, such as a String literal, onto the operand stack?",
+    "options": ["ldc", "iload", "getstatic", "new"],
+    "answer": 0,
+    "explanation": "ldc loads a constant (an int, float, String or class literal) from the run-time constant pool onto the operand stack. iload reads a local variable, getstatic reads a static field and new creates an object.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-058",
+    "question": "Which statement about when runtime data areas are created is correct?",
+    "options": [
+      "The heap is created each time a thread starts",
+      "The PC register and JVM stacks are created once when the JVM starts",
+      "The heap and method area are created at JVM start-up, while the PC register and stacks are created when a thread is created",
+      "The method area is created when the first object is allocated"
+    ],
+    "answer": 2,
+    "explanation": "Shared areas exist for the whole life of the JVM, whereas each thread receives its own PC register and stacks when it is created, and they are destroyed when it ends.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-059",
+    "question": "How are the arguments of a method call passed to the new frame of the invoked method?",
+    "options": [
+      "They are written to the PC register",
+      "They are popped from the caller's operand stack and become the first local variables of the new frame",
+      "They remain on the caller's operand stack, and the callee reads them there",
+      "They are copied to the method area"
+    ],
+    "answer": 1,
+    "explanation": "The caller pushes arguments on its operand stack. On invocation they are popped into the callee's local variable array, starting at index 0, or at index 1 after this for instance methods.",
+    "subtopic": "Runtime data areas"
+  },
+  {
+    "id": "java-jvm-internals-runtime-data-areas-060",
+    "question": "Which statement about JIT-compiled methods and JVM stack frames is correct?",
+    "options": [
+      "Compiled code has no frames and no stack",
+      "Compiled methods are placed on the heap",
+      "Compiled code always uses the same frame layout as the interpreter",
+      "Compiled frames may be laid out differently, but the observable behavior and stack traces are as the specification describes"
+    ],
+    "answer": 3,
+    "explanation": "The JVM specification defines frames logically. HotSpot may use a different physical layout for compiled code, and it keeps debug information to reproduce the logical frames, for example in stack traces.",
+    "subtopic": "Runtime data areas"
+  }
+]

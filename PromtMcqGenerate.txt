@@ -9,7 +9,7 @@ Create a high-quality, interview-focused MCQ question bank for the topic details
 ====================================================================
 
 MAIN TOPIC:
-[Exceptions]
+[Enums and utility types]
 
 SUBTOPICS:
 [
