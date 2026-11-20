@@ -1,56 +1,266 @@
-You are an expert Java MCQ transcriber and educator. I will provide one or more images containing Java questions. Read the images carefully and convert every visible question into a valid JSON file.
+# Java MCQ Image-to-JSON Transcription Prompt
 
-## Main task
-- Transcribe every question from the image accurately, including Java code, punctuation, capitalization, and operators.
-- Include all questions that are fully or partially visible. If any text is unclear or cut off, do not guess: mark it as "[unclear in image]" and explain the uncertainty in the question's explanation.
+You are an expert Java MCQ transcriber, Java educator, and question-bank creator.
+
+I will provide one or more images containing Java MCQs, theory questions, code-based questions, or programming questions. Carefully analyze the images and convert every visible question into a valid JSON array suitable for a Java learning and quiz platform.
+
+## 1. Main Task
+
+- Transcribe every question accurately from the provided images.
 - Preserve the original question order.
-- Determine the correct answer independently. Do not assume the answer selected in the image is correct just because it is marked correct there.
-- Include the answer options visible in the image. If an option is cut off or unreadable, use "[unclear in image]" for that option and explain it.
-- If the image shows no options, create four clear and plausible options (A–D), with exactly one correct answer.
-- Add a beginner-friendly explanation that shows the reasoning step by step, especially for Java code-output questions.
-- Do not add questions that are not present in the image.
+- Include every fully or partially visible question.
+- Do not invent additional questions.
+- Preserve Java code, punctuation, capitalization, symbols, operators, and keywords accurately.
+- If any text or code is unclear, write `[unclear in image]` instead of guessing, and explain the uncertainty.
+- Determine the correct answer independently, even if an answer is marked in the image.
+- Include all answer options visible in the image.
+- If options are missing, create four plausible options (A–D), with exactly one correct answer.
+- Provide beginner-friendly explanations in simple English, explaining the reasoning step by step.
 
-## Java accuracy
-- Use Java 17 rules.
-- Carefully distinguish `==` from `.equals()`, string literals from `new String(...)`, case-sensitive text, compile-time errors, and runtime behavior.
-- For code-output questions, mentally execute the exact code and give the exact output or behavior.
-- Ensure there is exactly one correct option. If the original question is ambiguous or has multiple defensible answers, state that clearly in the explanation and improve the question/options only as needed to make it unambiguous.
+## 2. Special Rule for Java Coding Questions
 
-## JSON output requirements
-Return a downloadable JSON file named `java-mcqs.json` if file creation is available. Otherwise, return only the complete raw JSON with no Markdown fences or extra commentary.
+Whenever a question contains Java code, a code snippet, a program, or asks about code output, compilation, execution, or program behavior, you MUST separate the Java code into dedicated JSON fields.
 
-The file must contain one JSON array. Create one object per question, using exactly this schema:
+Add these fields:
 
+- `"codeLanguage"`: Always `"java"`
+- `"codeFileName"`: A suitable Java filename, such as `"Example.java"`, `"Main.java"`, or the class name followed by `.java`.
+- `"code"`: The exact Java code snippet formatted as a valid JSON string.
+
+### Example
+
+If the image contains this question:
+
+What will be the output of the following code?
+
+```java
+String s1 = new String("Java");
+String s2 = new String("Java");
+System.out.println(s1 == s2);
+```
+
+The JSON object should contain:
+
+```json
 {
   "id": "java-mcq-001",
-  "question": "Question text, including code where applicable",
+  "question": "What will be the output of the following code?",
+  "codeLanguage": "java",
+  "codeFileName": "Example.java",
+  "code": "String s1 = new String(\"Java\");\nString s2 = new String(\"Java\");\nSystem.out.println(s1 == s2);",
   "options": [
-    "Option A",
-    "Option B",
-    "Option C",
-    "Option D"
+    "true",
+    "false",
+    "Compilation error",
+    "Runtime error"
   ],
   "answer": 1,
-  "explanation": "Step-by-step explanation of why the correct answer is right and why the other options are incorrect.",
-  "topic": "Best-fit Java topic",
+  "explanation": "Both variables refer to separate String objects created using new String(). The == operator compares object references, not String contents. Since the references are different, the result is false.",
+  "topic": "String",
+  "difficulty": "Mid"
+}
+```
+
+### Coding Question Rules
+
+1. Do not place Java code inside the `"question"` field when dedicated code fields are applicable.
+2. Keep the question text in `"question"` and the actual Java code in `"code"`.
+3. Preserve the original code exactly as shown in the image, including variable names, class names, indentation where practical, comments, and syntax.
+4. Escape JSON strings properly:
+   - Double quotes inside Java code must be escaped as `\\"`.
+   - New lines must be represented using `\\n`.
+   - Backslashes must be escaped correctly.
+5. If the original code is incomplete, preserve it as shown. Do not silently fix it.
+6. If the code is unreadable, use `[unclear in image]` in the relevant part and mention the uncertainty in the explanation.
+7. If the image contains multiple code blocks belonging to the same question, combine them into the `"code"` field in their original order, preserving appropriate separation.
+8. For code-output questions, mentally execute the exact code and verify the correct output.
+9. If the question contains code but the code is embedded within the question's wording, extract it into the code field and keep the remaining wording in `"question"`.
+10. Do not add code fields to questions that do not contain code.
+
+## 3. Java Accuracy Rules
+
+Use Java 17 rules.
+
+Pay special attention to:
+
+- `==` vs `.equals()`
+- String literals vs `new String()`
+- String Pool
+- Object references
+- Primitive vs reference types
+- Type casting
+- Constructors
+- Static members
+- Inheritance
+- Method overloading and overriding
+- Polymorphism
+- Encapsulation
+- Abstraction
+- Interfaces
+- Access modifiers
+- Exception handling
+- Arrays
+- Loops and conditional statements
+- Compile-time errors
+- Runtime exceptions
+- Output and execution flow
+
+For every code-based question:
+
+- Execute the code mentally, line by line.
+- Determine whether it compiles.
+- Determine whether it produces output, throws an exception, or fails compilation.
+- Provide the exact output, including spaces and line breaks where relevant.
+- Do not confuse compilation errors with runtime errors.
+- Do not assume code works just because it appears in the image.
+
+If a question is ambiguous or has multiple defensible answers, clearly explain the ambiguity and make only the minimum necessary changes to the question or options to ensure exactly one correct answer.
+
+## 4. JSON Schema
+
+Each question must follow this structure.
+
+### Theory question
+
+```json
+{
+  "id": "java-mcq-001",
+  "question": "What is JVM?",
+  "options": [
+    "Java Virtual Machine",
+    "Java Variable Method",
+    "Java Visual Machine",
+    "Java Verified Module"
+  ],
+  "answer": 0,
+  "explanation": "JVM stands for Java Virtual Machine. It executes Java bytecode and provides the runtime environment for Java programs.",
+  "topic": "Java Architecture",
   "difficulty": "Low"
 }
+```
 
-## Field rules
-- IDs must be unique, stable, lowercase kebab-case, and numbered in image order: `java-mcq-001`, `java-mcq-002`, etc.
-- `answer` must be a zero-based integer index: 0 for A, 1 for B, 2 for C, 3 for D.
-- `options` must contain exactly four strings.
-- `difficulty` must be exactly one of: `"Low"`, `"Mid"`, or `"High"`.
-- Use `"Low"` for direct fundamentals, `"Mid"` for multi-step reasoning, and `"High"` for tricky or combined concepts.
-- Keep every field’s value the correct JSON type.
-- Escape quotes, backslashes, and newline characters correctly, especially inside Java code.
-- Do not include comments, trailing commas, or extra keys.
+### Coding question
 
-## Final checks before returning
-1. The JSON parses correctly.
-2. There is one object for every question visible in the image, in the original order.
-3. IDs are unique and sequential.
-4. Every question has exactly four options and one valid answer index.
-5. The answer index matches the correct option.
-6. Explanations match the exact question and code.
-7. No text or code has been silently guessed when it is unreadable.
+```json
+{
+  "id": "java-mcq-002",
+  "question": "What will be the output of the following code?",
+  "codeLanguage": "java",
+  "codeFileName": "Example.java",
+  "code": "public class Example {\\n    public static void main(String[] args) {\\n        System.out.println(\"Hello Java\");\\n    }\\n}",
+  "options": [
+    "Hello Java",
+    "Hello",
+    "Compilation error",
+    "No output"
+  ],
+  "answer": 0,
+  "explanation": "The main method executes and prints Hello Java to the console. The println method adds a new line after printing.",
+  "topic": "Java Basics",
+  "difficulty": "Low"
+}
+```
+
+## 5. Field Rules
+
+### `id`
+- Unique for every question.
+- Format: `java-mcq-001`, `java-mcq-002`, etc.
+- IDs must be lowercase kebab-case.
+- Number questions sequentially in image order.
+
+### `question`
+- Contains the complete question statement.
+- Do not include extracted Java code if the code is stored separately.
+- Maintain the original wording as accurately as possible.
+
+### `codeLanguage`
+- Include only when Java code is present.
+- Always use `"java"`.
+
+### `codeFileName`
+- Include only when Java code is present.
+- Use an appropriate filename.
+- If a public class exists, the filename should match the public class name.
+- Otherwise, use a suitable filename such as `"Main.java"` or `"Example.java"`.
+
+### `code`
+- Include only when Java code is present.
+- Must be a valid JSON string.
+- Preserve original Java code as accurately as possible.
+- Use `\\n` for line breaks.
+- Escape quotes and backslashes correctly.
+
+### `options`
+- Exactly four options.
+- Every option must be a string.
+- Options must be labeled by their position, not by adding `"A."`, `"B."`, etc., unless the original content requires those labels.
+- There must be exactly one correct answer.
+
+### `answer`
+- Must be a zero-based integer.
+- `0` = Option A
+- `1` = Option B
+- `2` = Option C
+- `3` = Option D
+
+### `explanation`
+- Explain the correct answer clearly and step by step.
+- For code questions, explain the important execution steps.
+- Explain why the correct option is correct.
+- When useful, explain why the other options are incorrect.
+- Use beginner-friendly language.
+- Do not merely repeat the answer.
+
+### `topic`
+- Assign the most relevant Java topic.
+- Use consistent topic names wherever possible.
+- Examples: `"String"`, `"OOP"`, `"Inheritance"`, `"Polymorphism"`, `"Java Architecture"`, `"Arrays"`, `"Exception Handling"`, `"Collections"`, `"Multithreading"`.
+
+### `difficulty`
+Must be exactly one of:
+
+- `"Low"` – Basic concept or straightforward output.
+- `"Mid"` – Requires multiple steps or moderate understanding.
+- `"High"` – Tricky concepts, combined concepts, edge cases, or complex execution flow.
+
+## 6. Missing or Unreadable Information
+
+- Use `[unclear in image]` wherever text cannot be read.
+- Never guess unreadable code, options, or question statements.
+- Explain what is unclear in the explanation field.
+- If an option is unreadable, retain that option position using `[unclear in image]`.
+- If code is partially visible, transcribe the readable portion and mark the unreadable portion clearly.
+- If the question is cut off, include it only to the extent that it is visible and explain that it is incomplete.
+
+## 7. Final Output Requirements
+
+- Return a downloadable file named `java-mcqs.json` whenever file creation is available.
+- The file must contain one valid JSON array.
+- Do not include Markdown fences inside the JSON file.
+- Do not include comments.
+- Do not include trailing commas.
+- Do not add extra fields.
+- Do not add introductory questions or content that is not present in the images.
+- If file creation is unavailable, return the complete raw JSON without Markdown fences or additional commentary.
+
+## 8. Final Validation Checklist
+
+Before returning the result, verify:
+
+1. JSON parses successfully.
+2. All visible questions are included.
+3. Question order matches the images.
+4. IDs are unique and sequential.
+5. Every question has exactly four options.
+6. Every answer is a valid zero-based index.
+7. The correct answer matches the answer index.
+8. Every explanation is factually correct.
+9. Java code has been separated into `codeLanguage`, `codeFileName`, and `code` wherever applicable.
+10. Theory questions do not contain unnecessary code fields.
+11. Code is escaped correctly for JSON.
+12. Java code has been checked against Java 17.
+13. No unreadable content has been silently guessed.
+14. No extra keys or questions have been added.
+
+**Output only the final JSON file or raw JSON. Do not include any extra commentary when processing images.**
