@@ -9,15 +9,15 @@ Create a high-quality, interview-focused MCQ question bank for the topic details
 ====================================================================
 
 MAIN TOPIC:
-[Enums and utility types]
+[Profiling and optimization]
 
 SUBTOPICS:
 [
-Checked and unchecked exceptions,
-try, catch, finally, and try-with-resources,
-Throwing and propagating exceptions,
-Designing custom exceptions,
-Exception handling practices
+JFR and async-profiler,
+Heap dumps and thread dumps,
+Latency, throughput, and allocation,
+Benchmarking with JMH,
+Avoiding premature optimization
 ]
 
 OPTIONAL SETTINGS (leave as-is or edit):

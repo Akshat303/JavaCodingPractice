@@ -1,0 +1,422 @@
+[
+  {
+    "id": "java-mcq-001",
+    "question": "What happens here?\n\npublic class Test {\n    public static void main(String[] args) {\n        try {\n            throw new NullPointerException();\n        } finally {\n            System.out.println(\"Finally\");\n        }\n    }\n}",
+    "options": [
+      "Only Finally is printed and execution completes normally.",
+      "A\nC",
+      "Finally is skipped because an exception occurred.",
+      "Finally is printed, then NullPointerException propagates."
+    ],
+    "answer": 3,
+    "explanation": "Step 1: Inside the `try` block, `new NullPointerException()` is explicitly thrown. Step 2: There is no `catch` block to handle the exception, so control transfers immediately to the `finally` block before the method exits. Step 3: The `finally` block executes and prints `Finally`. Step 4: Because the `NullPointerException` was never caught, it continues propagating up the call stack after `finally` finishes. Therefore, Option D (index 3) is correct, while Option A is wrong because execution terminates abruptly with an uncaught exception, Option B is unrelated output, and Option C is wrong because `finally` always runs even when an uncaught exception is thrown.",
+    "topic": "Exception Handling (try-finally)",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-002",
+    "question": "What happens here?\n\nclass Test {\n    void show(Number n) {\n        System.out.println(\"Number\");\n    }\n    void show(Integer i) {\n        System.out.println(\"Integer\");\n    }\n    public static void main(String[] args) {\n        Test t = new Test();\n        t.show(null);\n    }\n}",
+    "options": [
+      "Number",
+      "Integer",
+      "Compilation error due to ambiguity.",
+      "NullPointerException."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: `null` can be passed to any reference type parameter, so both `show(Number)` and `show(Integer)` are applicable overload candidates. Step 2: Under Java's overload resolution rules (JLS §15.12.2.5), when multiple methods are applicable, the compiler chooses the most specific method. Step 3: Since `Integer` is a subclass of `Number` (`java.lang.Integer extends java.lang.Number`), `show(Integer)` is more specific than `show(Number)`. Step 4: Therefore, `show(Integer)` is selected at compile time and prints `Integer`. Option A is incorrect because `Number` is the broader supertype; Option C is incorrect because there is a clear inheritance hierarchy between `Integer` and `Number` (ambiguity only occurs between sibling types like `String` and `Integer`); Option D is incorrect because passing `null` as an argument does not dereference it.",
+    "topic": "Method Overloading Resolution",
+    "difficulty": "Mid"
+  },
+  {
+    "id": "java-mcq-003",
+    "question": "Refer the code below.\n\nvoid test() {\n    Object a = new Object(); // Object-1 created\n    Object b = new Object(); // Object-2 created\n    a = b;\n}\n\nWhich statement is correct after the assignment?",
+    "options": [
+      "Both objects become eligible for GC.",
+      "Only the first object becomes eligible for GC",
+      "Only the second object becomes eligible for GC.",
+      "Neither object becomes eligible for GC."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: `Object a = new Object();` creates Object-1 on the heap, referenced by `a`. Step 2: `Object b = new Object();` creates Object-2 on the heap, referenced by `b`. Step 3: `a = b;` copies the reference stored in `b` into `a`. Now both `a` and `b` point to Object-2, and zero active references point to Object-1. Step 4: Because Object-1 is no longer reachable, only the first object becomes eligible for garbage collection immediately after the assignment `a = b;` (before `test()` exits). Option A and Option C are wrong because Object-2 is still referenced by both `a` and `b`; Option D is wrong because Object-1 lost its only reference.",
+    "topic": "Garbage Collection & Object Reachability",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-004",
+    "question": "Which of the following is a potential cause of memory leaks in Java?",
+    "options": [
+      "Creating local variables inside methods.",
+      "Using primitive variables extensively.",
+      "Creating Connection objects without closing them.",
+      "Using StringBuilder instead of String."
+    ],
+    "answer": 2,
+    "explanation": "Step 1: A memory leak in Java occurs when objects or system resources are no longer needed by the application logic but remain reachable or unreleased, preventing the Garbage Collector or runtime from reclaiming memory. Step 2: Creating `Connection` objects (such as JDBC connections) without closing them keeps underlying native resources, buffers, and driver/pool references alive, causing memory and resource leaks. Step 3: Local variables (Option A) are popped off the stack when the method returns, making their referenced objects eligible for GC. Primitive variables (Option B) store raw values directly on the stack (or inside objects) without heap allocation overhead. Using `StringBuilder` (Option D) actually reduces memory churn compared to repeated `String` concatenation.",
+    "topic": "Memory Management & Memory Leaks",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-005",
+    "question": "Which feature was introduced in Java 8 interfaces?",
+    "options": [
+      "Default methods and static methods.",
+      "Private instance methods.",
+      "Protected abstract methods.",
+      "Constructors inside interfaces."
+    ],
+    "answer": 0,
+    "explanation": "Step 1: Prior to Java 8, interfaces could only contain `public abstract` methods and `public static final` constants. Step 2: Java 8 introduced `default` methods (with concrete implementations) and `static` methods inside interfaces so libraries could evolve existing interfaces without breaking implementing classes. Step 3: Private methods in interfaces (Option B) were introduced later in Java 9, not Java 8. Interface methods cannot be `protected` (Option C), and interfaces cannot have constructors (Option D) because they cannot be instantiated directly.",
+    "topic": "Java 8 Interfaces",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-006",
+    "question": "A class implements two interfaces, both defining the same default method signature. What must the implementing class do?",
+    "options": [
+      "JVM selects the first interface alphabetically.",
+      "Override the conflicting method to resolve ambiguity.",
+      "Declare both interfaces as abstract.",
+      "Use super() to invoke both methods automatically."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: When a class implements two interfaces that provide `default` methods with the exact same signature, Java encounters the 'diamond problem' of multiple inheritance of behavior. Step 2: The Java compiler refuses to guess which implementation to inherit and produces a compilation error unless the implementing class explicitly overrides the conflicting method. Step 3: Inside that overridden method, the class can provide its own logic or delegate to a specific interface using `InterfaceName.super.methodName()`. Option A is false (Java has no alphabetical tie-breaker), Option C is nonsensical because interfaces are already implicitly abstract, and Option D is invalid syntax (`super()` invokes a superclass constructor, not interface methods).",
+    "topic": "Interfaces & Default Method Conflicts",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-007",
+    "question": "class MemoryTest {\n    static Object obj;\n    public static void main(String[] args) {\n        Object local = new Object();\n        obj = local;\n        local = null;\n        obj = null;\n    }\n}\n\nWhen does the created object become eligible for garbage collection?",
+    "options": [
+      "Immediately after local = null.",
+      "Immediately after obj = local.",
+      "After obj = null, assuming no other reachable references exist.",
+      "Only after the main method completes."
+    ],
+    "answer": 2,
+    "explanation": "Step 1: `Object local = new Object();` creates the object on the heap and assigns its reference to the local variable `local`. Step 2: `obj = local;` copies that reference to the static field `obj`. Now two references (`local` and `obj`) point to the object. Step 3: `local = null;` clears the local reference, so Option A is wrong because the static reference `obj` still keeps the object reachable. Step 4: `obj = null;` clears the second and final reference, making the object unreachable and eligible for garbage collection right away (even before `main` finishes, so Option D is wrong). Option B is wrong because at `obj = local;`, both references are active.",
+    "topic": "Garbage Collection & Object Reachability",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-008",
+    "question": "A Java application continuously creates objects, but heap usage does not decrease even after several garbage collections. Which scenario is the most likely explanation?",
+    "options": [
+      "JVM garbage collector is not working.",
+      "All objects are automatically moved into stack memory.",
+      "Objects are still strongly reachable through application references.",
+      "Garbage collector cannot collect objects created using new."
+    ],
+    "answer": 2,
+    "explanation": "Step 1: Java's Garbage Collector only reclaims heap memory occupied by objects that are no longer reachable from any GC roots (such as active threads, local variables on stacks, or static fields). Step 2: If an application keeps storing newly created objects in a long-lived collection, cache, or static reference, those objects remain strongly reachable, so the GC cannot free them and heap usage stays high. Step 3: Option A is unlikely in a standard JVM; Option B is false because objects reside on the heap rather than being moved to stack memory; Option D is false because objects created with `new` are the primary targets of garbage collection.",
+    "topic": "Garbage Collection & Memory Management",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-009",
+    "question": "Code\n\nclass Test {\n    public static void main(String[] args) {\n        String a = new String(\"Java\");\n        String b = new String(\"Java\");\n        System.out.println(a == b);\n        System.out.println(a.equals(b));\n    }\n}\n\nWhat is the output?",
+    "options": [
+      "true\ntrue",
+      "false\ntrue",
+      "true\nfalse",
+      "false\nfalse"
+    ],
+    "answer": 1,
+    "explanation": "Step 1: Using `new String(\"Java\")` explicitly allocates a brand-new `String` object on the heap each time it is called. Thus, `a` and `b` point to two distinct object references at different memory addresses. Step 2: `a == b` compares object references (memory addresses), which evaluates to `false`. Step 3: `a.equals(b)` compares the actual character sequences inside both `String` objects (`\"Java\"` and `\"Java\"`), which are identical, so it evaluates to `true`. Step 4: Therefore, the program prints `false` followed by `true` (Option B).",
+    "topic": "Strings (== vs .equals())",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-010",
+    "question": "What happens here?\n\ninterface A {\n    default void display() {\n        System.out.println(\"A\");\n    }\n}\n\ninterface B {\n    default void display() {\n        System.out.println(\"B\");\n    }\n}\n\nclass C implements A, B {\n    public static void main(String[] args) {\n        new C().display();\n    }\n}",
+    "options": [
+      "A",
+      "B",
+      "Compilation Error",
+      "Runtime Exception"
+    ],
+    "answer": 2,
+    "explanation": "Step 1: Both `interface A` and `interface B` declare a `default void display()` method with the exact same signature. Step 2: `class C implements A, B` inherits both conflicting default methods without overriding `display()`. Step 3: Java prevents this ambiguity at compile time (`class C inherits unrelated defaults for display() from types A and B`), resulting in a Compilation Error. Options A and B cannot run because compilation fails, and Option D is wrong because the error is caught by the compiler before runtime.",
+    "topic": "Interfaces & Default Method Conflicts",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-011",
+    "question": "Which statement about interface variables is correct?\n\ninterface A {\n    int VALUE = 10;\n}\n\nclass Test implements A {\n    public static void main(String[] args) {\n        // VALUE = 20;\n    }\n}",
+    "options": [
+      "VALUE is an instance variable.",
+      "VALUE is protected and mutable.",
+      "VALUE is private and final.",
+      "VALUE is implicitly public, static and final."
+    ],
+    "answer": 3,
+    "explanation": "Step 1: In Java, every field declared inside an interface is implicitly `public`, `static`, and `final` (a constant), even if those modifiers are omitted in the source code. Step 2: Because `VALUE` is `final`, uncommenting `VALUE = 20;` would cause a compilation error (`cannot assign a value to final variable VALUE`). Step 3: Option A is wrong because interface variables are `static` (belonging to the interface, not an instance); Option B is wrong because they cannot be `protected` or mutable; Option C is wrong because interface fields are `public`, not `private`.",
+    "topic": "Interface Variables & Modifiers",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-012",
+    "question": "Output?\n\npublic class Test {\n    public static void main(String[] args) {\n        try {\n            System.out.println(\"A\");\n            throw new Exception();\n        } catch (Exception e) {\n            System.out.println(\"B\");\n            return;\n        } finally {\n            System.out.println(\"C\");\n        }\n    }\n}",
+    "options": [
+      "A\nB",
+      "A\nC",
+      "A\nB\nC",
+      "Compilation error."
+    ],
+    "answer": 2,
+    "explanation": "Step 1: Execution enters the `try` block and prints `A`. Step 2: `throw new Exception();` throws a checked `Exception`, immediately transferring control to the matching `catch (Exception e)` block. Step 3: Inside `catch`, `B` is printed, and then `return;` prepares to exit `main`. Step 4: Before `return` actually exits the method, Java guarantees that the `finally` block executes, printing `C`. Step 5: Thus, the complete output is `A`, `B`, and `C` on separate lines (Option C). Option A misses the `finally` execution, Option B skips `catch`, and Option D is wrong because the thrown checked `Exception` is properly caught.",
+    "topic": "Exception Handling (try-catch-finally & return)",
+    "difficulty": "Mid"
+  },
+    {
+    "id": "java-mcq-013",
+    "question": "public class Test {\n    public static void main(String[] args) {\n        Integer a = 122;\n        Integer b = 122;\n        System.out.println(a == b);\n    }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        Integer a = 133;\n        Integer b = 133;\n        System.out.println(a == b);\n    }\n}",
+    "options": [
+      "true\ntrue",
+      "true\nfalse",
+      "false\ntrue",
+      "false\nfalse"
+    ],
+    "answer": 1,
+    "explanation": "Step 1: When an `int` literal is autoboxed into an `Integer` (`Integer a = 122;`), Java invokes `Integer.valueOf(int)`. Step 2: By default, the JVM caches `Integer` wrapper instances for values in the range `-128` to `127`. For `122` (which is inside `-128..127`), `a` and `b` both receive a reference to the exact same cached `Integer` object, so `a == b` evaluates to `true`. Step 3: For `133` (which is outside `-128..127`), `Integer.valueOf(133)` creates two distinct `Integer` objects on the heap. Because `==` compares object references rather than numeric values, `a == b` evaluates to `false`. Step 4: Note that the screenshot presents two separate `public class Test` snippets back-to-back as two independent test cases (if placed in the same file without renaming, declaring two `public class Test` classes would cause a duplicate class compilation error, which is not one of the options). Evaluated sequentially as two programs, the outputs are `true` followed by `false` (Option B).",
+    "topic": "Wrapper Classes & Integer Caching",
+    "difficulty": "Mid"
+  },
+  {
+    "id": "java-mcq-014",
+    "question": "What happens here?\n\nclass A {\n    void display() {\n        System.out.println(\"A\");\n    }\n}\n\nclass B extends A {\n    void display() {\n        System.out.println(\"B\");\n    }\n}\n\nclass Test {\n    public static void main(String[] args) {\n        A obj = new B();\n        obj.display();\n    }\n}",
+    "options": [
+      "A",
+      "B",
+      "Compilation error.",
+      "Runtime Exception."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: `class B extends A` and overrides the instance method `display()`. Step 2: `A obj = new B();` creates an object of runtime type `B` and assigns it to a reference variable of compile-time type `A` (upcasting). Step 3: When `obj.display()` is called, Java uses dynamic method dispatch (runtime polymorphism) to invoke the overridden method belonging to the actual runtime object (`B`), printing `B`. Option A is wrong because `A`'s implementation is overridden; Options C and D are wrong because upcasting and method overriding are valid in Java.",
+    "topic": "Polymorphism & Method Overriding",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-015",
+    "question": "Which overloaded method gets called?\n\nclass Test {\n    void print(long x) {\n        System.out.println(\"long\");\n    }\n    void print(Integer x) {\n        System.out.println(\"Integer\");\n    }\n    public static void main(String[] args) {\n        new Test().print(10);\n    }\n}",
+    "options": [
+      "long",
+      "Integer",
+      "Compilation error.",
+      "Ambiguous method call."
+    ],
+    "answer": 0,
+    "explanation": "Step 1: The literal `10` has the primitive type `int`. Neither `print(long)` nor `print(Integer)` is an exact match for `int`. Step 2: Under Java's overload resolution phases (JLS §15.12.2), Phase 1 checks primitive widening conversions (`int` -> `long`) *before* Phase 2 considers boxing conversions (`int` -> `Integer`). Step 3: Because primitive widening takes precedence over autoboxing, `10` is widened to `long` and `print(long)` is invoked, printing `long` (Option A). Option B is wrong because autoboxing only happens if no primitive widening match exists; Options C and D are wrong because the overload rules cleanly prioritize widening over boxing.",
+    "topic": "Method Overloading (Widening vs Autoboxing)",
+    "difficulty": "Mid"
+  },
+  {
+    "id": "java-mcq-016",
+    "question": "What happens when a subclass attempts to override a superclass method with reduced visibility?\n\nclass A {\n    public void display() { }\n}\n\nclass B extends A {\n    protected void display() { }\n}",
+    "options": [
+      "Compilation succeeds.",
+      "Runtime exception.",
+      "Method hiding occurs.",
+      "Compilation error because overriding cannot reduce visibility."
+    ],
+    "answer": 3,
+    "explanation": "Step 1: In `class A`, `display()` is declared `public`. Step 2: In `class B extends A`, `display()` is overridden with `protected`, which is more restrictive than `public`. Step 3: Java enforces the Liskov Substitution Principle for method overriding: an overriding method cannot assign weaker access privileges (`public` -> `protected` -> package-private -> `private`). Step 4: Therefore, the compiler rejects `class B` with a compilation error (`attempting to assign weaker access privileges; was public`), making Option D correct.",
+    "topic": "Method Overriding & Access Modifiers",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-017",
+    "question": "What happens here?\n\nclass Test {\n    final void display() { }\n}\n\nclass Demo extends Test {\n    void display() { }\n}",
+    "options": [
+      "Compilation succeeds.",
+      "Runtime exception.",
+      "Method hiding occurs.",
+      "Compilation error"
+    ],
+    "answer": 3,
+    "explanation": "Step 1: In `class Test`, `display()` is marked with the `final` modifier, which explicitly prohibits subclasses from overriding it. Step 2: `class Demo extends Test` attempts to define `void display() { }`, overriding the `final` method from `Test`. Step 3: The Java compiler immediately fails with a compilation error (`display() in Demo cannot override display() in Test; overridden method is final`), making Option D correct.",
+    "topic": "final Keyword & Inheritance",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-018",
+    "question": "class Address implements Cloneable {\n    String city = \"Bangalore\";\n    public Object clone() throws CloneNotSupportedException {\n        return super.clone();\n    }\n}\n\nclass Student implements Cloneable {\n    Address address = new Address();\n    public Object clone() throws CloneNotSupportedException {\n        return super.clone();\n    }\n    public static void main(String[] args) throws Exception {\n        Student s1 = new Student();\n        Student s2 = (Student) s1.clone();\n        s2.address.city = \"Delhi\";\n        System.out.println(s1.address.city);\n    }\n}\n\noutput?",
+    "options": [
+      "Bangalore",
+      "Delhi",
+      "null",
+      "Compilation error"
+    ],
+    "answer": 1,
+    "explanation": "Step 1: `Student.clone()` calls `super.clone()`, which delegates to `Object.clone()`. Step 2: `Object.clone()` performs a **shallow copy**—it creates a new `Student` instance `s2`, but copies the `address` reference field bit-for-bit rather than cloning the `Address` object itself. Step 3: As a result, `s1.address` and `s2.address` point to the exact same `Address` object on the heap. Step 4: When `s2.address.city = \"Delhi\";` mutates that shared `Address` object, `s1.address.city` also reflects `\"Delhi\"`, printing `Delhi` (Option B).",
+    "topic": "Object Cloning (Shallow vs Deep Copy)",
+    "difficulty": "Mid"
+  },
+  {
+    "id": "java-mcq-019",
+    "question": "What happens to a static variable during Java default serialization?\n\nclass Student implements Serializable {\n    int id = 101;\n    static String college = \"ABC\";\n}",
+    "options": [
+      "Both id and college are serialized.",
+      "Only id is serialized; static fields are not part of the serialized object state",
+      "Only college is serialized.",
+      "Serialization fails."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: Java serialization saves the state of an individual *object instance* into a byte stream. Step 2: Instance fields like `int id = 101;` belong to each object, so they are serialized. Step 3: `static` fields like `static String college = \"ABC\";` belong to the class rather than any specific object instance, so Java's default serialization mechanism ignores them. Step 4: Therefore, only `id` is serialized (Option B).",
+    "topic": "Serialization & static Fields",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-020",
+    "question": "Is this a valid functional interface?\n\n@FunctionalInterface\ninterface Test {\n    void display();\n    boolean equals(Object obj);\n}",
+    "options": [
+      "Compilation error because there are two abstract methods.",
+      "It is Valid",
+      "Valid only in Java 9.",
+      "Valid only if display() is static."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: A functional interface must have exactly one abstract method (Single Abstract Method, or SAM). Step 2: Under Java Language Specification §9.8, if an interface declares an abstract method that overrides one of the `public` methods of `java.lang.Object`—such as `boolean equals(Object obj)`—it does **not** count toward the interface's abstract method count because every implementing class already inherits a concrete implementation from `Object`. Step 3: Consequently, `void display()` is the single abstract method, `@FunctionalInterface` compiles without error, and Option B (`It is Valid`) is correct.",
+    "topic": "Functional Interfaces",
+    "difficulty": "High"
+  },
+  {
+    "id": "java-mcq-021",
+    "question": "Which memory area stores objects created using the new keyword in Java?",
+    "options": [
+      "Stack",
+      "Method Area",
+      "Program Counter Register",
+      "Heap"
+    ],
+    "answer": 3,
+    "explanation": "Step 1: In the JVM runtime data areas, all class instances and arrays allocated using `new` are stored on the **Heap** (Option D), which is shared across all threads and managed by the Garbage Collector. Step 2: The Stack (Option A) stores thread-specific stack frames, local primitive variables, and object references (not the objects themselves); the Method Area (Option B) stores class metadata, bytecode, and static variables; the Program Counter Register (Option C) tracks the address of the current JVM instruction being executed.",
+    "topic": "JVM Memory Architecture",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-022",
+    "question": "Which method can be used to request garbage collection in Java?",
+    "options": [
+      "Runtime.collect()",
+      "System.gc()",
+      "Object.gc()",
+      "Thread.gc()"
+    ],
+    "answer": 1,
+    "explanation": "Step 1: In Java, `System.gc()` (or `Runtime.getRuntime().gc()`) suggests to the JVM that it expend effort toward recycling unused objects. Step 2: `Runtime.collect()`, `Object.gc()`, and `Thread.gc()` do not exist in the standard Java API. Therefore, Option B (`System.gc()`) is correct.",
+    "topic": "Garbage Collection",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-023",
+    "question": "Which block is generally used to execute cleanup code whether an exception occurs or not?",
+    "options": [
+      "try",
+      "catch",
+      "finally",
+      "throw"
+    ],
+    "answer": 2,
+    "explanation": "Step 1: The `finally` block (Option C) always executes when the `try` block exits—whether normally, via a `return` statement, or because an exception was thrown—making it the standard construct for releasing resources and running cleanup code. Step 2: `try` encloses risky code, `catch` runs only when a matching exception occurs, and `throw` explicitly throws an exception.",
+    "topic": "Exception Handling",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-024",
+    "question": "What happens if an exception is thrown inside a catch block?",
+    "options": [
+      "It is automatically handled by the same catch block.",
+      "It propagates to an appropriate enclosing handler or caller.",
+      "JVM ignores the exception.",
+      "Finally block is skipped."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: A `catch` block only catches exceptions thrown inside its corresponding `try` block, not exceptions thrown within the `catch` block itself (so Option A is false). Step 2: If an exception is thrown inside a `catch` block, the associated `finally` block (if present) executes first (so Option D is false), and then the exception propagates outward to an enclosing `try-catch` block or up the call stack to the caller (Option B). The JVM never silently ignores uncaught exceptions (Option C).",
+    "topic": "Exception Handling & Propagation",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-025",
+    "question": "What happens when a variable is declared as final?",
+    "options": [
+      "Its value must be assigned only at declaration.",
+      "It can be assigned once, but assignment may happen later if it is a blank final variable.",
+      "It becomes static automatically.",
+      "It cannot be accessed inside methods."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: A `final` variable in Java can be initialized at most once. Step 2: While it can be initialized at declaration, Java also allows *blank final* variables: a blank final local variable can be assigned once before it is read, a blank final instance variable must be assigned in an instance initializer or every constructor, and a blank final static variable must be assigned in a static initializer block (making Option B true and Option A false). Step 3: `final` does not make a variable `static` (Option C) and does not restrict method access (Option D).",
+    "topic": "final Keyword",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-026",
+    "question": "Which annotation is used to indicate that an interface is intended to be a functional interface?",
+    "options": [
+      "@Override",
+      "@Deprecated",
+      "@FunctionalInterface",
+      "@Serializable"
+    ],
+    "answer": 2,
+    "explanation": "Step 1: `@FunctionalInterface` (Option C), introduced in Java 8 in `java.lang`, instructs the compiler to verify that the annotated interface contains exactly one abstract method. Step 2: `@Override` marks an overridden method, `@Deprecated` marks obsolete APIs, and `@Serializable` is not a standard Java SE annotation (Java uses the `java.io.Serializable` marker interface).",
+    "topic": "Annotations & Functional Interfaces",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-027",
+    "question": "A payment service calls an external payment gateway. The gateway occasionally times out. What is the best practice?",
+    "options": [
+      "Catch Exception and return null.",
+      "Ignore the exception and continue processing.",
+      "Use System.exit(0) to stop the application.",
+      "Handle the timeout explicitly, log meaningful context and apply an appropriate retry or failure strategy."
+    ],
+    "answer": 3,
+    "explanation": "Step 1: Transient network or gateway timeouts require explicit error handling so the system remains observable and resilient. Step 2: Catching a specific timeout exception, logging diagnostic context (such as transaction/correlation IDs), and applying an idempotent retry policy (e.g., exponential backoff) or controlled failure/fallback response (Option D) is standard engineering practice. Step 3: Returning `null` (Option A) hides the failure and risks downstream `NullPointerException`s; ignoring the exception (Option B) corrupts payment state; calling `System.exit(0)` (Option C) crashes the entire service.",
+    "topic": "Exception Handling Best Practices",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-028",
+    "question": "A payment service calls an external payment gateway. The gateway occasionally times out. What is the best practice?",
+    "options": [
+      "Catch Exception and return null.",
+      "Ignore the exception and continue processing.",
+      "Use System.exit(0) to stop the application.",
+      "Handle the timeout explicitly, log meaningful context and apply an appropriate retry or failure strategy."
+    ],
+    "answer": 3,
+    "explanation": "Step 1: Note that this question appears identically as both Question 26 and Question 27 in the source quiz image and is preserved here to maintain a 1-to-1 transcription. Step 2: When an external payment gateway times out, the service should explicitly handle the timeout exception, log meaningful context for troubleshooting, and execute an appropriate retry (with idempotency safeguards) or graceful failure strategy (Option D). Returning `null` (Option A), silently ignoring the failure (Option B), or terminating the JVM with `System.exit(0)` (Option C) are all anti-patterns.",
+    "topic": "Exception Handling Best Practices",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-029",
+    "question": "An application serializes a User object containing a password field. The developer does not want the password included in the default serialized data.\n\nWhich approach is appropriate?",
+    "options": [
+      "Declare password as final.",
+      "Declare password as transient, and ensure any custom serialization logic also excludes it.",
+      "Declare password as static.",
+      "Override equals() and hashCode()."
+    ],
+    "answer": 1,
+    "explanation": "Step 1: In Java, the `transient` modifier marks an instance field to be skipped by the default serialization mechanism (`ObjectOutputStream`), resetting it to its default value (`null` for `String`) upon deserialization. Step 2: If custom `writeObject`/`readObject` methods are implemented, they must also avoid writing the password, making Option B the right choice. Step 3: `final` fields (Option A) are still serialized normally; making `password` `static` (Option C) would share a single password across all `User` instances in memory; `equals()` and `hashCode()` (Option D) have no effect on serialization.",
+    "topic": "Serialization & transient Keyword",
+    "difficulty": "Low"
+  },
+  {
+    "id": "java-mcq-030",
+    "question": "class Employee {\n    String name;\n    public static void main(String[] args) {\n        Employee e1 = new Employee();\n        Employee e2 = e1;\n        e1.name = \"Rahul\";\n        e2 = null;\n        System.out.println(e1.name);\n    }\n}\n\nWhat is the output?",
+    "options": [
+      "null",
+      "Rahul",
+      "Compilation error.",
+      "NullPointerException"
+    ],
+    "answer": 1,
+    "explanation": "Step 1: `Employee e1 = new Employee();` creates an `Employee` object on the heap and stores its reference in `e1`. Step 2: `Employee e2 = e1;` copies that reference into `e2`, so both `e1` and `e2` point to the same `Employee` object. Step 3: `e1.name = \"Rahul\";` sets the object's `name` field to `\"Rahul\"`. Step 4: `e2 = null;` sets only the reference variable `e2` to `null`—it does **not** destroy the object or affect `e1`. Step 5: `System.out.println(e1.name);` dereferences `e1` (which still points to the `Employee` object) and prints `Rahul` (Option B).",
+    "topic": "Object References & Memory",
+    "difficulty": "Low"
+  }
+]
