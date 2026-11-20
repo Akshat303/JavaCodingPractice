@@ -1,7 +1,10 @@
 [
   {
     "id": "java-mcq-001",
-    "question": "What happens here?\n\npublic class Test {\n    public static void main(String[] args) {\n        try {\n            throw new NullPointerException();\n        } finally {\n            System.out.println(\"Finally\");\n        }\n    }\n}",
+    "question": "What happens here?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "public class Test {\n    public static void main(String[] args) {\n        try {\n            throw new NullPointerException();\n        } finally {\n            System.out.println(\"Finally\");\n        }\n    }\n}",
     "options": [
       "Only Finally is printed and execution completes normally.",
       "A\nC",
@@ -15,7 +18,10 @@
   },
   {
     "id": "java-mcq-002",
-    "question": "What happens here?\n\nclass Test {\n    void show(Number n) {\n        System.out.println(\"Number\");\n    }\n    void show(Integer i) {\n        System.out.println(\"Integer\");\n    }\n    public static void main(String[] args) {\n        Test t = new Test();\n        t.show(null);\n    }\n}",
+    "question": "What happens here?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "class Test {\n    void show(Number n) {\n        System.out.println(\"Number\");\n    }\n    void show(Integer i) {\n        System.out.println(\"Integer\");\n    }\n    public static void main(String[] args) {\n        Test t = new Test();\n        t.show(null);\n    }\n}",
     "options": [
       "Number",
       "Integer",
@@ -29,7 +35,10 @@
   },
   {
     "id": "java-mcq-003",
-    "question": "Refer the code below.\n\nvoid test() {\n    Object a = new Object(); // Object-1 created\n    Object b = new Object(); // Object-2 created\n    a = b;\n}\n\nWhich statement is correct after the assignment?",
+    "question": "Refer the code below.\n\nWhich statement is correct after the assignment?",
+    "codeLanguage": "java",
+    "codeFileName": "Example.java",
+    "code": "void test() {\n    Object a = new Object(); // Object-1 created\n    Object b = new Object(); // Object-2 created\n    a = b;\n}",
     "options": [
       "Both objects become eligible for GC.",
       "Only the first object becomes eligible for GC",
@@ -85,7 +94,10 @@
   },
   {
     "id": "java-mcq-007",
-    "question": "class MemoryTest {\n    static Object obj;\n    public static void main(String[] args) {\n        Object local = new Object();\n        obj = local;\n        local = null;\n        obj = null;\n    }\n}\n\nWhen does the created object become eligible for garbage collection?",
+    "question": "When does the created object become eligible for garbage collection?",
+    "codeLanguage": "java",
+    "codeFileName": "MemoryTest.java",
+    "code": "class MemoryTest {\n    static Object obj;\n    public static void main(String[] args) {\n        Object local = new Object();\n        obj = local;\n        local = null;\n        obj = null;\n    }\n}",
     "options": [
       "Immediately after local = null.",
       "Immediately after obj = local.",
@@ -113,7 +125,10 @@
   },
   {
     "id": "java-mcq-009",
-    "question": "Code\n\nclass Test {\n    public static void main(String[] args) {\n        String a = new String(\"Java\");\n        String b = new String(\"Java\");\n        System.out.println(a == b);\n        System.out.println(a.equals(b));\n    }\n}\n\nWhat is the output?",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "class Test {\n    public static void main(String[] args) {\n        String a = new String(\"Java\");\n        String b = new String(\"Java\");\n        System.out.println(a == b);\n        System.out.println(a.equals(b));\n    }\n}",
     "options": [
       "true\ntrue",
       "false\ntrue",
@@ -127,7 +142,10 @@
   },
   {
     "id": "java-mcq-010",
-    "question": "What happens here?\n\ninterface A {\n    default void display() {\n        System.out.println(\"A\");\n    }\n}\n\ninterface B {\n    default void display() {\n        System.out.println(\"B\");\n    }\n}\n\nclass C implements A, B {\n    public static void main(String[] args) {\n        new C().display();\n    }\n}",
+    "question": "What happens here?",
+    "codeLanguage": "java",
+    "codeFileName": "C.java",
+    "code": "interface A {\n    default void display() {\n        System.out.println(\"A\");\n    }\n}\n\ninterface B {\n    default void display() {\n        System.out.println(\"B\");\n    }\n}\n\nclass C implements A, B {\n    public static void main(String[] args) {\n        new C().display();\n    }\n}",
     "options": [
       "A",
       "B",
@@ -141,7 +159,10 @@
   },
   {
     "id": "java-mcq-011",
-    "question": "Which statement about interface variables is correct?\n\ninterface A {\n    int VALUE = 10;\n}\n\nclass Test implements A {\n    public static void main(String[] args) {\n        // VALUE = 20;\n    }\n}",
+    "question": "Which statement about interface variables is correct?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "interface A {\n    int VALUE = 10;\n}\n\nclass Test implements A {\n    public static void main(String[] args) {\n        // VALUE = 20;\n    }\n}",
     "options": [
       "VALUE is an instance variable.",
       "VALUE is protected and mutable.",
@@ -155,7 +176,10 @@
   },
   {
     "id": "java-mcq-012",
-    "question": "Output?\n\npublic class Test {\n    public static void main(String[] args) {\n        try {\n            System.out.println(\"A\");\n            throw new Exception();\n        } catch (Exception e) {\n            System.out.println(\"B\");\n            return;\n        } finally {\n            System.out.println(\"C\");\n        }\n    }\n}",
+    "question": "Output?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "public class Test {\n    public static void main(String[] args) {\n        try {\n            System.out.println(\"A\");\n            throw new Exception();\n        } catch (Exception e) {\n            System.out.println(\"B\");\n            return;\n        } finally {\n            System.out.println(\"C\");\n        }\n    }\n}",
     "options": [
       "A\nB",
       "A\nC",
@@ -167,9 +191,12 @@
     "topic": "Exception Handling (try-catch-finally & return)",
     "difficulty": "Mid"
   },
-    {
+  {
     "id": "java-mcq-013",
-    "question": "public class Test {\n    public static void main(String[] args) {\n        Integer a = 122;\n        Integer b = 122;\n        System.out.println(a == b);\n    }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        Integer a = 133;\n        Integer b = 133;\n        System.out.println(a == b);\n    }\n}",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "public class Test {\n    public static void main(String[] args) {\n        Integer a = 122;\n        Integer b = 122;\n        System.out.println(a == b);\n    }\n}\n\npublic class Test {\n    public static void main(String[] args) {\n        Integer a = 133;\n        Integer b = 133;\n        System.out.println(a == b);\n    }\n}",
     "options": [
       "true\ntrue",
       "true\nfalse",
@@ -183,7 +210,10 @@
   },
   {
     "id": "java-mcq-014",
-    "question": "What happens here?\n\nclass A {\n    void display() {\n        System.out.println(\"A\");\n    }\n}\n\nclass B extends A {\n    void display() {\n        System.out.println(\"B\");\n    }\n}\n\nclass Test {\n    public static void main(String[] args) {\n        A obj = new B();\n        obj.display();\n    }\n}",
+    "question": "What happens here?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "class A {\n    void display() {\n        System.out.println(\"A\");\n    }\n}\n\nclass B extends A {\n    void display() {\n        System.out.println(\"B\");\n    }\n}\n\nclass Test {\n    public static void main(String[] args) {\n        A obj = new B();\n        obj.display();\n    }\n}",
     "options": [
       "A",
       "B",
@@ -197,7 +227,10 @@
   },
   {
     "id": "java-mcq-015",
-    "question": "Which overloaded method gets called?\n\nclass Test {\n    void print(long x) {\n        System.out.println(\"long\");\n    }\n    void print(Integer x) {\n        System.out.println(\"Integer\");\n    }\n    public static void main(String[] args) {\n        new Test().print(10);\n    }\n}",
+    "question": "Which overloaded method gets called?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "class Test {\n    void print(long x) {\n        System.out.println(\"long\");\n    }\n    void print(Integer x) {\n        System.out.println(\"Integer\");\n    }\n    public static void main(String[] args) {\n        new Test().print(10);\n    }\n}",
     "options": [
       "long",
       "Integer",
@@ -211,7 +244,10 @@
   },
   {
     "id": "java-mcq-016",
-    "question": "What happens when a subclass attempts to override a superclass method with reduced visibility?\n\nclass A {\n    public void display() { }\n}\n\nclass B extends A {\n    protected void display() { }\n}",
+    "question": "What happens when a subclass attempts to override a superclass method with reduced visibility?",
+    "codeLanguage": "java",
+    "codeFileName": "B.java",
+    "code": "class A {\n    public void display() { }\n}\n\nclass B extends A {\n    protected void display() { }\n}",
     "options": [
       "Compilation succeeds.",
       "Runtime exception.",
@@ -225,7 +261,10 @@
   },
   {
     "id": "java-mcq-017",
-    "question": "What happens here?\n\nclass Test {\n    final void display() { }\n}\n\nclass Demo extends Test {\n    void display() { }\n}",
+    "question": "What happens here?",
+    "codeLanguage": "java",
+    "codeFileName": "Demo.java",
+    "code": "class Test {\n    final void display() { }\n}\n\nclass Demo extends Test {\n    void display() { }\n}",
     "options": [
       "Compilation succeeds.",
       "Runtime exception.",
@@ -239,7 +278,10 @@
   },
   {
     "id": "java-mcq-018",
-    "question": "class Address implements Cloneable {\n    String city = \"Bangalore\";\n    public Object clone() throws CloneNotSupportedException {\n        return super.clone();\n    }\n}\n\nclass Student implements Cloneable {\n    Address address = new Address();\n    public Object clone() throws CloneNotSupportedException {\n        return super.clone();\n    }\n    public static void main(String[] args) throws Exception {\n        Student s1 = new Student();\n        Student s2 = (Student) s1.clone();\n        s2.address.city = \"Delhi\";\n        System.out.println(s1.address.city);\n    }\n}\n\noutput?",
+    "question": "output?",
+    "codeLanguage": "java",
+    "codeFileName": "Student.java",
+    "code": "class Address implements Cloneable {\n    String city = \"Bangalore\";\n    public Object clone() throws CloneNotSupportedException {\n        return super.clone();\n    }\n}\n\nclass Student implements Cloneable {\n    Address address = new Address();\n    public Object clone() throws CloneNotSupportedException {\n        return super.clone();\n    }\n    public static void main(String[] args) throws Exception {\n        Student s1 = new Student();\n        Student s2 = (Student) s1.clone();\n        s2.address.city = \"Delhi\";\n        System.out.println(s1.address.city);\n    }\n}",
     "options": [
       "Bangalore",
       "Delhi",
@@ -253,7 +295,10 @@
   },
   {
     "id": "java-mcq-019",
-    "question": "What happens to a static variable during Java default serialization?\n\nclass Student implements Serializable {\n    int id = 101;\n    static String college = \"ABC\";\n}",
+    "question": "What happens to a static variable during Java default serialization?",
+    "codeLanguage": "java",
+    "codeFileName": "Student.java",
+    "code": "class Student implements Serializable {\n    int id = 101;\n    static String college = \"ABC\";\n}",
     "options": [
       "Both id and college are serialized.",
       "Only id is serialized; static fields are not part of the serialized object state",
@@ -267,7 +312,10 @@
   },
   {
     "id": "java-mcq-020",
-    "question": "Is this a valid functional interface?\n\n@FunctionalInterface\ninterface Test {\n    void display();\n    boolean equals(Object obj);\n}",
+    "question": "Is this a valid functional interface?",
+    "codeLanguage": "java",
+    "codeFileName": "Test.java",
+    "code": "@FunctionalInterface\ninterface Test {\n    void display();\n    boolean equals(Object obj);\n}",
     "options": [
       "Compilation error because there are two abstract methods.",
       "It is Valid",
@@ -407,7 +455,10 @@
   },
   {
     "id": "java-mcq-030",
-    "question": "class Employee {\n    String name;\n    public static void main(String[] args) {\n        Employee e1 = new Employee();\n        Employee e2 = e1;\n        e1.name = \"Rahul\";\n        e2 = null;\n        System.out.println(e1.name);\n    }\n}\n\nWhat is the output?",
+    "question": "What is the output?",
+    "codeLanguage": "java",
+    "codeFileName": "Employee.java",
+    "code": "class Employee {\n    String name;\n    public static void main(String[] args) {\n        Employee e1 = new Employee();\n        Employee e2 = e1;\n        e1.name = \"Rahul\";\n        e2 = null;\n        System.out.println(e1.name);\n    }\n}",
     "options": [
       "null",
       "Rahul",
